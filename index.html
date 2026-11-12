@@ -1868,6 +1868,66 @@ body.mark-only #cards .col-body .card{opacity:1}
 .tbb-pal{flex-basis:100%;display:flex;gap:5px;padding:5px 4px 3px}
 .tbb-sw{width:20px;height:20px;border-radius:50%;border:1px solid var(--line);cursor:pointer;padding:0}
 .tbb-sw.none{background:linear-gradient(135deg,transparent 45%,#e5534b 45%,#e5534b 55%,transparent 55%)}
+
+/* ===== v2.5 status bar, hero, shapes ===== */
+#tabrow{display:flex;align-items:flex-end;flex:none;background:color-mix(in srgb,var(--bar) 82%,#000 8%);border-bottom:1px solid var(--line)}
+#tabrow #tabbar{flex:1;min-width:0;border-bottom:0;background:none}
+#tabactions{display:flex;align-items:center;gap:2px;padding:0 8px 2px 4px;flex:none;height:32px}
+#tabactions .ib{width:28px;height:26px}
+#topbar.statusbar{height:28px;border-top:1px solid var(--line);font-size:12px;padding:0 8px;gap:8px;order:99}
+#topbar.statusbar .ib{width:26px;height:24px;flex:none}
+.sb-pills{display:flex;align-items:center;gap:6px;flex:none}
+#topbar.statusbar #unsortedBadge{position:static;display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 9px;font-size:11.5px;border-radius:10px}
+#topbar.statusbar #markBadge{order:-1;margin:0;height:20px;padding:0 9px;font-size:11.5px;border-radius:10px;gap:5px}
+.tasksview,.dashview,.pv-wrap{bottom:28px}
+.presenting #tabrow{display:none}
+@media print{#tabrow{display:none}}
+/* hero + dashboard page */
+.tv-body.dash2{display:block;overflow-y:auto;overflow-x:hidden;padding:0 16px 16px;scrollbar-gutter:stable}
+.t2-hero{position:relative;height:150px;border-radius:16px;margin:14px 0 14px;display:flex;align-items:flex-end;padding:18px 22px;color:#fff;overflow:hidden;box-sizing:border-box}
+.hero-txt h2{margin:0;font-size:26px;font-weight:650;letter-spacing:-.01em;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.hero-txt p{margin:4px 0 0;font-size:13.5px;opacity:.92;text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.hero-name{border:0;background:none;color:inherit;font:inherit;padding:0;cursor:text;border-bottom:1.5px dashed transparent}
+.hero-name:hover{border-bottom-color:rgba(255,255,255,.7)}
+.hero-change{position:absolute;right:14px;top:12px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.35);color:#fff;border-radius:8px;padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;opacity:0;transition:opacity .15s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.t2-hero:hover .hero-change,.hero-change:focus{opacity:1}
+@media(hover:none){.hero-change{opacity:1}}
+.hero-pop{width:290px;display:flex;flex-direction:column;gap:10px;padding:12px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hero-sw{height:44px;border-radius:9px;border:2px solid transparent;color:#fff;font:inherit;font-size:11.5px;cursor:pointer;display:flex;align-items:flex-end;padding:4px 7px;text-shadow:0 1px 3px rgba(0,0,0,.5);text-align:left}
+.hero-sw.cur{border-color:var(--sel)}
+.t2-charts{margin:0 0 6px}
+.t2-charts .dpanels{margin:0}
+.t2-divider{display:flex;align-items:center;gap:12px;margin:14px 0 0;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.t2-divider::before,.t2-divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.t2-divider::before{flex:0 0 14px}
+.t2-panes{display:grid;grid-template-columns:minmax(300px,36%) 1fr;gap:14px;height:var(--paneh,560px);padding-top:14px;box-sizing:content-box}
+.t2-switch{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 10px 0 8px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--muted);font:inherit;font-size:12px;cursor:pointer;flex:none;white-space:nowrap}
+.t2-switch i{width:22px;height:12px;border-radius:6px;background:var(--line);position:relative;transition:background .15s}
+.t2-switch i::after{content:"";position:absolute;left:2px;top:2px;width:8px;height:8px;border-radius:50%;background:var(--card);box-shadow:0 0 0 1px rgba(0,0,0,.12);transition:left .15s}
+.t2-switch.on{color:var(--text)}.t2-switch.on i{background:#4aa3ff}.t2-switch.on i::after{left:12px}
+@media(max-width:900px){.tv-body.dash2{grid-template-columns:none}.t2-panes{grid-template-columns:1fr;height:auto}.t2-panes .t2pane{height:420px}.t2-hero{height:130px;padding:14px 16px}.hero-txt h2{font-size:21px}}
+/* shapes */
+.card.t-shape{background:transparent;box-shadow:none;border-radius:0;overflow:visible}
+.shape-in{position:relative;width:100%;height:100%}
+.shape-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;display:block}
+.shape-tx{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;pointer-events:none}
+.shape-txt{min-width:1ch;min-height:1.2em;max-width:100%;outline:none;overflow-wrap:anywhere;white-space:pre-wrap;line-height:1.3;pointer-events:auto;font-size:14px}
+.card.t-shape.editing .shape-tx{overflow:visible}
+.resize.wh{right:-5px;bottom:-5px;top:auto;left:auto;margin:0;width:12px;height:12px;cursor:nwse-resize}
+.resize.wh::after{left:2px;top:2px;width:8px;height:8px;border-radius:2px;background:var(--selh)}
+.resize.wh::before{inset:-6px}
+.sp-pop{width:292px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.sp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.sp-item{display:flex;flex-direction:column;align-items:center;gap:3px;border:1px solid transparent;border-radius:8px;background:none;color:var(--text);font:inherit;font-size:10.5px;padding:6px 2px;cursor:pointer}
+.sp-item:hover{background:var(--hover)}.sp-item.cur{border-color:var(--sel)}
+.sp-svg{display:block;color:var(--text)}
+.sp-icwrap{position:relative}
+.sp-ic{width:100%;height:54px;border:1px solid var(--line);border-radius:8px;background:var(--card);cursor:pointer;display:grid;place-items:center;padding:6px}
+.sp-ic img{max-width:100%;max-height:100%;object-fit:contain}
+.sp-icx{position:absolute;right:2px;top:2px;width:16px;height:16px;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:12px;line-height:1;cursor:pointer;opacity:0;padding:0}
+.sp-icwrap:hover .sp-icx{opacity:1}
+.sp-empty{font-size:12px;padding:2px 2px 4px}
 </style>
 </head>
 <body class="app-root">
@@ -2733,8 +2793,8 @@ function onMove(e) {
     case 'resize': {
       if (!P.moved) { checkpoint(); P.moved = true; }
       const v = view(), c = ST.cards[P.id], k = v.z * (c.sc || 1);
-      if (P.axis !== 'h') { let nw = Math.max(c.type === 'ink' ? 20 : 80, P.w0 + (e.clientX - P.sx) / k); if (ST.settings.snap) nw = Math.round(nw / 10) * 10; c.w = Math.round(nw); P.el.style.width = c.w + 'px'; }
-      if (RESIZE_WH.has(c.type) && P.axis === 'h') { let nh = Math.max(60, P.h0 + (e.clientY - P.sy) / k); if (ST.settings.snap) nh = Math.round(nh / 10) * 10; c.h = Math.round(nh); P.el.style.height = c.h + 'px'; }
+      if (P.axis !== 'h') { let nw = Math.max(c.type === 'ink' ? 20 : c.type === 'shape' ? 40 : 80, P.w0 + (e.clientX - P.sx) / k); if (ST.settings.snap) nw = Math.round(nw / 10) * 10; c.w = Math.round(nw); P.el.style.width = c.w + 'px'; }
+      if (RESIZE_WH.has(c.type) && (P.axis === 'h' || P.axis === 'wh')) { let nh = Math.max(c.type === 'shape' ? 30 : 60, P.h0 + (e.clientY - P.sy) / k); if (ST.settings.snap) nh = Math.round(nh / 10) * 10; c.h = Math.round(nh); P.el.style.height = c.h + 'px'; }
       scheduleLines(); break;
     }
     case 'scale': {
@@ -8879,7 +8939,7 @@ function todayState() {
 function todayItems() {
   const st = todayState(), t = todayStr(), out = [], seen = new Set();
   for (const id of st.today) { const f = findTask(id); if (f) { out.push({ it: f.item, c: f.card, manual: true }); seen.add(id); } }
-  for (const c of taskLists()) for (const it of c.data.items) if (!seen.has(it.id) && !it.done && it.due && it.due <= t) out.push({ it, c, manual: false });
+  for (const c of taskLists()) for (const it of c.data.items) if (!seen.has(it.id) && it.due && (it.done ? (st.showDone && it.due === t) : it.due <= t)) out.push({ it, c, manual: false });
   return out;
 }
 function toggleToday(tid, on) { const st = todayState(), has = st.today.includes(tid); if (on === undefined) on = !has; if (on && !has) st.today.push(tid); if (!on && has) st.today = st.today.filter(x => x !== tid); save(); renderTVBody(); }
@@ -8943,27 +9003,23 @@ function renderTVHead() {
         h('span', { class: 't2-prog', title: `${d.allDone} of ${d.all.length} tasks resolved` }, h('span', { class: 't2-progbar' }, h('i', { style: { width: pct + '%' } })), pct + '%')),
       h('span', { style: { flex: 1 } }),
       h('label', { class: 'tv2-sbox' }, h('span', { html: ICON.search || '', class: 'tv2-sic' }), q),
-      h('button', { class: 'tv2-fbtn', title: 'Charts and matrix', onclick: openDashCharts }, h('span', { html: ICON.chart2 })),
+      h('button', { class: 't2-switch' + (st.showDone ? ' on' : ''), title: 'Show or hide completed tasks in both lists', onclick: () => { st.showDone = !st.showDone; save(); renderTVHead(); renderTVBody(); } }, h('i'), 'Show completed'),
       h('button', { class: 'tv-sel' + (S.tvSelMode ? ' on' : ''), onclick: () => { S.tvSelMode = !S.tvSelMode; S.tvSel = new Set(); renderTVHead(); renderTVBody(); } }, S.tvSelMode ? 'Done' : 'Select'),
       h('button', { class: 'btn primary', onclick: () => newTaskFromDash() }, '+ New task')),
     chips);
   ov.prepend(top);
 }
 function filterBar() { return null; }
-function openDashCharts() {
-  $('.dash-charts')?.closest('.modal-bg')?.remove();
-  const box = h('div', { class: 'dash-charts' }); modal(box).classList.add('charts-bg'); fillDashCharts();
-}
-function fillDashCharts() { const box = $('.dash-charts'); if (!box) return; box.innerHTML = ''; box.append(h('h3', null, 'Charts'), dashPanels(dashData(), tvState())); vizTipAttach(box); }
+function fillDashCharts() { const box = $('.t2-charts'); if (!box) return; box.innerHTML = ''; box.append(dashPanels(dashData(), tvState())); vizTipAttach(box); }
 
 /* ---- body: two panes ---- */
 function renderTVBodyCore() {
   const ov = $('.tasksview'); if (!ov) return; const st = todayState(), t = todayStr();
-  const old = ov.querySelector('.tv-body'), sc = old ? { l: old.querySelector('.t2left .t2scroll')?.scrollTop || 0, r: old.querySelector('.t2right .t2scroll')?.scrollTop || 0 } : (S.t2sc || { l: 0, r: 0 });
+  const old = ov.querySelector('.tv-body'), pageSc = old ? old.scrollTop : (S.t2page || 0), sc = old ? { l: old.querySelector('.t2left .t2scroll')?.scrollTop || 0, r: old.querySelector('.t2right .t2scroll')?.scrollTop || 0 } : (S.t2sc || { l: 0, r: 0 });
   old?.remove();
   const body = h('div', { class: 'tv-body dash2' });
   /* left: today */
-  const items = todayItems(), openN = items.filter(x => !x.it.done).length;
+  const items = todayItems().filter(x => st.showDone || !x.it.done), openN = items.filter(x => !x.it.done).length;
   const lsc = h('div', { class: 't2scroll' });
   if (!items.length) lsc.append(h('div', { class: 't2-empty' }, h('span', { class: 't2-bigic', html: ICON.sun }), 'Drag tasks here, or click the sun on a task, to plan your day.'));
   for (const x of items) { const r = t2Row(x.it, x.c, 'L'); if (!x.manual) r.classList.add('auto'); lsc.append(r); }
@@ -9008,7 +9064,9 @@ function renderTVBodyCore() {
   right.addEventListener('dragover', e => { if (S.t2drag && S.t2drag.from === 'L') { e.preventDefault(); right.classList.add('t2-over'); } });
   right.addEventListener('dragleave', e => { if (e.target === right) right.classList.remove('t2-over'); });
   right.addEventListener('drop', e => { if (!S.t2drag || S.t2drag.from !== 'L') return; e.preventDefault(); const id = S.t2drag.id; S.t2drag = null; toggleToday(id, false); });
-  body.append(left, right); ov.append(body);
+  const panes = h('div', { class: 't2-panes' }, left, right);
+  body.append(t2Hero(), h('div', { class: 't2-charts' }), h('div', { class: 't2-divider' }, h('span', null, 'Tasks')), panes); ov.append(body);
+  t2SizePanes(body); body.scrollTop = pageSc; body.addEventListener('scroll', () => { S.t2page = body.scrollTop; });
   lsc.scrollTop = sc.l; rsc.scrollTop = sc.r;
   const keep = () => { S.t2sc = { l: lsc.scrollTop, r: rsc.scrollTop }; }; lsc.addEventListener('scroll', keep); rsc.addEventListener('scroll', keep);
   if (S.t2focusAdd) { S.t2focusAdd = null; body.querySelector('.t2-add')?.focus(); }
@@ -9314,6 +9372,151 @@ try { new MutationObserver(() => tabSyncSoon()).observe(document.body, { childLi
 if (typeof scheduleSidebar === 'function') { const _ss = scheduleSidebar; scheduleSidebar = function () { const r = _ss.apply(this, arguments); if (TABS.ready) setTimeout(renderTabs, 0); return r; }; }
 document.addEventListener('click', e => { TABS.mod = e.metaKey || e.ctrlKey; setTimeout(() => { TABS.mod = false; }, 0); }, true);
 if (typeof openRef === 'function') { const _or = openRef; openRef = function (key) { if (TABS.mod && TABS.ready) { const [k, id] = String(key).split(':'); if (k === 'b' && ST.boards[id]) return openInNewTab({ t: 'board', id }); if (k === 'p' && ST.pages[id]) return openInNewTab({ t: 'page', id }); } return _or.apply(this, arguments); }; }
+
+/* ========== v2.5: bottom status bar, dashboard hero, shapes ========== */
+/* ---- shell: tab row (with actions) on top, slim status bar at the bottom ---- */
+(function shellV25() {
+  const am = $('#appmain'), top = $('#topbar'), tabbar = $('#tabbar'); if (!am || !top || !tabbar || $('#tabrow')) return;
+  const row = h('div', { id: 'tabrow' }); am.insertBefore(row, tabbar); row.append(tabbar);
+  const acts = top.querySelector('.top-actions'); if (acts) { acts.id = 'tabactions'; row.append(acts); }
+  top.classList.add('statusbar'); am.append(top);
+  const pills = h('div', { class: 'sb-pills', id: 'sbPills' }); top.append(pills);
+  const un = $('#unsortedBadge'); if (un) pills.append(un);
+})();
+document.body.classList.add('v25');
+
+/* ---- dashboard hero ---- */
+const HEROES = {
+  slate: ['Slate', 'radial-gradient(circle at 82% 20%,rgba(255,255,255,.10),transparent 46%),linear-gradient(120deg,#23272e,#3a404a 60%,#2b3038)'],
+  dusk: ['Dusk', 'radial-gradient(circle at 80% 15%,rgba(255,210,160,.35),transparent 42%),linear-gradient(120deg,#2b2f5c,#6b3f7c 55%,#d4745f)'],
+  ocean: ['Ocean', 'radial-gradient(circle at 15% 90%,rgba(120,220,255,.28),transparent 45%),linear-gradient(120deg,#0f3b57,#1f6f8f 55%,#59b8d9)'],
+  forest: ['Forest', 'radial-gradient(circle at 85% 10%,rgba(190,255,190,.22),transparent 40%),linear-gradient(120deg,#16301f,#2f6a43 60%,#7bb686)'],
+  ember: ['Ember', 'radial-gradient(circle at 20% 15%,rgba(255,220,150,.3),transparent 40%),linear-gradient(120deg,#4a1d1a,#b5472e 55%,#f2a65a)'],
+  aurora: ['Aurora', 'radial-gradient(circle at 75% 25%,rgba(150,255,210,.30),transparent 40%),radial-gradient(circle at 20% 80%,rgba(180,140,255,.30),transparent 45%),linear-gradient(120deg,#101f3a,#27508a 60%,#3b9c9c)'],
+  sand: ['Sand', 'radial-gradient(circle at 80% 20%,rgba(255,255,255,.4),transparent 45%),linear-gradient(120deg,#8c7b66,#c8b497 60%,#e8dcc4)'],
+  mono: ['Lines', 'repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 2px,transparent 2px 14px),linear-gradient(120deg,#1b1d22,#31353d)'],
+};
+function heroState() { const s = ST.settings; if (!s.hero) s.hero = { kind: 'builtin', id: 'slate' }; if (!s.userName) s.userName = 'Greg'; return s.hero; }
+function heroBg() { const hs = heroState(); if (hs.kind === 'img' && hs.src) return { backgroundImage: `linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.45)),url("${hs.src}")`, backgroundSize: 'cover', backgroundPosition: 'center' }; return { background: (HEROES[hs.id] || HEROES.slate)[1] }; }
+function greetWord() { const hr = new Date().getHours(); return hr < 5 ? 'Good evening' : hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening'; }
+function heroSummary() {
+  const t = todayStr(), today = todayItems().filter(x => !x.it.done).length;
+  let over = 0; for (const c of taskLists()) for (const it of c.data.items) if (!it.done && it.due && it.due < t) over++;
+  return (today ? `${today} task${today === 1 ? '' : 's'} today` : 'No tasks planned today') + (over ? `, ${over} overdue` : '');
+}
+async function imageToDataUrl(file, max, q) {
+  if (file.type === 'image/svg+xml') return await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+  const bmp = await createImageBitmap(file), s = Math.min(1, max / Math.max(bmp.width, bmp.height)), cv = document.createElement('canvas');
+  cv.width = Math.max(1, Math.round(bmp.width * s)); cv.height = Math.max(1, Math.round(bmp.height * s)); cv.getContext('2d').drawImage(bmp, 0, 0, cv.width, cv.height);
+  return cv.toDataURL(file.type === 'image/png' ? 'image/png' : 'image/jpeg', q || .85);
+}
+function heroPop(anchor) {
+  const hs = heroState(), set = v => { checkpoint(); ST.settings.hero = v; save(); closeTransient(); renderTVBody(); };
+  const grid = h('div', { class: 'hero-grid' }, Object.entries(HEROES).map(([id, [name, bg]]) => h('button', { class: 'hero-sw' + (hs.kind === 'builtin' && hs.id === id ? ' cur' : ''), style: { background: bg }, title: name, onclick: () => set({ kind: 'builtin', id }) }, h('span', null, name))));
+  popAt(anchor, h('div', { class: 'hero-pop' }, h('div', { class: 'dd-h' }, 'Banner'), grid,
+    h('button', { class: 'btn', onclick: () => { closeTransient(); pickFiles('image/*', async f => { try { const src = await imageToDataUrl(f[0], 1800, .82); checkpoint(); ST.settings.hero = { kind: 'img', src }; save(); renderTVBody(); } catch (e) { toast('Could not read that image'); } }); } }, 'Upload image…')));
+}
+function t2Hero() {
+  const hs = heroState(), nm = ST.settings.userName, t = new Date();
+  const name = h('button', { class: 'hero-name', title: 'Click to change your name', onclick: e => askText(e.currentTarget, 'Your name', ST.settings.userName, v => { v = (v || '').trim(); if (!v) return; ST.settings.userName = v; save(); renderTVBody(); }) }, nm);
+  return h('div', { class: 't2-hero', style: heroBg() },
+    h('div', { class: 'hero-txt' }, h('h2', null, greetWord() + ', ', name), h('p', null, t.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' }) + ' · ' + heroSummary())),
+    h('button', { class: 'hero-change', onclick: e => { e.stopPropagation(); heroPop(e.currentTarget); } }, 'Change'));
+}
+function t2SizePanes(body) {
+  const fit = () => { if (!body.isConnected) return; body.style.setProperty('--paneh', Math.max(340, body.clientHeight - 62) + 'px'); };
+  fit(); try { const ro2 = new ResizeObserver(fit); ro2.observe(body); body._ro = ro2; } catch (e) { }
+}
+
+/* ---- shapes ---- */
+ICON.shape = sv('<rect x="3.5" y="4" width="9" height="9" rx="1.5"/><circle cx="16.5" cy="16.5" r="4"/>');
+const SHAPES = {
+  rect: ['Rectangle', 160, 90], rrect: ['Rounded rectangle', 160, 90], square: ['Square', 110, 110], circle: ['Circle', 110, 110], ellipse: ['Ellipse', 170, 100],
+  diamond: ['Decision (diamond)', 150, 110], triangle: ['Triangle', 130, 110], para: ['Input / output', 170, 90], hexagon: ['Hexagon', 160, 100], cylinder: ['Database (cylinder)', 120, 130],
+};
+const SHAPE_INSET = { rect: [8, 8], rrect: [10, 8], square: [8, 8], circle: [16, 16], ellipse: [18, 12], diamond: [26, 24], triangle: [34, 30], para: [20, 8], hexagon: [18, 10], cylinder: [8, 22] };
+function shapeDraw(svg, kind, w, hh, st) {
+  const i = 2, r = (n) => Math.round(n * 10) / 10; svg.setAttribute('viewBox', `0 0 ${w} ${hh}`); svg.innerHTML = '';
+  const mk = (tag, a) => { const e = svgEl(tag, a); svg.append(e); return e; };
+  const base = { 'stroke-width': 2, 'stroke-linejoin': 'round', style: `fill:${st.fill};stroke:${st.stroke}` };
+  const poly = pts => mk('polygon', { ...base, points: pts.map(p => r(p[0]) + ',' + r(p[1])).join(' ') });
+  switch (kind) {
+    case 'rect': case 'square': mk('rect', { ...base, x: i, y: i, width: w - 2 * i, height: hh - 2 * i }); break;
+    case 'rrect': mk('rect', { ...base, x: i, y: i, width: w - 2 * i, height: hh - 2 * i, rx: Math.min(16, (hh - 2 * i) / 2, (w - 2 * i) / 2) }); break;
+    case 'circle': case 'ellipse': mk('ellipse', { ...base, cx: w / 2, cy: hh / 2, rx: w / 2 - i, ry: hh / 2 - i }); break;
+    case 'diamond': poly([[w / 2, i], [w - i, hh / 2], [w / 2, hh - i], [i, hh / 2]]); break;
+    case 'triangle': poly([[w / 2, i], [w - i, hh - i], [i, hh - i]]); break;
+    case 'para': { const s = Math.min(w * .2, 40); poly([[s, i], [w - i, i], [w - s, hh - i], [i, hh - i]]); break; }
+    case 'hexagon': { const s = Math.min(w * .22, 44); poly([[s, i], [w - s, i], [w - i, hh / 2], [w - s, hh - i], [s, hh - i], [i, hh / 2]]); break; }
+    case 'cylinder': { const rx = w / 2 - i, ry = Math.min(16, hh * .16); mk('path', { ...base, d: `M${i} ${ry}V${hh - ry}A${rx} ${ry} 0 0 0 ${w - i} ${hh - ry}V${ry}` }); mk('ellipse', { ...base, cx: w / 2, cy: ry, rx, ry: ry - 1 }); break; }
+  }
+}
+function shapeStyle(c) {
+  const d = c.data, filled = d.filled !== false, fill = filled ? (d.fill || 'color-mix(in srgb,var(--text) 7%,var(--card))') : 'none', stroke = d.line || 'var(--text)';
+  const tc = filled && d.fill ? (isDark(d.fill) ? '#fff' : '#1d1f22') : 'var(--text)';
+  return { fill, stroke, tc };
+}
+TYPE_NAME.shape = 'Shape'; TYPE_ICON.shape = 'shape'; DEF.shape = { w: 160, h: 90 }; RESIZE_WH.add('shape'); SCALE_NO.add('shape');
+{ const _dd = defaultData; defaultData = function (type) { return type === 'shape' ? { shape: 'rect', text: '', fill: null, line: null, filled: true } : _dd(type); }; }
+const SHAPE_RO = new ResizeObserver(es => { for (const e of es) { const el = e.target, c = ST.cards[el.closest('.card')?.dataset.id]; if (c) shapeDraw(el.querySelector('svg'), c.data.shape, el.clientWidth, el.clientHeight, shapeStyle(c)); } });
+RENDER.shape = c => {
+  const d = c.data, st = shapeStyle(c), ins = SHAPE_INSET[d.shape] || [8, 8];
+  const svg = svgEl('svg', { class: 'shape-svg', preserveAspectRatio: 'none' });
+  const tx = h('div', { class: 'shape-txt', 'data-edit-off': 'data.text', style: { color: st.tc } }, d.text || '');
+  const root = h('div', { class: 'shape-in' }, svg, h('div', { class: 'shape-tx', style: { inset: `${ins[1]}% ${ins[0]}%` } }, tx));
+  shapeDraw(svg, d.shape, c.w, c.h || 90, st); SHAPE_RO.observe(root); return root;
+};
+{ const _ct = cardText; cardText = function (c) { if (c.type === 'shape') return `[${(SHAPES[c.data.shape] || ['Shape'])[0]}] ${c.data.text || ''}`.trim(); return _ct(c); }; }
+{ const _rc = renderCard; renderCard = function (c, inCol) { const el = _rc(c, inCol); if (c.type === 'shape' && !inCol && !c.locked) el.append(h('div', { class: 'resize wh', 'data-resize': 'wh', title: 'Drag to resize' })); return el; }; }
+{ const _od = onDbl; onDbl = function (e) { const cardEl = e.target.closest && e.target.closest('#cards .card.t-shape'); if (cardEl && !S.tool && !e.target.closest('[data-scale],[data-act],[data-resize],[data-conn]')) { const t = cardEl.querySelector('.shape-txt'); if (t) { startEdit(t, { x: e.clientX, y: e.clientY }); return; } } return _od(e); }; }
+{ const _ac = afterCreate; afterCreate = function (c) { if (c.type === 'shape') { setTimeout(() => focusEdit(c.id, 'data.text'), 30); return; } return _ac(c); }; }
+/* connector lines stop at the real outline of round / diamond shapes */
+{
+  const _ea = endAnchor; endAnchor = function (end) { const a = _ea(end); if (a.r && end.cardId) { const c = ST.cards[end.cardId]; if (c && c.type === 'shape') a.r = { ...a.r, shape: c.data.shape }; } return a; };
+  const _cl = clipToRect;
+  clipToRect = function (r, tx, ty, gap = 6) {
+    if (!r.shape || !['circle', 'ellipse', 'diamond'].includes(r.shape)) return _cl(r, tx, ty, gap);
+    const cx = r.x + r.w / 2, cy = r.y + r.h / 2, dx = tx - cx, dy = ty - cy; if (!dx && !dy) return { x: cx, y: cy };
+    const a = r.w / 2 + gap, b = r.h / 2 + gap; const k = r.shape === 'diamond' ? Math.abs(dx) / a + Math.abs(dy) / b : Math.hypot(dx / a, dy / b);
+    const s = 1 / k; if (s >= 1) return { x: cx, y: cy }; return { x: cx + dx * s, y: cy + dy * s };
+  };
+}
+/* toolbar for a selected shape */
+{
+  const _ctx = ctxTools;
+  ctxTools = function () {
+    const r = _ctx(); if (!r || S.selLine || S.tool || S.sketchEdit || (S.editing && S.editing.rich)) return r; const ids = selTopIds();
+    if (ids.length !== 1) return r; const c = ST.cards[ids[0]]; if (!c || c.type !== 'shape') return r; const T = TOOLS(ids), d = c.data;
+    const col = (key, label) => ({ label, swatch: d[key] || null, fn: b => colorPop(b, ids, v => { d[key] = v; c.updatedAt = now(); rerenderCard(c.id); }) });
+    return [col('fill', 'Fill'), col('line', 'Outline'), { label: d.filled !== false ? 'Filled' : 'Outline only', icon: 'shape', active: d.filled !== false, fn: () => { checkpoint(); d.filled = d.filled === false; c.updatedAt = now(); save(); rerenderCard(c.id); renderToolbar(); } },
+      { label: 'Shape', icon: 'shape', fn: b => shapePicker(b, { change: c }) }, { label: 'Edit text', icon: 'rename', fn: () => focusEdit(c.id, 'data.text', true) }, T.comment, T.more];
+  };
+}
+/* dock button + picker */
+MAIN_TOOLS.splice(MAIN_TOOLS.findIndex(t => t && t.k === 'more'), 0, { k: 'shapes', label: 'Shapes', icon: 'shape', box: 1 });
+{
+  const _ca = createAt;
+  createAt = function (kind, x, y) { if (kind === 'shapes') { S.shapePt = { x, y }; const b = $('#toolbar [aria-label="Shapes"]') || $('#toolbar'); return shapePicker(b, { pt: { x, y } }); } return _ca(kind, x, y); };
+}
+function shapeThumb(kind) { const d = SHAPES[kind], k = Math.min(54 / d[1], 38 / d[2]), w = Math.round(d[1] * k), hh = Math.round(d[2] * k); const s = svgEl('svg', { viewBox: `0 0 ${w} ${hh}`, width: w, height: hh, class: 'sp-svg' }); shapeDraw(s, kind, w, hh, { fill: 'none', stroke: 'currentColor' }); return s; }
+function placeShape(kind, pt) {
+  const d = SHAPES[kind]; checkpoint(); const c = newCard('shape', pt.x, pt.y, { shape: kind }); c.w = d[1]; c.h = d[2]; snapCard(c);
+  S.sel = new Set([c.id]); S.selLine = null; save(); renderBoard(); afterCreate(c);
+}
+function placeIcon(ic, pt) { checkpoint(); const c = newCard('image', pt.x, pt.y, { src: ic.src, name: ic.name, noBg: true, icon: true }); c.w = 96; snapCard(c); S.sel = new Set([c.id]); S.selLine = null; save(); renderBoard(); }
+function myIcons() { if (!Array.isArray(ST.settings.myIcons)) ST.settings.myIcons = []; return ST.settings.myIcons; }
+function shapePicker(anchor, o) {
+  o = o || {}; const pt = o.pt || centerPt('shape');
+  const pick = k => { closeTransient(); if (o.change) { checkpoint(); o.change.data.shape = k; o.change.updatedAt = now(); save(); rerenderCard(o.change.id); renderToolbar(); } else placeShape(k, pt); };
+  const grid = h('div', { class: 'sp-grid' }, Object.entries(SHAPES).map(([k, d]) => h('button', { class: 'sp-item' + (o.change && o.change.data.shape === k ? ' cur' : ''), title: d[0], onclick: () => pick(k) }, shapeThumb(k), h('span', null, d[0].replace(/ \(.*\)/, '')))));
+  const kids = [h('div', { class: 'dd-h' }, o.change ? 'Change shape' : 'Shapes'), grid];
+  if (!o.change) {
+    const ics = myIcons(), mine = h('div', { class: 'sp-grid sp-mine' }, ics.map(ic => h('div', { class: 'sp-icwrap' }, h('button', { class: 'sp-ic', title: ic.name, onclick: () => { closeTransient(); placeIcon(ic, pt); } }, h('img', { src: ic.src, alt: ic.name })), h('button', { class: 'sp-icx', title: 'Remove from My icons', onclick: e => { e.stopPropagation(); checkpoint(); ST.settings.myIcons = myIcons().filter(x => x.id !== ic.id); save(); shapePicker(anchor, o); } }, '×'))));
+    kids.push(h('div', { class: 'dd-h' }, 'My icons'), ics.length ? mine : h('div', { class: 'muted sp-empty' }, 'Upload SVG or PNG icons to reuse them here.'),
+      h('button', { class: 'btn', onclick: () => { closeTransient(); pickFiles('image/svg+xml,image/png,image/jpeg,image/webp', async fs => { checkpoint(); for (const f of fs) { try { myIcons().push({ id: uid(), name: (f.name || 'icon').replace(/\.[^.]+$/, ''), src: await imageToDataUrl(f, 256, .9) }); } catch (e) { toast('Could not read ' + f.name); } } save(); shapePicker(anchor, o); }); } }, 'Upload icon…'));
+  }
+  const p = popAt(anchor, h('div', { class: 'sp-pop' }, kids)); return p;
+}
 
 /* ========== events + init ========== */
 function migrate() {
