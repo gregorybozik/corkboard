@@ -1569,6 +1569,118 @@ a.mention:hover{background:var(--hover)}
 .tv-sel.on{background:color-mix(in srgb,var(--selh) 22%,transparent)}
 .tv-row.selmode .chk{display:none}
 .cs-grid.narrow .cs{height:auto}
+
+/* ===== v2.0 tasks dashboard ===== */
+.tv2-top{background:linear-gradient(135deg,#2c2f36,#17191d 62%,#1d2b3d);color:#eef1f6;border-bottom:1px solid rgba(255,255,255,.08);padding:14px 22px 12px;display:flex;flex-direction:column;gap:10px}
+.app-root:not(.dark) .tv2-top{background:linear-gradient(135deg,#f4f6fa,#e6ebf3 65%,#dce7f6);color:#1c2430;border-bottom-color:var(--line)}
+.tv2-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.tv2-title{display:flex;align-items:center;gap:12px;flex:1;min-width:180px}
+.tv2-bar{width:4px;height:36px;border-radius:3px;background:linear-gradient(#4aa3ff,#6fd68a)}
+.tv2-title h2{margin:0;font-size:24px;display:flex;align-items:baseline;gap:10px}
+.tv2-title .tv-count{font-size:12px;font-weight:500;opacity:.65}
+.tv2-sub{font-size:11.5px;opacity:.6;margin-top:2px}
+.tv2-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tv2-sbox{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:0 10px;height:34px;min-width:220px}
+.app-root:not(.dark) .tv2-sbox{background:#fff;border-color:var(--line)}
+.tv2-sic{width:15px;height:15px;display:block;opacity:.7}
+.tv2-search{background:none;border:0;outline:0;color:inherit;font:inherit;font-size:13px;flex:1;min-width:0}
+.tv2-fbtn{position:relative;height:34px;width:38px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:inherit;cursor:pointer;display:grid;place-items:center}
+.app-root:not(.dark) .tv2-fbtn{background:#fff;border-color:var(--line)}
+.tv2-fbtn span{width:17px;height:17px;display:block}
+.tv2-fbtn.on{border-color:#4aa3ff;box-shadow:0 0 0 2px rgba(74,163,255,.25)}
+.tv2-fn{position:absolute;top:-6px;right:-6px;background:#4aa3ff;color:#fff;border-radius:9px;font-size:10px;font-style:normal;min-width:16px;height:16px;display:grid;place-items:center}
+.tv2-top .tv-active{margin:0}
+.tvfilter{width:300px;padding:12px 14px}
+.tvfilter h4{margin:10px 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.6}
+.tvfilter h4:first-child{margin-top:0}
+.tvf-pills{display:flex;flex-wrap:wrap;gap:5px}
+.tvf-pill{border:1px solid var(--line);background:var(--hover);color:var(--text);border-radius:14px;padding:3px 10px;font-size:12px;cursor:pointer}
+.tvf-pill.on{background:#2b57ab;border-color:#2b57ab;color:#fff}
+.tvf-pill.tag.on{background:var(--tg,#2b57ab)}
+.tvf-tgs{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.tvf-tg{display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer}
+
+.tv-body.dash{padding:18px 22px 40px;display:flex;flex-direction:column;gap:16px;max-width:none}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr) 1.35fr;gap:12px}
+.kpi{--kc:#4aa3ff;position:relative;display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:16px;cursor:pointer;text-align:left;color:var(--text);font:inherit;
+ background:linear-gradient(145deg,color-mix(in srgb,var(--kc) 22%,transparent),color-mix(in srgb,var(--kc) 6%,transparent));border:1px solid color-mix(in srgb,var(--kc) 38%,transparent);box-shadow:0 0 22px color-mix(in srgb,var(--kc) 16%,transparent);transition:transform .12s,box-shadow .12s}
+.kpi:hover{transform:translateY(-1px)}
+.kpi.on{box-shadow:0 0 0 2px var(--kc),0 0 28px color-mix(in srgb,var(--kc) 35%,transparent)}
+.kpi-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--kc) 24%,transparent);color:var(--kc);flex:none}
+.kpi-ic svg{width:22px;height:22px}
+.kpi-t{display:flex;flex-direction:column;gap:2px}
+.kpi-t b{font-size:30px;line-height:1;font-weight:700}
+.kpi-t span{font-size:12.5px;opacity:.75}
+.kpi.prog{cursor:default;--kc:#6fd68a}
+.kpi.prog:hover{transform:none}
+.ring-w{position:relative;width:70px;height:70px;flex:none}
+.ring{width:100%;height:100%}
+.ring-bg{fill:none;stroke:var(--line);stroke-width:8}
+.ring-fg{fill:none;stroke-width:8;stroke-linecap:round}
+.ring-n{position:absolute;inset:0;display:grid;place-items:center;font-size:15px}
+.kpi-t .prog-h{font-size:15px}
+
+.dpanels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:stretch}
+.dpanel{display:flex;flex-direction:column;gap:10px;min-height:230px;padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.01))}
+.app-root:not(.dark) .dpanel{background:linear-gradient(160deg,#fff,#f6f8fb)}
+.dp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.dp-seg button{padding:2px 9px;font-size:11.5px}
+.cc{display:flex;align-items:flex-end;gap:8px;flex:1;padding-top:4px}
+.cc-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;background:none;border:0;padding:0;color:var(--text);font:inherit;height:100%;cursor:default}
+.cc-col.click{cursor:pointer}
+.cc-val{font-size:11px;opacity:.8;min-height:13px}
+.cc-bar{width:100%;max-width:34px;border-radius:6px 6px 2px 2px;background:var(--bc)}
+.cc-col.strong .cc-lab{font-weight:700;opacity:1}
+.cc-lab{font-size:11px;opacity:.65;white-space:nowrap}
+.bb{display:flex;flex-direction:column;gap:7px;flex:1;justify-content:center}
+.bb-row{display:grid;grid-template-columns:26px minmax(60px,1fr) 1.4fr 24px;align-items:center;gap:8px;background:none;border:0;padding:3px 4px;border-radius:8px;color:var(--text);font:inherit;cursor:pointer;text-align:left}
+.bb-row:hover,.bb-row.on{background:var(--hover)}
+.bb-row.on{box-shadow:inset 0 0 0 1px #4aa3ff}
+.bb-tile,.tv-btile{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;font-size:13px;flex:none;color:#fff}
+.bb-name{font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bb-track{height:8px;border-radius:5px;background:var(--line);overflow:hidden}
+.bb-fill{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#4aa3ff,#7ad0ff)}
+.bb-n{text-align:right;font-size:13px}
+.mx{position:relative;flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;margin:16px 0 0 74px;min-height:150px}
+.mx-ax{position:absolute;font-size:10.5px;opacity:.6}
+.mx-ax.top1{top:-15px;left:25%;transform:translateX(-50%)}.mx-ax.top2{top:-15px;left:75%;transform:translateX(-50%)}
+.mx-ax.left1{left:-72px;top:25%}.mx-ax.left2{left:-72px;top:75%}
+.mx-cell{--mc:#8a919c;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:8px 12px;border-radius:12px;border:1px solid color-mix(in srgb,var(--mc) 40%,transparent);background:linear-gradient(145deg,color-mix(in srgb,var(--mc) 24%,transparent),color-mix(in srgb,var(--mc) 6%,transparent));color:var(--text);font:inherit;cursor:pointer;text-align:left}
+.mx-cell b{font-size:24px;line-height:1}.mx-t{font-size:12.5px;font-weight:600}.mx-s{font-size:10.5px;opacity:.65}
+.mx-cell.on{box-shadow:0 0 0 2px var(--mc)}
+.mx-do{--mc:#ef6f6c}.mx-schedule{--mc:#4aa3ff}.mx-delegate{--mc:#ff9a4a}.mx-later{--mc:#8a919c}
+
+.tvbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.tvchips{display:flex;gap:6px;flex-wrap:wrap}
+.tvchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--hover);color:var(--text);border-radius:18px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+.tvchip i{font-style:normal;font-size:11px;background:rgba(128,128,128,.22);border-radius:9px;padding:0 6px}
+.tvchip.on{background:#2b57ab;border-color:#2b57ab;color:#fff}.tvchip.on i{background:rgba(255,255,255,.25)}
+.tvchip-i svg{width:13px;height:13px;display:block}
+.tvbar-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tvbar .tv-sel.on{background:#2b57ab;color:#fff}
+
+.tv-row{position:relative}
+.tv-row.pr-high{box-shadow:inset 3px 0 0 #ef6f6c}.tv-row.pr-med{box-shadow:inset 3px 0 0 #f2b53a}
+.tv-row .tv-btile{margin:0 6px}
+.tcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;padding:6px 0 14px}
+.tcard{position:relative;display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.01));cursor:pointer;border-left:4px solid var(--line)}
+.app-root:not(.dark) .tcard{background:#fff}
+.tcard.pr-high{border-left-color:#ef6f6c}.tcard.pr-med{border-left-color:#f2b53a}
+.tcard.done{opacity:.6}.tcard.done .tcard-title{text-decoration:line-through}
+.tcard-top{display:flex;align-items:center;gap:8px}
+.tcard-where{font-size:11.5px;opacity:.65;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tcard-title{font-size:14px;font-weight:600;display:flex;gap:6px;align-items:flex-start}
+.tcard-notes{font-size:12px;opacity:.65}
+.tcard-foot{display:flex;gap:6px;align-items:center;margin-top:auto;flex-wrap:wrap}
+.tcard-date,.tcard-tag{font-size:12px;padding:2px 6px;height:26px;width:auto;max-width:118px}
+.tcard .flagbtn{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:var(--hover);color:var(--text);cursor:pointer;display:grid;place-items:center;opacity:.6}
+.tcard .flagbtn.on.urgent{background:#ef6f6c;border-color:#ef6f6c;color:#fff;opacity:1}
+.tcard .flagbtn.on.important{background:#f2b53a;border-color:#f2b53a;color:#1b1b1b;opacity:1}
+.tcard .tv-selbox{position:absolute;top:8px;right:8px}
+
+@media(max-width:1100px){.dpanels{grid-template-columns:1fr 1fr}.dpanels .dpanel:last-child{grid-column:1/-1}}
+@media(max-width:1000px){.dpanels{grid-template-columns:1fr}}
+@media(max-width:900px){.kpis{grid-template-columns:1fr 1fr}.kpi.prog{grid-column:1/-1}.tv-body.dash{padding:12px 12px 40px}.tv2-top{padding:12px}.tv2-sbox{min-width:0;flex:1}}
 </style>
 </head>
 <body class="app-root">
@@ -1630,7 +1742,7 @@ function h(tag, attrs, ...kids) {
     const v = attrs[k];
     if (v == null || v === false) continue;
     if (k === 'class') el.className = v;
-    else if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
+    else if (k === 'style' && typeof v === 'object') for (const sk in v) { if (sk.startsWith('--')) el.style.setProperty(sk, v[sk]); else el.style[sk] = v[sk]; }
     else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v);
     else if (k === 'html') el.innerHTML = v;
     else if (k === 'value') el.value = v;
@@ -4164,7 +4276,7 @@ function openTask(tid, opts) {
 
 /* --- dashboard --- */
 function tvState() {
-  const d = { mode: 'list', group: 'board', showDone: false, tags: [], flag: 'all', due: 'any', board: 'all', sort: 'due', collapsed: {} };
+  const d = { mode: 'list', group: 'board', showDone: false, tags: [], flag: 'all', due: 'any', board: 'all', sort: 'due', collapsed: {}, view: 'all', quad: null, panel3: 'load' };
   const cur = ST.settings.tasksView || (ST.settings.tasksView = {});
   for (const k in d) if (!(k in cur)) cur[k] = d[k];
   if (!cur.v19) { cur.v19 = 1; cur.mode = 'list'; cur.group = 'board'; cur.flag = 'all'; cur.due = 'any'; cur.tags = []; cur.board = 'all'; }
@@ -4176,7 +4288,7 @@ S.tvQuery = '';
 function openTasksView() {
   endEdit(); closeTransient(); closePanels(); if (S.theater) exitTheater();
   let ov = $('.tasksview'); if (ov) ov.remove();
-  { const st = tvState(); st.flag = 'all'; st.due = 'any'; st.tags = []; st.board = 'all'; S.tvQuery = ''; S.tvSel = new Set(); S.tvSelMode = false; }
+  { const st = tvState(); st.flag = 'all'; st.due = 'any'; st.tags = []; st.board = 'all'; st.view = 'all'; st.quad = null; S.tvQuery = ''; S.tvSel = new Set(); S.tvSelMode = false; }
   ov = h('div', { class: 'tasksview' }); document.body.append(ov);
   renderTVHead(); renderTVBody();
 }
@@ -4230,6 +4342,8 @@ function taskMatches(it, c, o) {
   if (st.due.startsWith('day:') && it.due !== st.due.slice(4)) return false;
   if (st.due === 'overdue' && !(it.due && it.due < t && !it.done)) return false; if (st.due === 'today' && it.due !== t) return false;
   if (st.due === 'week' && !(it.due && it.due >= t && it.due <= addDays(t, 6))) return false;
+  if (st.due === 'd14' && !(it.due && it.due >= t && it.due <= addDays(t, 13))) return false; if (st.due === 'd30' && !(it.due && it.due >= t && it.due <= addDays(t, 29))) return false;
+  if (st.due.startsWith('range:')) { const [, a, b] = st.due.split(':'); if (!(it.due && it.due >= a && it.due <= b)) return false; }
   if (st.due === 'dated' && !it.due) return false; if (st.due === 'none' && it.due) return false;
   }
   const q = S.tvQuery.trim().toLowerCase();
@@ -4257,7 +4371,8 @@ function listCol(c, tasks, showBoard) {
   if (c.color) head.style.borderTop = `3px solid ${c.color}`;
   return h('div', { class: 'tv-col', 'data-droplist': c.id }, head, h('div', { class: 'tv-rows' }, tasks.map(it => tvRow(it, c, false))), addTaskInput(c));
 }
-function renderTVBody() {
+function renderTVBody() { renderTVBodyCore(); }
+function renderTVBodyCore() {
   const ov = $('.tasksview'); if (!ov) return; const st = tvState();
   ov.querySelector('.tv-body')?.remove();
   const lists = allLists().filter(c => st.board === 'all' || c.boardId === st.board);
@@ -4346,7 +4461,7 @@ const inPreview = n => !!(n && n.closest && n.closest('.tpreview'));
 document.addEventListener('pointerover', e => {
   if (e.pointerType !== 'mouse') return; window._hx = e.clientX;
   if (inPreview(e.target)) { clearTimeout(hideT); return; }
-  const row = e.target.closest && e.target.closest('#cards .todo-item[data-item], .tv-row[data-tid]');
+  const row = e.target.closest && e.target.closest('#cards .todo-item[data-item], .tv-row[data-tid], .tcard[data-tid]');
   if (row === hovRow) { clearTimeout(hideT); return; }
   if (!row && $('.tpreview')) { clearTimeout(hideT); hideT = setTimeout(() => { const tp = $('.tpreview'); if (tp && (tp.matches(':hover') || tp.contains(document.activeElement))) return; hidePreview(); hovRow = null; }, 250); return; }
   hidePreview(); hovRow = row; if (!row) return;
@@ -7927,7 +8042,7 @@ renderTVBody = function () {
   ov.querySelector('.tv-bulk')?.remove();
   if (!S.tvSelMode) return;
   S.tvSel = S.tvSel || new Set();
-  for (const row of ov.querySelectorAll('.tv-row[data-tid]')) {
+  for (const row of ov.querySelectorAll('.tv-row[data-tid],.tcard[data-tid]')) {
     const tid = row.dataset.tid, on = S.tvSel.has(tid);
     row.classList.toggle('sel', on); row.classList.add('selmode');
     const box = h('span', { class: 'tv-selbox' + (on ? ' on' : ''), html: on ? ICON.check : '' }); row.prepend(box);
@@ -7945,7 +8060,7 @@ function bulkBar() {
   const dis = n ? {} : { disabled: true };
   const date = h('input', { type: 'date', class: 'tp-in', title: 'Set due date', ...dis }); date.onchange = () => { if (date.value) { const v = date.value; bulkApply(x => { x.due = v; }); } };
   const bar = h('div', { class: 'tv-bulk' }, h('b', null, n ? `${n} selected` : 'Click tasks to select'),
-    h('button', { class: 'mini', onclick: () => { S.tvSel = new Set($$('.tv-row[data-tid]').map(r => r.dataset.tid)); renderTVBody(); } }, 'Select all shown'),
+    h('button', { class: 'mini', onclick: () => { S.tvSel = new Set($$('.tv-row[data-tid],.tcard[data-tid]').map(r => r.dataset.tid)); renderTVBody(); } }, 'Select all shown'),
     h('button', { class: 'mini', ...dis, onclick: () => { bulkApply(x => { x.done = true; x.doneAt = now(); }); S.tvSel = new Set(); renderTVBody(); } }, 'Complete'),
     date,
     h('button', { class: 'mini', ...dis, onclick: e => { const r = e.currentTarget.getBoundingClientRect(); showMenu(r.left, r.top - 4, ST.labels.map(l => ({ label: 'Add tag: ' + l.name, fn: () => bulkApply(x => { if (!x.tags.includes(l.id)) x.tags.push(l.id); }) })).concat(ST.labels.length ? [{ label: 'Remove all tags', fn: () => bulkApply(x => { x.tags = []; }) }] : [{ label: 'No tags yet', fn: () => {} }])); } }, 'Tag…'),
@@ -8016,6 +8131,206 @@ renderCharts = function (root) {
   vizTipAttach(root);
 };
 let _rzT = null; window.addEventListener('resize', () => { clearTimeout(_rzT); _rzT = setTimeout(() => { if ($('.tasksview')) renderTVBody(); }, 200); });
+
+/* ========== v2.0: tasks dashboard redesign ========== */
+Object.assign(ICON, {
+  kOpen: sv('<rect x="5" y="4.5" width="14" height="16" rx="2.5"/><path d="M9 4.5V3.5h6v1M8.5 12.5l2.5 2.5 4.5-5"/>'),
+  kSoon: sv('<rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>'),
+  kStar: sv('<path d="M12 3.8l2.5 5.2 5.7.8-4.1 4 1 5.7-5.1-2.7-5.1 2.7 1-5.7-4.1-4 5.7-.8z"/>'),
+  kDone: sv('<circle cx="12" cy="12" r="8.5"/><path d="M8.2 12.4l2.7 2.7 5-5.6"/>'),
+  filt: sv('<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>'),
+});
+const SOON_DAYS = 7;
+const quadOf = it => it.important && it.urgent ? 'do' : it.important ? 'schedule' : it.urgent ? 'delegate' : 'later';
+const QUADS = { do: ['Do now', 'Urgent + important'], schedule: ['Schedule', 'Important, not urgent'], delegate: ['Delegate', 'Urgent, not important'], later: ['Later', 'Neither flag'] };
+const isSoon = (it, t) => !it.done && it.due && it.due <= addDays(t, SOON_DAYS);
+const prClass = it => (it.urgent && it.important) ? 'pr-high' : (it.urgent || it.important) ? 'pr-med' : 'pr-low';
+
+function dashData() {
+  const t = todayStr(), all = [], base = [];
+  for (const c of allLists()) for (const it of c.data.items) { normTask(it); all.push({ it, c }); if (taskMatches(it, c, { ignoreDone: true })) base.push({ it, c }); }
+  const open = base.filter(x => !x.it.done), done = base.filter(x => x.it.done);
+  return { t, all, base, open, done, soon: open.filter(x => isSoon(x.it, t)), imp: open.filter(x => x.it.important), allDone: all.filter(x => x.it.done).length };
+}
+function viewPass(x, st, t) {
+  const { it } = x;
+  if (st.view === 'done') { if (!it.done) return false; }
+  else { if (it.done && !st.showDone) return false; if (st.view === 'important' && !(it.important && !it.done)) return false; if (st.view === 'soon' && !isSoon(it, t)) return false; }
+  if (st.quad && (it.done || quadOf(it) !== st.quad)) return false;
+  return true;
+}
+
+/* ---------- banner / header ---------- */
+function renderTVHead() {
+  const ov = $('.tasksview'), st = tvState(); if (!ov) return;
+  ov.querySelector('.tv-top')?.remove();
+  const q = h('input', { class: 'tv2-search', placeholder: 'Search tasks, notes, or boards…', value: S.tvQuery });
+  q.addEventListener('input', () => { S.tvQuery = q.value; renderTVBody(); const fb = ov.querySelector('.tv-active'); fb?.remove(); const nf = filterBar(); if (nf) ov.querySelector('.tv-top').append(nf); });
+  const n = (st.tags.length) + (st.flag !== 'all') + (st.due !== 'any') + (st.board !== 'all') + (st.charts === false ? 1 : 0);
+  const fbtn = h('button', { class: 'tv2-fbtn' + (n ? ' on' : ''), title: 'Filters: date range, tags, board, flags', onclick: () => filterPanel(fbtn) }, h('span', { html: ICON.filt }), n ? h('i', { class: 'tv2-fn' }, String(n)) : null);
+  const openCount = allLists().reduce((a, c) => a + c.data.items.filter(i => !i.done).length, 0);
+  const top = h('div', { class: 'tv-top tv2-top' },
+    h('div', { class: 'tv2-row' },
+      h('button', { class: 'tbtn', onclick: closeTasksView }, h('span', { html: ICON.back, style: { width: '16px', height: '16px', display: 'block' } }), h('span', { class: 'tl' }, 'Back to board')),
+      h('div', { class: 'tv2-title' }, h('span', { class: 'tv2-bar' }), h('div', null, h('h2', null, 'Tasks', h('span', { class: 'tv-count' }, `${openCount} open`)), h('div', { class: 'tv2-sub' }, 'Plan · Produce · Deliver'))),
+      h('div', { class: 'tv2-tools' }, h('label', { class: 'tv2-sbox' }, h('span', { html: ICON.search || '', class: 'tv2-sic' }), q), fbtn, h('button', { class: 'btn primary', onclick: () => newTaskFromDash() }, '+ New task'))));
+  { const fb = filterBar(); if (fb) top.append(fb); }
+  ov.prepend(top);
+  if (document.activeElement === document.body && S.tvQuery) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
+}
+function filterPanel(anchor) {
+  closeTransient(); const st = tvState();
+  const p = h('div', { class: 'pop tvfilter' });
+  const apply = () => { save(); renderTVHead(); renderTVBody(); draw(); };
+  const draw = () => {
+    p.innerHTML = '';
+    const pills = (opts, cur, fn) => h('div', { class: 'tvf-pills' }, opts.map(([v, l]) => h('button', { class: 'tvf-pill' + (cur === v ? ' on' : ''), onclick: () => fn(v) }, l)));
+    p.append(h('h4', null, 'Date range'), pills([['any', 'Any'], ['overdue', 'Overdue'], ['today', 'Today'], ['week', '7 days'], ['d14', '14 days'], ['d30', '30 days'], ['dated', 'Has date'], ['none', 'No date']], st.due.startsWith('day:') || st.due.startsWith('range:') ? '' : st.due, v => { st.due = v; apply(); }));
+    p.append(h('h4', null, 'Tags'), ST.labels.length ? h('div', { class: 'tvf-pills' }, ST.labels.map(l => h('button', { class: 'tvf-pill tag' + (st.tags.includes(l.id) ? ' on' : ''), style: { '--tg': l.color }, onclick: () => { st.tags = st.tags.includes(l.id) ? st.tags.filter(x => x !== l.id) : [...st.tags, l.id]; apply(); } }, l.name))) : h('div', { class: 'muted', style: { fontSize: '12px' } }, 'No tags yet'));
+    p.append(h('h4', null, 'Flags'), pills([['all', 'All'], ['important', 'Important'], ['urgent', 'Urgent'], ['both', 'Both'], ['none', 'None']], st.flag, v => { st.flag = v; apply(); }));
+    const boards = Object.values(ST.boards).filter(b => boardIsLive(b.id) && allLists().some(c => c.boardId === b.id));
+    const bs = h('select', { class: 'tp-in' }, h('option', { value: 'all' }, 'All boards'), boards.map(b => h('option', { value: b.id }, b.title || 'Untitled'))); bs.value = st.board; bs.onchange = () => { st.board = bs.value; apply(); };
+    p.append(h('h4', null, 'Board'), bs);
+    const tg = (label, on, fn) => h('label', { class: 'tvf-tg', onclick: fn }, h('span', { class: 'toggle' + (on ? ' on' : '') }), label);
+    p.append(h('div', { class: 'tvf-tgs' }, tg('Show completed in list', st.showDone, () => { st.showDone = !st.showDone; apply(); }), tg('Show charts', st.charts !== false, () => { st.charts = st.charts === false; apply(); })));
+    p.append(h('button', { class: 'btn', style: { marginTop: '10px' }, onclick: () => { st.tags = []; st.flag = 'all'; st.due = 'any'; st.board = 'all'; st.quad = null; apply(); } }, 'Reset filters'));
+  };
+  draw(); document.body.append(p); const r = anchor.getBoundingClientRect(); placeEl(p, Math.max(8, r.right - 300), r.bottom + 8);
+}
+function filterBar() {
+  const st = tvState(), chips = [];
+  const clear = fn => () => { fn(); save(); renderTVHead(); renderTVBody(); };
+  if (S.tvQuery.trim()) chips.push(['Search: “' + S.tvQuery.trim() + '”', clear(() => { S.tvQuery = ''; })]);
+  for (const id of st.tags) { const l = tagById(id); if (l) chips.push(['Tag: ' + l.name, clear(() => { st.tags = st.tags.filter(x => x !== id); })]); }
+  if (st.flag !== 'all') chips.push(['Flag: ' + ({ important: 'Important', urgent: 'Urgent', both: 'Important + urgent', none: 'No flags' }[st.flag] || st.flag), clear(() => { st.flag = 'all'; })]);
+  if (st.due !== 'any') chips.push(['Date: ' + (st.due.startsWith('day:') ? fmtDue(st.due.slice(4)) : st.due.startsWith('range:') ? 'Custom range' : ({ overdue: 'Overdue', today: 'Today', week: 'Next 7 days', d14: 'Next 14 days', d30: 'Next 30 days', dated: 'Has a date', none: 'No date' }[st.due] || st.due)), clear(() => { st.due = 'any'; })]);
+  if (st.board !== 'all') chips.push(['Board: ' + boardName(st.board), clear(() => { st.board = 'all'; })]);
+  if (st.quad) chips.push(['Matrix: ' + QUADS[st.quad][0], clear(() => { st.quad = null; })]);
+  if (!chips.length) return null;
+  return h('div', { class: 'tv-active' }, h('span', { class: 'muted' }, 'Filters active:'), chips.map(([l, fn]) => h('button', { class: 'tv-fchip', onclick: fn }, l, h('span', { class: 'x' }, '×'))),
+    h('button', { class: 'tv-fclear', onclick: clear(() => { st.tags = []; st.flag = 'all'; st.due = 'any'; st.board = 'all'; st.quad = null; S.tvQuery = ''; }) }, 'Clear all'));
+}
+
+/* ---------- KPI row ---------- */
+function kpiRow(d, st) {
+  const tile = (key, icon, num, label, color, view) => { const on = st.view === view && !st.quad; return h('button', { class: 'kpi' + (on ? ' on' : ''), style: { '--kc': color }, title: on ? 'Click to clear' : 'Click to filter the list', onclick: () => { st.view = on ? 'all' : view; st.quad = null; save(); renderTVBody(); } }, h('span', { class: 'kpi-ic', html: icon }), h('span', { class: 'kpi-t' }, h('b', null, String(num)), h('span', null, label))); };
+  const pct = d.all.length ? Math.round(d.allDone / d.all.length * 100) : 0, R = 34, C = 2 * Math.PI * R;
+  const ring = svgEl('svg', { viewBox: '0 0 84 84', class: 'ring' });
+  const gd = svgEl('defs', {}), lg = svgEl('linearGradient', { id: 'ringg', x1: 0, y1: 0, x2: 1, y2: 1 }); lg.append(svgEl('stop', { offset: '0%', 'stop-color': '#4aa3ff' }), svgEl('stop', { offset: '100%', 'stop-color': '#6fd68a' })); gd.append(lg); ring.append(gd);
+  ring.append(svgEl('circle', { cx: 42, cy: 42, r: R, class: 'ring-bg' }), svgEl('circle', { cx: 42, cy: 42, r: R, class: 'ring-fg', stroke: 'url(#ringg)', 'stroke-dasharray': `${C * pct / 100} ${C}`, transform: 'rotate(-90 42 42)' }));
+  const prog = h('div', { class: 'kpi prog' }, h('div', { class: 'ring-w' }, ring, h('b', { class: 'ring-n' }, pct + '%')), h('div', { class: 'kpi-t' }, h('b', { class: 'prog-h' }, 'Total progress'), h('span', null, `${d.allDone} of ${d.all.length} tasks resolved`)));
+  return h('div', { class: 'kpis' }, tile('open', ICON.kOpen, d.open.length, 'Open tasks', '#4aa3ff', 'all'), tile('soon', ICON.kSoon, d.soon.length, 'Due soon', '#ff9a4a', 'soon'), tile('imp', ICON.kStar, d.imp.length, 'Important', '#f2b53a', 'important'), tile('done', ICON.kDone, d.done.length, 'Completed', '#5fcf80', 'done'), prog);
+}
+
+/* ---------- panels ---------- */
+const dpanelEl = (title, sub, extra) => h('section', { class: 'dpanel' }, h('div', { class: 'dp-head' }, h('div', null, h('div', { class: 'vp-title' }, title), sub ? h('div', { class: 'vp-sub' }, sub) : null), extra || null));
+function colChart(items, H = 128) { // items: [{label,n,color,tip,fn,strong}]
+  const max = niceMax(Math.max(1, ...items.map(i => i.n)));
+  return h('div', { class: 'cc', style: { height: H + 'px' } }, items.map(i => h('button', { class: 'cc-col' + (i.fn ? ' click' : '') + (i.strong ? ' strong' : ''), 'data-tip': i.tip || '', onclick: i.fn || null }, h('span', { class: 'cc-val' }, i.n ? String(i.n) : ''), h('span', { class: 'cc-bar', style: { height: Math.max(i.n ? 6 : 2, i.n / max * (H - 42)) + 'px', '--bc': i.color || 'var(--v-s1)', opacity: i.n ? 1 : .35 } }), h('span', { class: 'cc-lab' }, i.label))));
+}
+function dashPanels(d, st) {
+  const t = d.t, wrap = h('div', { class: 'dpanels' });
+  // 1 activity this week (Mon-Sun)
+  const dow = (parseYmd(t).getDay() + 6) % 7, mon = addDays(t, -dow), wk = [];
+  for (let i = 0; i < 7; i++) { const day = addDays(mon, i), a = parseYmd(day).getTime(), b = a + 864e5; wk.push({ day, n: d.done.filter(x => x.it.doneAt && x.it.doneAt >= a && x.it.doneAt < b).length }); }
+  const wkDone = wk.reduce((a, x) => a + x.n, 0), dueWeek = d.open.filter(x => x.it.due && x.it.due >= t && x.it.due <= addDays(t, 6)).length;
+  const p1 = dpanelEl('Activity this week', `${wkDone} completed · ${dueWeek} still due this week`);
+  p1.append(colChart(wk.map(x => ({ label: parseYmd(x.day).toLocaleDateString(undefined, { weekday: 'short' }), n: x.n, strong: x.day === t, color: 'linear-gradient(180deg,#59b8d9,#2b6f8f)', tip: parseYmd(x.day).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' }) + ': ' + x.n + ' completed' }))));
+  // 2 open by board
+  const by = {}; for (const x of d.open) { const b = by[x.c.boardId] || (by[x.c.boardId] = { bid: x.c.boardId, n: 0, items: [] }); b.n++; b.items.push(x); }
+  const rows = Object.values(by).sort((a, b) => b.n - a.n).slice(0, 6), mx = Math.max(1, ...rows.map(r => r.n));
+  const p2 = dpanelEl('Open tasks by board', `${d.open.length} open across ${Object.keys(by).length} board${Object.keys(by).length === 1 ? '' : 's'}`);
+  const list = h('div', { class: 'bb' }); if (!rows.length) list.append(h('div', { class: 'vempty' }, 'No open tasks match these filters.'));
+  for (const r of rows) { const bd = ST.boards[r.bid] || {}; list.append(h('button', { class: 'bb-row' + (st.board === r.bid ? ' on' : ''), 'data-tip': taskNames(r.items).slice(0, 6).join('\n'), onclick: () => { st.board = st.board === r.bid ? 'all' : r.bid; save(); renderTVHead(); renderTVBody(); } }, h('span', { class: 'bb-tile', style: { background: bd.color || '#5f8ff0' } }, bd.icon || ''), h('span', { class: 'bb-name' }, bd.title || 'Board'), h('span', { class: 'bb-track' }, h('span', { class: 'bb-fill', style: { width: (r.n / mx * 100) + '%' } })), h('b', { class: 'bb-n' }, String(r.n)))); }
+  p2.append(list);
+  // 3 due-date load / matrix
+  const tab = (v, l) => h('button', { class: st.panel3 === v ? 'cur' : '', onclick: () => { st.panel3 = v; save(); renderTVBody(); } }, l);
+  const p3 = dpanelEl(st.panel3 === 'matrix' ? 'Urgent × Important' : 'Due-date load', st.panel3 === 'matrix' ? 'Click a box to filter the list' : 'Open tasks by when they are due', h('div', { class: 'seg tv-seg dp-seg' }, tab('load', 'Due dates'), tab('matrix', 'Matrix')));
+  if (st.panel3 === 'matrix') {
+    const cnt = { do: [], schedule: [], delegate: [], later: [] }; for (const x of d.open) cnt[quadOf(x.it)].push(x);
+    const cell = k => h('button', { class: 'mx-cell mx-' + k + (st.quad === k ? ' on' : ''), 'data-tip': taskNames(cnt[k]).slice(0, 8).join('\n'), onclick: () => { st.quad = st.quad === k ? null : k; save(); renderTVHead(); renderTVBody(); } }, h('b', null, String(cnt[k].length)), h('span', { class: 'mx-t' }, QUADS[k][0]), h('span', { class: 'mx-s' }, QUADS[k][1]));
+    p3.append(h('div', { class: 'mx' }, h('span', { class: 'mx-ax top1' }, 'Urgent'), h('span', { class: 'mx-ax top2' }, 'Not urgent'), h('span', { class: 'mx-ax left1' }, 'Important'), h('span', { class: 'mx-ax left2' }, 'Not important'), cell('do'), cell('schedule'), cell('delegate'), cell('later')));
+  } else {
+    const inR = (a, b) => d.open.filter(x => x.it.due && x.it.due >= a && x.it.due <= b), far = '9999-12-31';
+    const bk = [['Overdue', d.open.filter(x => x.it.due && x.it.due < t), '#ef6f6c', 'overdue'], ['This week', inR(t, addDays(t, 6)), '#ff9a4a', 'week'], ['Next week', inR(addDays(t, 7), addDays(t, 13)), '#4aa3ff', 'range:' + addDays(t, 7) + ':' + addDays(t, 13)], ['Later', inR(addDays(t, 14), far), '#8a919c', 'range:' + addDays(t, 14) + ':' + far], ['No date', d.open.filter(x => !x.it.due), '#5b616b', 'none']];
+    p3.append(colChart(bk.map(([l, arr, c, val]) => ({ label: l, n: arr.length, color: `linear-gradient(180deg,${c},color-mix(in srgb,${c} 35%,transparent))`, tip: [`${l}: ${arr.length}`, ...taskNames(arr).slice(0, 6)].join('\n'), fn: () => { st.due = st.due === val ? 'any' : val; save(); renderTVHead(); renderTVBody(); } }))));
+  }
+  wrap.append(p1, p2, p3); return wrap;
+}
+
+/* ---------- list / cards ---------- */
+function boardTile(c) { const bd = ST.boards[c.boardId] || {}; return h('span', { class: 'tv-btile', title: boardName(c.boardId), style: { background: bd.color || '#5f8ff0' } }, bd.icon || ''); }
+{ const _row = tvRow; tvRow = function (it, c, showList) { const row = _row(it, c, showList); row.classList.add(prClass(it)); const chk = row.querySelector('.chk'); if (chk) chk.after(boardTile(c)); return row; }; }
+function taskCard(it, c) {
+  const edit = fn => { checkpoint(); fn(normTask(it)); c.updatedAt = now(); save(); refreshTaskViews([c.id]); };
+  const chk = h('button', { class: 'chk' + (it.done ? ' on' : ''), html: it.done ? ICON.check : '', title: 'Mark complete', onclick: e => { e.stopPropagation(); toggleTask(it.id); } });
+  const due = h('input', { type: 'date', class: 'tp-in tcard-date', value: it.due || '', title: 'Due date' }); due.addEventListener('change', () => edit(x => { x.due = due.value || null; })); due.addEventListener('click', e => e.stopPropagation());
+  const flag = (k, label, ic) => h('button', { class: 'flagbtn ' + k + (it[k] ? ' on' : ''), title: label, onclick: e => { e.stopPropagation(); edit(x => { x[k] = !x[k]; }); } }, h('span', { html: ICON[ic], style: { width: '13px', height: '13px', display: 'inline-block' } }));
+  const sel = h('select', { class: 'tp-in tcard-tag', title: 'Add a tag' }, h('option', { value: '' }, '+ Tag'), ST.labels.filter(l => !it.tags.includes(l.id)).map(l => h('option', { value: l.id }, l.name)));
+  sel.addEventListener('click', e => e.stopPropagation()); sel.addEventListener('change', () => { if (sel.value) edit(x => { if (!x.tags.includes(sel.value)) x.tags.push(sel.value); }); });
+  const card = h('div', { class: 'tcard ' + prClass(it) + (it.done ? ' done' : ''), 'data-tid': it.id },
+    h('div', { class: 'tcard-top' }, chk, boardTile(c), h('span', { class: 'tcard-where' }, `${boardName(c.boardId)} · ${listName(c)}`)),
+    h('div', { class: 'tcard-title' }, flagIcons(it), it.text || h('span', { class: 'muted' }, 'Untitled task')),
+    h('div', { class: 'tmeta' }, it.tags.map(id => tagById(id)).filter(Boolean).map(l => h('span', { class: 'tchip tag', 'data-tag': l.id, style: { background: l.color } }, l.name)), subProgress(it)),
+    strip(it.notes) ? h('div', { class: 'tcard-notes' }, strip(it.notes).slice(0, 110)) : null,
+    h('div', { class: 'tcard-foot' }, due, flag('urgent', 'Urgent', 'bolt'), flag('important', 'Important', 'star'), sel));
+  card.addEventListener('click', () => { if (!S.tvSelMode) openTask(it.id); });
+  return card;
+}
+function renderTVBodyCore() {
+  const ov = $('.tasksview'); if (!ov) return; const st = tvState();
+  ov.querySelector('.tv-body')?.remove();
+  const body = h('div', { class: 'tv-body dash ' + (st.mode === 'board' ? 'mode-board' : 'mode-list') });
+  if (!allLists().length) { body.append(h('div', { class: 'tv-empty' }, h('b', null, 'No to-do lists yet'), 'Click “+ New task” to start an Inbox list, or add a To-do card to any board.')); ov.append(body); return; }
+  const d = dashData(), t = d.t, lists = allLists().filter(c => st.board === 'all' || c.boardId === st.board);
+  body.append(kpiRow(d, st));
+  if (st.charts !== false) body.append(dashPanels(d, st));
+  const t3 = h('div', { class: 'tv-top3' }); body.append(t3); renderTop3(t3);
+  // toolbar
+  const cnt = { all: d.open.length + (st.showDone ? d.done.length : 0), important: d.imp.length, soon: d.soon.length, done: d.done.length };
+  const chip = (v, label, ic) => h('button', { class: 'tvchip' + (st.view === v && !st.quad ? ' on' : ''), onclick: () => { st.view = v; st.quad = null; save(); renderTVBody(); } }, ic ? h('span', { class: 'tvchip-i', html: ic }) : null, label, h('i', null, String(cnt[v])));
+  const sel = (opts, cur, fn, title) => { const s = h('select', { class: 'tv-sel', title }, opts.map(([v, l]) => h('option', { value: v }, l))); s.value = cur; s.onchange = () => fn(s.value); return s; };
+  const set = (k, v) => { st[k] = v; save(); renderTVHead(); renderTVBody(); };
+  body.append(h('div', { class: 'tvbar' }, h('div', { class: 'tvchips' }, chip('all', 'All tasks'), chip('important', 'Important', ICON.kStar), chip('soon', 'Due soon', ICON.kSoon), chip('done', 'Completed', ICON.kDone)),
+    h('div', { class: 'tvbar-r' }, h('div', { class: 'seg tv-seg' }, [['list', 'List'], ['cards', 'Cards'], ['board', 'Lists']].map(([v, l]) => h('button', { class: st.mode === v ? 'cur' : '', onclick: () => set('mode', v) }, l))),
+      st.mode !== 'board' ? sel([['board', 'Group: Board'], ['list', 'Group: To-do list'], ['due', 'Group: Due date'], ['flags', 'Group: Flags'], ['tag', 'Group: Tag'], ['none', 'No grouping']], st.group, v => set('group', v), 'Group by') : null,
+      st.mode !== 'board' ? sel([['due', 'Sort: Due date'], ['flag', 'Sort: Priority'], ['created', 'Sort: Newest'], ['manual', 'Sort: Manual']], st.sort, v => set('sort', v), 'Sort') : null,
+      h('button', { class: 'tv-sel' + (S.tvSelMode ? ' on' : ''), onclick: () => { S.tvSelMode = !S.tvSelMode; S.tvSel = new Set(); renderTVBody(); } }, S.tvSelMode ? 'Done selecting' : 'Select'))));
+  const holder = h('div', { class: 'tv-list' }); body.append(holder);
+  if (st.mode === 'board') {
+    const cols = h('div', { class: 'tv-cols' });
+    for (const c of lists) cols.append(listCol(c, c.data.items.filter(it => taskMatches(it, c) && viewPass({ it }, st, t)), true));
+    holder.append(cols);
+  } else {
+    const all = []; for (const c of lists) for (const it of c.data.items) if (taskMatches(it, c, { ignoreDone: true }) && viewPass({ it }, st, t)) all.push([it, c]);
+    let defs;
+    if (st.group === 'none') defs = [['All tasks', () => true]];
+    else if (st.group === 'list') defs = lists.map(c => [listName(c), ([it, k]) => k === c, null, boardName(c.boardId), c]);
+    else if (st.group === 'due') defs = [['Overdue', ([it]) => it.due && it.due < t && !it.done], ['Today', ([it]) => it.due === t], ['Tomorrow', ([it]) => it.due === addDays(t, 1)], ['Next 7 days', ([it]) => it.due > addDays(t, 1) && it.due <= addDays(t, 7)], ['Later', ([it]) => it.due > addDays(t, 7)], ['Earlier (completed)', ([it]) => it.due && it.due < t && it.done], ['No date', ([it]) => !it.due]];
+    else if (st.group === 'flags') defs = [['Important + urgent', ([it]) => it.important && it.urgent], ['Urgent', ([it]) => it.urgent && !it.important], ['Important', ([it]) => it.important && !it.urgent], ['No flags', ([it]) => !it.important && !it.urgent]];
+    else if (st.group === 'tag') defs = [...ST.labels.map(l => [l.name, ([it]) => it.tags.includes(l.id), l.color]), ['No tag', ([it]) => !it.tags.length]];
+    else { const bids = [...new Set(lists.map(c => c.boardId))]; defs = bids.map(b => [boardName(b), ([it, c]) => c.boardId === b, (ST.boards[b] || {}).color]); }
+    const byDue = ([a], [b]) => (a.due || '9999').localeCompare(b.due || '9999') || ((b.urgent + b.important) - (a.urgent + a.important)) || a.text.localeCompare(b.text);
+    const sortFn = st.sort === 'manual' ? () => 0 : st.sort === 'created' ? ([a], [b]) => (b.createdAt || 0) - (a.createdAt || 0) : st.sort === 'flag' ? ([a], [b]) => ((b.urgent * 2 + b.important) - (a.urgent * 2 + a.important)) || byDue([a], [b]) : byDue;
+    let n = 0;
+    for (const [title, fn, color, sub, list] of defs) {
+      const ts = all.filter(fn).sort(sortFn); if (!ts.length && !list) continue; if (!ts.length && st.view !== 'all') continue; n += ts.length;
+      const gk = 'g:' + st.group + ':' + title, folded = !!(st.collapsed || {})[gk], flat = st.group === 'none';
+      const g = h('div', { class: 'tv-group' + (folded ? ' folded' : ''), 'data-droplist': list ? list.id : null });
+      if (!flat) g.append(h('div', { class: 'tv-ghead', style: color ? { borderLeft: `4px solid ${color}`, paddingLeft: '8px' } : {}, onclick: () => { st.collapsed = st.collapsed || {}; st.collapsed[gk] = !folded; save(); renderTVBody(); } }, h('span', { class: 'tr-chev' + (folded ? '' : ' open'), html: ICON.chevr }), h('b', null, title), sub ? h('span', { class: 'muted' }, ' · ' + sub) : null, h('span', { class: 'muted' }, ` · ${ts.length}`)));
+      if (!folded) { g.append(st.mode === 'cards' ? h('div', { class: 'tcards' }, ts.map(([it, c]) => taskCard(it, c))) : h('div', { class: 'tv-rows' }, ts.map(([it, c]) => tvRow(it, c, !list)))); if (list && st.mode === 'list') g.append(addTaskInput(list)); }
+      holder.append(g);
+    }
+    if (!n) holder.append(h('div', { class: 'tv-empty' }, st.view === 'done' ? 'Nothing completed yet with these filters.' : 'No tasks match these filters.'));
+  }
+  const prev = S.tvScroll || { x: 0, y: 0 };
+  ov.append(body);
+  const cols = body.querySelector('.tv-cols'); if (cols) cols.scrollLeft = prev.x; body.scrollTop = prev.y;
+  body.addEventListener('scroll', () => { S.tvScroll = { x: cols ? cols.scrollLeft : 0, y: body.scrollTop }; }, true);
+  vizTipAttach(body);
+  if (S.tvFocus) { const inp = body.querySelector(`.tv-add[data-for="${S.tvFocus}"]`); S.tvFocus = null; if (inp) inp.focus(); }
+  const c2 = ov.querySelector('.tv-count'); if (c2) c2.textContent = `${d.open.length} open`;
+}
 
 /* ========== events + init ========== */
 function migrate() {
