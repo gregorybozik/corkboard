@@ -1823,6 +1823,51 @@ body.mark-only #cards .col-body .card{opacity:1}
 /* boards: no title bar, breadcrumb only */
 #titlebar{display:none}
 #crumbs .crumb.cur{font-weight:600}
+
+/* ===== v2.4 tabs ===== */
+#tabbar{height:32px;flex:none;display:flex;align-items:flex-end;gap:2px;padding:0 8px;background:color-mix(in srgb,var(--bar) 82%,#000 8%);border-bottom:1px solid var(--line);overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.tab{display:flex;align-items:center;gap:7px;height:27px;min-width:90px;max-width:200px;padding:0 6px 0 9px;border-radius:8px 8px 0 0;font-size:12.5px;color:var(--muted);cursor:pointer;flex:0 1 auto;border:1px solid transparent;border-bottom:0;user-select:none}
+.tab:hover{background:var(--hover);color:var(--text)}
+.tab.cur{background:var(--bar);color:var(--text);border-color:var(--line);margin-bottom:-1px;height:28px}
+.tab-ic{width:15px;height:15px;border-radius:4px;display:grid;place-items:center;font-size:10px;flex:none}
+.tab-t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tab-x{border:0;background:none;color:inherit;font-size:15px;line-height:1;width:18px;height:18px;border-radius:5px;cursor:pointer;opacity:0;flex:none;padding:0}
+.tab:hover .tab-x,.tab.cur .tab-x{opacity:.6}.tab-x:hover{opacity:1!important;background:var(--line)}
+.tab-new{border:0;background:none;color:var(--muted);font-size:17px;width:26px;height:26px;border-radius:7px;cursor:pointer;flex:none;margin-bottom:1px}
+.tab-new:hover{background:var(--hover);color:var(--text)}
+.tasksview,.dashview{top:32px}
+.pv-wrap{top:32px}
+.presenting #tabbar{display:none}
+@media print{#tabbar{display:none}}
+#cards>.card.parked{position:absolute!important;left:-100000px!important;top:0!important;visibility:hidden!important;pointer-events:none!important}
+
+/* ===== v2.4 tables ===== */
+.tb2{position:relative;padding:16px 12px 12px 16px;outline:0}
+.tb2.in-page{padding-left:16px;margin:4px 0}
+.tbl2{width:100%;table-layout:fixed;border-collapse:collapse}
+.tbl2 td,.tbl2 th{position:relative;height:30px;padding:0;vertical-align:top;cursor:cell}
+.tbl2 .tc{padding:5px 7px;min-height:20px;white-space:pre-wrap;word-break:break-word;outline:0}
+.tbl2 td.insel,.tbl2 th.insel{background-image:linear-gradient(color-mix(in srgb,var(--sel) 14%,transparent),color-mix(in srgb,var(--sel) 14%,transparent))}
+.tbl2 td.cur,.tbl2 th.cur{box-shadow:inset 0 0 0 2px var(--sel)}
+.tbl2 td.editing,.tbl2 th.editing{box-shadow:inset 0 0 0 2px var(--sel),0 2px 10px rgba(0,0,0,.18);cursor:text}
+.tb2-add{position:absolute;z-index:4;width:16px;height:16px;border-radius:50%;border:0;background:var(--sel);color:#fff;font-size:13px;line-height:16px;padding:0;cursor:pointer;display:none;text-align:center}
+.tb2.hov:not(.resizing) .tb2-add{display:block;opacity:.55}.tb2-add:hover{opacity:1!important;transform:scale(1.15)}
+.tb2-grips{position:absolute;inset:0;pointer-events:none}
+.tb2-grip{position:absolute;pointer-events:auto;z-index:3}
+.tb2-grip.col{width:7px;cursor:col-resize}.tb2-grip.row{height:6px;cursor:row-resize}
+.tb2-grip:hover,.tb2.resizing .tb2-grip:active{background:color-mix(in srgb,var(--sel) 55%,transparent)}
+.tblbar{position:fixed;z-index:26000;display:flex;align-items:center;gap:2px;flex-wrap:wrap;max-width:330px;background:var(--menu,var(--card));color:var(--text);border:1px solid var(--line);border-radius:10px;padding:4px;box-shadow:0 8px 28px rgba(0,0,0,.25)}
+.tbb{min-width:28px;height:28px;border:0;background:none;color:inherit;border-radius:6px;cursor:pointer;font:inherit;font-size:13px;display:grid;place-items:center;padding:0 6px}
+.tbb:hover{background:var(--hover)}.tbb.on{background:color-mix(in srgb,var(--sel) 22%,transparent)}
+.tbb.txt{font-size:12px}.tbb.dis{opacity:.4;pointer-events:none}
+.tbb-sep{width:1px;height:18px;background:var(--line);margin:0 3px}
+.tbb-al{display:flex;flex-direction:column;gap:2.5px;width:14px}.tbb-al i{display:block;height:1.6px;background:currentColor;border-radius:1px;width:100%}.tbb-al i:nth-child(2){width:62%}
+.tbb-al.center{align-items:center}.tbb-al.right{align-items:flex-end}
+.tbb-a{border-bottom:3px solid;line-height:1;padding:0 2px;font-weight:600}
+.tbb-fill{width:14px;height:14px;border-radius:4px;border:1.5px solid currentColor;display:block}
+.tbb-pal{flex-basis:100%;display:flex;gap:5px;padding:5px 4px 3px}
+.tbb-sw{width:20px;height:20px;border-radius:50%;border:1px solid var(--line);cursor:pointer;padding:0}
+.tbb-sw.none{background:linear-gradient(135deg,transparent 45%,#e5534b 45%,#e5534b 55%,transparent 55%)}
 </style>
 </head>
 <body class="app-root">
@@ -1840,6 +1885,7 @@ body.mark-only #cards .col-body .card{opacity:1}
   </aside>
   <div id="sbScrim"></div>
   <div id="appmain">
+    <div id="tabbar"></div>
     <header id="topbar">
       <button class="ib" id="btnSide" title="Toggle sidebar (Ctrl/⌘ \)"></button>
       <div class="crumbs" id="crumbs"></div>
@@ -2207,7 +2253,7 @@ function renderBoard() {
   const cont = $('#cards');
   ro.disconnect();
   const keep = new Map();
-  for (const el of [...cont.children]) { const c = ST.cards[el.dataset.id]; if (c && c.boardId === S.boardId && el.querySelector('.media-keep')) keep.set(el.dataset.id, el); else el.remove(); }
+  for (const el of [...cont.children]) { const c = ST.cards[el.dataset.id], mk = c && !c.trashed && el.querySelector('.media-keep'); if (mk && c.boardId === S.boardId && !c.columnId) { el.classList.remove('parked'); keep.set(el.dataset.id, el); } else if (mk && !c.columnId && !c.unsorted && typeof tabBoards === 'function' && tabBoards().has(c.boardId)) el.classList.add('parked'); else el.remove(); }
   applyView();
   const cards = topLevel(S.boardId).sort((a, b) => a.z - b.z);
   for (const c of cards) { const fresh = renderCard(c), old = keep.get(c.id); if (old) { keep.delete(c.id); patchCard(old, fresh); } else cont.append(fresh); }
@@ -3438,6 +3484,8 @@ function showCardMenu(x, y) {
   const c = ST.cards[ids[0]], one = ids.length === 1, allLocked = ids.every(id => ST.cards[id].locked);
   const extra = [];
   if (one && c.type === 'board') extra.push({ label: 'Open Board', fn: () => openBoard(c.data.boardId) });
+  if (one && c.type === 'board') extra.push({ label: 'Open in New Tab', fn: () => openInNewTab({ t: 'board', id: c.data.boardId }) });
+  if (one && c.type === 'page' && c.data.pageId) extra.push({ label: 'Open in New Tab', fn: () => openInNewTab({ t: 'page', id: c.data.pageId }) });
   if (one && c.type === 'doc') extra.push({ label: 'Open Document', fn: () => openDoc(c.id) });
   if (one && c.type === 'link' && c.data.url) extra.push({ label: 'Open Link', fn: () => window.open(c.data.url, '_blank', 'noopener') });
   if (one && c.type === 'image' && c.data.blobId) extra.push({ label: 'View Full Size', fn: () => lightbox(c) });
@@ -6219,6 +6267,7 @@ function blockEl(b, n) {
     case 'callout': bc.append(h('button', { class: 'bemo', tabindex: '-1', title: 'Change icon' }, b.emoji || '💡'), ed()); break;
     case 'code': { const pre = h('pre', { class: 'bcode', spellcheck: 'false' }); pre.textContent = b.text || ''; pre.contentEditable = 'plaintext-only'; if (pre.contentEditable !== 'plaintext-only') pre.contentEditable = 'true'; bc.append(h('div', { class: 'bcode-lab' }, 'Code'), pre); break; }
     case 'divider': bc.append(h('hr')); break;
+    case 'table': bc.append(tableUI(b, { key: 'b:' + b.id, inPage: true, cp: checkpoint, changed() { if (PE.page) { PE.page.updatedAt = now(); save(); scheduleCardSync(); } } })); break;
     case 'image': {
       if (b.blobId || b.src) { const cap = h('div', { class: 'bcap' + (b.caption ? '' : ' is-empty'), 'data-ph': 'Add a caption…', html: b.caption || '' }); cap.contentEditable = 'true'; bc.append(h('figure', { class: 'bimg w-' + (b.width || 'full') }, h('img', { src: b.blobId ? Blobs.url(b.blobId) : b.src, alt: '', draggable: 'false', referrerpolicy: 'no-referrer' }), cap)); }
       else bc.append(placeholderEl(b, 'image', 'Add an image', [h('button', { class: 'btn', 'data-pa': 'up-image' }, 'Upload'), h('input', { class: 'bph-in', 'data-kind': 'image', placeholder: 'or paste an image link and press Enter' })]));
@@ -6368,6 +6417,7 @@ const SLASH = [
   ['quote', 'Quote', 'Capture a quote', '❝'], ['callout', 'Callout', 'Make writing stand out', '💡'], ['divider', 'Divider', 'Visually divide blocks', '—'], ['code', 'Code', 'Capture a code snippet', '</>'],
   ['subpage', 'Page', 'Embed a sub-page inside this page', '📄'], ['link', 'Link to board or page', 'Link to a board, page or card', '↗'], ['mention', 'Mention', 'Mention a page, board or date', '@'], ['date', 'Date', 'Insert today’s date', '▦'],
   ['image', 'Image', 'Upload or embed an image', '🖼'], ['video', 'Video', 'YouTube, Vimeo or a video file', '▶'], ['bookmark', 'Web bookmark', 'Visual preview of a link', '🔖'], ['file', 'File', 'Upload a file', '📎'],
+  ['table', 'Table', 'Simple table with rows and columns', '▥'],
   ['db', 'Database', 'Rows with properties: table, board, gallery, list', '▤'], ['dblink', 'Linked view of database', 'Show an existing database here', '↗'],
   ['boardemb', 'Board', 'Embed a live board in this page', '▦'],
   ['toc', 'Table of contents', 'Links to headings on this page', '☰'], ['cols2', '2 columns', 'Side-by-side columns', '▥'], ['cols3', '3 columns', 'Three columns', '▥'],
@@ -6422,6 +6472,7 @@ function applySlash(k) {
   if (k === 'db') n = nb('db', '', { dbId: newDb({ t: 'page', id: PE.page.id }).id, linked: false, views: [], cur: null });
   else if (k === 'cols2' || k === 'cols3') n = { id: uid(), type: 'cols', indent: 0, cols: Array.from({ length: k === 'cols2' ? 2 : 3 }, () => ({ id: uid(), blocks: [nb('text')] })) };
   else if (k === 'subpage') { const sp = newPage({}, { t: 'page', id: PE.page.id }); n = nb('subpage', '', { pageId: sp.id }); }
+  else if (k === 'table') n = nb('table', '', { rows: [['', '', ''], ['', '', ''], ['', '', '']], header: true });
   else n = nb(k);
   if (empty && b.type === 'text' && n.type !== 'cols') { n.indent = b.indent || 0; f.arr.splice(f.i, 1, n); }
   else if (empty && b.type === 'text' && n.type === 'cols' && !f.owner) f.arr.splice(f.i, 1, n);
@@ -9015,6 +9066,254 @@ document.addEventListener('dblclick', e => {
     last.addEventListener('dblclick', e => { e.stopPropagation(); const b = board(); askText(last, 'Board name', b.title || '', v => { v = (v || '').trim(); if (!v) return; checkpoint(); b.title = v; b.updatedAt = now(); save(); renderAll(); }); });
   };
 }
+
+/* ========== v2.4: tables (shared by board table cards and page table blocks) ========== */
+const TBL = { sel: {}, active: null, activeKey: null, bar: null };
+const TBL_FG = [null, '#e5534b', '#e07a1f', '#b8860b', '#3a9d5d', '#2b7fd9', '#8b6cf0', '#8a919c'];
+const TBL_BG = [null, 'rgba(229,83,75,.22)', 'rgba(255,154,74,.24)', 'rgba(242,181,58,.26)', 'rgba(95,207,128,.22)', 'rgba(74,163,255,.22)', 'rgba(139,108,240,.22)', 'rgba(138,145,156,.24)'];
+function tblNorm(m) {
+  if (!Array.isArray(m.rows) || !m.rows.length) m.rows = [['']];
+  const n = Math.max(1, ...m.rows.map(r => r.length)); m.rows.forEach(r => { while (r.length < n) r.push(''); });
+  m.colW = (m.colW || []).slice(0, n); while (m.colW.length < n) m.colW.push(1);
+  m.rowH = (m.rowH || []).slice(0, m.rows.length); while (m.rowH.length < m.rows.length) m.rowH.push(0);
+  m.merge = (m.merge || []).filter(g => g.r < m.rows.length && g.c < n); m.merge.forEach(g => { g.rs = Math.min(g.rs, m.rows.length - g.r); g.cs = Math.min(g.cs, n - g.c); }); m.merge = m.merge.filter(g => g.rs > 1 || g.cs > 1);
+  m.fmt = m.fmt || {};
+  return m;
+}
+const tblAnchor = (m, r, c) => m.merge.find(g => r >= g.r && r < g.r + g.rs && c >= g.c && c < g.c + g.cs);
+function tblShiftFmt(m, axis, i, d) { const out = {}; for (const k in m.fmt) { let [r, c] = k.split(',').map(Number); if (axis === 'r') { if (d < 0 && r === i) continue; if (r >= i + (d < 0 ? 1 : 0)) r += d; } else { if (d < 0 && c === i) continue; if (c >= i + (d < 0 ? 1 : 0)) c += d; } out[r + ',' + c] = m.fmt[k]; } m.fmt = out; }
+function tblInsRow(m, i) { m.rows.splice(i, 0, m.rows[0].map(() => '')); m.rowH.splice(i, 0, 0); tblShiftFmt(m, 'r', i, 1); for (const g of m.merge) { if (g.r >= i) g.r++; else if (i < g.r + g.rs) g.rs++; } }
+function tblInsCol(m, i) { m.rows.forEach(r => r.splice(i, 0, '')); const avg = m.colW.reduce((a, b) => a + b, 0) / m.colW.length; m.colW.splice(i, 0, avg); tblShiftFmt(m, 'c', i, 1); for (const g of m.merge) { if (g.c >= i) g.c++; else if (i < g.c + g.cs) g.cs++; } }
+function tblDelRow(m, i) { if (m.rows.length <= 1) return false; for (const g of m.merge) { if (i < g.r) g.r--; else if (i < g.r + g.rs) { if (i === g.r && g.rs > 1) m.rows[i + 1][g.c] = m.rows[i][g.c]; g.rs--; } } m.rows.splice(i, 1); m.rowH.splice(i, 1); tblShiftFmt(m, 'r', i, -1); tblNorm(m); return true; }
+function tblDelCol(m, i) { if (m.rows[0].length <= 1) return false; for (const g of m.merge) { if (i < g.c) g.c--; else if (i < g.c + g.cs) { if (i === g.c && g.cs > 1) m.rows.forEach((r, ri) => { if (ri === g.r) r[i + 1] = r[i]; }); g.cs--; } } m.rows.forEach(r => r.splice(i, 1)); m.colW.splice(i, 1); tblShiftFmt(m, 'c', i, -1); tblNorm(m); return true; }
+
+function tableUI(m, hooks) {
+  tblNorm(m); const key = hooks.key;
+  const wrap = h('div', { class: 'tb2' + (hooks.inPage ? ' in-page' : ''), tabindex: '0' });
+  let sel = TBL.sel[key] || null, editing = null, table, cols = [];
+  const R = () => m.rows.length, C = () => m.rows[0].length;
+  const fix = (r, c) => { r = Math.max(0, Math.min(R() - 1, r)); c = Math.max(0, Math.min(C() - 1, c)); const g = tblAnchor(m, r, c); return g ? [g.r, g.c] : [r, c]; };
+  const rect = () => { if (!sel) return null; let r0 = Math.min(sel.r, sel.r2), r1 = Math.max(sel.r, sel.r2), c0 = Math.min(sel.c, sel.c2), c1 = Math.max(sel.c, sel.c2), grew = true; while (grew) { grew = false; for (const g of m.merge) if (g.r <= r1 && g.r + g.rs - 1 >= r0 && g.c <= c1 && g.c + g.cs - 1 >= c0) { if (g.r < r0) { r0 = g.r; grew = true; } if (g.c < c0) { c0 = g.c; grew = true; } if (g.r + g.rs - 1 > r1) { r1 = g.r + g.rs - 1; grew = true; } if (g.c + g.cs - 1 > c1) { c1 = g.c + g.cs - 1; grew = true; } } } return { r0, r1, c0, c1 }; };
+  const cells = () => { const q = rect(), out = []; if (!q) return out; for (let r = q.r0; r <= q.r1; r++) for (let c = q.c0; c <= q.c1; c++) { const g = tblAnchor(m, r, c); if (!g || (g.r === r && g.c === c)) out.push([r, c]); } return out; };
+  const td = (r, c) => table && table.querySelector(`[data-r="${r}"][data-c="${c}"]`);
+  const setSel = (r, c, extend) => { [r, c] = fix(r, c); if (extend && sel) { sel = { r: sel.r, c: sel.c, r2: r, c2: c }; } else sel = { r, c, r2: r, c2: c }; TBL.sel[key] = sel; paintSel(); };
+  const paintSel = () => { if (!table) return; const q = rect(); table.querySelectorAll('td,th').forEach(x => { const r = +x.dataset.r, c = +x.dataset.c; x.classList.toggle('cur', !!sel && TBL.activeKey === key && r === sel.r && c === sel.c); x.classList.toggle('insel', !!q && TBL.activeKey === key && r >= q.r0 && r <= q.r1 && c >= q.c0 && c <= q.c1 && !(q.r0 === q.r1 && q.c0 === q.c1)); }); if (TBL.activeKey === key) tblBar(api); };
+  const activate = () => { if (TBL.active && TBL.active !== api && TBL.active.deactivate) TBL.active.deactivate(); TBL.active = api; TBL.activeKey = key; wrap.classList.add('active'); paintSel(); };
+  const mut = fn => { commit(); hooks.cp(); fn(); tblNorm(m); if (sel) { const [r, c] = fix(sel.r, sel.c); sel = { r, c, r2: Math.min(sel.r2, R() - 1), c2: Math.min(sel.c2, C() - 1) }; TBL.sel[key] = sel; } hooks.changed(); draw(); if (TBL.activeKey === key) wrap.focus({ preventScroll: true }); };
+  const fmtOf = (r, c) => m.fmt[r + ',' + c] || {};
+  const setFmt = (k, v) => mut(() => { for (const [r, c] of cells()) { const f = Object.assign({}, fmtOf(r, c)); if (v === null || v === false || v === undefined) delete f[k]; else f[k] = v; if (Object.keys(f).length) m.fmt[r + ',' + c] = f; else delete m.fmt[r + ',' + c]; } });
+  const toggleFmt = k => { if (!sel) return; setFmt(k, fmtOf(sel.r, sel.c)[k] ? null : 1); };
+  const canMerge = () => { const q = rect(); return !!q && (q.r0 !== q.r1 || q.c0 !== q.c1); };
+  const merged = () => sel && m.merge.find(g => g.r === sel.r && g.c === sel.c);
+  const doMerge = () => { const q = rect(); if (!canMerge()) return; mut(() => { const texts = []; for (let r = q.r0; r <= q.r1; r++) for (let c = q.c0; c <= q.c1; c++) { if (m.rows[r][c]) texts.push(m.rows[r][c]); if (r !== q.r0 || c !== q.c0) { m.rows[r][c] = ''; delete m.fmt[r + ',' + c]; } } m.rows[q.r0][q.c0] = texts.join(' '); m.merge = m.merge.filter(g => !(g.r >= q.r0 && g.r <= q.r1 && g.c >= q.c0 && g.c <= q.c1)); m.merge.push({ r: q.r0, c: q.c0, rs: q.r1 - q.r0 + 1, cs: q.c1 - q.c0 + 1 }); sel = { r: q.r0, c: q.c0, r2: q.r0, c2: q.c0 }; }); };
+  const doSplit = () => { const g = merged(); if (!g) return; mut(() => { m.merge = m.merge.filter(x => x !== g); }); };
+  function startEdit(r, c, ch) {
+    commit(); const cell = td(r, c); if (!cell) return; const tc = cell.querySelector('.tc'); activate(); setSel(r, c);
+    tc.contentEditable = 'plaintext-only'; if (tc.contentEditable !== 'plaintext-only') tc.contentEditable = 'true';
+    if (ch !== undefined && ch !== null) tc.textContent = ch;
+    editing = { r, c, tc, old: m.rows[r][c] }; cell.classList.add('editing'); tc.focus({ preventScroll: true });
+    const rg = document.createRange(); rg.selectNodeContents(tc); rg.collapse(false); const s = getSelection(); s.removeAllRanges(); s.addRange(rg);
+  }
+  function commit(cancel) {
+    if (!editing) return; const e = editing; editing = null; e.tc.contentEditable = 'false'; e.tc.closest('td,th')?.classList.remove('editing');
+    const v = cancel ? e.old : e.tc.innerText.replace(/\n$/, ''); if (cancel) e.tc.textContent = e.old;
+    if (v !== e.old) { hooks.cp(); m.rows[e.r][e.c] = v; hooks.changed(); placeGrips(); }
+  }
+  const move = (dr, dc, extend) => { if (!sel) return setSel(0, 0); const br = extend ? sel.r2 : sel.r, bc = extend ? sel.c2 : sel.c, g = tblAnchor(m, br, bc); let r = br + (dr > 0 && g ? g.rs : dr), c = bc + (dc > 0 && g ? g.cs : dc); setSel(r, c, extend); td(...fix(r, c))?.scrollIntoView({ block: 'nearest', inline: 'nearest' }); };
+  function onKey(e) {
+    if (editing) {
+      e.stopPropagation();
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); wrap.focus({ preventScroll: true }); move(1, 0); }
+      else if (e.key === 'Tab') { e.preventDefault(); commit(); wrap.focus({ preventScroll: true }); move(0, e.shiftKey ? -1 : 1); }
+      else if (e.key === 'Escape') { e.preventDefault(); commit(true); wrap.focus({ preventScroll: true }); }
+      return;
+    }
+    if (!sel) return; const mod = e.metaKey || e.ctrlKey, k = e.key; let used = true;
+    if (k === 'ArrowDown') move(1, 0, e.shiftKey); else if (k === 'ArrowUp') move(-1, 0, e.shiftKey); else if (k === 'ArrowRight') move(0, 1, e.shiftKey); else if (k === 'ArrowLeft') move(0, -1, e.shiftKey);
+    else if (k === 'Tab') { if (!e.shiftKey && sel.c === C() - 1 && sel.r === R() - 1) mut(() => { tblInsRow(m, R()); sel = { r: R() - 1, c: 0, r2: R() - 1, c2: 0 }; }); else if (!e.shiftKey && sel.c >= C() - 1) setSel(sel.r + 1, 0); else if (e.shiftKey && sel.c === 0) setSel(sel.r - 1, C() - 1); else move(0, e.shiftKey ? -1 : 1); }
+    else if (k === 'Enter' || k === 'F2') startEdit(sel.r, sel.c);
+    else if (k === 'Delete' || k === 'Backspace') { if (cells().some(([r, c]) => m.rows[r][c])) mut(() => { for (const [r, c] of cells()) m.rows[r][c] = ''; }); }
+    else if (k === 'Escape') { api.deactivate(); wrap.blur(); }
+    else if (mod && k.toLowerCase() === 'b') toggleFmt('b'); else if (mod && k.toLowerCase() === 'i') toggleFmt('i');
+    else if (!mod && !e.altKey && k.length === 1) startEdit(sel.r, sel.c, k);
+    else used = false;
+    if (used) { e.preventDefault(); e.stopPropagation(); }
+  }
+  wrap.addEventListener('keydown', onKey);
+  wrap.addEventListener('pointerdown', e => {
+    if (e.target.closest('.tb2-add,.tb2-grip')) { e.stopPropagation(); return; }
+    const cell = e.target.closest('td,th'); if (!cell || !wrap.contains(cell)) { if (hooks.inPage) e.stopPropagation(); return; }
+    const r = +cell.dataset.r, c = +cell.dataset.c;
+    if (editing && editing.r === r && editing.c === c) { e.stopPropagation(); return; }
+    if (e.button === 2 && sel && (() => { const q = rect(); return r >= q.r0 && r <= q.r1 && c >= q.c0 && c <= q.c1; })()) { activate(); return; }
+    commit(); activate(); setSel(r, c, e.shiftKey); if (e.shiftKey) e.preventDefault();
+    if (hooks.inPage) e.stopPropagation();
+    setTimeout(() => { if (!editing && TBL.activeKey === key) wrap.focus({ preventScroll: true }); }, 0);
+  });
+  wrap.addEventListener('click', e => { if (hooks.inPage) e.stopPropagation(); if (!editing && TBL.activeKey === key && e.target.closest('td,th')) wrap.focus({ preventScroll: true }); });
+  wrap.addEventListener('dblclick', e => { const cell = e.target.closest('td,th'); if (!cell) return; e.stopPropagation(); if (editing && editing.tc === cell.querySelector('.tc')) return; startEdit(+cell.dataset.r, +cell.dataset.c); });
+  wrap.addEventListener('focusout', e => { if (editing && e.target === editing.tc) commit(); });
+  wrap.addEventListener('contextmenu', e => {
+    const cell = e.target.closest('td,th'); if (!cell) return; e.preventDefault(); e.stopPropagation(); if (editing) return;
+    const r = +cell.dataset.r, c = +cell.dataset.c, q0 = rect(); if (!q0 || !(r >= q0.r0 && r <= q0.r1 && c >= q0.c0 && c <= q0.c1)) setSel(r, c); activate();
+    const q = rect(), g = merged();
+    showMenu(e.clientX, e.clientY, [
+      { label: 'Insert row above', fn: () => mut(() => tblInsRow(m, q.r0)) }, { label: 'Insert row below', fn: () => mut(() => tblInsRow(m, q.r1 + 1)) },
+      { label: 'Insert column left', fn: () => mut(() => tblInsCol(m, q.c0)) }, { label: 'Insert column right', fn: () => mut(() => tblInsCol(m, q.c1 + 1)) }, '-',
+      { label: q.r1 > q.r0 ? `Delete ${q.r1 - q.r0 + 1} rows` : 'Delete row', disabled: q.r1 - q.r0 + 1 >= R(), fn: () => mut(() => { for (let i = q.r1; i >= q.r0; i--) tblDelRow(m, i); }) },
+      { label: q.c1 > q.c0 ? `Delete ${q.c1 - q.c0 + 1} columns` : 'Delete column', disabled: q.c1 - q.c0 + 1 >= C(), fn: () => mut(() => { for (let i = q.c1; i >= q.c0; i--) tblDelCol(m, i); }) }, '-',
+      canMerge() ? { label: 'Merge cells', fn: doMerge } : null, g ? { label: 'Split cell', fn: doSplit } : null,
+      { label: 'Clear contents', fn: () => mut(() => { for (const [rr, cc] of cells()) m.rows[rr][cc] = ''; }) },
+      { label: m.header ? 'Turn off header row' : 'Make first row a header', fn: () => mut(() => { m.header = !m.header; }) }].filter(Boolean));
+  });
+  /* hover "+" handles */
+  const addR = h('button', { class: 'tb2-add r', title: 'Insert row here', tabindex: '-1' }, '+'), addC = h('button', { class: 'tb2-add c', title: 'Insert column here', tabindex: '-1' }, '+');
+  let addRi = 0, addCi = 0;
+  addR.addEventListener('click', e => { e.stopPropagation(); activate(); mut(() => { tblInsRow(m, addRi); sel = { r: addRi, c: sel ? Math.min(sel.c, C() - 1) : 0, r2: addRi, c2: sel ? Math.min(sel.c, C() - 1) : 0 }; }); });
+  addC.addEventListener('click', e => { e.stopPropagation(); activate(); mut(() => { tblInsCol(m, addCi); sel = { r: sel ? sel.r : 0, c: addCi, r2: sel ? sel.r : 0, c2: addCi }; }); });
+  wrap.addEventListener('mousemove', e => {
+    const cell = e.target.closest('td,th'); if (!cell || editing || wrap.classList.contains('resizing')) return; const b = cell.getBoundingClientRect(), fy = (e.clientY - b.top) / b.height, fx = (e.clientX - b.left) / b.width;
+    const r = +cell.dataset.r, c = +cell.dataset.c, rs = cell.rowSpan || 1, cs = cell.colSpan || 1;
+    addRi = fy > .5 ? r + rs : r; addCi = fx > .5 ? c + cs : c;
+    addR.style.top = (table.offsetTop + cell.offsetTop + (fy > .5 ? cell.offsetHeight : 0) - 8) + 'px'; addR.style.left = (table.offsetLeft - 13) + 'px';
+    addC.style.left = (table.offsetLeft + cell.offsetLeft + (fx > .5 ? cell.offsetWidth : 0) - 8) + 'px'; addC.style.top = (table.offsetTop - 13) + 'px';
+    wrap.classList.add('hov');
+  });
+  wrap.addEventListener('mouseleave', () => wrap.classList.remove('hov'));
+  /* resize grips */
+  let grips = h('div', { class: 'tb2-grips' });
+  function placeGrips() {
+    if (!table || !table.isConnected) return; grips.innerHTML = ''; const tot = m.colW.reduce((a, b) => a + b, 0), W = table.offsetWidth, L = table.offsetLeft, T = table.offsetTop, H = table.offsetHeight; let cum = 0;
+    m.colW.forEach((w, i) => { cum += w; if (i === m.colW.length - 1) return; const g = h('div', { class: 'tb2-grip col', style: { left: (L + W * cum / tot - 3) + 'px', top: T + 'px', height: H + 'px' } }); g.addEventListener('pointerdown', e => gripCol(e, i, g)); grips.append(g); });
+    [...table.rows].forEach((tr, i) => { const g = h('div', { class: 'tb2-grip row', style: { top: (T + tr.offsetTop + tr.offsetHeight - 3) + 'px', left: L + 'px', width: W + 'px' } }); g.addEventListener('pointerdown', e => gripRow(e, i, g, tr)); grips.append(g); });
+  }
+  function gripCol(e, i, g) {
+    e.preventDefault(); e.stopPropagation(); commit(); g.setPointerCapture(e.pointerId); wrap.classList.add('resizing');
+    const x0 = e.clientX, a = m.colW[i], b = m.colW[i + 1], tot = m.colW.reduce((p, q) => p + q, 0), per = table.getBoundingClientRect().width / tot, min = 28 / per; let moved = false;
+    const mv = ev => { const d = (ev.clientX - x0) / per, na = Math.max(min, Math.min(a + b - min, a + d)); if (!moved) { moved = true; hooks.cp(); } m.colW[i] = na; m.colW[i + 1] = a + b - na; cols.forEach((cl, ci) => { cl.style.width = (m.colW[ci] / tot * 100) + '%'; }); };
+    const up = () => { g.removeEventListener('pointermove', mv); g.removeEventListener('pointerup', up); g.removeEventListener('pointercancel', up); wrap.classList.remove('resizing'); if (moved) hooks.changed(); placeGrips(); };
+    g.addEventListener('pointermove', mv); g.addEventListener('pointerup', up); g.addEventListener('pointercancel', up);
+  }
+  function gripRow(e, i, g, tr) {
+    e.preventDefault(); e.stopPropagation(); commit(); g.setPointerCapture(e.pointerId); wrap.classList.add('resizing');
+    const y0 = e.clientY, hs = tr.getBoundingClientRect().height, sc = hs / (tr.offsetHeight || 1) || 1; let moved = false;
+    const mv = ev => { const nh = Math.max(26, (hs + ev.clientY - y0) / sc); if (!moved) { moved = true; hooks.cp(); } m.rowH[i] = Math.round(nh); tr.style.height = m.rowH[i] + 'px'; };
+    const up = () => { g.removeEventListener('pointermove', mv); g.removeEventListener('pointerup', up); g.removeEventListener('pointercancel', up); wrap.classList.remove('resizing'); if (moved) hooks.changed(); placeGrips(); };
+    g.addEventListener('pointermove', mv); g.addEventListener('pointerup', up); g.addEventListener('pointercancel', up);
+  }
+  function draw() {
+    editing = null; wrap.innerHTML = ''; table = h('table', { class: 'tbl tbl2' }); const tot = m.colW.reduce((a, b) => a + b, 0);
+    cols = m.colW.map(w => h('col', { style: { width: (w / tot * 100) + '%' } })); table.append(h('colgroup', null, cols));
+    m.rows.forEach((row, r) => {
+      const tr = h('tr', { style: m.rowH[r] ? { height: m.rowH[r] + 'px' } : {} });
+      row.forEach((v, c) => {
+        const g = tblAnchor(m, r, c); if (g && !(g.r === r && g.c === c)) return; const f = fmtOf(r, c);
+        const cell = h(r === 0 && m.header ? 'th' : 'td', { 'data-r': r, 'data-c': c, style: { fontWeight: f.b ? '700' : '', fontStyle: f.i ? 'italic' : '', textAlign: f.al || '', color: f.fg || '', background: f.bg || '' } }, h('div', { class: 'tc' }, v));
+        if (g) { cell.rowSpan = g.rs; cell.colSpan = g.cs; } tr.append(cell);
+      });
+      table.append(tr);
+    });
+    grips = h('div', { class: 'tb2-grips' }); wrap.append(table, grips, addR, addC); paintSel(); requestAnimationFrame(placeGrips);
+  }
+  const api = { key, wrap, m, get sel() { return sel; }, rect, cells, fmtOf, setFmt, toggleFmt, canMerge, merged, doMerge, doSplit, mut, onKey, startEdit, setSel, activate,
+    deactivate() { commit(); if (TBL.active === api) { TBL.active = null; TBL.activeKey = null; } wrap.classList.remove('active'); paintSel(); tblBar(null); } };
+  wrap._tbl = api; draw();
+  try { new ResizeObserver(() => placeGrips()).observe(table); } catch (e) { }
+  if (TBL.activeKey === key) { TBL.active = api; wrap.classList.add('active'); setTimeout(() => { if (TBL.activeKey === key && wrap.isConnected && !isTypingTarget(document.activeElement)) { wrap.focus({ preventScroll: true }); paintSel(); } }, 0); }
+  return wrap;
+}
+/* floating format bar for the active table */
+function tblBar(api) {
+  if (!api || !api.sel || !api.wrap.isConnected) { TBL.bar?.remove(); TBL.bar = null; return; }
+  const f = api.fmtOf(api.sel.r, api.sel.c), bar = TBL.bar || (TBL.bar = h('div', { class: 'tblbar' })); bar.innerHTML = ''; bar._api = api;
+  const btn = (label, title, on, fn, cls) => { const b = h('button', { class: 'tbb' + (on ? ' on' : '') + (cls ? ' ' + cls : ''), title }, label); b.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); }); b.addEventListener('click', e => { e.stopPropagation(); fn(b); }); return b; };
+  const pal = (list, k, title, glyph) => btn(glyph, title, false, b => { const old = bar.querySelector('.tbb-pal'); if (old) { const same = old.dataset.k === k; old.remove(); if (same) return; } const p = h('div', { class: 'tbb-pal', 'data-k': k }, list.map(col => { const s = h('button', { class: 'tbb-sw' + (col ? '' : ' none'), title: col ? '' : 'None', style: col ? { background: col } : {} }); s.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); }); s.addEventListener('click', e => { e.stopPropagation(); api.setFmt(k, col); }); return s; })); bar.append(p); });
+  const algn = v => btn(h('span', { class: 'tbb-al ' + v }, h('i'), h('i'), h('i')), 'Align ' + v, (f.al || 'left') === v, () => api.setFmt('al', v === 'left' ? null : v));
+  bar.append(btn(h('b', null, 'B'), 'Bold (Ctrl/⌘ B)', f.b, () => api.toggleFmt('b')), btn(h('i', null, 'I'), 'Italic (Ctrl/⌘ I)', f.i, () => api.toggleFmt('i')), h('span', { class: 'tbb-sep' }), algn('left'), algn('center'), algn('right'), h('span', { class: 'tbb-sep' }),
+    pal(TBL_FG, 'fg', 'Text color', h('span', { class: 'tbb-a', style: { borderBottomColor: f.fg || 'currentColor' } }, 'A')), pal(TBL_BG, 'bg', 'Fill color', h('span', { class: 'tbb-fill', style: { background: f.bg || 'transparent' } })), h('span', { class: 'tbb-sep' }),
+    api.merged() ? btn('Split', 'Split merged cell', false, () => api.doSplit(), 'txt') : btn('Merge', 'Merge selected cells (Shift-click or Shift-arrows to select several)', false, () => api.doMerge(), 'txt' + (api.canMerge() ? '' : ' dis')));
+  if (!bar.isConnected) document.body.append(bar);
+  tblBarPlace();
+}
+function tblBarPlace() { const bar = TBL.bar; if (!bar || !bar._api) return; const w = bar._api.wrap; if (!w.isConnected) { TBL.bar.remove(); TBL.bar = null; return; } const r = w.getBoundingClientRect(), bw = bar.offsetWidth || 300; let top = r.top - 40; if (top < 44) top = Math.min(innerHeight - 46, r.bottom + 6); bar.style.top = top + 'px'; bar.style.left = Math.max(6, Math.min(innerWidth - bw - 6, r.left + 10)) + 'px'; }
+(function tblLoop() { if (TBL.bar) tblBarPlace(); requestAnimationFrame(tblLoop); })();
+document.addEventListener('pointerdown', e => { if (!TBL.active) return; const t = e.target; if (t.closest && (t.closest('.tblbar,.menu') || TBL.active.wrap.contains(t))) return; TBL.active.deactivate(); }, true);
+document.addEventListener('keydown', e => { const a = TBL.active; if (!a || !a.wrap.isConnected) return; if (a.wrap.contains(e.target)) return; if (isTypingTarget(e.target) || $('.modal-bg,.menu,.pop')) return; a.onKey(e); }, true);
+
+/* board table card uses the shared table */
+RENDER.table = c => tableUI(c.data, { key: 'c:' + c.id, cp: checkpoint, changed() { c.updatedAt = now(); save(); if (typeof scheduleLines === 'function') scheduleLines(); } });
+{ const _ac2 = afterCreate; afterCreate = function (c) { if (c.type === 'table') { setTimeout(() => { const w = $(`#cards [data-id="${c.id}"] .tb2`); if (w && w._tbl) { w._tbl.activate(); w._tbl.setSel(0, 0); w.focus({ preventScroll: true }); } }, 30); return; } return _ac2(c); }; }
+{ const _ct3 = ctxTools; const DROP = new Set(['Add row', 'Add column', 'Delete row', 'Delete column', 'Header']); ctxTools = function () { const r = _ct3(); if (!r || S.sel.size !== 1) return r; const c = ST.cards[[...S.sel][0]]; return c && c.type === 'table' ? r.filter(t => !t || !DROP.has(t.label)) : r; }; }
+
+/* ========== v2.4: tabs across the top ========== */
+const TABS = { switching: false, ready: false };
+function tabList() { const s = ST.settings; if (!Array.isArray(s.tabs)) s.tabs = []; for (let i = s.tabs.length - 1; i >= 0; i--) { const t = s.tabs[i]; if (!(t && ST.boards[t.b] && boardIsLive(t.b))) { s.tabs.splice(i, 1); if (i < s.tabCur) s.tabCur--; } } if (!s.tabs.length) s.tabs.push({ b: ST.boards[S.boardId] ? S.boardId : ST.rootId, o: null }); if (!(s.tabCur >= 0 && s.tabCur < s.tabs.length)) s.tabCur = 0; return s.tabs; }
+function tabBoards() { return new Set(tabList().map(t => t.b)); }
+function curOverlay() { if (S.pageId && $('.pv-wrap') && ST.pages[S.pageId]) return 'p:' + S.pageId; if ($('.tasksview')) return 'd:tasks'; if ($('.dashview.notesview')) return 'd:notes'; if ($('.dashview.focusview')) return 'd:focus'; return null; }
+function tabLabel(t) {
+  if (t.o === 'd:tasks') return ['Tasks', null, '☑']; if (t.o === 'd:notes') return ['Notes', null, '≡']; if (t.o === 'd:focus') return ['Focus', null, '◎'];
+  if (t.o && t.o[0] === 'p') { const p = ST.pages[t.o.slice(2)]; if (p) return [p.title || 'Untitled page', null, p.icon || '📄']; }
+  const b = ST.boards[t.b] || {}; return [b.title || 'Untitled', b.color || '#5f8ff0', b.icon || ''];
+}
+function tabSync() {
+  if (TABS.switching || !TABS.ready) return; const tabs = tabList(), t = tabs[ST.settings.tabCur], o = curOverlay();
+  if (t.b !== S.boardId || t.o !== o) { t.b = S.boardId; t.o = o; save(); }
+  renderTabs();
+}
+let _tabSyncQ = false;
+function tabSyncSoon() { if (_tabSyncQ) return; _tabSyncQ = true; Promise.resolve().then(() => { _tabSyncQ = false; tabSync(); }); }
+function renderTabs() {
+  const bar = $('#tabbar'); if (!bar) return; const tabs = tabList(), cur = ST.settings.tabCur; bar.innerHTML = '';
+  tabs.forEach((t, i) => {
+    const [title, color, icon] = tabLabel(t);
+    const el = h('div', { class: 'tab' + (i === cur ? ' cur' : ''), title, draggable: 'true' }, h('span', { class: 'tab-ic', style: color ? { background: color } : {} }, icon || ''), h('span', { class: 'tab-t' }, title),
+      tabs.length > 1 ? h('button', { class: 'tab-x', title: 'Close tab', onclick: e => { e.stopPropagation(); closeTab(i); } }, '×') : null);
+    el.addEventListener('click', () => switchTab(i));
+    el.addEventListener('auxclick', e => { if (e.button === 1) { e.preventDefault(); closeTab(i); } });
+    el.addEventListener('dragstart', e => { TABS.drag = i; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', 'tab'); });
+    el.addEventListener('dragover', e => { if (TABS.drag !== undefined && TABS.drag !== null) e.preventDefault(); });
+    el.addEventListener('drop', e => { const from = TABS.drag; TABS.drag = null; if (from === null || from === undefined || from === i) return; e.preventDefault(); const curTab = tabs[ST.settings.tabCur]; const [mv] = tabs.splice(from, 1); tabs.splice(i, 0, mv); ST.settings.tabCur = tabs.indexOf(curTab); save(); renderTabs(); });
+    bar.append(el);
+  });
+  bar.append(h('button', { class: 'tab-new', title: 'New tab', onclick: () => openInNewTab({ t: 'board', id: S.boardId }) }, '+'));
+}
+function tabApply(t) {
+  TABS.switching = true;
+  try {
+    closeDashes(); if ($('.pv-wrap')) closePageView();
+    if (ST.boards[t.b]) openBoard(t.b);
+    if (t.o === 'd:tasks') openTasksView(); else if (t.o === 'd:notes') openNotesView(); else if (t.o === 'd:focus') openFocusView();
+    else if (t.o && t.o[0] === 'p') { const pid = t.o.slice(2); if (ST.pages[pid] && pageIsLive(pid)) openPage(pid, { mode: 'full' }); else t.o = null; }
+  } finally { TABS.switching = false; }
+  save(); renderTabs();
+}
+function switchTab(i) { const tabs = tabList(); if (i === ST.settings.tabCur || !tabs[i]) return; tabSync(); ST.settings.tabCur = i; tabApply(tabs[i]); }
+function closeTab(i) {
+  const tabs = tabList(); if (tabs.length <= 1 || !tabs[i]) return; const wasCur = i === ST.settings.tabCur; tabs.splice(i, 1);
+  if (wasCur) { ST.settings.tabCur = Math.min(i, tabs.length - 1); tabApply(tabs[ST.settings.tabCur]); }
+  else { if (i < ST.settings.tabCur) ST.settings.tabCur--; save(); renderTabs(); renderBoard(); }
+}
+openInNewTab = function (target) {
+  const tabs = tabList(); tabSync();
+  const t = target.t === 'page' ? { b: S.boardId, o: 'p:' + target.id } : target.t === 'dash' ? { b: S.boardId, o: 'd:' + target.k } : { b: target.id, o: null };
+  tabs.splice(ST.settings.tabCur + 1, 0, t); ST.settings.tabCur++; tabApply(t);
+};
+/* keep the current tab in step with normal navigation */
+for (const name of ['openBoard', 'openPage', 'closePageView', 'openTasksView', 'closeTasksView']) {
+  const orig = window[name]; if (typeof orig !== 'function') continue;
+  window[name] = function () { const r = orig.apply(this, arguments); tabSyncSoon(); return r; };
+}
+try { new MutationObserver(() => tabSyncSoon()).observe(document.body, { childList: true }); } catch (e) { }
+{
+  const _ra = renderAll;
+  renderAll = function () {
+    if (!TABS.ready) { TABS.ready = true; const tabs = tabList(), t = tabs[ST.settings.tabCur]; if (ST.boards[S.boardId]) { t.b = S.boardId; t.o = null; } }
+    const r = _ra.apply(this, arguments); renderTabs(); return r;
+  };
+}
+if (typeof scheduleSidebar === 'function') { const _ss = scheduleSidebar; scheduleSidebar = function () { const r = _ss.apply(this, arguments); if (TABS.ready) setTimeout(renderTabs, 0); return r; }; }
+document.addEventListener('click', e => { TABS.mod = e.metaKey || e.ctrlKey; setTimeout(() => { TABS.mod = false; }, 0); }, true);
+if (typeof openRef === 'function') { const _or = openRef; openRef = function (key) { if (TABS.mod && TABS.ready) { const [k, id] = String(key).split(':'); if (k === 'b' && ST.boards[id]) return openInNewTab({ t: 'board', id }); if (k === 'p' && ST.pages[id]) return openInNewTab({ t: 'page', id }); } return _or.apply(this, arguments); }; }
 
 /* ========== events + init ========== */
 function migrate() {
