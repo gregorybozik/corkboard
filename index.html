@@ -1746,6 +1746,83 @@ body.mark-only #cards .col-body .card{opacity:1}
 .aip-mode{display:flex;flex-direction:column;gap:4px;margin-top:10px;font-size:12.5px}
 .aip-mode label{display:flex;gap:6px;align-items:center;cursor:pointer}
 .aip-btns{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+
+/* ===== v2.3 dashboard (two panes) ===== */
+.t2-top{background:var(--bar);border-bottom:1px solid var(--line);padding:8px 16px 8px;display:flex;flex-direction:column;gap:8px;color:var(--text)}
+.t2-bar{display:flex;align-items:center;gap:10px;min-height:36px;flex-wrap:wrap}
+.t2-h{font-size:17px}
+.t2-top .tv2-sbox{background:var(--card);border-color:var(--line);min-width:180px;height:32px}
+.t2-top .tv2-fbtn{background:var(--card);border-color:var(--line);height:32px}
+.t2-stats{display:flex;align-items:center;gap:6px;margin-left:8px}
+.t2-stat{--kc:#4aa3ff;display:inline-flex;align-items:center;gap:6px;border:1px solid color-mix(in srgb,var(--kc) 40%,transparent);background:color-mix(in srgb,var(--kc) 12%,transparent);color:var(--text);border-radius:16px;padding:3px 11px;font:inherit;font-size:12px;cursor:pointer}
+.t2-stat{white-space:nowrap;flex:none}
+.t2-stat b{font-size:14px;color:var(--kc)}
+.t2-stat.on{box-shadow:0 0 0 2px var(--kc)}
+.t2-prog{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);margin-left:4px}
+.t2-progbar{width:70px;height:6px;border-radius:4px;background:var(--line);overflow:hidden;display:block}
+.t2-progbar i{display:block;height:100%;background:linear-gradient(90deg,#4aa3ff,#6fd68a)}
+.t2-chips{display:flex;align-items:center;gap:6px;height:28px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.t2-chip{--cc:#5f8ff0;display:inline-flex;align-items:center;gap:6px;flex:none;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:14px;padding:2px 10px 2px 4px;font:inherit;font-size:12px;cursor:pointer;height:24px}
+.t2-cdot{width:16px;height:16px;border-radius:5px;background:var(--cc);display:grid;place-items:center;font-size:10px}
+.t2-chip.tag .t2-cdot{border-radius:50%;width:10px;height:10px;margin-left:4px}
+.t2-chip.on{background:color-mix(in srgb,var(--cc) 22%,var(--card));border-color:var(--cc);box-shadow:0 0 0 1px var(--cc)}
+.t2-csep{width:1px;height:16px;background:var(--line);flex:none;margin:0 4px}
+.t2-clear{flex:none;border:0;background:none;color:var(--sel);font:inherit;font-size:12px;cursor:pointer;padding:2px 6px}
+.tv-body.dash2{flex:1;min-height:0;display:grid;grid-template-columns:minmax(300px,36%) 1fr;gap:14px;padding:14px 16px;overflow:hidden;max-width:none}
+.t2pane{display:flex;flex-direction:column;min-height:0;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+.t2left{background:linear-gradient(180deg,color-mix(in srgb,#f2b53a 9%,var(--card)),var(--card) 120px)}
+.t2pane.t2-over{box-shadow:0 0 0 2px var(--sel)}
+.t2-phead{display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid var(--line);font-size:14px;flex:none;min-height:24px}
+.t2-phead .muted{font-size:12px}
+.t2-pic{width:17px;height:17px;color:#f2b53a;display:block}.t2-pic svg{width:17px;height:17px}
+.t2-pn{font-size:11px;background:var(--hover);border-radius:9px;padding:0 7px;color:var(--muted)}
+.t2-phead .t2-pn{margin-left:auto}.t2right .t2-phead .t2-pn{margin-left:0}
+.t2-sel{font-size:12px;padding:2px 6px;height:26px}
+.t2scroll{flex:1;overflow-y:auto;padding:6px 8px 10px;scrollbar-gutter:stable}
+.t2row{display:flex;align-items:center;gap:8px;height:36px;padding:0 8px;border-radius:8px;cursor:default;outline:0;position:relative}
+.t2row:hover{background:var(--hover)}
+.t2row:focus{box-shadow:inset 0 0 0 1.5px var(--sel)}
+.t2row.dragging{opacity:.4}
+.t2row.t2-over{box-shadow:inset 0 2px 0 var(--sel)}
+.t2row.done .t2-title{text-decoration:line-through;color:var(--muted)}
+.t2row.auto .t2-sun{opacity:.35}
+.t2row .chk{flex:none}
+.t2-dot{width:16px;height:16px;border-radius:5px;flex:none;display:grid;place-items:center;font-size:10px}
+.t2-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13.5px;cursor:text}
+.t2-edit{flex:1;min-width:0;border:1px solid var(--sel);border-radius:6px;background:var(--card);color:var(--text);font:inherit;font-size:13.5px;padding:3px 6px;outline:0}
+.t2-tags{display:flex;gap:3px;flex:none}.t2-tags i{width:8px;height:8px;border-radius:50%;display:block}
+.t2-sub{font-size:10.5px;color:var(--muted);flex:none}
+.t2-flag,.t2-sun{flex:none;width:22px;height:22px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;color:var(--muted);opacity:0;border-radius:6px}
+.t2-flag svg,.t2-sun svg{width:14px;height:14px}
+.t2row:hover .t2-flag,.t2row:hover .t2-sun,.t2row:focus .t2-flag,.t2row:focus .t2-sun{opacity:.45}
+.t2-flag:hover,.t2-sun:hover{opacity:1!important;background:var(--line)}
+.t2-flag.on{opacity:1}.t2-flag.on.urgent{color:#ef6f6c}.t2-flag.on.important{color:#f2b53a}.t2-flag.on svg{fill:currentColor}
+.t2-sun.on{opacity:1;color:#f2b53a}
+.t2-date{flex:none;position:relative;border:0;border-radius:10px;padding:2px 9px;font:inherit;font-size:11.5px;cursor:pointer;background:var(--hover);color:var(--muted);width:74px;box-sizing:border-box;height:22px;display:grid;place-items:center;white-space:nowrap}
+.t2-date.over{background:color-mix(in srgb,#ef6f6c 22%,transparent);color:#ef6f6c;font-weight:600}
+.t2-date.soon{background:color-mix(in srgb,#ff9a4a 22%,transparent);color:#e07a1f;font-weight:600}
+.t2-date.none{background:none;opacity:0}.t2row:hover .t2-date.none,.t2row:focus .t2-date.none{opacity:.45}
+.t2-ic svg{width:14px;height:14px;display:block}
+.t2-datein{position:absolute;inset:0;opacity:0;pointer-events:none;width:100%;height:100%;border:0;padding:0}
+.t2-ghead{display:flex;align-items:center;gap:8px;padding:10px 6px 5px;font-size:12.5px;cursor:pointer;border:0!important}
+.t2group+.t2group{margin-top:4px}
+.t2-add{flex:none;border:0;border-top:1px solid var(--line);background:none;color:var(--text);font:inherit;font-size:13px;padding:11px 14px;outline:0}
+.t2-empty{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;color:var(--muted);font-size:13px;padding:40px 24px}
+.t2-bigic{width:34px;height:34px;color:#f2b53a;opacity:.7}.t2-bigic svg{width:34px;height:34px}
+.t2row.selmode .chk{display:none}.t2row.sel{background:color-mix(in srgb,var(--selh) 14%,transparent)}
+.t2row .tv-selbox{flex:none}
+.charts-bg .modal{width:min(1100px,94vw);max-width:94vw}
+.dash-charts h3{margin:0 0 12px}
+@media(max-width:900px){.tv-body.dash2{grid-template-columns:1fr;overflow-y:auto}.t2pane{min-height:300px}.t2-stats{order:5;width:100%;margin-left:0;overflow-x:auto}}
+/* image links */
+.img-linkbadge{position:absolute;left:8px;bottom:8px;width:22px;height:22px;border-radius:7px;background:rgba(0,0,0,.6);color:#fff;display:grid;place-items:center;pointer-events:auto}
+.img-linkbadge svg{width:13px;height:13px}
+.imglink{width:300px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.il-row{display:flex;gap:6px;flex-wrap:wrap}.il-row .tp-in{flex:1;min-width:0}
+.il-cur,.il-hint{font-size:11.5px;overflow-wrap:anywhere}
+/* boards: no title bar, breadcrumb only */
+#titlebar{display:none}
+#crumbs .crumb.cur{font-weight:600}
 </style>
 </head>
 <body class="app-root">
@@ -8107,7 +8184,7 @@ renderTVBody = function () {
   ov.querySelector('.tv-bulk')?.remove();
   if (!S.tvSelMode) return;
   S.tvSel = S.tvSel || new Set();
-  for (const row of ov.querySelectorAll('.tv-row[data-tid],.tcard[data-tid]')) {
+  for (const row of ov.querySelectorAll('.tv-row[data-tid],.tcard[data-tid],.t2row[data-tid]')) {
     const tid = row.dataset.tid, on = S.tvSel.has(tid);
     row.classList.toggle('sel', on); row.classList.add('selmode');
     const box = h('span', { class: 'tv-selbox' + (on ? ' on' : ''), html: on ? ICON.check : '' }); row.prepend(box);
@@ -8125,7 +8202,7 @@ function bulkBar() {
   const dis = n ? {} : { disabled: true };
   const date = h('input', { type: 'date', class: 'tp-in', title: 'Set due date', ...dis }); date.onchange = () => { if (date.value) { const v = date.value; bulkApply(x => { x.due = v; }); } };
   const bar = h('div', { class: 'tv-bulk' }, h('b', null, n ? `${n} selected` : 'Click tasks to select'),
-    h('button', { class: 'mini', onclick: () => { S.tvSel = new Set($$('.tv-row[data-tid],.tcard[data-tid]').map(r => r.dataset.tid)); renderTVBody(); } }, 'Select all shown'),
+    h('button', { class: 'mini', onclick: () => { S.tvSel = new Set($$('.tv-row[data-tid],.tcard[data-tid],.t2row[data-tid]').map(r => r.dataset.tid)); renderTVBody(); } }, 'Select all shown'),
     h('button', { class: 'mini', ...dis, onclick: () => { bulkApply(x => { x.done = true; x.doneAt = now(); }); S.tvSel = new Set(); renderTVBody(); } }, 'Complete'),
     date,
     h('button', { class: 'mini', ...dis, onclick: e => { const r = e.currentTarget.getBoundingClientRect(); showMenu(r.left, r.top - 4, ST.labels.map(l => ({ label: 'Add tag: ' + l.name, fn: () => bulkApply(x => { if (!x.tags.includes(l.id)) x.tags.push(l.id); }) })).concat(ST.labels.length ? [{ label: 'Remove all tags', fn: () => bulkApply(x => { x.tags = []; }) }] : [{ label: 'No tags yet', fn: () => {} }])); } }, 'Tag…'),
@@ -8734,6 +8811,210 @@ function aiHilite() {
 { const _us = updateSelUI; updateSelUI = function () { _us(); aiHilite(); }; }
 { const _rb = renderBoard; renderBoard = function () { _rb(); aiHilite(); }; }
 { const _fl = finishLine; finishLine = function (p, e) { const r = _fl(p, e); setTimeout(aiHilite, 0); return r; }; }
+
+/* ========== v2.3: tasks dashboard rebuilt (two panes), image links, headerless boards ========== */
+ICON.sun = sv('<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/>');
+ICON.chart2 = sv('<path d="M5 20V10M12 20V4M19 20v-7"/>');
+ICON.cal2 = sv('<rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>');
+
+/* ---- today list ---- */
+function todayState() {
+  const st = tvState(), t = todayStr();
+  if (!Array.isArray(st.today)) { st.today = []; for (const c of allLists()) for (const it of c.data.items) if (it.pinned && !it.done) st.today.push(it.id); }
+  if (st.todayDay !== t) { st.today = st.today.filter(id => { const f = findTask(id); return f && !f.item.done; }); st.todayDay = t; }
+  else st.today = st.today.filter(id => findTask(id));
+  return st;
+}
+function todayItems() {
+  const st = todayState(), t = todayStr(), out = [], seen = new Set();
+  for (const id of st.today) { const f = findTask(id); if (f) { out.push({ it: f.item, c: f.card, manual: true }); seen.add(id); } }
+  for (const c of taskLists()) for (const it of c.data.items) if (!seen.has(it.id) && !it.done && it.due && it.due <= t) out.push({ it, c, manual: false });
+  return out;
+}
+function toggleToday(tid, on) { const st = todayState(), has = st.today.includes(tid); if (on === undefined) on = !has; if (on && !has) st.today.push(tid); if (!on && has) st.today = st.today.filter(x => x !== tid); save(); renderTVBody(); }
+function dueLabel(due, t) { if (due === t) return 'Today'; if (due === addDays(t, 1)) return 'Tomorrow'; if (due === addDays(t, -1)) return 'Yesterday'; const d = parseYmd(due); return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }); }
+
+/* ---- one clean row ---- */
+function t2Row(it, c, where) {
+  const t = todayStr(), st = tvState(), bd = ST.boards[c.boardId] || {}, inToday = (st.today || []).includes(it.id);
+  const edit = fn => { checkpoint(); fn(normTask(it)); c.updatedAt = now(); save(); refreshTaskViews([c.id]); if (c.virtual) renderTVBody(); };
+  const chk = h('button', { class: 'chk' + (it.done ? ' on' : ''), html: it.done ? ICON.check : '', title: 'Complete', onclick: e => { e.stopPropagation(); toggleTask(it.id); if (c.virtual) { save(); renderTVBody(); } } });
+  const title = h('span', { class: 't2-title', title: 'Click to rename · double-click for details' }, it.text || h('span', { class: 'muted' }, 'Untitled'));
+  title.addEventListener('click', e => {
+    if (S.tvSelMode) return; e.stopPropagation(); if (e.detail > 1) return;
+    clearTimeout(title._t); title._t = setTimeout(() => {
+      if (!title.isConnected) return; const inp = h('input', { class: 't2-edit', value: it.text || '' }); title.replaceWith(inp); inp.focus(); inp.select();
+      let done = false; const fin = ok => { if (done) return; done = true; const v = inp.value.trim(); if (ok && v && v !== it.text) edit(x => { x.text = v; }); else renderTVBody(); };
+      inp.addEventListener('keydown', ev => { ev.stopPropagation(); if (ev.key === 'Enter') fin(true); if (ev.key === 'Escape') fin(false); }); inp.addEventListener('blur', () => fin(true)); inp.addEventListener('click', ev => ev.stopPropagation());
+    }, 230);
+  });
+  const dateInp = h('input', { type: 'date', class: 't2-datein', value: it.due || '', tabindex: '-1' }); dateInp.addEventListener('change', () => edit(x => { x.due = dateInp.value || null; })); dateInp.addEventListener('click', e => e.stopPropagation());
+  const dcls = !it.due ? ' none' : it.done ? '' : it.due < t ? ' over' : it.due <= addDays(t, 7) ? ' soon' : '';
+  const date = h('button', { class: 't2-date' + dcls, title: it.due ? 'Due ' + it.due + ' · click to change' : 'Set a due date', onclick: e => { e.stopPropagation(); try { dateInp.showPicker(); } catch (er) { dateInp.focus(); } } }, it.due ? dueLabel(it.due, t) : h('span', { class: 't2-ic', html: ICON.cal2 }), dateInp);
+  const flag = (k, ic, label) => h('button', { class: 't2-flag ' + k + (it[k] ? ' on' : ''), title: label, html: ICON[ic], onclick: e => { e.stopPropagation(); edit(x => { x[k] = !x[k]; }); } });
+  const tags = h('span', { class: 't2-tags' }, it.tags.map(id => tagById(id)).filter(Boolean).map(l => h('i', { title: l.name, style: { background: l.color } })));
+  const sub = (it.subtasks || []).length ? h('span', { class: 't2-sub', title: 'Subtasks' }, `${it.subtasks.filter(s => s.done).length}/${it.subtasks.length}`) : null;
+  const sun = h('button', { class: 't2-sun' + (inToday ? ' on' : ''), title: inToday ? 'Remove from Today' : 'Add to Today', html: ICON.sun, onclick: e => { e.stopPropagation(); toggleToday(it.id); } });
+  const row = h('div', { class: 't2row' + (it.done ? ' done' : ''), 'data-tid': it.id, 'data-where': where, tabindex: '0', draggable: 'true' },
+    chk, h('span', { class: 't2-dot', style: { background: bd.color || '#5f8ff0' }, title: `${boardName(c.boardId)} · ${listName(c)}` }, bd.icon || ''), title, sub, tags, flag('urgent', 'bolt', 'Urgent'), flag('important', 'star', 'Important'), date, sun);
+  row.addEventListener('dblclick', e => { if (S.tvSelMode || e.target.closest('button,input')) return; clearTimeout(title._t); openTask(it.id); });
+  row.addEventListener('dragstart', e => { if (S.tvSelMode) { e.preventDefault(); return; } e.dataTransfer.setData('text/plain', it.id); e.dataTransfer.effectAllowed = 'move'; S.t2drag = { id: it.id, from: where }; row.classList.add('dragging'); });
+  row.addEventListener('dragend', () => { S.t2drag = null; row.classList.remove('dragging'); $$('.t2-over').forEach(x => x.classList.remove('t2-over')); });
+  row.addEventListener('keydown', e => {
+    if (e.target !== row) return; const rows = [...row.closest('.t2pane').querySelectorAll('.t2row')], i = rows.indexOf(row);
+    if (e.key === 'ArrowDown') { e.preventDefault(); rows[i + 1]?.focus(); } else if (e.key === 'ArrowUp') { e.preventDefault(); rows[i - 1]?.focus(); }
+    else if (e.key === ' ') { e.preventDefault(); S.t2focus = it.id + where; toggleTask(it.id); } else if (e.key === 'Enter') { e.preventDefault(); openTask(it.id); }
+    else if (e.key.toLowerCase() === 't') { S.t2focus = it.id + where; toggleToday(it.id); }
+  });
+  return row;
+}
+
+/* ---- header: slim toolbar + stats strip + chips ---- */
+function renderTVHead() {
+  const ov = $('.tasksview'); if (!ov) return; const st = todayState();
+  ov.querySelector('.tv-top')?.remove();
+  const d = dashData();
+  const q = h('input', { class: 'tv2-search', placeholder: 'Search tasks…', value: S.tvQuery });
+  q.addEventListener('input', () => { S.tvQuery = q.value; renderTVBody(); });
+  const stat = (view, n, label, color) => { const on = st.view === view && !st.quad; return h('button', { class: 't2-stat' + (on ? ' on' : ''), style: { '--kc': color }, onclick: () => { st.view = on ? 'all' : view; st.quad = null; save(); renderTVHead(); renderTVBody(); } }, h('b', null, String(n)), label); };
+  const pct = d.all.length ? Math.round(d.allDone / d.all.length * 100) : 0;
+  const boards = Object.values(ST.boards).filter(b => boardIsLive(b.id) && taskLists().some(c => c.boardId === b.id));
+  const chips = h('div', { class: 't2-chips' },
+    boards.map(b => h('button', { class: 't2-chip' + (st.board === b.id ? ' on' : ''), style: { '--cc': b.color || '#5f8ff0' }, title: 'Show only ' + (b.title || 'Untitled'), onclick: () => { st.board = st.board === b.id ? 'all' : b.id; save(); renderTVHead(); renderTVBody(); } }, h('span', { class: 't2-cdot' }, b.icon || ''), b.title || 'Untitled')),
+    ST.labels.length ? h('span', { class: 't2-csep' }) : null,
+    ST.labels.map(l => h('button', { class: 't2-chip tag' + (st.tags.includes(l.id) ? ' on' : ''), style: { '--cc': l.color }, onclick: () => { st.tags = st.tags.includes(l.id) ? st.tags.filter(x => x !== l.id) : [...st.tags, l.id]; save(); renderTVHead(); renderTVBody(); } }, h('span', { class: 't2-cdot' }), l.name)),
+    (st.board !== 'all' || st.tags.length || st.quad || st.due !== 'any' || st.flag !== 'all') ? h('button', { class: 't2-clear tv-fclear', onclick: () => { st.board = 'all'; st.tags = []; st.quad = null; st.due = 'any'; st.flag = 'all'; save(); renderTVHead(); renderTVBody(); } }, 'Clear') : null);
+  const top = h('div', { class: 'tv-top t2-top' },
+    h('div', { class: 't2-bar' },
+      h('button', { class: 'tbtn', onclick: closeTasksView, title: 'Back to board' }, h('span', { html: ICON.back, style: { width: '16px', height: '16px', display: 'block' } })),
+      h('b', { class: 't2-h' }, 'Tasks'), h('span', { class: 'tv-count', style: { display: 'none' } }),
+      h('div', { class: 't2-stats' }, stat('all', d.open.length, 'Open', '#4aa3ff'), stat('soon', d.soon.length, 'Due soon', '#ff9a4a'), stat('important', d.imp.length, 'Important', '#f2b53a'), stat('done', d.done.length, 'Done', '#5fcf80'),
+        h('span', { class: 't2-prog', title: `${d.allDone} of ${d.all.length} tasks resolved` }, h('span', { class: 't2-progbar' }, h('i', { style: { width: pct + '%' } })), pct + '%')),
+      h('span', { style: { flex: 1 } }),
+      h('label', { class: 'tv2-sbox' }, h('span', { html: ICON.search || '', class: 'tv2-sic' }), q),
+      h('button', { class: 'tv2-fbtn', title: 'Charts and matrix', onclick: openDashCharts }, h('span', { html: ICON.chart2 })),
+      h('button', { class: 'tv-sel' + (S.tvSelMode ? ' on' : ''), onclick: () => { S.tvSelMode = !S.tvSelMode; S.tvSel = new Set(); renderTVHead(); renderTVBody(); } }, S.tvSelMode ? 'Done' : 'Select'),
+      h('button', { class: 'btn primary', onclick: () => newTaskFromDash() }, '+ New task')),
+    chips);
+  ov.prepend(top);
+}
+function filterBar() { return null; }
+function openDashCharts() {
+  $('.dash-charts')?.closest('.modal-bg')?.remove();
+  const box = h('div', { class: 'dash-charts' }); modal(box).classList.add('charts-bg'); fillDashCharts();
+}
+function fillDashCharts() { const box = $('.dash-charts'); if (!box) return; box.innerHTML = ''; box.append(h('h3', null, 'Charts'), dashPanels(dashData(), tvState())); vizTipAttach(box); }
+
+/* ---- body: two panes ---- */
+function renderTVBodyCore() {
+  const ov = $('.tasksview'); if (!ov) return; const st = todayState(), t = todayStr();
+  const old = ov.querySelector('.tv-body'), sc = old ? { l: old.querySelector('.t2left .t2scroll')?.scrollTop || 0, r: old.querySelector('.t2right .t2scroll')?.scrollTop || 0 } : (S.t2sc || { l: 0, r: 0 });
+  old?.remove();
+  const body = h('div', { class: 'tv-body dash2' });
+  /* left: today */
+  const items = todayItems(), openN = items.filter(x => !x.it.done).length;
+  const lsc = h('div', { class: 't2scroll' });
+  if (!items.length) lsc.append(h('div', { class: 't2-empty' }, h('span', { class: 't2-bigic', html: ICON.sun }), 'Drag tasks here, or click the sun on a task, to plan your day.'));
+  for (const x of items) { const r = t2Row(x.it, x.c, 'L'); if (!x.manual) r.classList.add('auto'); lsc.append(r); }
+  const addT = h('input', { class: 't2-add', placeholder: '+ Add a task for today' });
+  addT.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && addT.value.trim()) { checkpoint(); const c = ensureInbox(), nt = newTask(addT.value.trim()); c.data.items.push(nt); c.updatedAt = now(); st.today.push(nt.id); S.t2focusAdd = 'L'; save(); refreshTaskViews([c.id]); renderTVHead(); } });
+  const left = h('section', { class: 't2pane t2left' }, h('div', { class: 't2-phead' }, h('span', { class: 't2-pic', html: ICON.sun }), h('b', null, 'Today'), h('span', { class: 'muted' }, new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })), h('span', { class: 't2-pn' }, String(openN))), lsc, addT);
+  const overEl = e => { const r = e.target.closest && e.target.closest('.t2left .t2row'); return r; };
+  left.addEventListener('dragover', e => { if (!S.t2drag) return; e.preventDefault(); $$('.t2-over').forEach(x => x.classList.remove('t2-over')); (overEl(e) || left).classList.add('t2-over'); });
+  left.addEventListener('dragleave', e => { if (e.target === left) left.classList.remove('t2-over'); });
+  left.addEventListener('drop', e => {
+    if (!S.t2drag) return; e.preventDefault(); const id = S.t2drag.id, tgt = overEl(e); st.today = st.today.filter(x => x !== id);
+    const ti = tgt ? st.today.indexOf(tgt.dataset.tid) : -1; if (ti >= 0) st.today.splice(ti, 0, id); else st.today.push(id);
+    S.t2drag = null; save(); renderTVBody();
+  });
+  /* right: all tasks */
+  const lists = taskLists().filter(c => st.board === 'all' || c.boardId === st.board);
+  const all = []; for (const c of lists) for (const it of c.data.items) { normTask(it); if (taskMatches(it, c, { ignoreDone: true }) && viewPass({ it, c }, st, t)) all.push([it, c]); }
+  const byDue = ([a], [b]) => (a.due || '9999').localeCompare(b.due || '9999') || ((b.urgent + b.important) - (a.urgent + a.important)) || (a.text || '').localeCompare(b.text || '');
+  const sortFn = st.sort === 'manual' ? () => 0 : st.sort === 'created' ? ([a], [b]) => (b.createdAt || 0) - (a.createdAt || 0) : st.sort === 'flag' ? ([a], [b]) => ((b.urgent * 2 + b.important) - (a.urgent * 2 + a.important)) || byDue([a], [b]) : byDue;
+  let defs;
+  if (st.group === 'none') defs = [['', () => true]];
+  else if (st.group === 'due') defs = [['Overdue', ([it]) => it.due && it.due < t && !it.done, '#ef6f6c'], ['Today', ([it]) => it.due === t, '#ff9a4a'], ['Next 7 days', ([it]) => it.due > t && it.due <= addDays(t, 7), '#4aa3ff'], ['Later', ([it]) => it.due > addDays(t, 7), '#8a919c'], ['Earlier (done)', ([it]) => it.due && it.due < t && it.done, '#8a919c'], ['No date', ([it]) => !it.due, '#5b616b']];
+  else if (st.group === 'flags') defs = [['Urgent + important', ([it]) => it.important && it.urgent, '#ef6f6c'], ['Urgent', ([it]) => it.urgent && !it.important, '#ff9a4a'], ['Important', ([it]) => it.important && !it.urgent, '#f2b53a'], ['No flags', ([it]) => !it.important && !it.urgent, '#8a919c']];
+  else if (st.group === 'tag') defs = [...ST.labels.map(l => [l.name, ([it]) => it.tags.includes(l.id), l.color]), ['No tag', ([it]) => !it.tags.length, '#8a919c']];
+  else if (st.group === 'list') defs = lists.map(c => [listName(c), ([it, k]) => k === c, (ST.boards[c.boardId] || {}).color]);
+  else { const bids = [...new Set(lists.map(c => c.boardId))]; defs = bids.map(b => [boardName(b), ([it, c]) => c.boardId === b, (ST.boards[b] || {}).color, (ST.boards[b] || {}).icon]); }
+  const rsc = h('div', { class: 't2scroll' }); let n = 0;
+  for (const [title, fn, color, icon] of defs) {
+    const ts = all.filter(fn).sort(sortFn); if (!ts.length) continue; n += ts.length;
+    const gk = 'g:' + st.group + ':' + title, folded = !!(st.collapsed || {})[gk];
+    const g = h('div', { class: 'tv-group t2group' + (folded ? ' folded' : '') });
+    if (title) g.append(h('div', { class: 'tv-ghead t2-ghead', onclick: () => { st.collapsed = st.collapsed || {}; st.collapsed[gk] = !folded; save(); renderTVBody(); } }, h('span', { class: 'tr-chev' + (folded ? '' : ' open'), html: ICON.chevr }), h('span', { class: 't2-dot', style: { background: color || '#5f8ff0' } }, icon || ''), h('b', null, title), h('span', { class: 't2-pn' }, String(ts.length))));
+    if (!folded) for (const [it, c] of ts) g.append(t2Row(it, c, 'R'));
+    rsc.append(g);
+  }
+  if (!n) rsc.append(h('div', { class: 't2-empty' }, taskLists().length ? 'No tasks match.' : 'No tasks yet. Click “+ New task” to start.'));
+  const sel = (opts, cur, fn, title) => { const s = h('select', { class: 'tv-sel t2-sel', title }, opts.map(([v, l]) => h('option', { value: v }, l))); s.value = cur; s.onchange = () => fn(s.value); return s; };
+  const set = (k, v) => { st[k] = v; save(); renderTVBody(); };
+  const right = h('section', { class: 't2pane t2right' }, h('div', { class: 't2-phead' }, h('b', null, st.view === 'done' ? 'Completed' : st.view === 'soon' ? 'Due soon' : st.view === 'important' ? 'Important' : 'All tasks'), h('span', { class: 't2-pn' }, String(n)), st.quad ? h('button', { class: 't2-clear', onclick: () => { st.quad = null; save(); renderTVBody(); } }, 'Matrix: ' + QUADS[st.quad][0] + ' ×') : null, h('span', { style: { flex: 1 } }),
+    sel([['board', 'By board'], ['list', 'By list'], ['due', 'By date'], ['flags', 'By flags'], ['tag', 'By tag'], ['none', 'No groups']], st.group, v => set('group', v), 'Group'),
+    sel([['due', 'Date'], ['flag', 'Priority'], ['created', 'Newest'], ['manual', 'Manual']], st.sort, v => set('sort', v), 'Sort')), rsc);
+  right.addEventListener('dragover', e => { if (S.t2drag && S.t2drag.from === 'L') { e.preventDefault(); right.classList.add('t2-over'); } });
+  right.addEventListener('dragleave', e => { if (e.target === right) right.classList.remove('t2-over'); });
+  right.addEventListener('drop', e => { if (!S.t2drag || S.t2drag.from !== 'L') return; e.preventDefault(); const id = S.t2drag.id; S.t2drag = null; toggleToday(id, false); });
+  body.append(left, right); ov.append(body);
+  lsc.scrollTop = sc.l; rsc.scrollTop = sc.r;
+  const keep = () => { S.t2sc = { l: lsc.scrollTop, r: rsc.scrollTop }; }; lsc.addEventListener('scroll', keep); rsc.addEventListener('scroll', keep);
+  if (S.t2focusAdd) { S.t2focusAdd = null; body.querySelector('.t2-add')?.focus(); }
+  else if (S.t2focus) { const f = S.t2focus; S.t2focus = null; [...body.querySelectorAll('.t2row')].find(r => r.dataset.tid + r.dataset.where === f)?.focus(); }
+  fillDashCharts();
+  const d = dashData(), stats = ov.querySelectorAll('.t2-stat b'); if (stats.length === 4) { stats[0].textContent = d.open.length; stats[1].textContent = d.soon.length; stats[2].textContent = d.imp.length; stats[3].textContent = d.done.length; }
+}
+{ const _o = openTasksView; openTasksView = function () { S.t2sc = null; return _o.apply(this, arguments); }; }
+
+/* ---- image links ---- */
+ICON.linkout = sv('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>');
+function imgLinkLabel(l) { if (!l) return ''; if (l.url) return l.url; const id = l.ref.slice(2); return l.ref[0] === 'b' ? 'Board: ' + (ST.boards[id]?.title || 'missing') : 'Page: ' + (ST.pages[id]?.title || 'missing'); }
+function openImageLink(c) {
+  const l = c.data.link; if (!l) return false;
+  if (l.url) { window.open(l.url, '_blank', 'noopener'); return true; }
+  const id = l.ref.slice(2);
+  if (l.ref[0] === 'b') { if (!ST.boards[id] || !boardIsLive(id)) { toast('That board no longer exists'); return true; } openInNewTab({ t: 'board', id }); }
+  else { if (!ST.pages[id] || ST.pages[id].trashed) { toast('That page no longer exists'); return true; } openInNewTab({ t: 'page', id }); }
+  return true;
+}
+function openInNewTab(target) { if (target.t === 'board') openBoard(target.id); else openPage(target.id); }
+function imageLinkPop(anchor, c) {
+  closeTransient(); const set = v => { checkpoint(); if (v) c.data.link = v; else delete c.data.link; c.updatedAt = now(); save(); rerenderCard(c.columnId || c.id); p.remove(); renderToolbar(); };
+  const inp = h('input', { class: 'tp-in', placeholder: 'https://…', value: c.data.link && c.data.link.url ? c.data.link.url : '' });
+  inp.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') { const u = normUrl(inp.value); if (u) set({ url: u }); } });
+  const p = h('div', { class: 'pop imglink' }, h('div', { class: 'dd-h' }, 'Link this image'),
+    c.data.link ? h('div', { class: 'muted il-cur' }, 'Now: ' + imgLinkLabel(c.data.link)) : null,
+    h('div', { class: 'il-row' }, inp, h('button', { class: 'btn primary', onclick: () => { const u = normUrl(inp.value); if (u) set({ url: u }); else inp.focus(); } }, 'Save')),
+    h('div', { class: 'il-row' }, h('button', { class: 'btn', onclick: e => pickBoard(e.currentTarget, b => set({ ref: 'b:' + b.id }), 'Link to which board?') }, 'A board…'), h('button', { class: 'btn', onclick: e => pickPage(e.currentTarget, pg => set({ ref: 'p:' + pg.id })) }, 'A page…'), c.data.link ? h('button', { class: 'btn', onclick: () => set(null) }, 'Remove link') : null),
+    h('div', { class: 'muted il-hint' }, 'Double-click the image to open its link.'));
+  document.body.append(p); const r = anchor.getBoundingClientRect(); placeEl(p, r.left, r.bottom + 8); setTimeout(() => inp.focus(), 0);
+}
+{
+  const _ct = ctxTools;
+  ctxTools = function () {
+    const r = _ct(); if (!r || S.selLine || S.tool || S.sketchEdit) return r; const ids = [...S.sel];
+    if (ids.length === 1) { const c = ST.cards[ids[0]]; if (c && c.type === 'image') r.splice(Math.max(0, r.length - 1), 0, { label: 'Link', icon: 'linkout', active: !!c.data.link, keepPop: true, fn: b => imageLinkPop(b || $('#toolbar'), c) }); }
+    return r;
+  };
+}
+{
+  const _rc = renderCard;
+  renderCard = function (c, inCol) { const el = _rc(c, inCol); if (c.type === 'image' && c.data.link) { el.classList.add('has-link'); el.append(h('span', { class: 'img-linkbadge', title: imgLinkLabel(c.data.link) + ' (double-click to open)', html: ICON.linkout })); } return el; };
+}
+document.addEventListener('dblclick', e => {
+  const el = e.target.closest && e.target.closest('#cards .card.t-image.has-link'); if (!el || S.tool || e.target.closest('[data-act],button,input')) return;
+  const c = ST.cards[el.dataset.id]; if (c && c.data.link) { e.stopPropagation(); e.preventDefault(); openImageLink(c); }
+}, true);
+
+/* ---- boards without a title bar: rename from the breadcrumb ---- */
+{
+  const _cr = renderCrumbs;
+  renderCrumbs = function () {
+    _cr(); const last = $('#crumbs .crumb:last-of-type'); if (!last) return; last.classList.add('cur'); last.title = 'Double-click to rename';
+    last.addEventListener('dblclick', e => { e.stopPropagation(); const b = board(); askText(last, 'Board name', b.title || '', v => { v = (v || '').trim(); if (!v) return; checkpoint(); b.title = v; b.updatedAt = now(); save(); renderAll(); }); });
+  };
+}
 
 /* ========== events + init ========== */
 function migrate() {
