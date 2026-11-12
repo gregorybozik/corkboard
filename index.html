@@ -1716,7 +1716,36 @@ a.mention:hover{background:var(--hover)}
 #markBadge.on{background:#2b57ab;border-color:#2b57ab;color:#fff}
 #markBadge.on .mb-ic svg{stroke:#fff}
 body.mark-only #cards .card:not(.marked){opacity:.22}
-body.mark-only #cards .col-body .card:not(.marked){opacity:.35}
+body.mark-only #cards .col-body .card{opacity:1}
+
+/* ===== v2.2 AI block ===== */
+.card.t-ai{border:1px solid color-mix(in srgb,#8b6cf0 55%,var(--line));background:linear-gradient(160deg,color-mix(in srgb,#8b6cf0 12%,var(--card)),var(--card) 60%)}
+.aib{padding:12px;display:flex;flex-direction:column;gap:8px}
+.aib-head{display:flex;align-items:center;gap:7px;font-size:13px}
+.aib-ic{width:16px;height:16px;color:#8b6cf0;display:block}.aib-ic svg{width:16px;height:16px}
+.aib-count{margin-left:auto;font-size:11px;color:var(--muted);background:var(--hover);border-radius:9px;padding:1px 8px}
+.aib-prompt{width:100%;box-sizing:border-box;resize:vertical;min-height:64px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text);font:inherit;font-size:13px;padding:8px;outline:0}
+.aib-prompt:focus{border-color:#8b6cf0}
+.aib-presets{display:flex;flex-wrap:wrap;gap:5px}
+.aib-chip{border:1px solid var(--line);background:var(--hover);color:var(--text);border-radius:12px;padding:2px 9px;font:inherit;font-size:11.5px;cursor:pointer}
+.aib-chip:hover{border-color:#8b6cf0}
+.aib-row{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.aib-row .ai-key{flex:1;min-width:0}
+.aib-last,.aib-running{font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.aib-msg{font-size:12px;color:var(--muted)}.aib-msg.err{color:#e5534b}
+.aib-run[disabled]{opacity:.5;cursor:wait}
+.card.ai-ctx{outline:2px solid #8b6cf0;outline-offset:2px}
+.aip{width:auto;max-width:100%;min-width:0}
+.aip-row{min-width:0}
+.aip h3{margin:0 0 4px}.aip-sum{font-size:12.5px;margin-bottom:10px}
+.aip-list{display:flex;flex-direction:column;gap:6px;max-height:50vh;overflow:auto}
+.aip-row{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:9px 10px;cursor:pointer}
+.aip-row.warn{border-color:#e9a23b}
+.aip-ic{width:16px;height:16px;flex:none;margin-top:2px;opacity:.7}.aip-ic svg{width:16px;height:16px}
+.aip-t{min-width:0;font-size:13px}.aip-s{font-size:12px;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+.aip-mode{display:flex;flex-direction:column;gap:4px;margin-top:10px;font-size:12.5px}
+.aip-mode label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.aip-btns{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 </style>
 </head>
 <body class="app-root">
@@ -8398,7 +8427,7 @@ function pageTaskLists() {
     const bid = rc.boardId; if (!ST.boards[bid] || !boardIsLive(bid)) continue;
     const items = []; eachBlock(p.blocks, b => { if (b.type !== 'todo' || !strip(b.html || '').trim()) return; if (b.srcCol && ST.cards[b.srcCol] && !ST.cards[b.srcCol].trashed) return; items.push(taskProxy(b, p)); });
     if (!items.length) continue;
-    out.push({ id: 'pg:' + p.id, virtual: true, pageId: p.id, type: 'todo', boardId: bid, x: 0, y: 0, trashed: false, columnId: null, bookmark: rc.bookmark, data: { title: (p.title || 'Untitled page') + ' (page)', items }, get updatedAt() { return p.updatedAt; }, set updatedAt(v) { p.updatedAt = v; } });
+    out.push({ id: 'pg:' + p.id, virtual: true, pageId: p.id, type: 'todo', boardId: bid, x: 0, y: 0, trashed: false, columnId: null, data: { title: (p.title || 'Untitled page') + ' (page)', items }, get updatedAt() { return p.updatedAt; }, set updatedAt(v) { p.updatedAt = v; } });
   }
   return out;
 }
@@ -8411,7 +8440,7 @@ const taskLists = () => [...allLists(), ...pageTaskLists()];
     return null;
   };
 }
-const listMarked = c => !!(c.bookmark || (c.columnId && ST.cards[c.columnId] && ST.cards[c.columnId].bookmark));
+const listMarked = c => !!(c.columnId && ST.cards[c.columnId] && ST.cards[c.columnId].bookmark);
 
 /* ---- column → page ---- */
 function colBlocksFor(k, col) {
@@ -8472,27 +8501,239 @@ ACT.colfold = id => { const c = ST.cards[id]; if (!c) return; checkpoint(); c.da
   const _rc = renderCard;
   renderCard = function (c, inCol) {
     const el = _rc(c, inCol);
-    if (c.type === 'ink') return el;
-    const kidMarked = c.type === 'column' && (c.data.childIds || []).some(i => ST.cards[i] && ST.cards[i].bookmark && !ST.cards[i].trashed);
-    if (c.bookmark || kidMarked) el.classList.add('marked');
+    if (c.type !== 'column') return el;
+    if (c.bookmark) el.classList.add('marked');
     el.append(h('button', { class: 'bm-btn' + (c.bookmark ? ' on' : ''), 'data-act': 'bookmark', title: c.bookmark ? 'Bookmarked: needs attention (click to clear)' : 'Bookmark: needs attention', html: ICON.bookmark }));
     return el;
   };
 }
 ACT.bookmark = id => { const c = ST.cards[id]; if (!c) return; checkpoint(); c.bookmark = !c.bookmark; c.updatedAt = now(); save(); rerenderCard(c.columnId || id); updateUnsorted(); if ($('.tasksview')) renderTVBody(); };
-function bookmarkCount() { return cardsOf(S.boardId, true).filter(c => c.bookmark && !c.trashed && !c.unsorted).length; }
+function bookmarkCount() { return cardsOf(S.boardId, true).filter(c => c.type === 'column' && c.bookmark && !c.trashed && !c.unsorted).length; }
 {
   const _u = updateUnsorted;
   updateUnsorted = function () {
     _u();
     const host = $('#unsortedBadge'); if (!host || !host.parentElement) return;
     let b = $('#markBadge');
-    if (!b) { b = h('button', { id: 'markBadge', title: 'Dim everything except bookmarked cards', onclick: () => { document.body.classList.toggle('mark-only'); updateUnsorted(); } }); host.after(b); }
+    if (!b) { b = h('button', { id: 'markBadge', title: 'Dim everything except bookmarked columns', onclick: () => { document.body.classList.toggle('mark-only'); updateUnsorted(); } }); host.after(b); }
     const n = bookmarkCount(); b.innerHTML = ''; b.append(h('span', { class: 'mb-ic', html: ICON.bookmark }), h('b', null, String(n)), ' Bookmarked');
     b.classList.toggle('on', document.body.classList.contains('mark-only'));
   };
 }
 { const _o = openTasksView; openTasksView = function () { S.tvScroll = null; return _o.apply(this, arguments); }; }
+
+/* ========== v2.2: AI blocks (read connected blocks, create notes/links/tasks/pages/columns) ========== */
+TYPE_NAME.ai = 'AI block'; TYPE_ICON.ai = 'sparkle'; DEF.ai = { w: 340 }; RESIZE_W.add('ai');
+MORE_TOOLS.unshift({ k: 'ai', label: 'AI block', icon: 'sparkle' });
+{ const _dd = defaultData; defaultData = function (type) { return type === 'ai' ? { prompt: '', runs: [] } : _dd(type); }; }
+const AI_PRESETS = [
+  ['Research this', 'Research the subject of the connected blocks. Create a research note with the key points and sources.'],
+  ['Make a plan', 'Create a step-by-step plan for what the connected blocks describe, as a page.'],
+  ['Break into tasks', 'Break what the connected blocks describe into a task list of concrete next actions.'],
+  ['Summarize', 'Summarize the connected blocks in one short note.'],
+  ['Find links', 'Find the most useful web links for what the connected blocks describe, one link card each.']];
+const AIRUN = {};
+const aiOutputs = id => Object.values(ST.cards).filter(c => c.aiSrc === id && !c.trashed);
+
+/* ---- context: everything connected by lines, following the chain ---- */
+function aiChain(id) {
+  const me = ST.cards[id]; if (!me) return [];
+  const adj = {}; const add = (a, b) => { (adj[a] = adj[a] || new Set()).add(b); };
+  for (const l of Object.values(ST.lines)) { if (l.boardId !== me.boardId) continue; const a = l.from.cardId, b = l.to.cardId; if (a && b && ST.cards[a] && ST.cards[b]) { add(a, b); add(b, a); } }
+  const seen = new Set([id]), out = [], q = [id];
+  while (q.length) {
+    const cur = q.shift();
+    for (const n of adj[cur] || []) {
+      if (seen.has(n)) continue; seen.add(n); const c = ST.cards[n];
+      if (!c || c.trashed || c.unsorted || c.type === 'ai' || c.aiSrc === id) continue;
+      out.push(c); q.push(n);
+    }
+  }
+  return out;
+}
+function aiCardText(c, depth) {
+  const d = c.data;
+  if (c.type === 'column') { const kids = d.childIds.map(i => ST.cards[i]).filter(k => k && !k.trashed && !k.unsorted); return `Column "${d.title || 'Untitled'}" containing:\n` + kids.map(k => '  - ' + aiCardText(k, 1).replace(/\n/g, '\n    ')).join('\n'); }
+  if (c.type === 'todo') return `Task list "${d.title || 'Untitled'}":\n` + d.items.map(i => `  ${i.done ? '[x]' : '[ ]'} ${i.text}${i.due ? ' (due ' + i.due + ')' : ''}${i.urgent ? ' (urgent)' : ''}${i.important ? ' (important)' : ''}`).join('\n');
+  if (c.type === 'board') { const b = ST.boards[d.boardId]; return `Board "${b ? b.title : ''}" with cards: ` + (b ? topLevel(b.id).map(cardTitle).slice(0, 40).join('; ') : ''); }
+  if (c.type === 'image') return `Image "${d.name || 'image'}"${c.caption ? ' — ' + c.caption : ''}${d.blobId ? ' (attached)' : ''}`;
+  if (c.type === 'link') return `Link: ${d.title || ''} ${d.url || ''}${d.desc ? ' — ' + d.desc : ''}`;
+  if (c.type === 'page') return `Page:\n${cardText(c).slice(0, 12000)}`;
+  return `${TYPE_NAME[c.type] || c.type}: ${cardText(c).slice(0, 6000)}`;
+}
+const blobB64 = blob => new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(',')[1]); fr.onerror = rej; fr.readAsDataURL(blob); });
+async function aiContext(id) {
+  const chain = aiChain(id), parts = [], images = [], urls = new Set();
+  const imgs = [];
+  chain.forEach((c, i) => {
+    parts.push(`[Block ${i + 1}] ${aiCardText(c)}`);
+    const all = c.type === 'column' ? [c, ...c.data.childIds.map(k => ST.cards[k]).filter(Boolean)] : [c];
+    for (const k of all) { if (k.type === 'image' && k.data.blobId) imgs.push(k); if (k.type === 'link' && k.data.url) urls.add(aiNormUrl(k.data.url)); }
+  });
+  for (const k of imgs.slice(0, 5)) { const bl = Blobs.mem[k.data.blobId]; if (!bl || bl.size > 4.5e6 || !/^image\/(jpeg|png|gif|webp)$/.test(bl.type)) continue; try { images.push({ type: 'image', source: { type: 'base64', media_type: bl.type, data: await blobB64(bl) } }); } catch (e) { } }
+  return { chain, text: parts.join('\n\n'), images, urls };
+}
+const aiNormUrl = u => String(u || '').trim().replace(/#.*$/, '').replace(/\/+$/, '').replace(/^http:/, 'https:').toLowerCase();
+
+/* ---- API call with web search ---- */
+const AI_SYS = `You are an assistant built into a visual board app. The user connected some blocks (notes, task lists, columns, pages, images) to an AI block and wrote an instruction. Read the connected blocks to understand what the user is working on, then produce new blocks that fulfil the instruction.
+Rules:
+- Connected task lists are background that shows what the user intends to do. Decide what to create from the instruction.
+- Use web search whenever the instruction needs current facts or real links. Only use URLs that appeared in your web search results or in the connected blocks. Never invent or guess a URL. If you cannot find a reliable link, create a note saying so instead of a link.
+- Keep notes concise and useful. Put sources in notes as markdown links [title](url).
+- Finish with ONE JSON object and nothing after it, in this exact shape:
+{"summary":"one sentence on what you made","items":[
+ {"type":"note","title":"...","markdown":"..."},
+ {"type":"link","title":"...","url":"https://...","desc":"one line on why, and the source site"},
+ {"type":"todo","title":"...","tasks":[{"text":"...","due":"YYYY-MM-DD or null"}]},
+ {"type":"page","title":"...","markdown":"# headings, - bullets, - [ ] to-dos, plain paragraphs"},
+ {"type":"column","title":"...","items":[ note / link / todo items as above ]}
+]}
+Create between 1 and 8 top-level items. Use the smallest set that answers the instruction.`;
+async function aiCall(body, key) {
+  let r;
+  try { r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' }, body: JSON.stringify(body) }); }
+  catch (e) { throw new Error('Could not reach Anthropic. Check your internet connection.'); }
+  let j = null; try { j = await r.json(); } catch (e) { }
+  if (!r.ok) { if (r.status === 401) throw new Error('Your API key was rejected. Check it in Settings.'); throw new Error('Anthropic API error: ' + (j && j.error && j.error.message ? j.error.message : 'HTTP ' + r.status)); }
+  return j;
+}
+async function aiRunRequest(id) {
+  const c = ST.cards[id], key = aiGet(AI_KEY); if (!key) throw Object.assign(new Error('nokey'), { code: 'nokey' });
+  const ctx = await aiContext(id);
+  const user = [...ctx.images, { type: 'text', text: `Today is ${todayStr()}.\n\nCONNECTED BLOCKS (${ctx.chain.length}):\n${ctx.text || '(none connected)'}\n\nINSTRUCTION:\n${c.data.prompt.trim()}` }];
+  const messages = [{ role: 'user', content: user }];
+  const allowed = new Set(ctx.urls); let text = '', searched = false;
+  for (let turn = 0; turn < 4; turn++) {
+    const j = await aiCall({ model: aiModel(), max_tokens: 4096, system: AI_SYS, messages, tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 6 }] }, key);
+    for (const b of j.content || []) {
+      if (b.type === 'web_search_tool_result' && Array.isArray(b.content)) { searched = true; for (const r of b.content) if (r && r.url) allowed.add(aiNormUrl(r.url)); }
+      if (b.type === 'text') { text += b.text; for (const ct of b.citations || []) if (ct.url) allowed.add(aiNormUrl(ct.url)); }
+    }
+    if (j.stop_reason !== 'pause_turn') break;
+    messages.push({ role: 'assistant', content: j.content });
+  }
+  const a = text.lastIndexOf('{"summary"'); const m = a >= 0 ? text.slice(a) : (text.match(/\{[\s\S]*\}/) || [''])[0];
+  let out; try { out = JSON.parse(m.slice(0, m.lastIndexOf('}') + 1)); } catch (e) { throw new Error('The AI reply could not be read. Try running it again.'); }
+  const items = (Array.isArray(out.items) ? out.items : []).slice(0, 8).map(it => aiClean(it, allowed)).filter(Boolean);
+  if (!items.length) throw new Error('The AI did not return anything to create. Try a more specific instruction.');
+  return { summary: String(out.summary || ''), items, searched, count: ctx.chain.length };
+}
+function aiClean(it, allowed, nested) {
+  if (!it || typeof it !== 'object') return null; const title = String(it.title || '').trim().slice(0, 140);
+  switch (it.type) {
+    case 'note': return { type: 'note', title, html: aiMd(String(it.markdown || it.text || ''), allowed) };
+    case 'link': { const url = String(it.url || '').trim(); const ok = /^https?:\/\//i.test(url) && allowed.has(aiNormUrl(url)); return ok ? { type: 'link', title, url, desc: String(it.desc || '').slice(0, 300) } : { type: 'note', title: title || 'Link not verified', html: `<p>No verified link was found for “${esc(title || url)}”. The AI suggested an address that did not come from its web search, so it was not added.</p>`, warn: true }; }
+    case 'todo': { const tasks = (Array.isArray(it.tasks) ? it.tasks : []).map(t => typeof t === 'string' ? { text: t } : t).filter(t => t && String(t.text || '').trim()).slice(0, 30).map(t => ({ text: String(t.text).trim().slice(0, 200), due: /^\d{4}-\d\d-\d\d$/.test(t.due || '') ? t.due : null })); return tasks.length ? { type: 'todo', title, tasks } : null; }
+    case 'page': return { type: 'page', title, md: aiStripLinks(String(it.markdown || ''), allowed) };
+    case 'column': { if (nested) return null; const kids = (Array.isArray(it.items) ? it.items : []).slice(0, 12).map(k => aiClean(k, allowed, true)).filter(k => k && k.type !== 'page'); return kids.length ? { type: 'column', title, items: kids } : null; }
+  }
+  return null;
+}
+const aiStripLinks = (md, allowed) => md.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, (m, t, u) => allowed.has(aiNormUrl(u)) ? m : t).replace(/(^|[\s(])(https?:\/\/[^\s)<]+)/g, (m, p, u) => allowed.has(aiNormUrl(u)) ? m : p);
+function aiInline(s, allowed) {
+  return esc(s).replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, (m, t, u) => `<a href="${u}" target="_blank" rel="noopener">${t}</a>`).replace(/(^|[\s(])(https?:\/\/[^\s)<]+)/g, (m, p, u) => `${p}<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
+}
+function aiMd(md, allowed) {
+  const lines = aiStripLinks(md, allowed).split('\n'); let html = '', ul = false;
+  const close = () => { if (ul) { html += '</ul>'; ul = false; } };
+  for (const raw of lines) {
+    const l = raw.trim(); if (!l) { close(); continue; }
+    let m;
+    if ((m = l.match(/^#{1,6}\s+(.*)/))) { close(); html += `<h3>${aiInline(m[1], allowed)}</h3>`; }
+    else if ((m = l.match(/^(?:[-*•]|\d+[.)])\s+(.*)/))) { if (!ul) { html += '<ul>'; ul = true; } html += `<li>${aiInline(m[1], allowed)}</li>`; }
+    else { close(); html += `<p>${aiInline(l, allowed)}</p>`; }
+  }
+  close(); return html;
+}
+function aiMdBlocks(md) {
+  const out = [];
+  for (const raw of md.split('\n')) {
+    const l = raw.trim(); if (!l) continue; let m; const inl = s => aiInline(s, null);
+    if ((m = l.match(/^#\s+(.*)/))) out.push(nb('h1', inl(m[1])));
+    else if ((m = l.match(/^##\s+(.*)/))) out.push(nb('h2', inl(m[1])));
+    else if ((m = l.match(/^#{3,6}\s+(.*)/))) out.push(nb('h3', inl(m[1])));
+    else if ((m = l.match(/^[-*]\s+\[( |x)\]\s+(.*)/i))) out.push(nb('todo', inl(m[2]), { checked: m[1].toLowerCase() === 'x' }));
+    else if ((m = l.match(/^[-*•]\s+(.*)/))) out.push(nb('bullet', inl(m[1])));
+    else if ((m = l.match(/^\d+[.)]\s+(.*)/))) out.push(nb('number', inl(m[1])));
+    else out.push(nb('text', inl(l)));
+  }
+  return out.length ? out : [nb('text')];
+}
+
+/* ---- placing results ---- */
+function aiMake(it, x, y) {
+  let c;
+  if (it.type === 'note') c = newCard('note', x, y, { html: (it.title ? `<h3>${esc(it.title)}</h3>` : '') + it.html });
+  else if (it.type === 'link') { c = newCard('link', x, y, { url: it.url, title: it.title || hostOf(it.url), desc: (it.desc ? it.desc + ' · ' : '') + 'Found by web search', image: '', favicon: '', showPreview: true }); }
+  else if (it.type === 'todo') c = newCard('todo', x, y, { title: it.title || 'Tasks', showTitle: true, items: it.tasks.map(t => Object.assign(newTask(t.text), { due: t.due || null })) });
+  else if (it.type === 'page') { c = newCard('page', x, y); const p = ST.pages[c.data.pageId]; p.title = it.title || 'Untitled'; p.blocks = aiMdBlocks(it.md); normalizeBlocks(p); }
+  else if (it.type === 'column') { c = newCard('column', x, y, { title: it.title || 'Column', childIds: [], collapsed: false }); for (const k of it.items) { const kc = aiMake(k, 0, 0); if (kc) { kc.columnId = c.id; c.data.childIds.push(kc.id); } } }
+  return c;
+}
+const aiEstH = it => it.type === 'note' ? 110 + Math.min(360, Math.ceil(strip(it.html).length / 34) * 20) : it.type === 'link' ? 120 : it.type === 'todo' ? 80 + it.tasks.length * 30 : it.type === 'page' ? 150 : 110 + it.items.reduce((a, k) => a + aiEstH(k) + 8, 0);
+function aiPlace(id, items, replace, meta) {
+  const c = ST.cards[id]; if (!c) return; checkpoint();
+  if (replace) { for (const o of aiOutputs(id)) { o.trashed = true; o.trashedAt = now(); if (o.type === 'column') for (const k of o.data.childIds) if (ST.cards[k]) { ST.cards[k].trashed = true; ST.cards[k].trashedAt = now(); } for (const l of Object.values(ST.lines)) if (l.from.cardId === o.id || l.to.cardId === o.id) delete ST.lines[l.id]; } }
+  const prior = aiOutputs(id).filter(o => !o.columnId), x = c.x + (c.w || 340) + 80; let y = prior.length ? Math.max(...prior.map(o => o.y + 220)) : c.y; const made = [];
+  const prev = S.boardId; S.boardId = c.boardId;
+  for (const it of items) { const n = aiMake(it, x, y); if (!n) continue; n.aiSrc = id; snapCard(n); y += aiEstH(it) + 30; made.push(n.id); const l = newLine({ cardId: id }, { cardId: n.id }); l.ai = true; l.dashed = true; }
+  S.boardId = prev;
+  c.data.runs = [{ at: now(), prompt: c.data.prompt, summary: meta.summary, made: made.length, read: meta.count, searched: meta.searched }, ...(c.data.runs || [])].slice(0, 5);
+  c.updatedAt = now(); S.sel = new Set([id]); save(); renderBoard();
+  for (const mid of made) { const mc = ST.cards[mid]; if (mc && mc.type === 'link') fetchPreview(mid); }
+  toast(`Created ${made.length} block${made.length === 1 ? '' : 's'}`);
+}
+function aiPreview(id, res) {
+  const c = ST.cards[id]; if (!c) return; const had = aiOutputs(id).filter(o => !o.columnId).length;
+  const picks = res.items.map(() => true); let mode = 'add';
+  const icon2 = t => h('span', { class: 'aip-ic', html: ICON[TYPE_ICON[t] || 'note'] });
+  const snip = it => it.type === 'note' ? strip(it.html).slice(0, 220) : it.type === 'link' ? it.url + (it.desc ? ' — ' + it.desc : '') : it.type === 'todo' ? it.tasks.map(t => '☐ ' + t.text).slice(0, 6).join('   ') : it.type === 'page' ? it.md.replace(/[#*\[\]-]/g, ' ').replace(/\s+/g, ' ').slice(0, 220) : it.items.map(k => (TYPE_NAME[k.type] || k.type) + ': ' + (k.title || '')).join('   ');
+  const list = h('div', { class: 'aip-list' }, res.items.map((it, i) => { const cb = h('input', { type: 'checkbox', checked: true }); cb.onchange = () => { picks[i] = cb.checked; }; return h('label', { class: 'aip-row' + (it.warn ? ' warn' : '') }, cb, icon2(it.type), h('div', { class: 'aip-t' }, h('b', null, (TYPE_NAME[it.type] || it.type) + (it.title ? ': ' + it.title : '')), h('div', { class: 'aip-s' }, snip(it)))); }));
+  const modeRow = had ? h('div', { class: 'aip-mode' }, [['add', `Add to the ${had} earlier result${had === 1 ? '' : 's'}`], ['replace', 'Replace earlier results (moves them to Trash)']].map(([v, l]) => { const r = h('input', { type: 'radio', name: 'aipm', checked: v === 'add' }); r.onchange = () => { mode = v; }; return h('label', null, r, l); })) : null;
+  const bg = modal(h('div', { class: 'aip' }, h('h3', null, 'AI results'), h('div', { class: 'muted aip-sum' }, (res.summary || '') + ` · read ${res.count} block${res.count === 1 ? '' : 's'}${res.searched ? ' · searched the web' : ''}`), list, modeRow,
+    h('div', { class: 'aip-btns' }, h('button', { class: 'btn', onclick: () => bg.remove() }, 'Discard'), h('button', { class: 'btn primary', onclick: () => { const keep = res.items.filter((_, i) => picks[i]); bg.remove(); if (keep.length) aiPlace(id, keep, mode === 'replace', res); } }, 'Create selected'))));
+}
+async function aiRun(id) {
+  const c = ST.cards[id]; if (!c || AIRUN[id]?.state === 'run') return;
+  if (!c.data.prompt.trim()) { toast('Type an instruction or pick a quick action first'); return; }
+  if (!aiGet(AI_KEY)) { AIRUN[id] = { state: 'key' }; rerenderCard(id); return; }
+  AIRUN[id] = { state: 'run' }; rerenderCard(id);
+  try { const res = await aiRunRequest(id); delete AIRUN[id]; rerenderCard(id); aiPreview(id, res); }
+  catch (e) { AIRUN[id] = e.code === 'nokey' ? { state: 'key' } : { state: 'err', msg: e.message }; rerenderCard(id); }
+}
+
+/* ---- the block itself ---- */
+RENDER.ai = function (c) {
+  const d = c.data, st = AIRUN[c.id] || {}, n = aiChain(c.id).length, last = (d.runs || [])[0];
+  const ta = h('textarea', { class: 'aib-prompt', placeholder: 'What should the AI do with the connected blocks?', rows: '3', 'data-nodrag': '1' }); ta.value = d.prompt || '';
+  ta.addEventListener('input', () => { d.prompt = ta.value; c.updatedAt = now(); save(); });
+  ta.addEventListener('keydown', e => { e.stopPropagation(); if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); aiRun(c.id); } });
+  const w = h('div', { class: 'aib' },
+    h('div', { class: 'aib-head' }, h('span', { class: 'aib-ic', html: ICON.sparkle }), h('b', null, 'AI block'), h('span', { class: 'aib-count' }, n ? `Reading ${n} block${n === 1 ? '' : 's'}` : 'Not connected yet')),
+    ta,
+    h('div', { class: 'aib-presets' }, AI_PRESETS.map(([l, p]) => h('button', { class: 'aib-chip', title: p, onclick: e => { e.stopPropagation(); d.prompt = p; ta.value = p; save(); ta.focus(); } }, l))));
+  if (st.state === 'key') {
+    const key = h('input', { type: 'password', class: 'ai-key', placeholder: 'Paste your Anthropic API key (sk-ant-…)', autocomplete: 'off', 'data-nodrag': '1' }); key.addEventListener('keydown', e => e.stopPropagation());
+    w.append(h('div', { class: 'aib-msg' }, 'Add your Anthropic API key. It stays in this browser and is sent only to api.anthropic.com.'), h('div', { class: 'aib-row' }, key, h('button', { class: 'btn primary', onclick: () => { const v = key.value.trim(); if (!v) return; if (!aiSet(AI_KEY, v)) return toast('Could not save — browser storage is blocked'); delete AIRUN[c.id]; aiRun(c.id); } }, 'Save & run')));
+  } else {
+    if (st.state === 'err') w.append(h('div', { class: 'aib-msg err' }, st.msg));
+    w.append(h('div', { class: 'aib-row' }, st.state === 'run' ? h('div', { class: 'aib-running' }, h('span', { class: 'ai-spin' }), 'Reading, searching and writing…') : h('span', { class: 'aib-last' }, last ? `Last run made ${last.made} block${last.made === 1 ? '' : 's'}` : n ? '' : 'Draw a line from a block to this one'),
+      h('button', { class: 'btn primary aib-run', disabled: st.state === 'run' ? '' : null, onclick: e => { e.stopPropagation(); aiRun(c.id); } }, last ? 'Run again' : 'Run')));
+  }
+  return w;
+};
+{ const _ac = afterCreate; afterCreate = function (c) { if (c.type === 'ai') { setTimeout(() => $(`#cards [data-id="${c.id}"] .aib-prompt`)?.focus(), 30); return; } return _ac(c); }; }
+{ const _ct = cardText; cardText = function (c) { return c.type === 'ai' ? 'AI block: ' + (c.data.prompt || '') : _ct(c); }; }
+function aiHilite() {
+  const ctx = new Set(); for (const id of S.sel) { const c = ST.cards[id]; if (c && c.type === 'ai') for (const k of aiChain(id)) ctx.add(k.id); }
+  $$('#cards > .card').forEach(e => e.classList.toggle('ai-ctx', ctx.has(e.dataset.id)));
+  $$('#cards .col-body > .card').forEach(e => e.classList.toggle('ai-ctx', ctx.has(e.dataset.id)));
+  $$('#cards .card.t-ai').forEach(e => { const el = e.querySelector('.aib-count'); if (el) { const n = aiChain(e.dataset.id).length; el.textContent = n ? `Reading ${n} block${n === 1 ? '' : 's'}` : 'Not connected yet'; } });
+}
+{ const _us = updateSelUI; updateSelUI = function () { _us(); aiHilite(); }; }
+{ const _rb = renderBoard; renderBoard = function () { _rb(); aiHilite(); }; }
+{ const _fl = finishLine; finishLine = function (p, e) { const r = _fl(p, e); setTimeout(aiHilite, 0); return r; }; }
 
 /* ========== events + init ========== */
 function migrate() {
