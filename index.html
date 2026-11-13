@@ -1928,6 +1928,57 @@ body.mark-only #cards .col-body .card{opacity:1}
 .sp-icx{position:absolute;right:2px;top:2px;width:16px;height:16px;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:12px;line-height:1;cursor:pointer;opacity:0;padding:0}
 .sp-icwrap:hover .sp-icx{opacity:1}
 .sp-empty{font-size:12px;padding:2px 2px 4px}
+
+/* ===== v2.6 ===== */
+#lines{z-index:-1}
+#lines.raised{z-index:100000}
+body.multi-conn .card.selected{outline:2px dashed var(--selh);outline-offset:3px}
+/* notes 20% more solid */
+.app-root:not(.no-notetint) .card.t-note:not(.colored){background:linear-gradient(color-mix(in srgb,var(--text) 4%,transparent),color-mix(in srgb,var(--text) 4%,transparent)),rgba(255,255,255,.2)}
+#viewport[data-bgt=dark] .card.t-note:not(.colored){background:linear-gradient(rgba(255,255,255,.04),rgba(255,255,255,.04)),rgba(0,0,0,.2)}
+/* resize handles: edge strips + larger corners */
+.resize{right:-7px;top:16px;bottom:16px;margin:0;width:14px;height:auto}
+.resize::before{inset:0 -4px}
+.resize::after{left:6px;top:22%;margin:0;width:3px;height:28px;border-radius:2px}
+.resize.h{right:16px;left:16px;top:auto;bottom:-7px;margin:0;width:auto;height:14px}
+.resize.h::before{inset:-4px 0}
+.resize.h::after{left:22%;top:6px;margin:0;width:28px;height:3px}
+.resize.l{right:auto;left:-7px;cursor:ew-resize}
+.resize.t{right:16px;left:16px;top:-7px;bottom:auto;width:auto;height:14px;cursor:ns-resize}
+.resize.t::before{inset:-4px 0}
+.resize.t::after{left:22%;top:6px;margin:0;width:28px;height:3px}
+.resize:hover::after{background:var(--sel,var(--selh));filter:brightness(1.15)}
+.sc-h{width:11px;height:11px;border-width:1.5px;border-radius:3px}
+.sc-h::before{inset:-9px}
+.sc-h[data-scale=nw]{left:-7px;top:-7px}.sc-h[data-scale=ne]{right:-7px;top:-7px}
+.sc-h[data-scale=sw]{left:-7px;bottom:-7px}.sc-h[data-scale=se]{right:-7px;bottom:-7px}
+.resize.wh{right:-8px;bottom:-8px;width:16px;height:16px}
+.resize.wh::after{left:3px;top:3px;margin:0;width:10px;height:10px;border-radius:3px}
+/* tabs +15% */
+#tabbar{height:37px}
+#tabactions{height:37px}
+.tab{height:31px;min-width:104px;max-width:230px;font-size:14.4px;gap:8px;padding:0 7px 0 10px;border-radius:9px 9px 0 0}
+.tab.cur{height:32px}
+.tab-ic{width:17px;height:17px;font-size:11.5px}
+.tab-x{width:21px;height:21px;font-size:17px}
+.tab-new{width:30px;height:30px;font-size:19px}
+.tab-edit{flex:1;min-width:0;width:100%;font:inherit;color:var(--text);background:var(--card);border:1px solid var(--selh);border-radius:5px;padding:1px 5px;outline:none}
+/* lock */
+#main{position:relative}
+#lockscreen{position:absolute;inset:0;z-index:300000;background:var(--canvas);display:grid;place-items:center}
+.lk-box{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.lk-ic{font-size:44px}
+.lk-box h2{margin:0;font-size:22px}.lk-box p{margin:0;color:var(--muted)}
+.pw-modal{width:340px;display:flex;flex-direction:column;gap:10px}
+.pw-modal h3{margin:0}.pw-modal p{margin:0;color:var(--muted);font-size:13px}
+.pw-modal input{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text)}
+.pw-err{color:#e04646;font-size:12.5px;min-height:16px}
+.pw-forgot{border:0;background:none;color:var(--muted);font:inherit;font-size:12px;text-decoration:underline;cursor:pointer;margin-left:auto}
+/* youtube pop-out */
+.video-popped{position:absolute;inset:0;background-size:cover;background-position:center;z-index:6;display:grid;place-items:center;border-radius:inherit}
+.video-popped::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.62)}
+.vp-in{position:relative;color:#fff;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;font-size:14px}
+.vp-b{display:flex;gap:8px}
 </style>
 </head>
 <body class="app-root">
@@ -2743,11 +2794,12 @@ function onDownInner(e) {
   const th = t.closest('[data-taskhandle]');
   if (th) { endEdit(); P = { type: 'taskdrag', tid: th.dataset.taskhandle, sx: e.clientX, sy: e.clientY, moved: false, row: th.closest('.todo-item') }; e.preventDefault(); return; }
   const cn = t.closest('[data-conn]');
-  if (cn) { endEdit(); const r = cn.getBoundingClientRect(), p0 = toWorld(r.left + r.width / 2, r.top + r.height / 2); P = { type: 'linedraft', from: { cardId: cn.closest('.card').dataset.id }, fromDot: true }; S.lineDraft = { x0: p0.x, y0: p0.y, x1: w.x, y1: w.y }; e.preventDefault(); return; }
+  if (cn) { endEdit(); const r = cn.getBoundingClientRect(), p0 = toWorld(r.left + r.width / 2, r.top + r.height / 2); P = { type: 'linedraft', from: { cardId: cn.closest('.card').dataset.id }, fromDot: true, multi: S.sel.size > 1 && S.sel.has(cn.closest('.card').dataset.id) }; if (P.multi) document.body.classList.add('multi-conn'); S.lineDraft = { x0: p0.x, y0: p0.y, x1: w.x, y1: w.y }; e.preventDefault(); return; }
   const sch = t.closest('[data-scale]');
+  if (sch && e.shiftKey && (RESIZE_W.has(ST.cards[sch.closest('.card').dataset.id]?.type) || RESIZE_WH.has(ST.cards[sch.closest('.card').dataset.id]?.type))) { const el = sch.closest('.card'), c = ST.cards[el.dataset.id], k = sch.dataset.scale, dirs = (k.includes('e') ? 'e' : 'w') + (RESIZE_WH.has(c.type) ? (k.includes('s') ? 's' : 'n') : ''); endEdit(); P = { type: 'resize', axis: 'free', dirs, id: c.id, el, sx: e.clientX, sy: e.clientY, w0: c.w, h0: c.h || el.offsetHeight, x0: c.x, y0: c.y, moved: false }; e.preventDefault(); return; }
   if (sch) { if (S.editing) endEdit(); const el = sch.closest('.card'), c = ST.cards[el.dataset.id], sc0 = c.sc || 1; P = { type: 'scale', id: c.id, el, corner: sch.dataset.scale, sx: e.clientX, sy: e.clientY, sc0, x0: c.x, y0: c.y, wv: c.w * sc0, hv: el.offsetHeight * sc0, moved: false }; e.preventDefault(); return; }
   const rz = t.closest('[data-resize]');
-  if (rz) { const el = rz.closest('.card'), c = ST.cards[el.dataset.id]; P = { type: 'resize', axis: rz.dataset.resize, id: c.id, el, sx: e.clientX, sy: e.clientY, w0: c.w, h0: c.h || el.offsetHeight, moved: false }; e.preventDefault(); return; }
+  if (rz) { const el = rz.closest('.card'), c = ST.cards[el.dataset.id]; P = { type: 'resize', axis: rz.dataset.resize, dirs: ({ w: 'e', h: 's', wh: 'es', l: 'w', t: 'n' })[rz.dataset.resize] || 'e', id: c.id, el, sx: e.clientX, sy: e.clientY, w0: c.w, h0: c.h || el.offsetHeight, x0: c.x, y0: c.y, moved: false }; e.preventDefault(); return; }
   const cardEl = t.closest('.card');
   if (cardEl) {
     const id = cardEl.dataset.id;
@@ -2792,9 +2844,10 @@ function onMove(e) {
     case 'marquee': moveMarquee(e, w); break;
     case 'resize': {
       if (!P.moved) { checkpoint(); P.moved = true; }
-      const v = view(), c = ST.cards[P.id], k = v.z * (c.sc || 1);
-      if (P.axis !== 'h') { let nw = Math.max(c.type === 'ink' ? 20 : c.type === 'shape' ? 40 : 80, P.w0 + (e.clientX - P.sx) / k); if (ST.settings.snap) nw = Math.round(nw / 10) * 10; c.w = Math.round(nw); P.el.style.width = c.w + 'px'; }
-      if (RESIZE_WH.has(c.type) && (P.axis === 'h' || P.axis === 'wh')) { let nh = Math.max(c.type === 'shape' ? 30 : 60, P.h0 + (e.clientY - P.sy) / k); if (ST.settings.snap) nh = Math.round(nh / 10) * 10; c.h = Math.round(nh); P.el.style.height = c.h + 'px'; }
+      const v = view(), c = ST.cards[P.id], sc = c.sc || 1, k = v.z * sc, ax = P.dirs || 'e', dx = (e.clientX - P.sx) / k, dy = (e.clientY - P.sy) / k;
+      const minW = c.type === 'ink' ? 20 : c.type === 'shape' ? 40 : 80, minH = c.type === 'shape' ? 30 : 60, sn = n => ST.settings.snap ? Math.round(n / 10) * 10 : n;
+      if (ax.includes('e') || ax.includes('w')) { c.w = Math.round(Math.max(minW, sn(P.w0 + (ax.includes('e') ? dx : -dx)))); P.el.style.width = c.w + 'px'; if (ax.includes('w')) { c.x = Math.round(P.x0 + (P.w0 - c.w) * sc); P.el.style.left = c.x + 'px'; } }
+      if (RESIZE_WH.has(c.type) && (ax.includes('s') || ax.includes('n'))) { c.h = Math.round(Math.max(minH, sn(P.h0 + (ax.includes('s') ? dy : -dy)))); P.el.style.height = c.h + 'px'; if (ax.includes('n')) { c.y = Math.round(P.y0 + (P.h0 - c.h) * sc); P.el.style.top = c.y + 'px'; } }
       scheduleLines(); break;
     }
     case 'scale': {
@@ -2816,7 +2869,7 @@ function onMove(e) {
 }
 function onUp(e) {
   pointers.delete(e.pointerId);
-  document.body.classList.remove('ptr-busy');
+  document.body.classList.remove('ptr-busy', 'multi-conn');
   if (!P) return;
   const p = P; P = null; clearTimeout(p.lp);
   $('#viewport').classList.remove('panning');
@@ -2911,8 +2964,8 @@ function handleCardClick(p, e) {
   const li = c.type === 'note' && t.closest('.rt ul.cl > li');
   if (li && clHit(li, e.clientX)) { checkpoint(); toggleCl(li); const b = li.closest('.note-body'); c.data.html = b.innerHTML; c.updatedAt = now(); save(); return; }
   const ed = t.closest('[data-edit]');
+  if (c.type === 'note' || c.type === 'heading') return; /* v2.6: double-click to write */
   if (ed) { startEdit(ed, { x: e.clientX, y: e.clientY }); return; }
-  if (c.type === 'note') { const b = p.cardEl.querySelector('.note-body'); if (b) startEdit(b, { x: e.clientX, y: e.clientY }); }
 }
 function moveMarquee(e, w) {
   const m = $('#marquee'), vr = $('#viewport').getBoundingClientRect();
@@ -2933,6 +2986,11 @@ function finishLine(p, e) {
   let to;
   if (len < 8 && !(over && over !== p.from.cardId)) to = { x: d.x0 + 180, y: d.y0 };
   else to = over && over !== p.from.cardId ? { cardId: over } : { x: d.x1, y: d.y1 };
+  if (p.multi && to.cardId) {
+    const srcs = [...S.sel].filter(id => ST.cards[id] && id !== to.cardId), have = new Set(Object.values(ST.lines).filter(l => l.to && l.to.cardId === to.cardId && l.from && l.from.cardId).map(l => l.from.cardId));
+    checkpoint(); let last = null; for (const id of srcs) { if (have.has(id)) continue; last = newLine({ cardId: id }, to); }
+    S.tool = null; $('#viewport').classList.remove('tool-line'); S.sel.clear(); S.selLine = last ? last.id : null; save(); updateSelUI(); if (last) toast(`Connected ${srcs.filter(i => !have.has(i)).length} boxes`); return;
+  }
   checkpoint(); const l = newLine(p.from, to);
   S.tool = null; $('#viewport').classList.remove('tool-line');
   S.sel.clear(); S.selLine = l.id; save(); updateSelUI();
@@ -3551,6 +3609,7 @@ function showCardMenu(x, y) {
   if (one && c.type === 'image' && c.data.blobId) extra.push({ label: 'View Full Size', fn: () => lightbox(c) });
   if (one && c.data && c.data.blobId) extra.push({ label: 'Download', fn: () => ACT.download(c.id) });
   if (ids.some(id => ST.cards[id].sc)) extra.push({ label: 'Reset Size', fn: () => { checkpoint(); ids.forEach(id => { const k = ST.cards[id], el = $(`#cards > [data-id="${id}"]`); if (!k.sc || !el) return; const cx = k.x + k.w * k.sc / 2, cy = k.y + el.offsetHeight * k.sc / 2; delete k.sc; k.x = Math.round(cx - k.w / 2); k.y = Math.round(cy - el.offsetHeight / 2); }); save(); renderBoard(); } });
+  if (one && c.type === 'board') extra.push(...lockMenuItems('b:' + c.data.boardId));
   if (one && c.type === 'column' && c.data.childIds.length) extra.push({ label: 'Release Cards from Column', fn: () => releaseColumn(c.id) });
   showMenu(x, y, [...extra, extra.length ? '-' : null,
   { label: 'Cut', kbd: MOD + ' X', fn: () => copySel(true) }, { label: 'Copy', kbd: MOD + ' C', fn: () => copySel(false) }, { label: 'Duplicate', kbd: MOD + ' D', fn: duplicateSel },
@@ -6046,6 +6105,7 @@ function pageMenu(anchor, p) {
     '-',
     { label: 'Export as Markdown', fn: () => exportPage(p, 'md') }, { label: 'Export as Word document', fn: () => exportPage(p, 'docx') }, { label: 'Export as PDF (print)', fn: () => printPage() },
     '-',
+    ...lockMenuItems('p:' + p.id), '-',
     card && card.boardId ? { label: 'Show card on board', fn: () => { closePageView(); goToCard(card.id); } } : null,
     { label: 'Delete page', danger: true, fn: () => deletePage(p.id) },
   ].filter(Boolean));
@@ -7994,6 +8054,7 @@ function fdMoveMenu(el, key) {
   const walk = (parent, d) => { for (const f of fdSub(kind, parent)) { items.push({ label: ' '.repeat(d) + (cur === f.id ? '✓ ' : '') + f.name, fn: () => fdMoveItem(key, f.id) }); walk(f.id, d + 1); } };
   walk(null, 0);
   items.push('-', { label: 'New folder…', fn: () => fdAsk(el, 'Folder name', 'New folder', v => { const id = fdCreate(kind, null, v); fdMoveItem(key, id); }) });
+  { const L = lockMenuItems(key); if (L.length) items.push('-', ...L); }
   showMenu(r.right, r.bottom, items);
 }
 function fdItemRow(key, depth, kidsMap) {
@@ -8619,7 +8680,7 @@ function pageTaskLists() {
   }
   return out;
 }
-const taskLists = () => [...allLists(), ...pageTaskLists()];
+let taskLists = () => [...allLists(), ...pageTaskLists()];
 {
   const _find = findTask;
   findTask = function (tid) {
@@ -9517,6 +9578,143 @@ function shapePicker(anchor, o) {
   }
   const p = popAt(anchor, h('div', { class: 'sp-pop' }, kids)); return p;
 }
+
+/* ========== v2.6 ========== */
+/* ---- multi-select color (works across mixed card types, incl. shapes) ---- */
+{
+  const _ctx = ctxTools;
+  ctxTools = function () {
+    const r = _ctx(); if (!Array.isArray(r) || S.selLine || S.tool || S.sketchEdit || (S.editing && S.editing.rich)) return r;
+    const ids = selTopIds(); if (ids.length < 2) return r;
+    const i = r.findIndex(t => t && t.label === 'Color'); if (i < 0) return r;
+    const first = ST.cards[ids[0]], swatch = first.type === 'shape' ? first.data.fill : first.type === 'board' ? ST.boards[first.data.boardId]?.color : first.type === 'ink' ? first.data.paths[0]?.c : first.color;
+    r[i] = { label: 'Color', swatch: swatch || null, title: 'Color all selected', fn: b => colorPop(b, ids, col => {
+      for (const id of ids) { const c = ST.cards[id]; if (!c) continue; if (c.type === 'shape') c.data.fill = col, c.data.filled = true; else if (c.type === 'board') { const bd = ST.boards[c.data.boardId]; if (bd) bd.color = col || '#5f8ff0'; } else if (c.type === 'ink') c.data.paths.forEach(p => p.c = col || '#2b2d30'); else c.color = col; c.updatedAt = now(); }
+      ids.forEach(rerenderCard); if (ids.some(id => ST.cards[id]?.type === 'board')) renderCrumbs();
+    }) };
+    return r;
+  };
+}
+/* ---- lines sit behind cards; raised only while drawing ---- */
+{ const _rl = renderLines; renderLines = function () { _rl.apply(this, arguments); const l = $('#lines'); if (l) l.classList.toggle('raised', !!S.lineDraft); }; }
+/* ---- bigger resize handles on every edge ---- */
+{
+  const _rc = renderCard;
+  renderCard = function (c, inCol) {
+    const el = _rc(c, inCol);
+    if (!inCol && !c.locked && (RESIZE_W.has(c.type) || RESIZE_WH.has(c.type))) { el.append(h('div', { class: 'resize l', 'data-resize': 'l', title: 'Drag to resize' })); if (RESIZE_WH.has(c.type)) el.append(h('div', { class: 'resize t', 'data-resize': 't', title: 'Drag to resize' })); }
+    return el;
+  };
+}
+/* ---- double-click to write in notes and headings ---- */
+{
+  const _od = onDbl;
+  onDbl = function (e) {
+    const cardEl = e.target.closest && e.target.closest('#cards .card.t-note, #cards .card.t-heading');
+    if (cardEl && !S.tool && !isInteractive(e.target) && !e.target.closest('[data-scale],[data-resize],[data-conn]')) {
+      const c = ST.cards[cardEl.dataset.id], t = cardEl.querySelector(c.type === 'note' ? '.note-body' : '[data-edit]');
+      if (t) { if (!S.sel.has(c.id)) { S.sel = new Set([c.id]); updateSelUI(); } startEdit(t, { x: e.clientX, y: e.clientY }); return; }
+    }
+    return _od(e);
+  };
+}
+/* ---- tabs: double-click to rename ---- */
+{
+  const _rt = renderTabs;
+  renderTabs = function () {
+    if (TABS.renaming) return; _rt();
+    const tabs = tabList();
+    $$('#tabbar .tab').forEach((el, i) => el.addEventListener('dblclick', e => {
+      const t = tabs[i]; if (!t) return; e.stopPropagation();
+      const isPage = t.o && t.o[0] === 'p', page = isPage ? ST.pages[t.o.slice(2)] : null, bd = !t.o ? ST.boards[t.b] : null, tgt = page || bd;
+      if (!tgt) { toast('Dashboards keep their name'); return; }
+      const span = el.querySelector('.tab-t'), inp = h('input', { class: 'tab-edit', type: 'text', value: tgt.title || '' });
+      TABS.renaming = true; span.replaceWith(inp); inp.focus(); inp.select();
+      let done = false;
+      const fin = ok => { if (done) return; done = true; TABS.renaming = false; const v = inp.value.trim(); if (ok && v && v !== tgt.title) { checkpoint(); tgt.title = v; tgt.updatedAt = now(); if (page && typeof syncPageCard === 'function') syncPageCard(page.id); save(); renderAll(); renderSidebar(); } renderTabs(); };
+      inp.addEventListener('keydown', ev => { ev.stopPropagation(); if (ev.key === 'Enter') fin(true); if (ev.key === 'Escape') fin(false); });
+      inp.addEventListener('blur', () => fin(true)); inp.addEventListener('pointerdown', ev => ev.stopPropagation()); inp.addEventListener('click', ev => ev.stopPropagation()); inp.addEventListener('dblclick', ev => ev.stopPropagation());
+    }));
+  };
+}
+/* ---- password lock (privacy screen) ---- */
+const LOCK = { un: new Set() };
+function lockMap() { return ST.settings.locks || (ST.settings.locks = {}); }
+function isLocked(key) { return !!lockMap()[key] && !LOCK.un.has(key); }
+async function lockHash(pw, salt) {
+  try { const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(salt + ':' + pw)); return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join(''); }
+  catch (e) { let x = 5381; const s = salt + ':' + pw; for (let i = 0; i < s.length; i++) x = ((x << 5) + x + s.charCodeAt(i)) | 0; return 'f' + x; }
+}
+function lockTitle(key) { return key[0] === 'b' ? (ST.boards[key.slice(2)] || {}).title || 'board' : (ST.pages[key.slice(2)] || {}).title || 'page'; }
+function pwDialog(o) {
+  const a = h('input', { type: 'password', placeholder: o.confirm ? 'New password' : 'Password', autocomplete: 'off' }), b = o.confirm ? h('input', { type: 'password', placeholder: 'Repeat password', autocomplete: 'off' }) : null, err = h('div', { class: 'pw-err' });
+  let bg; const close = () => bg.remove();
+  const go = async () => { err.textContent = ''; if (!a.value) { err.textContent = 'Enter a password'; return; } if (b && a.value !== b.value) { err.textContent = 'The passwords do not match'; return; } const r = await o.onOk(a.value); if (r === false) { err.textContent = 'Wrong password'; a.select(); return; } close(); };
+  a.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') (b ? b.focus() : go()); if (e.key === 'Escape') { close(); o.onCancel && o.onCancel(); } });
+  if (b) b.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') go(); if (e.key === 'Escape') { close(); o.onCancel && o.onCancel(); } });
+  const extra = o.forgot ? h('button', { class: 'pw-forgot', onclick: () => { close(); o.forgot(); } }, 'Forgot password?') : null;
+  const box = h('div', { class: 'modal pw-modal' }, h('h3', null, o.title), o.msg ? h('p', null, o.msg) : null, a, b, err, h('div', { class: 'ai-actions' }, h('button', { class: 'btn primary', onclick: go }, o.ok || 'OK'), h('button', { class: 'btn', onclick: () => { close(); o.onCancel && o.onCancel(); } }, 'Cancel'), extra));
+  bg = modal(box); setTimeout(() => a.focus(), 30); return bg;
+}
+async function lockCheckPw(key, pw) { const L = lockMap()[key]; return !!L && (await lockHash(pw, L.s)) === L.h; }
+function unlockPrompt(key, onOk, onCancel) {
+  pwDialog({ title: 'Locked: ' + lockTitle(key), msg: 'Enter the password to open this ' + (key[0] === 'b' ? 'board' : 'page') + '.', ok: 'Unlock', onCancel,
+    onOk: async pw => { if (!(await lockCheckPw(key, pw))) return false; LOCK.un.add(key); onOk && onOk(); },
+    forgot: () => confirmBox('Remove this password?', 'This is a privacy screen, not encryption, so the lock can be removed without the password. The content stays as it is.', 'Remove password', () => { delete lockMap()[key]; LOCK.un.delete(key); save(); lockRefresh(); onOk && onOk(); }) });
+}
+function setLock(key) {
+  pwDialog({ title: 'Lock “' + lockTitle(key) + '”', msg: 'Choose a password. It hides this ' + (key[0] === 'b' ? 'board' : 'page') + ' until the password is entered. There is no recovery by email.', confirm: true, ok: 'Lock',
+    onOk: async pw => { const s = uid(); lockMap()[key] = { s, h: await lockHash(pw, s) }; LOCK.un.add(key); save(); lockRefresh(); toast('Password set'); } });
+}
+function removeLock(key) { pwDialog({ title: 'Remove password', msg: 'Enter the password to remove the lock.', ok: 'Remove', onOk: async pw => { if (!(await lockCheckPw(key, pw))) return false; delete lockMap()[key]; LOCK.un.delete(key); save(); lockRefresh(); toast('Password removed'); } }); }
+function lockNow(key) { LOCK.un.delete(key); if (key[0] === 'p' && $('.pv-wrap') && S.pageId === key.slice(2)) closePageView(); lockRefresh(); toast('Locked'); }
+function lockMenuItems(key) {
+  if (key[0] !== 'b' && key[0] !== 'p') return []; if (key[0] === 'b' && !ST.boards[key.slice(2)]) return []; if (key[0] === 'p' && !ST.pages[key.slice(2)]) return [];
+  if (!lockMap()[key]) return [{ label: '🔒 Lock with password…', fn: () => setLock(key) }];
+  return [LOCK.un.has(key) ? { label: '🔒 Lock now', fn: () => lockNow(key) } : null, { label: 'Remove password…', fn: () => (LOCK.un.has(key) ? removeLock(key) : unlockPrompt(key, () => removeLock(key))) }].filter(Boolean);
+}
+function lockRefresh() { renderAll(); renderSidebar(); renderTabs(); }
+function lockCheck() {
+  const key = 'b:' + S.boardId, ov = $('#lockscreen'), main = $('#main'); if (!main) return;
+  if (!isLocked(key)) { if (ov) ov.remove(); return; }
+  if (ov && ov.dataset.k === key) return; if (ov) ov.remove();
+  const bd = ST.boards[S.boardId] || {}, root = ST.rootId;
+  const el = h('div', { id: 'lockscreen', 'data-k': key }, h('div', { class: 'lk-box' }, h('div', { class: 'lk-ic' }, '🔒'), h('h2', null, bd.title || 'This board'), h('p', null, 'This board is locked.'), h('button', { class: 'btn primary', onclick: () => unlockPrompt(key, () => lockCheck(), null) }, 'Enter password'), S.boardId !== root ? h('button', { class: 'btn', onclick: () => openBoard(root) }, 'Go to home board') : null));
+  main.append(el); setTimeout(() => { if ($('#lockscreen') === el) unlockPrompt(key, () => lockCheck()); }, 60);
+}
+document.addEventListener('keydown', e => { const ls = $('#lockscreen'); if (ls && !e.target.closest('.modal,#lockscreen,#sidebar,#tabrow,#topbar')) { e.stopPropagation(); e.preventDefault(); } }, true);
+{ const _ra = renderAll; renderAll = function () { _ra(); lockCheck(); }; }
+{ const _op = openPage; openPage = function (pid, opts) { const key = 'p:' + pid; if (isLocked(key)) { unlockPrompt(key, () => _op(pid, opts)); return; } return _op(pid, opts); }; }
+{ const _ct = cardText; cardText = function (c) { if (c && ((c.boardId && isLocked('b:' + c.boardId)) || (c.type === 'page' && c.data && c.data.pageId && isLocked('p:' + c.data.pageId)))) return ''; return _ct(c); }; }
+{ const _tl = taskLists; taskLists = function () { return _tl().filter(c => !c.boardId || !isLocked('b:' + c.boardId)); }; }
+{ const _tb = tabLabel; tabLabel = function (t) { const r = _tb(t), k = t.o && t.o[0] === 'p' ? 'p:' + t.o.slice(2) : (!t.o ? 'b:' + t.b : null); if (k && lockMap()[k]) r[0] = '🔒 ' + r[0]; return r; }; }
+{ const _rs = renderSidebar; renderSidebar = function () { _rs.apply(this, arguments); $$('#sbDyn .tr-row[data-key]').forEach(r => { if (lockMap()[r.dataset.key]) { const t = r.querySelector('.tr-t'); if (t && !t.dataset.lk) { t.dataset.lk = 1; t.append(' 🔒'); } } }); }; }
+
+/* ---- YouTube pop-out window (signed in, so ads can be skipped) ---- */
+S.pop = {};
+function popLive(id) { const w = S.pop[id]; return !!(w && !w.closed); }
+ACT.vpop = function (id) {
+  const c = ST.cards[id]; if (!c || !c.data.yt) return toast('Pop-out works for YouTube videos');
+  let t = 0; try { t = Math.floor(curTime(playerFor(id))); } catch (e) { }
+  if (popLive(id)) { S.pop[id].focus(); return; }
+  const url = `https://www.youtube.com/watch?v=${c.data.yt}${t > 1 ? '&t=' + t + 's' : ''}`;
+  const w = window.open(url, 'cb_yt_' + id, 'popup=yes,width=960,height=600,left=80,top=80'); if (!w) return toast('The pop-up was blocked. Allow pop-ups for this site and try again.');
+  S.pop[id] = w; try { const p = playerFor(id); if (p) ctl.pause(p); } catch (e) { }
+  rerenderCard(id); popWatch();
+};
+ACT.vunpop = function (id) { try { S.pop[id] && S.pop[id].close(); } catch (e) { } delete S.pop[id]; rerenderCard(id); };
+ACT.vpopfocus = function (id) { try { S.pop[id] && S.pop[id].focus(); } catch (e) { } };
+function popWatch() { if (S.popTimer) return; S.popTimer = setInterval(() => { let any = false; for (const id of Object.keys(S.pop)) { if (popLive(id)) any = true; else { delete S.pop[id]; if (ST.cards[id]) rerenderCard(id); } } if (!any) { clearInterval(S.popTimer); S.popTimer = null; } }, 1000); }
+{
+  const _rv = RENDER.video;
+  RENDER.video = function (c) {
+    const el = _rv(c), d = c.data; if (!el || !d.yt) return el;
+    const bar = el.querySelector('.video-bar'); if (bar) { const tail = bar.querySelector('[data-act=theater]'); const b = h('button', { class: 'vbtn', 'data-act': 'vpop', title: 'Open in a separate window where you are signed in to YouTube' }, icon('open'), h('span', { class: 'vtl' }, 'Pop out')); tail ? tail.before(b) : bar.append(b); }
+    if (popLive(c.id)) el.append(h('div', { class: 'video-popped', style: { backgroundImage: `url(https://i.ytimg.com/vi/${d.yt}/hqdefault.jpg)` } }, h('div', { class: 'vp-in' }, h('div', null, 'Playing in a pop-out window'), h('div', { class: 'vp-b' }, h('button', { class: 'btn', 'data-act': 'vpopfocus' }, 'Show window'), h('button', { class: 'btn', 'data-act': 'vunpop' }, 'Bring back')))));
+    return el;
+  };
+}
+{ const _ct2 = ctxTools; ctxTools = function () { const r = _ct2(); if (!Array.isArray(r) || S.selLine || S.tool || S.sketchEdit) return r; const ids = selTopIds(); if (ids.length === 1 && ST.cards[ids[0]]?.type === 'video' && ST.cards[ids[0]].data.yt) { const i = r.findIndex(t => t && t.label === 'Theater' || t && t.label === 'Exit theater'); const b = { label: 'Pop out', icon: 'open', title: 'Open in a separate window where you are signed in to YouTube', fn: () => ACT.vpop(ids[0]) }; if (i >= 0) r.splice(i + 1, 0, b); else r.unshift(b); } return r; }; }
 
 /* ========== events + init ========== */
 function migrate() {
