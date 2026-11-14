@@ -2081,6 +2081,76 @@ button,.tool,.tab,.sb-item,.tr-row,.ib{touch-action:manipulation}
   .t2-hero{display:none}
   .modal{max-height:96dvh}
 }
+
+/* ===== v2.8: widgets + backup ===== */
+.card.t-twidget,.card.t-tdwidget{display:flex;flex-direction:column;border-radius:12px}
+.twg{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--card);border-radius:12px;overflow:hidden;font-size:13px;color:var(--text);cursor:default;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.pv-doc .twg{max-height:460px;min-height:220px;border:1px solid var(--line);box-shadow:var(--shadow)}
+.twg-h{display:flex;align-items:center;gap:7px;padding:10px 12px 6px;flex:none;flex-wrap:wrap}
+.twg-ic svg{width:17px;height:17px;display:block;color:var(--muted)}
+.twg.today .twg-ic svg{color:#eda100}
+.twg-t{font-weight:700;font-size:14.5px}
+.twg-n{font-size:11.5px;font-weight:700;color:var(--muted);background:var(--hover);border-radius:9px;padding:0 7px;line-height:1.6}
+.twg-sp{flex:1}
+.twg-sel{font:inherit;font-size:12px;color:var(--text);background:var(--hover);border:0;border-radius:7px;padding:3px 6px;max-width:120px;cursor:pointer}
+.twg-done{font:inherit;font-size:12px;border:0;border-radius:7px;padding:3px 9px;background:var(--hover);color:var(--muted);cursor:pointer}
+.twg-done.on{background:color-mix(in srgb,var(--sel) 16%,transparent);color:var(--sel);font-weight:600}
+.twg-tags{display:flex;gap:6px;padding:2px 12px 8px;overflow-x:auto;flex:none;scrollbar-width:none}
+.twg-tags::-webkit-scrollbar{display:none}
+.twg-tag{display:inline-flex;align-items:center;gap:5px;flex:none;font:inherit;font-size:12px;border:1px solid var(--line);background:none;color:var(--text);border-radius:12px;padding:2px 10px;cursor:pointer;white-space:nowrap}
+.twg-tag i{width:8px;height:8px;border-radius:50%;background:var(--tg,var(--muted));display:none}
+.twg-tag[style] i{display:inline-block}
+.twg-tag.on{background:color-mix(in srgb,var(--tg,var(--sel)) 22%,transparent);border-color:var(--tg,var(--sel));font-weight:600}
+.twg-list{flex:1;min-height:0;overflow-y:auto;padding:0 6px 4px;touch-action:pan-y;-webkit-overflow-scrolling:touch}
+.twg-empty{padding:22px 14px;text-align:center;color:var(--muted);font-size:12.5px}
+.twg-foot{padding:6px 10px 10px;flex:none;border-top:1px solid var(--line)}
+.twg-add{width:100%;box-sizing:border-box;font:inherit;font-size:13px;border:0;background:var(--hover);color:var(--text);border-radius:8px;padding:8px 10px;outline:none}
+.twg-add:focus{box-shadow:0 0 0 1.5px var(--sel)}
+.twg.twg-drop{box-shadow:inset 0 0 0 2px var(--sel)}
+.twg .t2row{min-height:36px;height:auto;padding-top:3px;padding-bottom:3px;gap:6px}
+.twg .t2-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.twg .t2-tags,.twg .t2-sub{flex:none}
+.twg.narrow .t2-tags,.twg.narrow .t2-sub{display:none}
+.twg .t2-flag,.twg .t2-sun{opacity:.4}
+.twg .t2-date{flex:none}
+.ab-stat{border:0;background:none;color:var(--muted);font:inherit;font-size:11.5px;cursor:pointer;padding:2px 8px;border-radius:10px;flex:none}
+.ab-stat:hover{background:var(--hover)}.ab-stat.warn{color:#c62828;font-weight:600}
+.ab-banner{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:29000;background:var(--menu);color:var(--text);box-shadow:var(--shadow-lg);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 20px);font-size:13px}
+.ab-banner .btn{padding:6px 12px}
+.ab-h{margin:18px 0 6px;font-size:14px}
+.ab-every{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.ab-min{width:64px;font:inherit;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--text)}
+
+/* ===== v2.8: iPhone ===== */
+#selModeBtn{display:none}
+.coarse #selModeBtn{display:grid}
+#selModeBtn.on{background:color-mix(in srgb,var(--sel) 16%,transparent);color:var(--sel)}
+@media (max-width:700px){
+  /* menus and popovers become bottom sheets */
+  .menu,.pop,.dd{position:fixed!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:auto!important;min-width:0!important;max-width:none!important;max-height:68dvh;overflow:auto;border-radius:16px 16px 0 0!important;padding-bottom:calc(12px + env(safe-area-inset-bottom));box-shadow:0 0 0 100vmax rgba(0,0,0,.28),var(--shadow-lg)!important;z-index:31500;box-sizing:border-box}
+  .menu::before,.pop::before,.dd::before{content:"";display:block;width:38px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 8px}
+  .menu .mi,.menu>div,.menu button,.dd-item{min-height:44px;display:flex;align-items:center;font-size:15.5px}
+  .slashmenu{left:8px!important;right:8px!important;top:auto!important;bottom:calc(var(--kb,0px) + 8px)!important;width:auto!important;max-height:42dvh}
+  .fmtbar{position:fixed!important;left:8px!important;right:8px!important;top:auto!important;bottom:calc(var(--kb,0px) + 8px)!important;overflow-x:auto;white-space:nowrap}
+  /* tasks, widgets */
+  .t2row{min-height:48px}
+  .t2-flag,.t2-sun{width:36px;height:36px}
+  .twg-h{padding:10px 10px 4px}.twg-sel{max-width:96px;font-size:13px}
+  .twg .t2row{min-height:46px}
+  .twg-add{font-size:16px;padding:10px 12px}
+  .card.t-twidget,.card.t-tdwidget{max-width:none}
+  /* pages and databases */
+  .pv-doc table,.btable,.dbt{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  .dbt th:first-child,.dbt td:first-child{position:sticky;left:0;background:var(--card);z-index:1}
+  .pv-title{font-size:26px}
+  .blk .bh{display:none}
+  /* navigation */
+  #crumbs{overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+  .search-res{max-height:calc(100dvh - 160px)}
+  .ab-banner{bottom:calc(84px + env(safe-area-inset-bottom));left:10px;right:10px;transform:none;justify-content:space-between}
+}
+body.selmode #viewport{cursor:crosshair}
+@media (max-width:700px){.menu .sep{min-height:0!important;display:block!important;height:1px!important}.menu-info{min-height:0!important;display:block!important}}
 </style>
 </head>
 <body class="app-root">
@@ -6513,6 +6583,7 @@ function blockEl(b, n) {
     case 'link': bc.append(b.ref ? h('div', { class: 'blink', title: 'Open' }, h('span', { class: 'blink-ic' }, '↗'), h('span', null, refLabel(b.ref))) : placeholderEl(b, 'link', 'Link to a board, page or card', [h('button', { class: 'btn', 'data-pa': 'pick-link' }, 'Choose…')])); break;
     case 'toc': bc.append(tocEl()); break;
     case 'board': bc.append(boardEmbedEl(b)); break;
+    case 'twidget': case 'tdwidget': bc.append(taskWidgetEl(b.type === 'tdwidget' ? 'today' : 'tasks', b, { pageId: PE.page.id }, () => { PE.page.updatedAt = now(); save(); })); break;
     case 'db': bc.append(dbPlaceEl({ kind: 'block', pageId: PE.page.id, bid: b.id }, { mode: 'block' })); break;
     case 'cols': { const w = h('div', { class: 'bcols n' + b.cols.length }); for (const col of b.cols) { const ce = h('div', { class: 'bcolc', 'data-col': col.id }); renderContainer(col.blocks, ce); w.append(ce); } bc.append(w); break; }
     default: bc.append(ed());
@@ -7951,6 +8022,7 @@ function openSettings() {
     Data: () => [
       h('div', { class: 'set-sub', style: { marginBottom: '10px' } }, 'Everything is saved in this browser only. Export a backup to keep a copy or move it to another device.'),
       h('div', { class: 'set-btns' }, h('button', { class: 'btn', onclick: exportBackup }, 'Export full backup (.json)'), h('button', { class: 'btn', onclick: importBackup }, 'Import backup…')),
+      ...(typeof backupSection === 'function' ? backupSection() : []),
       h('div', { style: { margin: '14px 0 6px' } }, store), h('div', { style: { marginTop: '14px' } }, reset),
     ],
   };
@@ -9135,7 +9207,7 @@ function t2Row(it, c, where) {
   row.addEventListener('dragstart', e => { if (S.tvSelMode) { e.preventDefault(); return; } e.dataTransfer.setData('text/plain', it.id); e.dataTransfer.effectAllowed = 'move'; S.t2drag = { id: it.id, from: where }; row.classList.add('dragging'); });
   row.addEventListener('dragend', () => { S.t2drag = null; row.classList.remove('dragging'); $$('.t2-over').forEach(x => x.classList.remove('t2-over')); });
   row.addEventListener('keydown', e => {
-    if (e.target !== row) return; const rows = [...row.closest('.t2pane').querySelectorAll('.t2row')], i = rows.indexOf(row);
+    if (e.target !== row) return; const rows = [...(row.closest('.t2pane') || row.closest('.twg')).querySelectorAll('.t2row')], i = rows.indexOf(row);
     if (e.key === 'ArrowDown') { e.preventDefault(); rows[i + 1]?.focus(); } else if (e.key === 'ArrowUp') { e.preventDefault(); rows[i - 1]?.focus(); }
     else if (e.key === ' ') { e.preventDefault(); S.t2focus = it.id + where; toggleTask(it.id); } else if (e.key === 'Enter') { e.preventDefault(); openTask(it.id); }
     else if (e.key.toLowerCase() === 't') { S.t2focus = it.id + where; toggleToday(it.id); }
@@ -9868,6 +9940,204 @@ document.addEventListener('focusin', e => {
   const t = e.target; if (!t || !t.closest || !t.closest('input,textarea,[contenteditable="true"],[contenteditable="plaintext-only"]')) return;
   setTimeout(() => { try { const r = t.getBoundingClientRect(), vh = (window.visualViewport ? visualViewport.height : innerHeight); if (r.bottom > vh - 12 && !t.closest('#world')) t.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (_) { } }, 320);
 });
+
+/* ========== v2.8: auto-backup + task widgets ========== */
+
+/* ---------- auto-backup ---------- */
+const AB = { handle: null, timer: null, busy: false, state: 'off', err: '', snooze: 0 };
+const AB_CAN_DIR = typeof window.showDirectoryPicker === 'function';
+const abSet = () => ST.settings.autoBackup || (ST.settings.autoBackup = { on: false, mins: 60, keep: 5, lastAt: 0, lastHash: 0, folder: '' });
+const abIdb = () => new Promise((res, rej) => { const r = indexedDB.open('corkboard-handles', 1); r.onupgradeneeded = () => r.result.createObjectStore('h'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+async function abLoadHandle() { try { const db = await abIdb(); return await new Promise(res => { const q = db.transaction('h').objectStore('h').get('dir'); q.onsuccess = () => res(q.result || null); q.onerror = () => res(null); }); } catch (_) { return null; } }
+async function abSaveHandle(hd) { try { const db = await abIdb(); await new Promise((res, rej) => { const t = db.transaction('h', 'readwrite'); hd ? t.objectStore('h').put(hd, 'dir') : t.objectStore('h').delete('dir'); t.oncomplete = res; t.onerror = rej; }); } catch (_) { } }
+const abHash = s => { let x = 5381; for (let i = 0; i < s.length; i++) x = ((x << 5) + x + s.charCodeAt(i)) | 0; return x; };
+async function backupPayload() {
+  const used = new Set([...Object.values(ST.cards).flatMap(cardBlobIds), ...Object.values(ST.pages || {}).flatMap(blobIdsOfPage)]), blobs = {};
+  for (const id of used) { const b = Blobs.get(id); if (b) blobs[id] = await blobToDataURL(b); }
+  const st = JSON.parse(JSON.stringify(ST)); if (st.settings && st.settings.autoBackup) { st.settings.autoBackup.lastAt = 0; st.settings.autoBackup.lastHash = 0; }
+  return JSON.stringify({ app: 'corkboard', version: 1, exportedAt: new Date().toISOString(), state: st, blobs });
+}
+const abName = () => { const d = new Date(), p = n => String(n).padStart(2, '0'); return `Corkboard-backup-${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}.json`; };
+const AB_RE = /^Corkboard-backup-\d{4}-\d\d-\d\d_\d{4}\.json$/;
+async function abPerm(hd, ask) { try { let p = await hd.queryPermission({ mode: 'readwrite' }); if (p !== 'granted' && ask) p = await hd.requestPermission({ mode: 'readwrite' }); return p === 'granted'; } catch (_) { return false; } }
+async function abWriteFolder(json, ask) {
+  const hd = AB.handle; if (!hd) throw new Error('No folder chosen');
+  if (!(await abPerm(hd, ask))) { const e = new Error('perm'); e.perm = true; throw e; }
+  const fh = await hd.getFileHandle(abName(), { create: true }), w = await fh.createWritable(); await w.write(json); await w.close();
+  const names = []; for await (const [n, e] of hd.entries()) if (e.kind === 'file' && AB_RE.test(n)) names.push(n);
+  names.sort().reverse(); for (const n of names.slice(Math.max(1, abSet().keep || 5))) { try { await hd.removeEntry(n); } catch (_) { } }
+}
+async function abRun(force, ask) {
+  const a = abSet(); if (AB.busy || (!a.on && !force)) return false; AB.busy = true;
+  try {
+    const json = await backupPayload(), hash = abHash(json.slice(json.indexOf('"state"')));
+    if (!force && hash === a.lastHash) { a.lastAt = Date.now(); save(); AB.state = 'ok'; return true; }
+    if (AB_CAN_DIR) await abWriteFolder(json, ask);
+    else { const f = new File([json], abName(), { type: 'application/json' }); if (ask === 'share' && navigator.canShare && navigator.canShare({ files: [f] })) { try { await navigator.share({ files: [f], title: 'Corkboard backup' }); } catch (e) { if (e && e.name === 'AbortError') { AB.busy = false; return false; } } } else download(f, f.name); }
+    a.lastAt = Date.now(); a.lastHash = hash; save(); AB.state = 'ok'; AB.err = ''; abUi(); return true;
+  } catch (e) { AB.state = e && e.perm ? 'perm' : 'err'; AB.err = e && e.perm ? 'Folder access needs to be allowed again' : (e && e.message) || 'Backup failed'; abUi(); return false; }
+  finally { AB.busy = false; }
+}
+function abDue() { const a = abSet(); return a.on && Date.now() - (a.lastAt || 0) >= (a.mins || 60) * 60000; }
+function abTick() {
+  const a = abSet(); if (!a.on || AB.busy) return;
+  if (!abDue()) { abUi(); return; }
+  if (AB_CAN_DIR) { if (AB.state === 'perm') { abUi(); return; } abRun(false, false); }
+  else if (Date.now() >= AB.snooze) abUi();
+}
+function abAgo(t) { if (!t) return 'not yet'; const m = Math.round((Date.now() - t) / 60000); return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : new Date(t).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); }
+function abUi() {
+  const a = abSet(); let st = $('#abStat'), bar = $('#abBanner');
+  const host = $('#topbar.statusbar #sbPills') || $('#topbar.statusbar');
+  if (a.on && host) { if (!st) { st = h('button', { id: 'abStat', class: 'ab-stat', title: 'Auto-backup' }); st.onclick = () => { openSettings(); setTimeout(() => $('.set-nav [data-k="Data"]')?.click(), 30); }; host.append(st); } st.textContent = (AB.state === 'perm' || AB.state === 'err' ? '⚠ ' : '⟳ ') + abAgo(a.lastAt); st.classList.toggle('warn', AB.state === 'perm' || AB.state === 'err'); }
+  else if (st) st.remove();
+  const need = a.on && ((AB_CAN_DIR && AB.state === 'perm') || (!AB_CAN_DIR && abDue() && Date.now() >= AB.snooze));
+  if (!need) { if (bar) bar.remove(); return; }
+  if (!bar) { bar = h('div', { id: 'abBanner', class: 'ab-banner' }); document.body.append(bar); }
+  bar.replaceChildren(h('span', { class: 'ab-t' }, AB_CAN_DIR ? 'Auto-backup paused — allow folder access to continue' : 'Backup due'),
+    h('button', { class: 'btn primary', onclick: async () => { if (AB_CAN_DIR) { if (await abRun(true, true)) toast('Backup saved'); } else { if (await abRun(true, 'share')) toast('Backup saved'); } abUi(); } }, AB_CAN_DIR ? 'Resume' : 'Save to Files'),
+    !AB_CAN_DIR ? h('button', { class: 'btn', onclick: () => { AB.snooze = Date.now() + 10 * 60000; abUi(); } }, 'Later') : null);
+}
+async function abStart() {
+  const a = abSet(); clearInterval(AB.timer);
+  if (AB_CAN_DIR && !AB.handle) AB.handle = await abLoadHandle();
+  if (AB_CAN_DIR && a.on && AB.handle) AB.state = (await abPerm(AB.handle, false)) ? 'ok' : 'perm';
+  abUi(); if (!a.on) return;
+  AB.timer = setInterval(abTick, 30000); setTimeout(abTick, 1500);
+}
+function backupSection() {
+  const a = abSet(), box = h('div', { class: 'ab-box' }), draw = () => {
+    const presets = [['30', '30 min'], ['60', '60 min'], ['90', '90 min'], ['c', 'Custom']], isPre = [30, 60, 90].includes(a.mins), cur = isPre ? String(a.mins) : 'c';
+    const tg = h('span', { class: 'toggle' + (a.on ? ' on' : '') });
+    const onRow = h('div', { class: 'set-row', onclick: async () => { if (!a.on && AB_CAN_DIR && !AB.handle) { toast('Choose a folder first'); return; } a.on = !a.on; tg.classList.toggle('on', a.on); save(); await abStart(); if (a.on) { a.lastAt = 0; abRun(true, false).then(() => draw()); } draw(); } },
+      h('div', { class: 'set-l' }, h('div', null, 'Automatic backups'), h('div', { class: 'set-sub' }, AB_CAN_DIR ? 'Saves a full backup to your chosen folder while Corkboard is open' : 'This browser can’t save to a folder, so you’ll get a “Backup due” prompt that saves to Files')), tg);
+    const kids = [h('h4', { class: 'ab-h' }, 'Auto-backup'), onRow];
+    if (AB_CAN_DIR) kids.push(h('div', { class: 'set-row nohover' }, h('div', { class: 'set-l' }, h('div', null, 'Folder'), h('div', { class: 'set-sub' }, a.folder ? a.folder : 'No folder chosen')),
+      h('button', { class: 'btn', onclick: async () => { try { const hd = await window.showDirectoryPicker({ id: 'corkboard-backups', mode: 'readwrite' }); AB.handle = hd; a.folder = hd.name; await abSaveHandle(hd); AB.state = 'ok'; save(); abUi(); if (a.on) abRun(true, true).then(() => draw()); draw(); } catch (e) { if (e && e.name !== 'AbortError') toast('Could not use that folder'); } } }, a.folder ? 'Change…' : 'Choose folder…')));
+    const custom = h('input', { class: 'ab-min', type: 'number', min: 5, max: 1440, value: a.mins, title: 'Minutes between backups' });
+    const applyC = () => { const v = Math.round(+custom.value); if (v >= 5 && v <= 1440) { a.mins = v; save(); abStart(); } else toast('Enter 5–1440 minutes'); };
+    custom.addEventListener('change', applyC); custom.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') applyC(); });
+    kids.push(h('div', { class: 'set-row nohover' }, h('div', { class: 'set-l' }, h('div', null, 'Every'), h('div', { class: 'set-sub' }, 'Keeps the newest 5 backups')), h('div', { class: 'ab-every' }, seg(presets, cur, v => { if (v === 'c') { if (isPre) { a.mins = 45; save(); } draw(); setTimeout(() => $('.ab-min')?.select(), 20); } else { a.mins = +v; save(); abStart(); draw(); } }), cur === 'c' ? h('span', { class: 'ab-cw' }, custom, ' min') : null)));
+    kids.push(h('div', { class: 'set-row nohover' }, h('div', { class: 'set-l' }, h('div', null, 'Last backup'), h('div', { class: 'set-sub' }, AB.err ? '⚠ ' + AB.err : abAgo(a.lastAt))),
+      h('button', { class: 'btn', onclick: async () => { const ok = await abRun(true, AB_CAN_DIR ? true : 'share'); toast(ok ? 'Backup saved' : AB.err || 'Backup not saved'); draw(); } }, 'Back up now')));
+    box.replaceChildren(...kids);
+  };
+  draw(); return [box];
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) abTick(); });
+window.addEventListener('pagehide', () => { /* nothing async is safe here */ });
+
+/* ---------- task widgets ---------- */
+DEF.twidget = { w: 380, h: 400 }; TYPE_NAME.twidget = 'Tasks widget'; TYPE_ICON.twidget = 'todo'; RESIZE_WH.add('twidget'); SCALE_NO.add('twidget');
+DEF.tdwidget = { w: 360, h: 360 }; TYPE_NAME.tdwidget = 'Today widget'; TYPE_ICON.tdwidget = 'sun'; RESIZE_WH.add('tdwidget'); SCALE_NO.add('tdwidget');
+function twBoardOf(ctx) {
+  if (ctx.cardId) { const c = ST.cards[ctx.cardId]; return c && c.boardId; }
+  const root = ctx.pageId && pageRoot(ctx.pageId), rc = root && root.parent && root.parent.t === 'card' && ST.cards[root.parent.id]; return rc ? rc.boardId : null;
+}
+function twItems(kind, cfg, ctx) {
+  const t = todayStr(), thisB = twBoardOf(ctx), out = [], seen = new Set();
+  const tags = cfg.tags || [], bsel = cfg.board || 'all';
+  if (kind === 'today') {
+    const st = todayState();
+    for (const id of st.today) { const f = findTask(id); if (f) { out.push({ it: normTask(f.item), c: f.card }); seen.add(id); } }
+    for (const c of taskLists()) for (const it of c.data.items) { if (seen.has(it.id)) continue; if (it.due && it.due <= t && (!it.done || (cfg.done && it.due === t))) { normTask(it); out.push({ it, c }); } }
+  } else for (const c of taskLists()) for (const it of c.data.items) { normTask(it); out.push({ it, c }); }
+  let rows = out.filter(r => (cfg.done || !r.it.done) && (bsel === 'all' || (bsel === 'this' ? (thisB && r.c.boardId === thisB) : r.c.boardId === bsel)));
+  const pool = rows;
+  if (tags.length) rows = rows.filter(r => r.it.tags.some(x => tags.includes(x)));
+  const ord = cfg.order || [], idx = id => { const i = ord.indexOf(id); return i < 0 ? 1e9 : i; }, sort = cfg.sort || 'manual';
+  const due = r => r.it.due || '9999-99-99';
+  rows = rows.slice().sort((a, b) => sort === 'due' ? (due(a).localeCompare(due(b)) || (a.it.createdAt || 0) - (b.it.createdAt || 0)) : sort === 'new' ? (b.it.createdAt || 0) - (a.it.createdAt || 0)
+    : (idx(a.it.id) - idx(b.it.id) || due(a).localeCompare(due(b)) || (a.it.createdAt || 0) - (b.it.createdAt || 0)));
+  return { rows, pool };
+}
+function twTarget(ctx) {
+  const bid = twBoardOf(ctx), lists = allLists(); let c = lists.find(x => x.boardId === bid && !x.columnId) || lists.find(x => x.boardId === bid);
+  if (c) return c;
+  if (ctx.cardId && ST.cards[ctx.cardId]) { const w = ST.cards[ctx.cardId]; c = newCard('todo', w.x + (w.w || 380) + 40, w.y, { title: 'Inbox', showTitle: true, items: [] }); c.boardId = w.boardId; toast('Created an “Inbox” list for new tasks'); return c; }
+  return lists[0] || (() => { c = newCard('todo', 40, 110, { title: 'Inbox', showTitle: true, items: [] }); toast('Created an “Inbox” list for new tasks'); return c; })();
+}
+function taskWidgetEl(kind, host, ctx, persist) {
+  const root = h('div', { class: 'twg ' + kind, 'data-nodrag': '1' });
+  const where = kind === 'today' ? 'wtoday' : 'wtasks';
+  for (const [k, v] of Object.entries({ tags: [], board: 'all', sort: 'manual', order: [], done: false })) if (!(k in host)) host[k] = Array.isArray(v) ? [] : v;
+  const draw = () => {
+    const { rows, pool } = twItems(kind, host, ctx), t = todayStr();
+    host.tags = (host.tags || []).filter(id => tagById(id));
+    const sel = (opts, val, fn, cls) => { const s = h('select', { class: 'twg-sel ' + (cls || '') }); for (const [v, l] of opts) s.append(h('option', { value: v, selected: v === val ? '' : null }, l)); s.value = val; s.addEventListener('change', () => fn(s.value)); s.addEventListener('pointerdown', e => e.stopPropagation()); return s; };
+    const live = Object.values(ST.boards).filter(b => boardIsLive(b.id));
+    const boards = [['all', 'All boards'], ['this', 'This board'], ...live.filter(b => b.id !== twBoardOf(ctx)).map(b => [b.id, b.title || 'Untitled'])];
+    if (host.board !== 'all' && host.board !== 'this' && !boards.some(x => x[0] === host.board)) host.board = 'all';
+    const used = new Map(); for (const r of pool) for (const id of r.it.tags) used.set(id, (used.get(id) || 0) + 1);
+    const chips = ST.labels.filter(l => used.has(l.id) || host.tags.includes(l.id));
+    const head = h('div', { class: 'twg-h' }, h('span', { class: 'twg-ic', html: kind === 'today' ? ICON.sun : ICON.todo }), h('span', { class: 'twg-t' }, kind === 'today' ? 'Today' : 'Tasks'), h('span', { class: 'twg-n' }, String(rows.filter(r => !r.it.done).length)), h('span', { class: 'twg-sp' }),
+      sel(boards, host.board || 'all', v => { host.board = v; persist(); draw(); }, 'bd'),
+      sel([['manual', 'Manual'], ['due', 'Due date'], ['new', 'Newest']], host.sort || 'manual', v => { host.sort = v; persist(); draw(); }),
+      h('button', { class: 'twg-done' + (host.done ? ' on' : ''), title: 'Show completed', onclick: e => { e.stopPropagation(); host.done = !host.done; persist(); draw(); } }, 'Done'));
+    const tagRow = chips.length ? h('div', { class: 'twg-tags' }, h('button', { class: 'twg-tag' + (host.tags.length ? '' : ' on'), onclick: e => { e.stopPropagation(); host.tags = []; persist(); draw(); } }, 'All'),
+      ...chips.map(l => h('button', { class: 'twg-tag' + (host.tags.includes(l.id) ? ' on' : ''), style: { '--tg': l.color }, onclick: e => { e.stopPropagation(); host.tags = host.tags.includes(l.id) ? host.tags.filter(x => x !== l.id) : [...host.tags, l.id]; persist(); draw(); } }, h('i'), l.name))) : null;
+    const list = h('div', { class: 'twg-list dbv-wheel' });
+    if (!rows.length) list.append(h('div', { class: 'twg-empty' }, kind === 'today' ? 'Nothing for today. Drag a task here, or tap ☀ on any task.' : 'No tasks match. Add one below.'));
+    for (const r of rows) list.append(t2Row(r.it, r.c, where));
+    const rowOf = e => e.target.closest && e.target.closest('.t2row');
+    list.addEventListener('dragover', e => { if (!S.t2drag) return; e.preventDefault(); e.stopPropagation(); list.querySelectorAll('.t2-over').forEach(x => x.classList.remove('t2-over')); const r = rowOf(e); if (r) r.classList.add('t2-over'); root.classList.add('twg-drop'); });
+    list.addEventListener('dragleave', e => { if (!root.contains(e.relatedTarget)) { root.classList.remove('twg-drop'); list.querySelectorAll('.t2-over').forEach(x => x.classList.remove('t2-over')); } });
+    list.addEventListener('drop', e => {
+      if (!S.t2drag) return; e.preventDefault(); e.stopPropagation(); root.classList.remove('twg-drop'); const d = S.t2drag; S.t2drag = null;
+      const tr = rowOf(e), tid = tr && tr.dataset.tid, ids = [...list.querySelectorAll('.t2row')].map(x => x.dataset.tid);
+      if (d.from === where) { if (!ids.includes(d.id) || d.id === tid) return; const rest = ids.filter(x => x !== d.id), at = tid ? rest.indexOf(tid) : rest.length; rest.splice(at, 0, d.id); host.order = [...rest, ...(host.order || []).filter(x => !rest.includes(x))]; host.sort = 'manual'; persist(); draw(); return; }
+      if (kind === 'today') { const f = findTask(d.id); if (!f) return; if (!todayState().today.includes(d.id)) { checkpoint(); toggleToday(d.id, true); } if (tid) { const rest = ids.filter(x => x !== d.id); rest.splice(rest.indexOf(tid) < 0 ? rest.length : rest.indexOf(tid), 0, d.id); host.order = [...rest, ...(host.order || []).filter(x => !rest.includes(x))]; host.sort = 'manual'; persist(); } toast('Added to Today'); return; }
+      if (d.from === 'wtoday') { toggleToday(d.id, false); toast('Removed from Today'); }
+    });
+    const inp = h('input', { class: 'twg-add', placeholder: kind === 'today' ? 'Add a task for today…' : 'Add a task…', 'data-nodrag': '1' });
+    inp.addEventListener('keydown', e => {
+      e.stopPropagation(); if (e.key !== 'Enter') return; const v = inp.value.trim(); if (!v) return;
+      const c = twTarget(ctx); checkpoint(); const it = newTask(v); it.tags = [...host.tags]; c.data.items.push(it); c.updatedAt = now();
+      if (kind === 'today') todayState().today.push(it.id); else if (host.board !== 'all' && host.board !== 'this' && c.boardId !== host.board) { /* stays visible only if it matches; fine */ }
+      save(); refreshTaskViews([c.id]); draw(); const n = root.querySelector('.twg-add'); n && n.focus();
+    });
+    inp.addEventListener('pointerdown', e => e.stopPropagation());
+    root.replaceChildren(head, tagRow, list, h('div', { class: 'twg-foot' }, inp));
+    root.classList.toggle('narrow', (root.parentElement ? root.offsetWidth : 380) < 340);
+  };
+  root._draw = draw; draw(); return root;
+}
+RENDER.twidget = c => taskWidgetEl('tasks', c.data, { cardId: c.id }, () => { c.updatedAt = now(); save(); });
+RENDER.tdwidget = c => taskWidgetEl('today', c.data, { cardId: c.id }, () => { c.updatedAt = now(); save(); });
+function refreshWidgets() { for (const el of $$('.twg')) { if (el._draw && !(el.contains(document.activeElement) && document.activeElement.matches('input,textarea,select'))) try { el._draw(); } catch (e) { console.warn(e); } } }
+{ const _r = refreshTaskViews; refreshTaskViews = function (ids) { _r.apply(this, arguments); refreshWidgets(); }; }
+{ const _t = renderTVBody; renderTVBody = function () { _t.apply(this, arguments); refreshWidgets(); }; }
+/* dock buttons */
+{ const i = MAIN_TOOLS.findIndex(t => t && t.k === 'timer'); MAIN_TOOLS.splice(i < 0 ? MAIN_TOOLS.length : i + 1, 0, { k: 'twidget', label: 'Tasks widget', icon: 'todo', box: 1 }, { k: 'tdwidget', label: 'Today widget', icon: 'sun', box: 1 }); }
+/* page blocks */
+SLASH.push(['twidget', 'Tasks widget', 'Live task list with tag filters', '☑'], ['tdwidget', 'Today widget', 'Everything due or planned for today', '☀']);
+
+{ const _i = init; init = async function () { const r = await _i.apply(this, arguments); try { await abStart(); } catch (e) { console.warn(e); } return r; }; }
+
+/* ---------- iPhone: edge-swipe sidebar, one-finger select mode ---------- */
+{
+  let sw = null;
+  document.addEventListener('touchstart', e => { if (!document.body.classList.contains('sb-mobile') || e.touches.length !== 1) { sw = null; return; } const t = e.touches[0], open = document.body.classList.contains('sb-open'); if ((!open && t.clientX <= 18) || (open && t.target.closest && t.target.closest('#sidebar'))) sw = { x: t.clientX, y: t.clientY, open }; else sw = null; }, { passive: true });
+  document.addEventListener('touchmove', e => { if (!sw) return; const t = e.touches[0], dx = t.clientX - sw.x, dy = t.clientY - sw.y; if (Math.abs(dy) > Math.abs(dx) * 1.2 && Math.abs(dy) > 14) { sw = null; return; } if (!sw.open && dx > 56) { toggleSidebar(true); sw = null; } else if (sw.open && dx < -56) { toggleSidebar(false); sw = null; } }, { passive: true });
+  document.addEventListener('touchend', () => { sw = null; }, { passive: true });
+}
+S.selMode = false;
+{
+  const _od = onDown;
+  onDown = function (e) {
+    if (S.selMode && e.pointerType === 'touch' && !S.tool && !(e.target.closest && e.target.closest('.card,[data-line],.lh,[data-conn],[data-resize],[data-scale]'))) {
+      const fake = { target: e.target, clientX: e.clientX, clientY: e.clientY, pointerId: e.pointerId, pointerType: 'mouse', button: 0, buttons: 1, shiftKey: false, metaKey: false, ctrlKey: false, altKey: false, isTrusted: true, preventDefault: () => e.preventDefault(), stopPropagation: () => e.stopPropagation() };
+      return _od.call(this, fake);
+    }
+    return _od.apply(this, arguments);
+  };
+  const place = () => {
+    const host = $('#tabactions'); if (!host || !document.body.classList.contains('coarse')) return; let b = $('#selModeBtn');
+    if (!b) { b = h('button', { id: 'selModeBtn', class: 'ib', title: 'Select several cards: drag a box around them' }); b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-dasharray="3 3"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>'; b.onclick = e => { e.stopPropagation(); S.selMode = !S.selMode; b.classList.toggle('on', S.selMode); document.body.classList.toggle('selmode', S.selMode); toast(S.selMode ? 'Select mode on: drag a box around cards' : 'Select mode off'); }; host.prepend(b); }
+  };
+  { const _rt = renderTabs; renderTabs = function () { const r = _rt.apply(this, arguments); try { place(); } catch (_) { } return r; }; }
+  setTimeout(place, 600);
+}
 
 /* ========== events + init ========== */
 function migrate() {
