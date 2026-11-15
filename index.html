@@ -3502,6 +3502,7 @@ function purgeBoard(bid) {
 function gcBlobs() {
   const used = new Set(); for (const c of Object.values(ST.cards)) for (const b of cardBlobIds(c)) used.add(b);
   for (const p of Object.values(ST.pages || {})) for (const b of blobIdsOfPage(p)) used.add(b);
+  for (const bd of Object.values(ST.boards || {})) if (bd.cover && bd.cover.blobId) used.add(bd.cover.blobId);
   for (const s of [...S.hist, ...S.fut]) for (const m of s.matchAll(/"blobId":"(b[\w]+)"/g)) used.add(m[1]);
   for (const id of Object.keys(Blobs.mem)) if (!used.has(id)) Blobs.remove(id);
 }
@@ -5561,7 +5562,7 @@ function aiBreakdownUI(it, change, renderSubs, syncMain, notesEl) {
 
 /* ========== notes: title, collapse, important, attachments, checklist, internal links, dashboard ========== */
 const noteFirstLine = html => (strip(html || '').split('\n').map(s => s.trim()).find(Boolean) || '').slice(0, 90);
-const cardBlobIds = c => !c || !c.data ? [] : [c.data.blobId, ...(c.data.files || []).map(f => f.blobId)].filter(Boolean);
+const cardBlobIds = c => !c || !c.data ? [] : [c.data.blobId, ...(c.data.files || []).map(f => f.blobId), c.type === 'board' && ST.boards[c.data.boardId] && ST.boards[c.data.boardId].cover && ST.boards[c.data.boardId].cover.blobId].filter(Boolean);
 function liveCard(c) { return c && !c.trashed && ST.boards[c.boardId] && boardIsLive(c.boardId) && !(c.columnId && ST.cards[c.columnId] && ST.cards[c.columnId].trashed); }
 
 RENDER.note = c => {
