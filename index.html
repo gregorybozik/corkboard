@@ -2151,6 +2151,192 @@ button,.tool,.tab,.sb-item,.tr-row,.ib{touch-action:manipulation}
 }
 body.selmode #viewport{cursor:crosshair}
 @media (max-width:700px){.menu .sep{min-height:0!important;display:block!important;height:1px!important}.menu-info{min-height:0!important;display:block!important}}
+
+/* ================= v3.0 — Cinematic Editorial: tokens ================= */
+.app-root{
+  /* palette */
+  --ce-canvas:#141619; --ce-card:#22252A; --ce-elev:#2B2E34; --ce-text:#F4F3F0; --ce-text2:#A3A8B0; --ce-border:#3A3E45;
+  --ce-blue:#3B82F6; --ce-ok:#6FA98B; --ce-warn:#D6A65D; --ce-err:#C96B6B;
+  /* type */
+  --serif:"New York","Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  /* spacing / radii / motion */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px;
+  --r-sm:8px; --r-md:10px; --r-lg:14px; --bw:1px;
+  --ease:cubic-bezier(.2,.7,.2,1); --dur:.14s;
+  /* light variant (default token set for non-dark) */
+  --canvas:#EEEDEA; --dot:#CFCDC7; --card:#FFFFFF; --elev:#F6F5F2; --text:#1D1F23; --muted:#5F656E; --line:#DAD8D2;
+  --bar:#FFFFFF; --bar-text:#2B2E34; --tb:#EEEDEA; --hover:rgba(20,22,25,.06); --sel:#2F6FE0; --selh:#2F6FE0; --accent:#2F6FE0;
+  --menu:#FFFFFF; --shadow:0 0 0 1px #DAD8D2,0 2px 8px rgba(20,22,25,.06);
+  --shadow-lg:0 0 0 1px #D2D0CA,0 14px 34px rgba(20,22,25,.16);
+  --phc:#8A8F97; --colbody:#F3F2EF; --link:#2F6FE0; --paper:#FBFAF6; --paper-tex:none;
+  --glass:rgba(255,255,255,.94); --glass-b:#DAD8D2; --sb-bg:#F6F5F2; --vig:rgba(0,0,0,0);
+  --focus:#2F6FE0; --ok:#3F8A66; --warn:#A87822; --err:#B24C4C;
+}
+.app-root.dark{
+  --canvas:#141619; --dot:#262A30; --card:#22252A; --elev:#2B2E34; --text:#F4F3F0; --muted:#A3A8B0; --line:#3A3E45;
+  --bar:#181A1E; --bar-text:#E9E8E4; --tb:#141619; --hover:rgba(255,255,255,.065); --sel:#3B82F6; --selh:#3B82F6; --accent:#3B82F6;
+  --menu:#2B2E34; --shadow:0 0 0 1px #3A3E45,0 2px 10px rgba(0,0,0,.28);
+  --shadow-lg:0 0 0 1px #454952,0 16px 40px rgba(0,0,0,.5);
+  --phc:#858B95; --colbody:#1B1D21; --link:#8DB4FA; --paper:#2B2E34; --paper-tex:none;
+  --glass:rgba(34,37,42,.94); --glass-b:#3A3E45; --sb-bg:#181A1E; --vig:rgba(0,0,0,.2);
+  --focus:#6FA2F8; --ok:#6FA98B; --warn:#D6A65D; --err:#C96B6B;
+  --bg-gray:#2B2E34; --bg-brown:#3a322e; --bg-orange:#3d3429; --bg-yellow:#3b3829; --bg-green:#27362f; --bg-blue:#22304a; --bg-purple:#33304a; --bg-pink:#3f2f3a; --bg-red:#402e2e;
+  --tc-green:#6FA98B; --tc-yellow:#D6A65D; --tc-red:#C96B6B; --tc-blue:#7FA8F0;
+  color-scheme:dark;
+}
+.app-root:not(.dark){color-scheme:light}
+body{background:var(--canvas)}
+h1,h2,h3,.pv-title,.col-title,.board-name,.todo-title,.pg-title{font-family:var(--serif)}
+
+/* ---- subtle dotted canvas ---- */
+#viewport{background-color:var(--canvas)}
+#viewport::before{opacity:.55}
+
+/* ---- interaction states ---- */
+.card{border-radius:var(--r-md);transition:box-shadow var(--dur) var(--ease),outline-color var(--dur) var(--ease),border-color var(--dur) var(--ease),transform var(--dur) var(--ease)}
+.card:hover:not(.selected):not(.dragging){box-shadow:0 0 0 1px color-mix(in srgb,var(--text) 22%,var(--line)),0 4px 14px rgba(0,0,0,.18)}
+.card.selected{outline:1.5px solid var(--sel);outline-offset:2px}
+.card.editing{outline:1.5px solid var(--sel);outline-offset:2px;box-shadow:0 0 0 4px color-mix(in srgb,var(--sel) 18%,transparent),var(--shadow)}
+.card.dragging{box-shadow:var(--shadow-lg);opacity:1;transform:scale(1.005)}
+.card.drop-target{outline:2px dashed var(--sel)}
+button:disabled,.btn:disabled,[aria-disabled=true]{opacity:.42;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:6px}
+.card :focus-visible,.pop :focus-visible,.menu :focus-visible{outline-offset:1px}
+input:focus-visible,textarea:focus-visible,[contenteditable]:focus-visible{outline:none}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+
+/* ---- surfaces: menus, popovers, modals ---- */
+.menu,.pop,.dd,.modal,.ctxmenu,#cmdk .box,.cmd-box{background:var(--menu);border:1px solid var(--line);border-radius:var(--r-md);box-shadow:var(--shadow-lg)}
+.menu .it:hover,.menu button:hover,.dd .it:hover,.pop .it:hover{background:var(--hover)}
+.btn{border-radius:var(--r-sm);border:1px solid var(--line);background:var(--elev);color:var(--text);font-weight:600}
+.btn:hover{border-color:color-mix(in srgb,var(--text) 30%,var(--line));background:color-mix(in srgb,var(--text) 6%,var(--elev))}
+.btn.primary{background:#2F6FE0;border-color:#2F6FE0;color:#fff}
+.btn.primary:hover{background:#3A7AEE;border-color:#3A7AEE}
+input,textarea,select{border-color:var(--line)}
+input:focus,textarea:focus,select:focus{border-color:var(--sel)!important}
+
+/* ---- dock: floating charcoal rounded toolbar ---- */
+#toolbar{background:var(--glass);border:1px solid var(--glass-b);border-radius:var(--r-lg);padding:6px 8px;gap:3px;box-shadow:0 10px 32px rgba(0,0,0,.38),0 0 0 1px rgba(255,255,255,.02)}
+.app-root:not(.dark) #toolbar{box-shadow:0 10px 30px rgba(20,22,25,.14)}
+#toolbar .tool{width:44px;height:44px;padding:0;border-radius:var(--r-md);display:grid;place-items:center;color:var(--text)}
+#toolbar .tool .ti,#toolbar .tool .ti.boxed,#toolbar .tool .ti.blue{width:44px;height:44px;border-radius:var(--r-md);background:transparent;box-shadow:none;color:var(--text);display:grid;place-items:center}
+#toolbar .tool .ti svg,#toolbar .tool .ti.blue svg{width:20px;height:20px;stroke-width:1.5;opacity:.92}
+#toolbar .tool .ti.blue svg rect{fill:none;stroke:currentColor;stroke-width:1.5}
+#toolbar .tool:hover .ti{background:var(--hover)}
+#toolbar .tool:active .ti{background:color-mix(in srgb,var(--text) 12%,transparent)}
+#toolbar .tool.active .ti,#toolbar .tool.on .ti,#toolbar .tool[aria-pressed=true] .ti{background:var(--sel);color:#fff}
+#toolbar .tool.active .ti svg,#toolbar .tool.on .ti svg{opacity:1}
+#toolbar .tb-sep{background:var(--line);height:24px;margin:0 6px}
+.dock-tip{background:var(--elev);color:var(--text);border:1px solid var(--line);font-weight:600;border-radius:var(--r-sm);box-shadow:var(--shadow-lg)}
+@media (max-width:700px){#toolbar .tool{width:44px;height:44px}}
+
+/* ---- sidebar / topbar / tabs ---- */
+#sidebar{background:var(--sb-bg)}
+#topbar{background:var(--bar)}
+
+/* ---- notes: muted cream / sage / blue / charcoal ---- */
+.card.t-note,.note-paper{background:var(--elev)!important;box-shadow:0 0 0 1px var(--line),0 2px 10px rgba(0,0,0,.18)}
+.app-root:not(.no-notetint) .card.t-note:not(.colored){background:var(--elev)!important;box-shadow:0 0 0 1px var(--line),0 2px 10px rgba(0,0,0,.18)}
+.card.t-note.colored,.note-paper.colored{background:color-mix(in srgb,var(--cc) 26%,var(--card))!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--cc) 40%,var(--line)),0 2px 10px rgba(0,0,0,.18)}
+.app-root:not(.dark) .card.t-note.colored,.app-root:not(.dark) .note-paper.colored{background:color-mix(in srgb,var(--cc) 30%,#fff)!important}
+.card.t-note.colored.dark-color{color:var(--text)}
+#viewport[data-bgt=dark] .card.t-note:not(.colored){--text:#F4F3F0;--muted:#A3A8B0;--line:#3A3E45;--phc:#858B95}
+#viewport[data-bgt=light] .card.t-note:not(.colored){--text:#F4F3F0;--muted:#A3A8B0;--line:#3A3E45;--phc:#858B95}
+.app-root:not(.dark) #viewport[data-bgt] .card.t-note:not(.colored){--text:#1D1F23;--muted:#5F656E;--line:#DAD8D2;--phc:#8A8F97}
+.card.t-note .rt,.card.t-note [contenteditable]{line-height:1.6}
+
+/* ---- link card: wide preview, title, description, domain ---- */
+.card.t-link{overflow:hidden;background:var(--card)}
+.link-img{background:var(--elev)}
+.link-img img{max-height:260px;aspect-ratio:16/9;object-fit:cover}
+.link-body{padding:14px 16px 16px}
+.link-url{order:3;margin-top:10px;font-size:11.5px;letter-spacing:.01em;color:var(--muted)}
+.link-body{display:flex;flex-direction:column}
+.link-title{order:1;margin-top:0;font:600 17px/1.3 var(--serif);color:var(--text);text-decoration:none}
+.link-title:hover{text-decoration:underline;text-underline-offset:3px}
+.link-desc{order:2;margin-top:6px;color:var(--muted);font-size:13px}
+.link-url::after{content:"";width:12px;height:12px;margin-left:auto;flex:none;opacity:.7;background:currentColor;-webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M7 17L17 7M8 7h9v9'/></svg>") center/contain no-repeat;mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M7 17L17 7M8 7h9v9'/></svg>") center/contain no-repeat}
+
+/* ---- to-do: square blue checkboxes, thin separators, subdued completed ---- */
+.card.t-todo{background:var(--card)}
+.todo{padding:16px 18px 12px}
+.todo-title{font:600 18px/1.3 var(--serif);margin-bottom:10px}
+.todo-item{padding:7px 0;border-top:1px solid var(--line);align-items:center}
+.todo-item:first-of-type{border-top:0}
+.todo-item .chk{border-radius:4px;border:1.5px solid color-mix(in srgb,var(--text) 40%,var(--line));background:transparent}
+.todo-item .chk:hover{border-color:var(--sel)}
+.todo-item.done .chk{background:var(--sel);border-color:var(--sel);color:#fff}
+.todo-item.done .todo-text{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+.todo-item.done::after{content:"Done";position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:10.5px;color:var(--ok);opacity:.0}
+.todo-text.ph{color:var(--phc)}
+
+/* ---- line ---- */
+.line-path{stroke:color-mix(in srgb,var(--text) 55%,transparent)}
+.line-path.sel,.line-sel path{stroke:var(--sel)}
+
+/* ---- board card: cover image / textured fallback, large serif title, count ---- */
+.card.t-board{background:var(--card)!important;box-shadow:var(--shadow);overflow:hidden}
+.card.t-board.selected{outline-offset:2px}
+.board-tile{display:flex;flex-direction:column;align-items:stretch;padding:0;text-align:left}
+.board-cover{position:relative;height:0;padding-bottom:56%;background-size:cover;background-position:center;cursor:pointer;overflow:hidden}
+.board-cover.gen{background-image:linear-gradient(160deg,color-mix(in srgb,var(--bc) 62%,#0d0f12) 0%,color-mix(in srgb,var(--bc) 24%,#0d0f12) 100%)}
+.board-cover.gen::before{content:"";position:absolute;inset:0;opacity:.35;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+.board-cover.gen::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 85% 0%,color-mix(in srgb,var(--bc) 40%,transparent),transparent 60%)}
+.board-cover.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.35))}
+.board-icon{position:absolute;left:12px;bottom:10px;width:34px;height:34px;border-radius:9px;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.35);z-index:1;background:rgba(20,22,25,.72)!important;backdrop-filter:blur(6px);color:#fff}
+.board-icon svg{width:18px!important;height:18px!important}
+.board-meta{padding:12px 14px 13px}
+.board-name{margin:0;font:600 18px/1.25 var(--serif);color:var(--text)}
+.board-count{margin-top:3px;font-size:12px;color:var(--muted)}
+
+/* ---- column ---- */
+.card.t-column{background:var(--card)}
+.col-head{text-align:left;padding:14px 14px 8px}
+.col-title{font:600 17px/1.3 var(--serif)}
+.col-body.empty{background:var(--colbody);border:1px dashed var(--line);border-radius:var(--r-sm)}
+.col-drop{background:var(--sel)}
+
+/* ---- comment ---- */
+.card.t-comment{background:var(--card)}
+
+/* ---- table: dark header, separators, selected cell ---- */
+.card.t-table{background:var(--card)}
+.tbl{border-radius:var(--r-sm)}
+.tbl td,.tbl th{border-color:var(--line)}
+.tbl th{background:color-mix(in srgb,var(--text) 8%,var(--card));font-weight:600;color:var(--text)}
+.tbl td.cur,.tbl th.cur{box-shadow:inset 0 0 0 2px var(--sel);background:color-mix(in srgb,var(--sel) 10%,transparent)}
+
+/* ---- page card: miniature document ---- */
+.pg-card{background:var(--card);border-radius:var(--r-md);overflow:hidden}
+.pg-cover{height:92px}
+.pg-main{padding:14px 16px 12px}
+.pg-title{font:600 20px/1.25 var(--serif);color:var(--text);margin-bottom:4px;word-break:break-word}
+.pg-prev{color:var(--muted);font-size:12.5px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pg-foot{margin-top:10px;padding-top:8px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px;display:flex;gap:10px;flex-wrap:wrap}
+.pg-open{margin-left:auto;display:inline-flex;align-items:center;gap:2px;color:var(--text);opacity:.8}
+
+/* ---- status pills + tags ---- */
+.tchip{border-radius:999px}
+.pill,.sel-pill{border-radius:999px}
+
+/* ---- database view tabs: blue underline ---- */
+.dbv-tab,.db-tab,.vtab{border-radius:0;border-bottom:2px solid transparent;background:transparent}
+.dbv-tab.on,.db-tab.on,.vtab.on,.dbv-tab.active,.db-tab.active,.vtab.active{border-bottom-color:var(--sel);color:var(--text);background:transparent}
+
+/* ---- focus timer: blue progress ring, big time ---- */
+.tmr-time,.timer-time{font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+
+/* ---- widgets ---- */
+.twg{background:var(--card)}
+
+/* ---- accessibility: completed not only by color ---- */
+.todo-item.done .todo-text,.t2row.done .t2txt{text-decoration:line-through}
+/* ---- long titles / filenames ---- */
+.board-name,.pg-title,.link-title,.col-title,.todo-text,.crumb span,.tab span{overflow-wrap:anywhere;word-break:break-word}
+.fname,.file-name,.doc-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 </style>
 </head>
 <body class="app-root">
@@ -2405,7 +2591,7 @@ function defaultState() {
     boards: { [root]: { id: root, title: 'Home', parentId: null, color: '#f2a65a', icon: '🏠', bg: null, grid: true, createdAt: now(), updatedAt: now(), view: { x: 60, y: 40, z: 1 } } },
     cards: {}, lines: {},
     labels: [{ id: uid(), name: 'Important', color: '#ef6f6c' }, { id: uid(), name: 'Idea', color: '#5f8ff0' }, { id: uid(), name: 'In progress', color: '#f2a65a' }, { id: uid(), name: 'Done', color: '#5bb85d' }],
-    recent: [root], settings: { dark: false, snap: true, name: 'Me' },
+    recent: [root], settings: { dark: true, v3theme: 1, snap: true, name: 'Me' },
   };
 }
 const DEF = { note: { w: 280 }, link: { w: 300 }, todo: { w: 300 }, board: { w: 110 }, column: { w: 300 }, comment: { w: 300 }, table: { w: 420 }, sketch: { w: 320, h: 220 }, swatch: { w: 150 }, doc: { w: 220 }, audio: { w: 300 }, map: { w: 360, h: 270 }, video: { w: 420 }, heading: { w: 420 }, image: { w: 300 }, file: { w: 280 }, ink: { w: 100 }, placeholder: { w: 280, h: 160 } };
@@ -10097,7 +10283,7 @@ function taskWidgetEl(kind, host, ctx, persist) {
       save(); refreshTaskViews([c.id]); draw(); const n = root.querySelector('.twg-add'); n && n.focus();
     });
     inp.addEventListener('pointerdown', e => e.stopPropagation());
-    root.replaceChildren(head, tagRow, list, h('div', { class: 'twg-foot' }, inp));
+    root.replaceChildren(...[head, tagRow, list, h("div", { class: "twg-foot" }, inp)].filter(Boolean));
     root.classList.toggle('narrow', (root.parentElement ? root.offsetWidth : 380) < 340);
   };
   root._draw = draw; draw(); return root;
@@ -10139,9 +10325,41 @@ S.selMode = false;
   setTimeout(place, 600);
 }
 
+/* ========== v3.0 — Cinematic Editorial ========== */
+DEF.board = { w: 220 }; RESIZE_W.add('board');
+RENDER.board = c => {
+  const b = ST.boards[c.data.boardId];
+  if (!b) return h('div', { class: 'board-tile' }, 'Missing board');
+  const n = cardsOf(b.id).length, bc = b.color || '#5f8ff0', cv = b.cover;
+  const cover = h('div', { class: 'board-cover ' + (cv && (cv.blobId || cv.src) ? 'img' : 'gen'), 'data-act': 'open-board', style: Object.assign({ '--bc': bc }, cv && (cv.blobId || cv.src) ? bannerCss(cv) : {}) },
+    h('div', { class: 'board-icon', 'data-act': 'open-board' }, b.icon || h('span', { html: ICON.board })));
+  return h('div', { class: 'board-tile' }, cover, h('div', { class: 'board-meta' }, h('div', { class: 'board-name', 'data-edit': 'board:title', 'data-ph': 'Untitled' }, b.title), h('div', { class: 'board-count' }, `${n} card${n === 1 ? '' : 's'}`)));
+};
+function boardCoverPop(anchor, c) {
+  const b = ST.boards[c.data.boardId]; if (!b) return;
+  const set = v => { checkpoint(); b.cover = v; save(); rerenderCard(c.id); };
+  const up = h('button', { class: 'btn primary', onclick: () => { closeTransient(); pickFiles('image/*', async files => { const f = files[0]; if (!f) return; const blob = await resizeImage(f, 1600); const blobId = await Blobs.put(blob); set({ blobId, y: 50 }); }); } }, 'Upload image');
+  const url = h('input', { class: 'rp-q', placeholder: 'Or paste an image link and press Enter' });
+  url.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && url.value.trim()) { closeTransient(); set({ src: normUrl(url.value.trim()), y: 50 }); } });
+  const kids = [h('div', { class: 'dd-h' }, 'Board cover'), h('div', { class: 'cover-row' }, up), url];
+  if (b.cover) kids.push(h('button', { class: 'btn', style: { marginTop: '8px' }, onclick: () => { closeTransient(); set(null); } }, 'Use generated cover'));
+  const pp = h('div', { class: 'pop coverpop' }, kids);
+  closeTransient(); document.body.append(pp); const r = anchor.getBoundingClientRect(); placeEl(pp, r.left, r.bottom + 6);
+}
+{ const _ct = ctxTools; ctxTools = function () {
+  const r = _ct(); if (!Array.isArray(r) || S.selLine || S.tool || S.sketchEdit) return r;
+  const ids = selTopIds(); if (ids.length !== 1) return r; const c = ST.cards[ids[0]]; if (!c) return r;
+  if (c.type === 'board') { const i = r.findIndex(t => t && t.label === 'Icon'); r.splice(i >= 0 ? i + 1 : 1, 0, { label: 'Set cover', icon: 'image', fn: b => boardCoverPop(b, c) }); }
+  if (c.type === 'page') { const p = ST.pages[c.data.pageId]; if (p) r.splice(1, 0, { label: 'Set cover', icon: 'image', fn: b => coverPop(b, p) }); }
+  return r;
+}; }
+{ const _at = applyTheme; applyTheme = function () { _at(); const m = $('meta[name=theme-color]'); if (m) m.content = ST.settings.dark ? '#141619' : '#FFFFFF'; }; }
+
 /* ========== events + init ========== */
 function migrate() {
-  ST.settings = Object.assign({ dark: false, snap: true, name: 'Me' }, ST.settings || {});
+  ST.settings = Object.assign({ dark: true, snap: true, name: 'Me' }, ST.settings || {});
+  if (!ST.settings.v3theme) { ST.settings.v3theme = 1; ST.settings.dark = true; }
+  for (const c of Object.values(ST.cards || {})) if (c.type === 'board' && c.w <= 130) c.w = 220;
   ST.labels = ST.labels || []; ST.lines = ST.lines || {}; ST.recent = (ST.recent || []).filter(id => ST.boards[id]);
   if (!ST.boards[ST.rootId]) { const d = defaultState(); ST.rootId = d.rootId; ST.boards[d.rootId] = d.boards[d.rootId]; }
   for (const c of Object.values(ST.cards)) { c.labels = c.labels || []; c.reactions = c.reactions || {}; c.comments = c.comments || []; c.data = c.data || defaultData(c.type); if (!ST.boards[c.boardId]) delete ST.cards[c.id]; }
