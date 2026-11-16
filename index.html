@@ -2458,6 +2458,62 @@ button:disabled:hover,[aria-disabled=true]:hover{background-image:none;transform
 .sw:not(.cur):hover{transform:scale(1.12);box-shadow:0 0 0 2px color-mix(in srgb,var(--text) 40%,transparent)}
 .cc-col.click:hover .cc-lab{text-decoration:underline;text-underline-offset:3px}
 .cc-col.strong .cc-lab{opacity:1!important}
+
+/* ================= v3.3 — visual hierarchy ================= */
+.app-root{--fs-display:28px;--fs-title:18px;--fs-section:14px;--fs-body:13px;--fs-meta:11.5px;--fw-strong:650}
+/* display / title / section / meta roles */
+.t2-hero h1,.hero-name,.hero-greet,.pv-title{font-family:var(--serif)}
+.t2-phead b,.vp-title,.fv-sec .vp-title{font-size:var(--fs-section);font-weight:700;letter-spacing:.005em}
+.vp-sub,.tvh-sub,.fv-sub,.board-count,.link-url,.pg-foot,.nv-foot{font-size:var(--fs-meta);color:var(--muted)}
+.t2-title{font-size:var(--fs-body)}
+/* KPI pills: big number, icon, label on hover */
+.t2-stat{height:40px;padding:0 14px 0 10px;gap:8px;border-radius:20px}
+.t2-stat b{font:700 22px/1 var(--serif);letter-spacing:-.01em;min-width:12px;text-align:left;color:var(--kc)}
+.t2-sic{width:18px;height:18px;display:grid;place-items:center;color:var(--kc);flex:none}
+.t2-sic svg{width:18px;height:18px}
+.t2-slab{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.t2-stat:not(.on) .t2-sic{opacity:.8}
+.t2-stats{gap:4px}
+/* chart numbers */
+.t2-card .big,.cardmetric,.bc-n,.ob-count,.ob-n{font:700 20px/1 var(--serif)}
+.vd-bar-v,.bar-val,.t2-bv{font-size:12px;font-weight:700;color:var(--text)}
+.bar.cur-week,.dd-bar.now{filter:brightness(1.25)}
+/* task rows: overdue emphasis, star next to title, board icon hidden under board header */
+.t2row > :first-child{order:-4}
+.t2row .t2-flag.important.on,.t2row .t2-flag.urgent.on{order:-3}
+.t2row .t2-dot{order:-2}
+.t2row:has(.t2-date.over){box-shadow:inset 3px 0 0 #E0645C;background:linear-gradient(90deg,color-mix(in srgb,#E0645C 7%,transparent),transparent 40%)}
+.t2row:has(.t2-date.over) .t2-title{font-weight:600}
+.t2-date.over{font-weight:700}
+.t2row.done .t2-title{color:var(--muted)}
+body.grp-board .t2right .t2row .t2-dot{display:none}
+.t2-date{font-size:var(--fs-meta)}
+/* Notes dashboard */
+.nv-card{padding:16px 16px 12px;border-radius:var(--r-md)}
+.nv-title{font:600 18px/1.3 var(--serif);margin-bottom:6px;order:0}
+.nv-top{margin-bottom:10px}
+.nv-top .nv-board{order:2;margin-left:0}
+.nv-text{font-size:var(--fs-body);color:color-mix(in srgb,var(--text) 88%,transparent)}
+.nv-foot{margin-top:10px;padding-top:8px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.nv-foot > span:last-child::before{content:"";display:inline-block;width:11px;height:11px;margin-right:5px;vertical-align:-1px;background:currentColor;opacity:.8;-webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/></svg>") center/contain no-repeat;mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/></svg>") center/contain no-repeat}
+.tv-done.iconly .tv-lab{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.tv-done.iconly .nv-tic{width:16px;height:16px}.tv-done.iconly .nv-tic svg{width:16px;height:16px}
+/* Focus */
+.fv-badge{opacity:.5;filter:grayscale(.6)}
+.fv-badge.got{opacity:1;filter:none;border:1px solid color-mix(in srgb,var(--v-s4) 55%,var(--line));background:color-mix(in srgb,var(--v-s4) 9%,var(--card))}
+.fv-badge.got .fv-bn{color:var(--text)}
+.fv-sec .vp-title{font:700 var(--fs-title)/1.3 var(--serif)}
+.fv-body .tv-empty{margin:28px auto;font-size:var(--fs-meta)}
+/* board count with icon */
+.board-count{display:flex;align-items:center;gap:5px}
+.bc-ic{width:13px;height:13px;display:inline-grid;place-items:center;opacity:.8}.bc-ic svg{width:13px;height:13px}
+/* database card: title leads, chrome recedes */
+.card.t-database .dbv-title{font:700 20px/1.25 var(--serif)}
+.card.t-database .dbv-tab:not(.cur){opacity:.7}
+.card.t-database .dbv-chooser:not(:only-child){display:none}
+.card.t-database .dbv-th,.card.t-database th{font-size:var(--fs-meta);text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600}
+/* link/page cards: meta stays small, below */
+.pg-prev{font-size:12.5px}
 </style>
 </head>
 <body class="app-root">
@@ -5791,7 +5847,7 @@ function renderNVHead() {
   const ov = $('.notesview'); if (!ov) return; const st = nvState();
   const set = (k, v) => { st[k] = v; save(); renderNVHead(); renderNVBody(); };
   const sel = (opts, cur, fn, title) => { const s = h('select', { class: 'tv-sel', title }, opts.map(([v, l]) => h('option', { value: v }, l))); s.value = cur; s.onchange = () => fn(s.value); return s; };
-  const tog = (label, k, ic) => { const t = h('span', { class: 'toggle' + (st[k] ? ' on' : '') }); return h('label', { class: 'tv-done', onclick: () => set(k, !st[k]) }, t, ic ? h('span', { class: 'nv-tic', html: ICON[ic] }) : null, label); };
+  const tog = (label, k, ic) => { const t = h('span', { class: 'toggle' + (st[k] ? ' on' : '') }); return h('label', { class: 'tv-done' + (ic ? ' iconly' : ''), title: label, onclick: () => set(k, !st[k]) }, t, ic ? h('span', { class: 'nv-tic', html: ICON[ic] }) : null, ic ? h('span', { class: 'tv-lab' }, label) : label); };
   const notes = allNotes();
   const q = h('input', { class: 'tv-search', placeholder: 'Search titles, text and file names…', value: st.q });
   q.addEventListener('input', () => { st.q = q.value; renderNVBody(); });
@@ -9530,7 +9586,7 @@ function renderTVHead() {
   const d = dashData();
   const q = h('input', { class: 'tv2-search', placeholder: 'Search tasks…', value: S.tvQuery });
   q.addEventListener('input', () => { S.tvQuery = q.value; renderTVBody(); });
-  const stat = (view, n, label, color) => { const on = st.view === view && !st.quad; return h('button', { class: 't2-stat' + (on ? ' on' : ''), style: { '--kc': color }, onclick: () => { st.view = on ? 'all' : view; st.quad = null; save(); renderTVHead(); renderTVBody(); } }, h('b', null, String(n)), label); };
+  const stat = (view, n, label, color) => { const on = st.view === view && !st.quad; return h('button', { class: 't2-stat' + (on ? ' on' : ''), style: { '--kc': color }, title: label, 'aria-label': label, onclick: () => { st.view = on ? 'all' : view; st.quad = null; save(); renderTVHead(); renderTVBody(); } }, h('span', { class: 't2-sic', html: ICON[{ all: 'kOpen', soon: 'kSoon', important: 'kStar', done: 'kDone' }[view]] || '' }), h('b', null, String(n)), h('span', { class: 't2-slab' }, label)); };
   const pct = d.all.length ? Math.round(d.allDone / d.all.length * 100) : 0;
   const boards = Object.values(ST.boards).filter(b => boardIsLive(b.id) && taskLists().some(c => c.boardId === b.id));
   const chips = h('div', { class: 't2-chips' },
@@ -10455,7 +10511,7 @@ RENDER.board = c => {
   const n = cardsOf(b.id).length, bc = b.color || '#5f8ff0', cv = b.cover;
   const cover = h('div', { class: 'board-cover ' + (cv && (cv.blobId || cv.src) ? 'img' : 'gen'), style: Object.assign({ '--bc': bc }, cv && (cv.blobId || cv.src) ? bannerCss(cv) : {}) },
     h('div', { class: 'board-icon' }, b.icon || h('span', { html: ICON.board })));
-  return h('div', { class: 'board-tile' }, cover, h('div', { class: 'board-meta' }, h('div', { class: 'board-name', 'data-edit': 'board:title', 'data-ph': 'Untitled' }, b.title), h('div', { class: 'board-count' }, `${n} card${n === 1 ? '' : 's'}`)));
+  return h('div', { class: 'board-tile' }, cover, h('div', { class: 'board-meta' }, h('div', { class: 'board-name', 'data-edit': 'board:title', 'data-ph': 'Untitled' }, b.title), h('div', { class: 'board-count', title: `${n} card${n === 1 ? '' : 's'}` }, h('span', { class: 'bc-ic', html: ICON.board }), `${n} card${n === 1 ? '' : 's'}`)));
 };
 function boardCoverPop(anchor, c) {
   const b = ST.boards[c.data.boardId]; if (!b) return;
@@ -10535,6 +10591,9 @@ function a11yPass() {
 }
 new MutationObserver(() => { if (!_a11yQ) _a11yQ = requestAnimationFrame(a11yPass); }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 setTimeout(a11yPass, 0);
+
+/* ---- v3.3: hierarchy ---- */
+{ const _a = a11yPass; a11yPass = function () { _a(); const g = $$('select').find(x => [...x.options].some(o => o.textContent === 'By board')); document.body.classList.toggle('grp-board', !!g && g.value === 'board'); }; }
 
 /* ========== events + init ========== */
 function migrate() {
