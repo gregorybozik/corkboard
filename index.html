@@ -2238,7 +2238,8 @@ input:focus,textarea:focus,select:focus{border-color:var(--sel)!important}
 #topbar{background:var(--bar)}
 
 /* ---- notes: muted cream / sage / blue / charcoal ---- */
-.card.t-note,.note-paper{background:var(--elev)!important;box-shadow:0 0 0 1px var(--line),0 2px 10px rgba(0,0,0,.18)}
+.app-root:not(.no-notetint) .card.t-note,.app-root:not(.no-notetint) .note-paper{background:var(--elev)!important;box-shadow:0 0 0 1px var(--line),0 2px 10px rgba(0,0,0,.18)}
+.app-root.no-notetint .card.t-note:not(.colored){background:#E9E3D3!important;box-shadow:0 1px 3px rgba(0,0,0,.25);--text:#1D1F23;--muted:#5F656E;--line:#CFC8B6;--phc:#7C7667;color:#1D1F23}
 .app-root:not(.no-notetint) .card.t-note:not(.colored){background:var(--elev)!important;box-shadow:0 0 0 1px var(--line),0 2px 10px rgba(0,0,0,.18)}
 .card.t-note.colored,.note-paper.colored{background:color-mix(in srgb,var(--cc) 26%,var(--card))!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--cc) 40%,var(--line)),0 2px 10px rgba(0,0,0,.18)}
 .app-root:not(.dark) .card.t-note.colored,.app-root:not(.dark) .note-paper.colored{background:color-mix(in srgb,var(--cc) 30%,#fff)!important}
@@ -2399,6 +2400,64 @@ input:focus,textarea:focus,select:focus{border-color:var(--sel)!important}
 .lockscreen,.lock-screen{background:var(--canvas)}
 .ap-play.playing svg{display:none}
 .ap-play.playing::after{content:"";width:14px;height:16px;background:linear-gradient(90deg,#fff 0 36%,transparent 36% 64%,#fff 64%)}
+
+/* ================= v3.2 — signifiers & affordances ================= */
+/* 1. one hover / press / focus language for every clickable control */
+.t2-stat,.t2-chip,.t2-switch,.tv-sel,.twg-done,.twg-tag,.hero-change,.nv-imp,.t2-date,.cc-col.click,.tr-star,.fd-add,.fd-more,.topen,.tr-chev,.sw,.btn,.seg button,.chk{transition:background-color var(--dur) var(--ease),border-color var(--dur) var(--ease),color var(--dur) var(--ease),box-shadow var(--dur) var(--ease),transform 80ms var(--ease),opacity var(--dur) var(--ease)}
+.t2-stat:not(:disabled):hover,.t2-chip:not(:disabled):hover,.t2-switch:not(:disabled):hover,.tv-sel:not(:disabled):hover,.twg-done:not(:disabled):hover,.twg-tag:not(:disabled):hover,.nv-imp:not(:disabled):hover,.t2-date:not(:disabled):hover,.cc-col.click:hover,.fd-add:hover,.fd-more:hover,.tr-star:hover,.hero-change:hover,.seg button:not(.on):not(.cur):not(:disabled):hover{background-image:linear-gradient(var(--hover),var(--hover));color:var(--text)}
+.t2-chip:not(.on):hover,.twg-tag:not(.on):hover,.tv-sel:not(.on):hover,.t2-switch:not(.on):hover,.nv-imp:not(.on):hover{border-color:color-mix(in srgb,var(--text) 38%,var(--line))}
+.t2-stat:hover{border-color:var(--kc)}
+.tr-star:hover{opacity:1;color:#E0B040;background-color:var(--hover)}
+.fd-more:hover,.fd-add:hover{opacity:1;background-color:var(--hover);color:var(--text)}
+.hero-change:hover{background-color:rgba(0,0,0,.55);border-color:rgba(255,255,255,.6)}
+.t2-date.none:hover{opacity:1!important;background:var(--hover);color:var(--text)}
+.t2-stat:active,.t2-chip:active,.t2-switch:active,.tv-sel:active,.twg-done:active,.twg-tag:active,.btn:active,.seg button:active,.nv-imp:active,.hero-change:active{transform:scale(.97)}
+/* 2. clear on / off */
+.t2-stat:not(.on){background:transparent;border-color:var(--line);color:var(--muted)}
+.t2-stat:not(.on) b{opacity:.85}
+.t2-stat.on{background:color-mix(in srgb,var(--kc) 22%,transparent);border-color:var(--kc);box-shadow:0 0 0 1px var(--kc);color:var(--text);font-weight:600}
+.t2-chip:not(.on){background:transparent;color:var(--muted)}
+.t2-chip.on{color:var(--text);font-weight:600}
+.twg-tag:not(.on){color:var(--muted)}
+.twg-tag.on{color:var(--text)}
+.twg-done:not(.on){border:1px solid var(--line);background:transparent}
+.twg-done.on{border:1px solid var(--sel)}
+.tv-sel.on{background:color-mix(in srgb,var(--sel) 22%,transparent);border-color:var(--sel);color:var(--text);font-weight:600}
+.t2-switch:not(.on){color:var(--muted)}
+.t2-switch.on{border-color:var(--sel)}
+.t2-switch.on i{background:var(--sel)}
+.seg button:not(.on):not(.cur){color:var(--muted)}
+.seg button.on,.seg button.cur{background:var(--sel);color:#fff;font-weight:600}
+.sb-item.on{box-shadow:inset 3px 0 0 var(--sel)}
+/* 3. grouped controls */
+.t2-stats{padding:3px;border:1px solid var(--line);border-radius:20px;background:color-mix(in srgb,var(--text) 3%,var(--card))}
+.t2-chips{padding:0 6px;border:1px solid var(--line);border-radius:18px;background:color-mix(in srgb,var(--text) 3%,var(--card));height:34px;align-items:center}
+.twg-tags{border:1px solid var(--line);border-radius:14px;margin:0 12px 8px;padding:4px 6px;background:color-mix(in srgb,var(--text) 3%,var(--card))}
+/* 4. disabled / inert */
+button:disabled,[aria-disabled=true],.tool:disabled{opacity:.4;cursor:not-allowed;filter:saturate(.4)}
+button:disabled:hover,[aria-disabled=true]:hover{background-image:none;transform:none;box-shadow:none}
+.cc-col:not(.click){cursor:default;pointer-events:none}
+.cc-col:not(.click) .cc-lab{opacity:.8}
+/* 5. contextual toolbar: labelled buttons */
+#toolbar .tool.ctx{width:auto;min-width:54px;height:auto;min-height:56px;flex-direction:column;gap:1px;padding:3px 6px;justify-content:center}
+#toolbar .tool.ctx .ti{width:36px;height:30px}
+#toolbar .tool.ctx .tl-lab{display:block;font-size:10.5px;line-height:1.15;color:var(--muted);font-weight:600;white-space:nowrap}
+#toolbar .tool.ctx.active .tl-lab{color:#fff}
+#toolbar .tool.ctx .ti .sw{width:20px;height:20px;border-radius:50%;box-shadow:0 0 0 1.5px color-mix(in srgb,var(--text) 55%,transparent)}
+#toolbar .tool.ctx .ti .sw.none{background:conic-gradient(from 45deg,#E0645C,#E7B24E,#5FB878,#4C86E6,#A77BE0,#E0645C)}
+#toolbar .tool.ctx .ti .sw.none::after{display:none}
+#toolbar .tb-back{width:44px;height:44px}
+/* 6. touch: 44px targets */
+@media (pointer:coarse){
+  .fd-add,.fd-more,.tr-star,.tr-chev,.topen,.nv-imp{min-width:44px;min-height:44px;width:44px;height:44px}
+  .chk{position:relative}.chk::after{content:"";position:absolute;inset:-15px}
+  .t2-stat,.t2-chip,.t2-switch,.tv-sel,.twg-done,.twg-tag{min-height:36px}
+  #toolbar .tool.ctx{min-height:60px}
+  .tr-star{opacity:.7}
+}
+.sw:not(.cur):hover{transform:scale(1.12);box-shadow:0 0 0 2px color-mix(in srgb,var(--text) 40%,transparent)}
+.cc-col.click:hover .cc-lab{text-decoration:underline;text-underline-offset:3px}
+.cc-col.strong .cc-lab{opacity:1!important}
 </style>
 </head>
 <body class="app-root">
@@ -3780,7 +3839,7 @@ function ctxBtn(t) {
   const ti = h('span', { class: 'ti' });
   if ('swatch' in t) ti.append(h('span', { class: 'sw' + (t.swatch ? '' : ' none'), style: t.swatch ? { background: t.swatch } : {} }));
   else ti.innerHTML = ICON[t.icon] || '';
-  const b = h('button', { class: 'tool' + (t.active ? ' active' : ''), 'aria-label': t.title || t.label }, ti, (t.title || t.label) ? h('span', { class: 'tl-lab' }, t.title || t.label) : null);
+  const b = h('button', { class: 'tool ctx' + (t.active ? ' active' : ''), 'aria-label': t.title || t.label, disabled: t.disabled ? true : null, title: t.disabled ? (t.hint || null) : null }, ti, (t.title || t.label) ? h('span', { class: 'tl-lab' }, t.title || t.label) : null);
   b.addEventListener('mousedown', e => e.preventDefault());
   b.addEventListener('click', e => { if (!t.keepPop) closeTransient(); t.fn(b, e); });
   return b;
@@ -10453,6 +10512,29 @@ async function waveData(blobId, size) {
 }; }
 /* AI block: API pill */
 { const _ai = RENDER.ai; RENDER.ai = function (c) { const el = _ai(c); const hd = el.querySelector && el.querySelector('.aib-head'); if (hd && !hd.querySelector('.aib-api')) { const ic = hd.querySelector('.aib-ic'); const pill = h('span', { class: 'aib-api' }, 'API'); (ic && ic.nextSibling ? ic.nextSibling.nextSibling || ic.nextSibling : hd.lastChild) ? hd.insertBefore(pill, hd.querySelector('.aib-count')) : hd.append(pill); } return el; }; }
+
+/* ---- v3.2: signifiers & affordances ---- */
+{ const _ct2 = ctxTools; ctxTools = function () {
+  const r = _ct2(); if (!Array.isArray(r) || S.selLine || S.tool || S.sketchEdit || (S.editing && S.editing.rich)) return r;
+  if (!r.some(t => t && t.label === 'Align')) { const ids = selTopIds(); if (ids.length === 1) { const i = r.indexOf('sep'); r.splice(i < 0 ? r.length - 1 : i, 0, { label: 'Align', icon: 'align', disabled: true, hint: 'Select two or more cards to align' }); } }
+  return r;
+}; }
+let _a11yQ = 0;
+function a11yPass() {
+  _a11yQ = 0;
+  const on = e => e.classList.contains('on') || e.classList.contains('cur') || e.classList.contains('active');
+  $$('.t2-stat,.t2-chip,.t2-switch,.tv-sel,.twg-done,.twg-tag,.seg button,.t2-top .tv2-fbtn').forEach(e => { const v = String(on(e)); if (e.getAttribute('aria-pressed') !== v) e.setAttribute('aria-pressed', v); });
+  $$('.tool.ctx,#toolbar .tool').forEach(e => { if (e.classList.contains('active') || e.hasAttribute('aria-pressed')) e.setAttribute('aria-pressed', String(e.classList.contains('active'))); });
+  $$('.sb-item').forEach(e => { if (e.classList.contains('on')) e.setAttribute('aria-current', 'page'); else e.removeAttribute('aria-current'); });
+  $$('.tab').forEach(e => { e.setAttribute('role', 'tab'); e.setAttribute('aria-selected', String(e.classList.contains('cur'))); });
+  $$('button.chk:not([aria-label])').forEach(e => { e.setAttribute('role', 'checkbox'); e.setAttribute('aria-label', 'Task done'); });
+  $$('button.chk[role=checkbox]').forEach(e => e.setAttribute('aria-checked', String(e.classList.contains('on') || !!e.closest('.done'))));
+  $$('button.tr-chev:not([aria-label])').forEach(e => { e.setAttribute('aria-label', 'Expand or collapse'); });
+  $$('.cc-col:not(.click)').forEach(e => { e.setAttribute('tabindex', '-1'); e.setAttribute('aria-disabled', 'true'); });
+  $$('.settings-nav button,.set-nav button,.modal .nav button').forEach(e => { if (e.classList.contains('on')) e.setAttribute('aria-current', 'true'); else e.removeAttribute('aria-current'); });
+}
+new MutationObserver(() => { if (!_a11yQ) _a11yQ = requestAnimationFrame(a11yPass); }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+setTimeout(a11yPass, 0);
 
 /* ========== events + init ========== */
 function migrate() {
