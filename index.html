@@ -2612,6 +2612,47 @@ body.ptr-busy .grp-outline{display:none}
 .pv-cr:hover{color:var(--text)}
 .pv-crumbs .crumb-sep:has(+ .pv-cr.cur),.pv-cr.cur{display:none}
 .app-root:not(.dark) .t2-stat b,.app-root:not(.dark) .t2-sic{color:color-mix(in srgb,var(--kc) 68%,#000)}
+
+/* ===== v3.7 Icons & Buttons ===== */
+:root,.app-root{--ic-sm:14px;--ic-md:16px;--ic-lg:20px;--bp-sm:4px 8px;--bp-md:8px 16px;--bp-lg:12px 24px}
+/* icon size = line-height of adjacent label */
+.sb-item{line-height:16px;padding:8px 16px;gap:8px}
+.sb-item .sb-ic,.sb-item .sb-ic svg{width:16px;height:16px;flex:none}
+.sb-item .sb-lab{line-height:16px}
+.sb-rail .sb-item{padding:8px 0}
+.btn{line-height:16px;padding:8px 16px}
+.btn svg,.tv-sel svg,.t2-chip svg,.t2-switch svg,.seg button svg{width:14px;height:14px;flex:none}
+.tv-sel,.t2-chip,.seg button,#unsortedBadge,#markBadge{line-height:14px}
+.tv-sel{padding:4px 8px}
+.seg button{padding:4px 8px}
+.dp-seg button,.tv-seg button{padding:4px 8px}
+#unsortedBadge,#markBadge{padding:4px 8px;font-size:11px}
+#markBadge .mb-ic svg{width:14px;height:14px}
+#topbar.statusbar #unsortedBadge,#topbar.statusbar #markBadge{height:auto;padding:4px 8px;border-radius:6px}
+.hero-change{padding:4px 8px}
+.t2-switch{height:auto;padding:4px 8px;gap:8px;border-radius:6px}
+/* ghost secondary actions */
+.tv-sel:not(.on),.t2-switch:not(.on),#unsortedBadge,#markBadge:not(.on),.seg button:not(.on):not(.cur){background:transparent;border-color:transparent;box-shadow:none}
+.tv-sel:not(.on):hover,.t2-switch:not(.on):hover,#unsortedBadge:hover,#markBadge:not(.on):hover,.seg button:not(.on):not(.cur):hover{background:var(--hover);border-color:transparent}
+.seg{border-color:transparent}
+.tvbar .tv-sel:not(.on){background:transparent}
+/* sidebar utility icon row */
+.sb-foot{flex-direction:row;justify-content:space-between;gap:4px;padding:8px}
+.sb-foot .sb-item{width:auto;flex:1;justify-content:center;padding:8px 0;color:var(--muted)}
+.sb-foot .sb-item:hover{color:var(--text)}
+.sb-foot .sb-lab{display:none}
+.sb-rail .sb-foot{flex-direction:column}
+@media(max-width:700px){.sb-foot .sb-item{padding:12px 0}}
+/* v3.7 leftovers */
+.ib svg,.t2-sic svg{width:20px;height:20px}
+.sb-collapse svg{width:16px;height:16px}
+.t2-pic svg,.fv-bic svg{width:16px;height:16px}
+.tr-chev svg,.fd-add svg,.fd-more svg,.tr-star svg,.nv-imp svg{width:14px;height:14px}
+.t2-date{padding:4px 8px;line-height:14px}
+.sb-hbtn{padding:4px 8px}
+.bb-row{padding:4px 8px}
+.sb-foot .sb-item{padding:8px}
+.seg button,.btn,.tv-sel,.t2-chip{white-space:nowrap}
 </style>
 </head>
 <body class="app-root">
