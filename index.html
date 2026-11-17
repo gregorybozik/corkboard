@@ -2865,11 +2865,57 @@ input:focus-visible,textarea:focus-visible{outline:none;box-shadow:0 0 0 3px col
 .ws-t{display:flex;flex-direction:column;min-width:0;flex:1;line-height:1.2}.ws-t b{font-size:13px;font-weight:600}.ws-t i{font-size:11px;color:var(--muted);font-style:normal}
 .ws-ch{color:var(--muted)}
 #btnSettings,#btnView,#btnExport,#btnHelp{position:fixed;left:16px;bottom:44px;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden}
-.sb-logo{display:none}
 .app-root:not(.classic) .t2-stat{--kc:var(--muted)!important}
 .app-root:not(.classic) .t2-stat.on{--kc:var(--sel)!important}
 .app-root:not(.classic) .btn.primary{background:var(--sel);border-color:var(--sel)}
 .app-root:not(.classic) .btn.primary:hover{background:var(--selh);border-color:var(--selh)}
+
+/* ===== v4.3: navigation ===== */
+/* 1 brand vs nav */
+.sb-head{border-bottom:1px solid var(--line);height:52px;gap:10px;padding:0 10px 0 14px}
+.sb-logo{display:grid!important;width:28px;height:28px;border-radius:8px;font-size:15px;font-weight:800;background:var(--sel);color:#fff;place-items:center;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.sb-name{font-size:16px;font-weight:800;letter-spacing:-.01em;color:var(--text)}
+.sb-rail .sb-head{border-bottom:0}
+/* 2 active */
+.sb-item.on,.sb-item[aria-current="page"]{font-weight:700;background:color-mix(in srgb,var(--sel) 16%,transparent);box-shadow:inset 3px 0 0 var(--sel)}
+.sb-item.on .sb-ic{color:var(--sel)}
+#tabbar .tab.cur,#tabbar .tab[aria-selected="true"]{color:var(--text);font-weight:700}
+.crumb[aria-current="page"]{font-weight:700;color:var(--text)}
+/* 3 home */
+.sb-home .sb-ic{color:var(--muted)}
+/* 4 primary vs secondary */
+.sb-util{margin:6px 8px 4px;padding:8px 0 0;border-top:1px solid var(--line);gap:6px}
+.sb-util .sb-new{border:1px solid var(--line);background:transparent;font-weight:500;color:var(--muted);justify-content:flex-start}
+.sb-util .sb-new:hover{color:var(--text);background:var(--hover)}
+.sb-foot{flex-direction:column!important;gap:2px!important}
+#tbTrash{width:100%!important;height:auto!important;justify-content:flex-start;gap:10px;color:var(--muted);font-weight:500}
+#tbTrash:hover{color:var(--text)}
+.sb-rail #tbTrash .sb-lab{display:none}
+/* 5 menu hierarchy */
+.menu .mi{font-weight:500}
+.menu .mi .kbd{opacity:.65;font-weight:400}
+.menu-info{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;padding:10px 10px 4px}
+.menu.menu-nav .mi{padding-left:14px;font-size:13px}
+.menu.sub .mi{font-weight:400;font-size:12.5px}
+/* 6 hover */
+.crumb:hover{background:var(--hover);color:var(--text)}
+.sb-item,.crumb,.tab,#tbTrash,.ws-card{transition:background-color .12s,color .12s}
+/* 10 focus: global fallback so no control loses its ring */
+button:focus-visible,[role="tab"]:focus-visible,[role="link"]:focus-visible,[role="button"]:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible,.crumb:focus-visible,.ws-card:focus-visible{outline:2px solid var(--sel)!important;outline-offset:2px!important;border-radius:6px}
+#tabbar .tab:focus-visible{outline-offset:-2px!important}
+/* 11 touch targets */
+@media (pointer:coarse),(max-width:760px){
+  .sb-item,.ws-card,#tbTrash{min-height:44px}
+  .sb-item{margin-bottom:2px}
+  .sb-head .ib,#btnSide,#topbar .ib{min-width:44px;min-height:44px}
+  #tabbar .tab{min-height:44px}
+  #tabbar .tab-x{width:44px!important;height:44px!important;margin-top:-22px!important;display:grid;place-items:center}
+  .crumb{min-height:44px;padding:4px 8px}
+  .menu .mi{min-height:44px}
+  .sb-collapse{min-width:44px;min-height:44px}
+}
+.sb-foot #tbTrash .sb-lab{display:inline!important}.sb-foot #tbTrash{padding:0 10px}
+.app-root.dark:not(.classic) .sb-logo,.app-root.dark:not(.classic) .ws-av,.app-root.dark:not(.classic) .btn.primary{color:#08201a}
 </style>
 </head>
 <body class="app-root">
@@ -11872,6 +11918,53 @@ function buildWsCard() {
 
 /* ---- progress bar only where completion is meaningful ---- */
 { const _dh2 = dbHead; dbHead = function (ctx) { const el = _dh2(ctx); const t = ctx.view.type; if (t === 'workload' || t === 'form' || t === 'calendar' || t === 'timeline' || t === 'gallery') el.querySelectorAll('.dbv-head .pbar, .pbar').forEach(x => { if (x.title && /of \d+ done/.test(x.title)) x.remove(); }); return el; }; }
+
+/* ========== v4.3: navigation polish — brand, Home, grouping, keyboard, active states ========== */
+function goHome() { try { closePageView(); closeDashes(); } catch (_) { } openBoard(ST.rootId); scheduleSidebar && scheduleSidebar(); if (isMobileSb()) toggleSidebar(false); }
+function onHomeNow() { return !$('.tasksview') && !$('.dashview') && !$('.pv-wrap') && S.boardId === ST.rootId; }
+
+{ const _rs = renderSidebar; renderSidebar = function () {
+  _rs.apply(this, arguments);
+  const dyn = $('#sbDyn'); if (!dyn || $('#sbHome')) return;
+  const secs = [...dyn.querySelectorAll(':scope > .sb-sec')], dashSec = secs.find(s => s.querySelector('.sb-h')?.textContent === 'Dashboards');
+  const home = h('button', { id: 'sbHome', class: 'sb-item sb-home' + (onHomeNow() ? ' on' : ''), title: 'Home — your root board', 'aria-current': onHomeNow() ? 'page' : null, onclick: goHome }, h('span', { class: 'sb-ic', html: ICON.home || '' }), h('span', { class: 'sb-lab' }, 'Home'));
+  if (!ICON.home) { home.firstChild.replaceChildren(lineIcon('home')); }
+  const top = dyn.querySelector('.sb-top');
+  // primary block: Home + dashboards come first; utilities (New page, search) move below them with a divider
+  if (dashSec) { dashSec.querySelector('.sb-h').textContent = 'Navigate'; dashSec.querySelector('.sb-h').after(home); dashSec.classList.add('sb-primary'); if (top) { top.classList.add('sb-util'); dashSec.after(top); } }
+  dyn.querySelectorAll('.sb-item.on').forEach(b => b.setAttribute('aria-current', 'page'));
+}; }
+
+/* trash gets a label; footer = card on top, trash below */
+function labelTrash() { const t = $('#tbTrash'); if (!t || t.querySelector('.sb-lab')) return; t.append(h('span', { class: 'sb-lab' }, 'Trash')); }
+{ const _rs2 = renderSidebar; renderSidebar = function () { _rs2.apply(this, arguments); labelTrash(); }; }
+
+/* workspace menu: headings + quieter rows */
+{ const _bw = buildWsCard; buildWsCard = function () { _bw(); const c = $('#wsCard'); if (!c || c._v43) return; c._v43 = 1; const old = c.onclick;
+  c.onclick = () => { const r = c.getBoundingClientRect(); showMenu(r.left, r.top - 4, [
+    { info: 'Workspace' }, { label: 'Settings', fn: () => $('#btnSettings').click() }, { label: 'Export this board', fn: () => $('#btnExport').click() },
+    '-', { info: 'View' }, { label: 'View, zoom and present', fn: () => $('#btnView').click() }, { label: (ST.settings.classic ? 'Use calm colors' : 'Use classic colors'), fn: () => { ST.settings.classic = !ST.settings.classic; save(); applyCalm(); } },
+    '-', { info: 'Help' }, { label: 'Keyboard shortcuts', fn: () => $('#btnHelp').click() }]);
+    const m = [...document.querySelectorAll('.menu')].pop(); if (m) { m.classList.add('menu-nav'); const mr = m.getBoundingClientRect(); m.style.top = Math.max(8, r.top - mr.height - 6) + 'px'; } }; }; }
+
+/* ---- keyboard: tabs and breadcrumbs ---- */
+function kbdTabs() {
+  const tabs = [...document.querySelectorAll('#tabbar .tab')]; if (!tabs.length) return; const bar = $('#tabbar'); bar.setAttribute('role', 'tablist'); bar.setAttribute('aria-label', 'Open boards');
+  tabs.forEach(t => { const cur = t.classList.contains('cur'); t.setAttribute('role', 'tab'); t.setAttribute('aria-selected', cur ? 'true' : 'false'); t.tabIndex = cur ? 0 : -1;
+    if (!t._k) { t._k = 1; t.addEventListener('keydown', e => { if (e.target !== t) return; const all = [...document.querySelectorAll('#tabbar .tab')], i = all.indexOf(t);
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); t.click(); setTimeout(() => $('#tabbar .tab.cur')?.focus(), 30); }
+      else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); const n = all[(i + (e.key === 'ArrowRight' ? 1 : all.length - 1)) % all.length]; n.tabIndex = 0; n.focus(); }
+      else if (e.key === 'Home') { e.preventDefault(); all[0].focus(); } else if (e.key === 'End') { e.preventDefault(); all[all.length - 1].focus(); }
+      else if ((e.key === 'Delete' || e.key === 'Backspace') && t.querySelector('.tab-x')) { e.preventDefault(); t.querySelector('.tab-x').click(); } }); } });
+}
+function kbdCrumbs() {
+  const cs = [...document.querySelectorAll('#crumbs .crumb')]; $('#crumbs')?.setAttribute('aria-label', 'Breadcrumb');
+  cs.forEach((c, i) => { c.setAttribute('role', 'link'); c.tabIndex = 0; if (i === cs.length - 1) c.setAttribute('aria-current', 'page'); if (!c._k) { c._k = 1; c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); c.click(); } }); } });
+}
+{ const _rt = renderTabs; renderTabs = function () { _rt.apply(this, arguments); kbdTabs(); }; }
+{ const _rc = renderCrumbs; renderCrumbs = function () { _rc.apply(this, arguments); kbdCrumbs(); }; }
+document.addEventListener('DOMContentLoaded', () => { kbdTabs(); kbdCrumbs(); });
+{ const mo = new MutationObserver(() => { clearTimeout(mo._t); mo._t = setTimeout(() => { kbdTabs(); kbdCrumbs(); }, 60); }); const go = () => { const a = $('#tabbar'), b = $('#crumbs'); a && mo.observe(a, { childList: true }); b && mo.observe(b, { childList: true }); }; if (document.body) go(); else document.addEventListener('DOMContentLoaded', go); }
 
 /* ========== events + init ========== */
 function migrate() {
