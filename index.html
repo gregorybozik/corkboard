@@ -2937,30 +2937,30 @@ button:focus-visible,[role="tab"]:focus-visible,[role="link"]:focus-visible,[rol
 .embed-msg{color:var(--muted)}.embed-msg.err{color:#c0392b}
 @media (pointer:coarse){.embed-bar,.yt-open{opacity:1}}
 
-/* ===== v4.5 brand guidelines: Corkboard Orange #F97316 · Hover #EA580C · Soft #FFF0E5 · Charcoal #202124 · Slate #64748B · Canvas #F8FAFC · Inter ===== */
+/* ===== v4.5 brand guidelines: Corkboard Orange var(--sel) · Hover var(--selh) · Soft #FFF0E5 · Charcoal #202124 · Slate #64748B · Canvas #F8FAFC · Inter ===== */
 .app-root{--sans:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
   --fs-display:48px;--fs-page:32px;--fs-section:24px;--fs-card:18px;--fs-body:16px;--fs-meta:13px;font-feature-settings:"cv11","ss03"}
-.app-root:not(.classic){--sel:#F97316;--selh:#EA580C;--accent:#F97316;--link:#C2410C;--soft:#FFF0E5}
+.app-root:not(.classic){--sel:#64748B;--selh:#566579;--accent:#64748B;--link:#475569;--soft:rgba(100,116,139,.12);--on-sel:#fff}
 .app-root:not(.classic):not(.dark){--canvas:#F8FAFC;--tb:#F8FAFC;--dot:#cbd5e1;--text:#202124;--muted:#566579;--line:#e2e8f0;--bar:#ffffff}
-.app-root.dark:not(.classic){--sel:#F97316;--selh:#FB923C;--accent:#F97316;--link:#FDBA74;--soft:rgba(249,115,22,.16)}
-.app-root:not(.classic) .btn.primary,.app-root.dark:not(.classic) .btn.primary{background:#F97316;border-color:#F97316;color:#fff;font-weight:600;border-radius:8px}
-.app-root:not(.classic) .btn.primary:hover{background:#EA580C;border-color:#EA580C}
+.app-root.dark:not(.classic){--sel:#64748B;--selh:#7c8ba1;--accent:#64748B;--link:#94a3b8;--soft:rgba(100,116,139,.22);--on-sel:#fff}
+.app-root:not(.classic) .btn.primary,.app-root.dark:not(.classic) .btn.primary{background:var(--sel);border-color:var(--sel);color:var(--on-sel);font-weight:600;border-radius:8px}
+.app-root:not(.classic) .btn.primary:hover{background:var(--selh);border-color:var(--selh)}
 .app-root:not(.classic) .btn:not(.primary){border-radius:8px}
-.app-root:not(.classic) .sb-item.on,.app-root:not(.classic) .sb-item[aria-current="page"]{background:var(--soft);color:#C2410C;box-shadow:inset 3px 0 0 #F97316}
-.app-root.dark:not(.classic) .sb-item.on,.app-root.dark:not(.classic) .sb-item[aria-current="page"]{color:#FDBA74}
-.app-root:not(.classic) .sb-item.on .sb-ic{color:#F97316}
+.app-root:not(.classic) .sb-item.on,.app-root:not(.classic) .sb-item[aria-current="page"]{background:var(--soft);color:var(--link);box-shadow:inset 3px 0 0 var(--sel)}
+.app-root.dark:not(.classic) .sb-item.on,.app-root.dark:not(.classic) .sb-item[aria-current="page"]{color:var(--link)}
+.app-root:not(.classic) .sb-item.on .sb-ic{color:var(--sel)}
 /* logo tile + wordmark */
-.sb-logo,.app-root.dark:not(.classic) .sb-logo,.app-root.dark:not(.classic) .ws-av{background:#F97316!important;color:#fff!important}
+.sb-logo,.app-root.dark:not(.classic) .sb-logo,.app-root.dark:not(.classic) .ws-av{background:var(--sel)!important;color:var(--on-sel)!important}
 .sb-logo{width:30px;height:30px;border-radius:9px;font-size:19px;box-shadow:none}
 .sb-logo svg{width:19px;height:19px;display:block}
 .sb-name{font-size:17px;font-weight:700;letter-spacing:-.02em}
-.ws-av{background:#F97316;color:#fff}
+.ws-av{background:var(--sel);color:#fff}
 .app-root.dark:not(.classic) .ws-av{color:#fff!important}
 /* tags / option pills in brand pastel family */
 .app-root:not(.classic) .opt{filter:saturate(.85)}
-.app-root:not(.classic) :focus-visible{outline-color:#F97316}
-button:focus-visible,[role="tab"]:focus-visible,[role="link"]:focus-visible,[role="button"]:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible,.crumb:focus-visible,.ws-card:focus-visible{outline-color:#F97316!important}
-.ws-av,.app-root.dark:not(.classic) .ws-av{color:#202124!important}
+.app-root:not(.classic) :focus-visible{outline-color:var(--sel)}
+button:focus-visible,[role="tab"]:focus-visible,[role="link"]:focus-visible,[role="button"]:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible,.crumb:focus-visible,.ws-card:focus-visible{outline-color:var(--sel)!important}
+.ws-av,.app-root.dark:not(.classic) .ws-av{color:var(--on-sel)!important}
 
 /* v4.5: click-shield over video/embed iframes */
 .video-wrap,.embed-wrap{position:relative}
@@ -2969,13 +2969,35 @@ button:focus-visible,[role="tab"]:focus-visible,[role="link"]:focus-visible,[rol
 .card.selected .if-shield:hover::after{opacity:1}
 .card:not(.selected) .if-shield:hover::after{content:"Click to select · drag to move";opacity:1}
 .if-grip{position:absolute;left:0;right:0;top:0;height:26px;z-index:4;display:none;align-items:center;justify-content:space-between;padding:0 8px;background:linear-gradient(to bottom,rgba(0,0,0,.7),rgba(0,0,0,.35));color:#fff;font-size:11px;cursor:grab}
-.if-done{pointer-events:auto;border:0;border-radius:999px;background:#F97316;color:#fff;font-size:11px;font-weight:600;padding:3px 10px;cursor:pointer}
+.if-done{pointer-events:auto;border:0;border-radius:999px;background:var(--sel);color:#fff;font-size:11px;font-weight:600;padding:3px 10px;cursor:pointer}
 .card.emb-live .if-shield{display:none}
 .card.emb-live .if-grip{display:flex}
 .card.emb-live .embed-bar{display:none}
 .embed-conv{border:0;cursor:pointer}
 @media (pointer:coarse){.if-shield::after{display:none}}
 .embed-bar{z-index:5}.yt-open{z-index:5!important}
+
+/* ===== v4.6 ===== */
+.acc-ctl{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.acc-sw{width:24px;height:24px;border-radius:50%;border:2px solid transparent;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,.2) inset}
+.acc-sw.on{border-color:var(--text);outline:2px solid var(--card);outline-offset:-4px}
+.acc-pick{width:30px;height:26px;border:1px solid var(--line);border-radius:6px;padding:0;background:transparent;cursor:pointer}
+.sb-view{display:flex;align-items:center;gap:2px;padding:4px 6px 6px;border-top:1px solid var(--line);margin-top:4px}
+.sbv-b,.sbv-pct,.sbv-fit{border:0;background:transparent;color:var(--muted);height:28px;border-radius:6px;cursor:pointer;font:inherit;font-size:12px;display:grid;place-items:center}
+.sbv-b{width:28px}.sbv-b svg{width:15px;height:15px}
+.sbv-pct{flex:1;min-width:44px;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums}
+.sbv-fit{padding:0 8px}
+.sbv-b:hover,.sbv-pct:hover,.sbv-fit:hover{background:var(--hover);color:var(--text)}
+.sb-rail .sb-view{flex-direction:column;border-top:0;padding:2px}.sb-rail .sbv-pct,.sb-rail .sbv-fit{display:none}
+@media (pointer:coarse),(max-width:760px){.sbv-b,.sbv-pct,.sbv-fit{min-height:44px;min-width:44px}}
+/* collapse toggle stays at the top in both states */
+.sb-rail #btnSideClose{display:grid!important;order:-1}
+.sb-rail:not(.sb-mobile) #btnSide{display:none!important}
+/* contain video/embed chrome so it can never paint over neighbouring cards */
+.video-card,.video-wrap,.embed-wrap{isolation:isolate}
+.video-wrap,.embed-wrap{overflow:hidden}
+body.editing-other .if-shield::after,body.editing-other .yt-open,body.editing-other .embed-bar{display:none!important}
+.card:not(.selected) .if-grip{display:none}
 </style>
 </head>
 <body class="app-root">
@@ -4718,7 +4740,7 @@ function openSettings() {
 }
 async function resetAll() { closeTransient(); for (const id of Object.keys(Blobs.mem)) await Blobs.remove(id); ST = defaultState(); S.hist = []; S.fut = []; S.boardId = ST.rootId; S.sel.clear(); flushSave(); renderAll(); toast('All data erased'); }
 function openHelp() {
-  const rows = [['Undo / Redo', `${MOD} Z / ${MOD} Shift Z`], ['Select all', `${MOD} A`], ['Copy / Cut / Paste', `${MOD} C / X / V`], ['Duplicate', `${MOD} D`], ['Delete selected', 'Delete'], ['Edit selected card', 'Enter'], ['Stop editing / deselect', 'Esc'], ['Nudge (10px with Shift)', 'Arrow keys'], ['Pan', 'Scroll, Space + drag, or middle-drag'], ['Zoom', `${MOD} + scroll, pinch, ${MOD} + / −`], ['Zoom to 100%', `${MOD} 0`], ['Scale to fit', 'Shift 1'], ['Search', `${MOD} F`], ['New note', 'Double-click the canvas'], ['Multi-select', 'Shift-click or drag a box'], ['Context menu', 'Right-click (long-press on touch)']];
+  const rows = [['New note', `${MOD} N (if your browser allows it) / Alt N / N`], ['Undo / Redo', `${MOD} Z / ${MOD} Shift Z`], ['Select all', `${MOD} A`], ['Copy / Cut / Paste', `${MOD} C / X / V`], ['Duplicate', `${MOD} D`], ['Delete selected', 'Delete'], ['Edit selected card', 'Enter'], ['Stop editing / deselect', 'Esc'], ['Nudge (10px with Shift)', 'Arrow keys'], ['Pan', 'Scroll, Space + drag, or middle-drag'], ['Zoom', `${MOD} + scroll, pinch, ${MOD} + / −`], ['Zoom to 100%', `${MOD} 0`], ['Scale to fit', 'Shift 1'], ['Search', `${MOD} F`], ['New note', 'Double-click the canvas'], ['Multi-select', 'Shift-click or drag a box'], ['Context menu', 'Right-click (long-press on touch)']];
   modal([h('h3', null, 'Keyboard shortcuts'), h('div', { class: 'kb' }, rows.flatMap(([a, b]) => [h('div', null, a), h('div', null, b.split(' / ').map((k, i) => [i ? ' / ' : '', h('kbd', null, k)]))]))]);
 }
 function modal(content) { const bg = h('div', { class: 'modal-bg' }); bg.addEventListener('pointerdown', e => { if (e.target === bg) (bg.closeOverlay ? bg.closeOverlay() : bg.remove()); }); bg.append(h('div', { class: 'modal' }, content)); document.body.append(bg); return bg; }
@@ -8837,6 +8859,7 @@ function openSettings() {
     General: () => [
       row('Your name', name),
       row('Theme', seg([['0', 'Light'], ['1', 'Dark']], st.dark ? '1' : '0', v => { st.dark = v === '1'; save(); applyTheme(); renderLines(); })),
+      row('Accent color', accentCtl(), 'Buttons, active items and highlights'),
       row('Text size', seg([['s', 'Small'], ['m', 'Medium'], ['l', 'Large']], st.fs || 'm', v => { st.fs = v; save(); applyPrefs(); renderBoard(); }), 'Cards and pages'),
       tgl('Transparent notes', 'New and uncolored notes match the theme instead of a solid fill', st.noteTint !== false, v => { st.noteTint = v; save(); applyPrefs(); }),
       tgl('Open boards and pages in a new tab', 'Double-click a board, or click a page, to open it in a new tab (Cmd/Ctrl+click always does)', st.openInTab === true, v => { st.openInTab = v; save(); }),
@@ -12005,7 +12028,7 @@ function labelTrash() { const t = $('#tbTrash'); if (!t || t.querySelector('.sb-
 { const _bw = buildWsCard; buildWsCard = function () { _bw(); const c = $('#wsCard'); if (!c || c._v43) return; c._v43 = 1; const old = c.onclick;
   c.onclick = () => { const r = c.getBoundingClientRect(); showMenu(r.left, r.top - 4, [
     { info: 'Workspace' }, { label: 'Settings', fn: () => $('#btnSettings').click() }, { label: 'Export this board', fn: () => $('#btnExport').click() },
-    '-', { info: 'View' }, { label: 'View, zoom and present', fn: () => $('#btnView').click() }, { label: (ST.settings.classic ? 'Use calm colors' : 'Use classic colors'), fn: () => { ST.settings.classic = !ST.settings.classic; save(); applyCalm(); } },
+    '-', { info: 'Appearance' }, { label: (ST.settings.classic ? 'Use calm colors' : 'Use classic colors'), fn: () => { ST.settings.classic = !ST.settings.classic; save(); applyCalm(); } },
     '-', { info: 'Help' }, { label: 'Keyboard shortcuts', fn: () => $('#btnHelp').click() }]);
     const m = [...document.querySelectorAll('.menu')].pop(); if (m) { m.classList.add('menu-nav'); const mr = m.getBoundingClientRect(); m.style.top = Math.max(8, r.top - mr.height - 6) + 'px'; } }; }; }
 
@@ -12091,7 +12114,7 @@ RENDER.embed = function (c) {
     const sep = [...m.querySelectorAll('.sep')].pop(); (sep || m.lastChild).before(row); const mr = m.getBoundingClientRect(), r = c.getBoundingClientRect(); m.style.top = Math.max(8, r.top - mr.height - 6) + 'px'; }; }; }
 
 /* ========== v4.5 brand: logo mark, wordmark, Inter ========== */
-const BRAND_PIN = '<svg viewBox="0 0 64 64" width="1em" height="1em" aria-hidden="true"><g transform="rotate(45 32 32) translate(8 8) scale(2)" fill="#fff" stroke="#fff" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></g></svg>';
+const BRAND_PIN = '<svg viewBox="0 0 64 64" width="1em" height="1em" aria-hidden="true"><g transform="rotate(45 32 32) translate(8 8) scale(2)" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></g></svg>';
 function brandLogo() { const l = $('#sbLogo'); if (l && !l.dataset.brand) { l.dataset.brand = '1'; l.innerHTML = BRAND_PIN; l.setAttribute('aria-label', 'Corkboard'); } }
 { const _rs = renderSidebar; renderSidebar = function () { _rs.apply(this, arguments); brandLogo(); }; }
 if (document.readyState !== 'loading') brandLogo(); else document.addEventListener('DOMContentLoaded', brandLogo);
@@ -12118,6 +12141,72 @@ function shieldWrap(wrap) {
   document.addEventListener('pointerup', e => { if (!pd) return; const { card, was, x, y } = pd; pd = null; if (Math.hypot(e.clientX - x, e.clientY - y) < 5 && was) card.classList.add('emb-live'); }, true);
   document.addEventListener('dblclick', e => { const sh = e.target.closest && e.target.closest('.if-shield'); if (sh) { e.stopPropagation(); sh.closest('.card').classList.add('emb-live'); } }, true);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.card.emb-live').forEach(c => c.classList.remove('emb-live')); }, true); }
+
+/* ========== v4.6: custom accent (default Slate), footer view/zoom bar, top collapse toggle, new-note shortcut ========== */
+/* ---- accent ---- */
+const ACCENT_DEFAULT = '#64748B', ACCENT_PRESETS = [['Slate', '#64748B'], ['Charcoal', '#374151'], ['Orange', '#F97316'], ['Blue', '#3B82F6'], ['Green', '#16A34A'], ['Purple', '#8B5CF6']];
+const _hx = hex => { hex = (hex || '').replace('#', ''); if (hex.length === 3) hex = hex.split('').map(c => c + c).join(''); const n = parseInt(hex, 16); return isNaN(n) || hex.length !== 6 ? null : [n >> 16 & 255, n >> 8 & 255, n & 255]; };
+const _toHex = c => '#' + c.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+const _lum = c => { const [r, g, b] = c.map(v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * r + .7152 * g + .0722 * b; };
+const _cr = (a, b) => { const x = _lum(a), y = _lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); };
+const _mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+function accentVars(hex, dark) {
+  const c = _hx(hex) || _hx(ACCENT_DEFAULT), bg = dark ? [32, 33, 36] : [255, 255, 255]; let link = c, n = 0;
+  while (_cr(link, bg) < 6 && n++ < 30) link = _mix(link, dark ? [255, 255, 255] : [0, 0, 0], .08);
+  const on = _cr([255, 255, 255], c) >= _cr([32, 33, 36], c) ? '#ffffff' : '#202124';
+  return { '--sel': _toHex(c), '--accent': _toHex(c), '--selh': _toHex(_mix(c, dark ? [255, 255, 255] : [0, 0, 0], .14)), '--link': _toHex(link), '--soft': `rgba(${c.map(Math.round).join(',')},${dark ? .22 : .12})`, '--on-sel': on };
+}
+function applyAccent() {
+  const b = document.body, st = ST.settings; if (!b) return;
+  const vars = accentVars(st.accent || ACCENT_DEFAULT, b.classList.contains('dark'));
+  Object.keys(vars).forEach(k => st.classic ? b.style.removeProperty(k) : b.style.setProperty(k, vars[k]));
+}
+{ const _at2 = applyTheme; applyTheme = function () { _at2(); applyAccent(); }; }
+function accentCtl() {
+  const cur = () => (ST.settings.accent || ACCENT_DEFAULT).toLowerCase();
+  const wrap = h('div', { class: 'acc-ctl' }); const picker = h('input', { type: 'color', class: 'acc-pick', value: cur(), title: 'Choose any color' });
+  const paint = () => { wrap.querySelectorAll('.acc-sw').forEach(b => b.classList.toggle('on', b.dataset.c.toLowerCase() === cur())); picker.value = cur(); };
+  const set = hex => { ST.settings.accent = hex; save(); applyAccent(); paint(); };
+  ACCENT_PRESETS.forEach(([n, c]) => wrap.append(h('button', { class: 'acc-sw', 'data-c': c, title: n + (c === ACCENT_DEFAULT ? ' (default)' : ''), style: { background: c }, onclick: () => set(c) })));
+  picker.addEventListener('input', () => set(picker.value)); wrap.append(picker, h('button', { class: 'btn', style: { marginLeft: '6px' }, onclick: () => set(ACCENT_DEFAULT) }, 'Reset')); paint(); return wrap;
+}
+
+/* ---- footer view/zoom bar ---- */
+function updSbZoom() { const p = $('#sbZoomPct'); if (p) p.textContent = Math.round(view().z * 100) + '%'; }
+function buildViewBar() {
+  const foot = $('.sb-foot'); if (!foot || $('#sbView')) return;
+  const b = (ic, title, fn, id) => h('button', { class: 'sbv-b', id: id || null, title, 'aria-label': title, onclick: fn }, lineIcon(ic) || '');
+  foot.append(h('div', { id: 'sbView', class: 'sb-view' },
+    h('button', { class: 'sbv-b', title: 'Zoom out (' + MOD + ' −)', 'aria-label': 'Zoom out', onclick: () => zoomBy(1 / 1.2), html: ICON.minus }),
+    h('button', { id: 'sbZoomPct', class: 'sbv-pct', title: 'Reset to 100% (' + MOD + ' 0)', onclick: () => setZoom(1) }, Math.round(view().z * 100) + '%'),
+    h('button', { class: 'sbv-b', title: 'Zoom in (' + MOD + ' +)', 'aria-label': 'Zoom in', onclick: () => zoomBy(1.2), html: ICON.plus }),
+    h('button', { class: 'sbv-fit', title: 'Scale to fit (Shift 1)', onclick: fitView }, 'Fit'),
+    h('button', { class: 'sbv-b', title: 'View options and presentation mode', 'aria-label': 'View options', onclick: () => $('#btnView').click(), html: ICON.eye })));
+  updSbZoom();
+}
+{ const _rs = renderSidebar; renderSidebar = function () { _rs.apply(this, arguments); buildViewBar(); const t = $('#btnSideClose'); if (t) t.title = (document.body.classList.contains('sb-rail') ? 'Expand sidebar' : 'Collapse sidebar') + ' (' + MOD + ' \\)'; }; }
+{ const _av = applyView; applyView = function () { _av.apply(this, arguments); updSbZoom(); }; }
+
+/* ---- new note: Cmd/Ctrl+N (where the browser lets the page have it), Alt/Option+N, or N ---- */
+let _lastPt = null;
+document.addEventListener('pointermove', e => { const vp = $('#viewport'); if (vp && vp.contains(e.target)) _lastPt = { x: e.clientX, y: e.clientY }; }, true);
+function newNoteHere() {
+  const vp = $('#viewport'); if (!vp) return; const r = vp.getBoundingClientRect(), p = _lastPt || { x: r.left + r.width / 2 - 100, y: r.top + r.height / 2 - 40 }, w = toWorld(p.x, p.y);
+  checkpoint(); const c = newCard('note', Math.round(w.x), Math.round(w.y), { html: '' }); S.sel = new Set([c.id]); S.selLine = null; save(); renderBoard(); focusEdit(c.id, 'data.html');
+}
+document.addEventListener('keydown', e => {
+  const mod = e.metaKey || e.ctrlKey, k = (e.key || '').toLowerCase(), isN = e.code === 'KeyN' || k === 'n';
+  if (!isN || e.shiftKey || e.repeat) return;
+  const combo = (mod && !e.altKey) || (e.altKey && !mod) || (!mod && !e.altKey);
+  if (!combo) return;
+  const plain = !mod && !e.altKey;
+  if (plain && (isTypingTarget(e.target) || S.editing)) return;           // a bare N must never fire while typing
+  if ($('.modal-bg,.tasksview,.dashview,.dbfull,.pv-wrap,.menu,.pop,.dd')) return;
+  e.preventDefault(); e.stopPropagation(); newNoteHere();
+}, true);
+
+/* ---- video/embed cards: no overlay chrome while another card is being worked on ---- */
+document.addEventListener('pointerdown', e => { const card = e.target.closest && e.target.closest('.card'); document.body.classList.toggle('editing-other', !!card && !card.querySelector(':scope .video-wrap, :scope .embed-wrap')); }, true);
 
 /* ========== events + init ========== */
 function migrate() {
