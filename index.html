@@ -2653,6 +2653,41 @@ body.ptr-busy .grp-outline{display:none}
 .bb-row{padding:4px 8px}
 .sb-foot .sb-item{padding:8px}
 .seg button,.btn,.tv-sel,.t2-chip{white-space:nowrap}
+
+/* ===== v3.8 feedback states + micro-interactions ===== */
+#toast{background:none;padding:0;opacity:1;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;transition:none;max-width:92vw}
+.tst{display:flex;align-items:center;gap:8px;background:#26282b;color:#fff;font-size:13px;line-height:16px;padding:8px 16px;border-radius:8px;box-shadow:var(--sh-3,0 8px 24px rgba(0,0,0,.25));pointer-events:auto;opacity:0;transform:translateY(12px) scale(.98);transition:opacity .18s ease,transform .18s ease}
+.tst.in{opacity:1;transform:none}.tst.out{opacity:0;transform:translateY(6px) scale(.98)}
+.tst-ic svg{width:14px;height:14px;display:block;fill:none;stroke:currentColor;stroke-width:2}
+.t-ok .tst-ic{color:#6fd39a}.t-err{background:#4a1f22;box-shadow:inset 0 0 0 1px #8f3b40,var(--sh-3,0 8px 24px rgba(0,0,0,.25))}.t-err .tst-ic{color:#ff9a9a}
+.tst-act{margin-left:8px;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.12);color:#fff;font:inherit;font-weight:600}.tst-act:hover{background:rgba(255,255,255,.22)}
+.tst-spin,.btn.is-loading::before{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;flex:none;display:inline-block}
+/* buttons: loading, disabled, done */
+.btn.is-loading,.tv-sel.is-loading{pointer-events:none;opacity:.8;display:inline-flex;align-items:center;gap:8px}
+.btn.is-loading::before{border-color:var(--line);border-top-color:var(--sel)}
+button:disabled,.btn:disabled,.btn[disabled],[aria-disabled=true]{opacity:.45;cursor:not-allowed;pointer-events:none;box-shadow:none}
+button.is-done,.btn.is-done{color:var(--ok-ink,#1a7f4b)!important;background:var(--ok-bg,rgba(60,170,110,.15))!important;border-color:transparent!important}
+button.is-done::after{content:" ✓";font-weight:700}
+.ib.is-done::after{content:none}.ib.is-done{box-shadow:inset 0 0 0 2px var(--ok-solid,#2f9e63)}
+body.is-busy{cursor:progress}
+/* keyboard focus ring (mouse clicks stay clean) */
+button:focus-visible,.btn:focus-visible,.ib:focus-visible,.sb-item:focus-visible,.tab:focus-visible,.tool:focus-visible,[role=button]:focus-visible,a:focus-visible,select:focus-visible,.seg button:focus-visible{outline:2px solid var(--sel);outline-offset:2px;border-radius:6px}
+input:focus-visible,textarea:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--sel) 30%,transparent)}
+/* field states */
+.field-err{border-color:var(--err-solid,#d64545)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--err-solid,#d64545) 22%,transparent)}
+.field-warn{border-color:var(--warn,#d99a20)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--warn,#d99a20) 22%,transparent)}
+.field-msg{font-size:12px;line-height:16px;margin-top:4px}.field-msg.err{color:var(--err-ink,#c23b3b)}.field-msg.warn{color:var(--warn-ink,#9a6a08)}
+/* transitions */
+.modal-bg{animation:fadeIn .15s ease}.modal-bg>*{animation:popIn .18s ease}
+.menu,.pop{animation:tpIn .14s ease}
+.pv-wrap,.dashview,.dbfull{animation:fadeIn .16s ease}
+.chk{transition:background-color .15s,border-color .15s,transform .15s}.chk.on,.todo-item.done .chk{animation:chkPop .22s ease}
+.todo-item{transition:opacity .2s}.todo-item.done{opacity:.7}
+.card.just-added{animation:popIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{from{opacity:0;transform:scale(.97) translateY(4px)}to{opacity:1;transform:none}}
+@keyframes chkPop{0%{transform:scale(.8)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.tst,.modal-bg,.modal-bg>*,.menu,.pop,.pv-wrap,.dashview,.dbfull,.chk,.card.just-added{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body class="app-root">
@@ -3734,7 +3769,7 @@ function trashCards(ids, skipCp) {
     c.trashed = true; c.trashedAt = now();
   }
   S.sel.clear(); save(); renderBoard();
-  toast(`Moved ${ids.length} card${ids.length > 1 ? 's' : ''} to Trash`);
+  toast(`Moved ${ids.length} card${ids.length > 1 ? 's' : ''} to Trash`, 5000, { action: { label: 'Undo', fn: undo } });
 }
 function restoreCard(id) {
   const c = ST.cards[id]; if (!c) return; checkpoint();
@@ -5716,7 +5751,7 @@ function aiSettingsSection() {
   const has = !!aiGet(AI_KEY);
   const key = h('input', { type: 'password', class: 'ai-key', placeholder: has ? '•••••••• saved' : 'sk-ant-…', autocomplete: 'off', spellcheck: 'false' });
   const status = h('div', { class: 'dd-sub ai-status' }, has ? 'Key saved in this browser.' : 'No key saved. AI breakdown is off.');
-  const saveBtn = h('button', { class: 'btn', onclick: () => { const v = key.value.trim(); if (!v) return; if (!aiSet(AI_KEY, v)) return toast('Could not save — browser storage is blocked'); key.value = ''; key.placeholder = '•••••••• saved'; status.textContent = 'Key saved in this browser.'; toast('API key saved'); } }, 'Save key');
+  const saveBtn = h('button', { class: 'btn', onclick: () => { const v = key.value.trim(); if (!v) return fieldMsg(key, 'Paste your API key first.', 'err'); if (!/^sk-ant-/.test(v)) { fieldMsg(key, 'This does not look like an Anthropic key (it should start with sk-ant-). Saved anyway.', 'warn'); } else fieldMsg(key, ''); if (!aiSet(AI_KEY, v)) return toast('Could not save — browser storage is blocked'); key.value = ''; key.placeholder = '•••••••• saved'; status.textContent = 'Key saved in this browser.'; toast('API key saved'); } }, 'Save key');
   const rm = h('button', { class: 'btn', onclick: () => { aiSet(AI_KEY, ''); key.placeholder = 'sk-ant-…'; status.textContent = 'No key saved. AI breakdown is off.'; toast('API key removed'); } }, 'Remove');
   key.addEventListener('keydown', e => { if (e.key === 'Enter') saveBtn.click(); });
   const model = h('select', { class: 'tv-sel' }, AI_MODELS.map(([v, l]) => h('option', { value: v }, l))); model.value = aiModel();
@@ -10982,6 +11017,89 @@ function arrangePop(anchor, ids) {
   if (ai >= 0) r.splice(ai, 1, ...add); else { const i = r.indexOf('sep'); r.splice(i < 0 ? r.length - 1 : i, 0, ...add); }
   return r;
 }; }
+
+/* ========== v3.8: Production template + feedback states ========== */
+const optId = (pr, name) => (pr.options.find(o => o.name === name) || {}).id || '';
+function buildProductionBoard() {
+  closeDashes(); closePageView(); closeTransient(); $$('.modal-bg').forEach(m => m.remove());
+  checkpoint(); const nb2 = createBoardIn(S.boardId, 'Production project'); nb2.icon = '🎬';
+  const prev = S.boardId; S.boardId = nb2.id;
+  newCard('heading', 40, 30, { text: 'Production project' }).w = 700;
+  /* shot list (source database) */
+  const sc = newCard('database', 40, 110, {}); sc.w = 760; sc.h = 360;
+  const sdb = ST.dbs[sc.data.dbId]; sdb.title = 'Shot list'; sdb.icon = '🎬'; sdb.titleName = 'Description';
+  const P = (t, n, o) => dbP(t, n, o);
+  const sNum = P('text', 'Shot'), sScene = P('text', 'Scene'), sType = P('select', 'Size', ['Wide', 'Medium', 'Close-up', 'Macro', 'Drone']), sMove = P('select', 'Movement', ['Static', 'Dolly', 'Slider', 'Handheld', 'Gimbal']),
+    sLens = P('text', 'Lens'), sLoc = P('text', 'Location'), sDay = P('select', 'Day', ['Day 1', 'Day 2', 'Day 3']), sCall = P('text', 'Time'),
+    sStat = P('status', 'Status', [['Planned', 'gray', 'todo'], ['Next', 'yellow', 'prog'], ['Shot', 'green', 'done']]), sDone = P('checkbox', 'Done');
+  sdb.schema = [sNum, sScene, sType, sMove, sLens, sLoc, sDay, sCall, sStat, sDone];
+  const rows = [['Surgeon enters OR, wide establishing', '1A', '1', 'Wide', 'Dolly', '24mm', 'OR 2', 'Day 1', '8:30', 'Shot'], ['Hands on device, macro detail', '1B', '1', 'Macro', 'Static', '100mm', 'OR 2', 'Day 1', '9:15', 'Next'], ['Interview: key talking point', '2A', '2', 'Medium', 'Slider', '50mm', 'Studio', 'Day 1', '1:00', 'Planned'], ['Exterior building, drone reveal', '3A', '3', 'Drone', 'Gimbal', '24mm', 'Campus', 'Day 2', '7:00', 'Planned']];
+  for (const r of rows) { const p = newRow(sdb, { title: r[0] }); Object.assign(p.values, { [sNum.id]: r[1], [sScene.id]: r[2], [sType.id]: optId(sType, r[3]), [sMove.id]: optId(sMove, r[4]), [sLens.id]: r[5], [sLoc.id]: r[6], [sDay.id]: optId(sDay, r[7]), [sCall.id]: r[8], [sStat.id]: optId(sStat, r[9]) }); }
+  sc.data.views = [dbV('table', 'Shot list', { sorts: [{ prop: sNum.id, dir: 'asc' }] }), dbV('gallery', 'Storyboard'), dbV('board', 'By status', { groupBy: sStat.id })]; sc.data.cur = sc.data.views[0].id;
+  /* schedule: linked view of the same shots, grouped by day */
+  const sch = newCard('database', 40, 510, { dbId: sdb.id, linked: true, views: [dbV('table', 'Schedule', { groupBy: sDay.id, sorts: [{ prop: sCall.id, dir: 'asc' }], hidden: [sMove.id, sLens.id, sDone.id] })] }); sch.data.cur = sch.data.views[0].id; sch.w = 760; sch.h = 340;
+  /* crew */
+  const cc = newCard('database', 840, 330, {}); cc.w = 520; cc.h = 300;
+  const cdb = ST.dbs[cc.data.dbId]; cdb.title = 'Crew and contacts'; cdb.icon = '👥'; cdb.titleName = 'Name';
+  const cRole = P('select', 'Role', ['Director', 'DP', 'Camera op', 'Sound', 'Talent', 'Client']), cPh = P('phone', 'Phone'), cEm = P('email', 'Email'), cCall = P('text', 'Call time'), cOk = P('checkbox', 'Confirmed');
+  cdb.schema = [cRole, cPh, cEm, cCall, cOk];
+  for (const r of [['Alex Rivera', 'DP', '6:30'], ['Sam Lee', 'Sound', '7:00'], ['Dr. Patel', 'Talent', '8:00']]) { const p = newRow(cdb, { title: r[0] }); Object.assign(p.values, { [cRole.id]: optId(cRole, r[1]), [cCall.id]: r[2] }); }
+  cc.data.views = [dbV('table', 'Crew')]; cc.data.cur = cc.data.views[0].id;
+  /* call sheet + tasks + mood board */
+  newCard('note', 840, 110, { html: '<b>Call sheet</b><br>Date: Day 1 · General call 6:30 AM<br>Location: address, parking, nearest ER<br>Weather · Sunrise · Sunset<br>Notes for cast and crew<br><i>Schedule and Crew update from the tables.</i>' });
+  newCard('todo', 1400, 110, { title: 'Pre-production', showTitle: true, items: ['Scout location', 'Confirm talent and crew', 'Permits and releases', 'Gear check', 'Send call sheet'].map(t => newTask(t)) });
+  const mc = newCard('column', 1400, 330, { title: 'Mood board' }); mc.w = 300;
+  S.boardId = prev; save(); renderBoard(); openBoard(nb2.id); toast('Created “Production project”', 3200);
+}
+BOARD_TEMPLATES.splice(1, 0, { id: 'production', name: 'Production project', icon: '🎬', desc: 'Shot list, storyboard, schedule, call sheet, crew.', cards: [], build: buildProductionBoard });
+{ const _c = createBoardFromTemplate; createBoardFromTemplate = function (t) { return t && t.build ? t.build() : _c.apply(this, arguments); }; }
+
+/* ---------- toast v2: typed, stacked, optional action ---------- */
+const TOAST_ERR = /^(could not|couldn.t|can.t|cannot|failed|unable|error|no file|nothing to|browser storage|that .* no longer|import failed)/i;
+function toast(msg, ms, opts) {
+  if (typeof ms === 'object' && ms) { opts = ms; ms = undefined; } opts = opts || {};
+  const host = $('#toast'); if (!host) return null;
+  const type = opts.type || (TOAST_ERR.test(String(msg)) ? 'err' : /^(copied|saved|created|added|exported|done|deleted|moved|restored|pasted|linked|converted|backup)/i.test(String(msg)) ? 'ok' : 'info');
+  if (type === 'err' && ms == null) ms = 4200; if (ms == null) ms = 2600;
+  const ic = { ok: ICON.check, err: ICON.help, info: '' }[type] || '';
+  const el = h('div', { class: 'tst t-' + type, role: type === 'err' ? 'alert' : 'status' }, ic ? h('span', { class: 'tst-ic', html: ic }) : null, h('span', { class: 'tst-m' }, String(msg)));
+  if (opts.action) el.append(h('button', { class: 'tst-act', onclick: () => { try { opts.action.fn(); } catch (e) { } kill(); } }, opts.action.label));
+  let tm; const kill = () => { clearTimeout(tm); if (!el.isConnected) return; el.classList.add('out'); setTimeout(() => el.remove(), 180); };
+  while (host.children.length >= 3) host.firstChild.remove();
+  host.append(el); requestAnimationFrame(() => el.classList.add('in'));
+  tm = setTimeout(kill, ms); el._kill = kill;
+  return { dismiss: kill, update: m => { const s = el.querySelector('.tst-m'); if (s) s.textContent = m; }, el };
+}
+/* long-running action: persistent spinner toast, then success/error */
+async function withBusy(label, fn, doneMsg) {
+  const host = $('#toast'); const el = h('div', { class: 'tst t-busy in', role: 'status' }, h('span', { class: 'tst-spin' }), h('span', { class: 'tst-m' }, label));
+  if (host) host.append(el); document.body.classList.add('is-busy');
+  try { const r = await fn(); el.remove(); if (doneMsg) toast(doneMsg, null, { type: 'ok' }); return r; }
+  catch (e) { el.remove(); toast('Failed: ' + ((e && e.message) || 'something went wrong'), 4200, { type: 'err' }); throw e; }
+  finally { document.body.classList.remove('is-busy'); }
+}
+/* wrap async user actions so they show progress and completion */
+for (const [name, label, done] of [['exportZip', 'Building ZIP…', 'ZIP exported'], ['exportPDF', 'Preparing PDF…', null], ['exportBackup', 'Saving backup…', null]]) {
+  try { const f = (0, eval)(name); (0, eval)(`(()=>{const _o=${name};${name}=function(){const a=arguments;return withBusy(${JSON.stringify(label)},()=>_o.apply(this,a),${JSON.stringify(done)});}})()`); } catch (e) { }
+}
+{ const _af = addFiles; addFiles = async function (files) { const n = files && files.length; if (n > 1 || (n === 1 && files[0].size > 1500000)) { const a = arguments, self = this; return withBusy(`Adding ${n} file${n > 1 ? 's' : ''}…`, () => _af.apply(self, a)); } return _af.apply(this, arguments); }; }
+
+/* copy buttons flip to a check; keyboard focus ring only for keyboard */
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('button,.btn,.ib'); if (!b || b.classList.contains('is-done')) return;
+  const t = ((b.getAttribute('title') || '') + ' ' + b.textContent).trim();
+  if (/^copy/i.test(t)) { b.classList.add('is-done'); setTimeout(() => b.classList.remove('is-done'), 1500); }
+}, true);
+/* field messages: field state + helper text */
+function fieldMsg(input, msg, type) {
+  if (!input) return; const wrap = input.parentElement; const old = wrap && wrap.querySelector(':scope > .field-msg'); if (old) old.remove();
+  input.classList.remove('field-err', 'field-warn'); input.removeAttribute('aria-invalid');
+  if (!msg) return; input.classList.add(type === 'warn' ? 'field-warn' : 'field-err'); if (type !== 'warn') input.setAttribute('aria-invalid', 'true');
+  const m = h('div', { class: 'field-msg ' + (type === 'warn' ? 'warn' : 'err'), role: 'alert' }, msg); input.after(m);
+  const clear = () => { fieldMsg(input, ''); input.removeEventListener('input', clear); }; input.addEventListener('input', clear);
+}
+/* API key field: validate on save */
+{ const _ac = typeof aiKeyField !== 'undefined'; }
 
 /* ========== events + init ========== */
 function migrate() {
