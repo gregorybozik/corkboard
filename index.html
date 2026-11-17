@@ -2735,6 +2735,106 @@ input:focus-visible,textarea:focus-visible{outline:none;box-shadow:0 0 0 3px col
 #tabbar .tab:hover .tab-t,#tabbar .tab.cur .tab-t{padding-right:12px}
 #tabbar .tab{min-width:96px}.tab-grp .tab{min-width:96px}
 .tab-grp.collapsed .tab:not(.cur){display:none}
+
+/* ===== v4.0 ===== */
+.avatar{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;color:#fff;font-size:10px;font-weight:600;flex:none;vertical-align:middle}
+.avatar.sm{width:18px;height:18px;font-size:9px}
+.avatar+.avatar{margin-left:-6px;box-shadow:0 0 0 2px var(--canvas,#fff)}
+.ppl-pop{min-width:220px;padding:6px}
+.ppl-pick{display:flex;align-items:center;gap:8px;width:100%;padding:5px 8px;border:0;background:none;border-radius:6px;cursor:pointer;text-align:left;color:inherit;font:inherit}
+.ppl-pick:hover{background:var(--hover)}
+.ppl-n{flex:1;font-size:13px}
+.ppl-in{width:100%;margin-top:4px}
+.pbar{display:inline-block;width:72px;height:6px;border-radius:3px;background:var(--line);overflow:hidden;vertical-align:middle;margin:0 6px}
+.pbar>i{display:block;height:100%;background:var(--ok-solid,#2e9e5b)}
+.lockb{font-size:12px;margin-left:4px}
+.relpill.done{opacity:.55;text-decoration:line-through}
+.apv-pop,.tmr-pop{padding:10px;min-width:240px;display:flex;flex-direction:column;gap:8px}
+.apv-row{display:flex;gap:6px}
+.tmr-big{font-size:22px;font-variant-numeric:tabular-nums;font-weight:600}
+.tmr-log{max-height:120px;overflow:auto;font-size:12px;color:var(--muted)}
+.vw-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.vw-ttl{font-weight:600;margin-right:auto;font-size:13px}
+.vw-seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.vw-seg button{border:0;background:none;padding:4px 10px;cursor:pointer;font:inherit;font-size:12px;color:inherit;white-space:nowrap}
+.vw-seg button.on{background:var(--sel);font-weight:600}
+.vw-sel{font:inherit;font-size:12px;padding:3px 6px;border:1px solid var(--line);border-radius:6px;background:transparent;color:inherit}
+.vw-need{padding:32px;text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center;color:var(--muted)}
+/* timeline */
+.tl{min-width:max-content}
+.tl-canvas{position:relative}
+.tl-hd{display:flex;position:sticky;top:0;z-index:4;background:var(--canvas,#fff);border-bottom:1px solid var(--line);height:44px}
+.tl-hl{position:sticky;left:0;z-index:5;background:var(--canvas,#fff);flex:none}
+.tl-hr{position:relative;flex:none}
+.tl-mo{position:absolute;top:0;height:22px;line-height:22px;font-size:11px;font-weight:600;border-left:1px solid var(--line);padding-left:6px;overflow:hidden;white-space:nowrap}
+.tl-dy{position:absolute;top:22px;height:22px;line-height:22px;font-size:10px;color:var(--muted);border-left:1px solid var(--line);padding-left:3px;overflow:hidden;box-sizing:border-box}
+.tl-dy.we{background:var(--hover)}.tl-dy.today{color:var(--err,#d33);font-weight:700}
+.tl-body{display:flex;position:relative}
+.tl-labels{position:sticky;left:0;z-index:3;width:220px;flex:none;background:var(--canvas,#fff);border-right:1px solid var(--line)}
+.tl-lab{display:flex;align-items:center;gap:4px;padding:0 10px;box-sizing:border-box;border-bottom:1px solid var(--line);overflow:hidden;font-size:13px}
+.tl-lab.grp{background:var(--hover);font-weight:600}
+.tl-t{cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-tracks{position:relative;flex:none}
+.tl-row{position:absolute;left:0;right:0;border-bottom:1px solid var(--line);box-sizing:border-box}
+.tl-row.grp{background:var(--hover)}
+.tl-bar{position:absolute;top:5px;height:22px;border-radius:6px;display:flex;align-items:center;cursor:grab;user-select:none;touch-action:none;overflow:hidden;font-size:12px;padding:0 8px;box-sizing:border-box}
+.tl-bar.drag{cursor:grabbing;opacity:.85;z-index:3}
+.tl-bar.done{opacity:.55}
+.tl-bt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;pointer-events:none}
+.tl-h{position:absolute;top:0;bottom:0;width:8px;cursor:ew-resize}.tl-h.l{left:0}.tl-h.r{right:0}
+.tl-unsch{position:absolute;left:8px;top:7px;font-size:12px;color:var(--muted);cursor:pointer}
+.tl-today{position:absolute;top:0;bottom:0;width:2px;background:var(--err,#d33);opacity:.6;pointer-events:none;z-index:2}
+.tl-deps{position:absolute;left:0;top:0;pointer-events:none;color:var(--muted);z-index:1}
+.tl-dep{fill:none;stroke:currentColor;stroke-width:1.5}.tl-dep.bad{stroke:var(--err,#d33);color:var(--err,#d33)}
+/* calendar */
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(110px,1fr))}
+.cal-dn{padding:6px 8px;font-size:11px;color:var(--muted);border-bottom:1px solid var(--line)}
+.cal-cell{min-height:104px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:4px;display:flex;flex-direction:column;gap:3px;box-sizing:border-box}
+.cal-grid.wk .cal-cell{min-height:320px}
+.cal-cell.out{background:var(--hover);color:var(--muted)}
+.cal-cell.today .cal-d span{background:var(--err,#d33);color:#fff;border-radius:10px;padding:0 6px}
+.cal-cell.cal-over{background:var(--sel)}
+.cal-d{display:flex;justify-content:space-between;font-size:12px}
+.cal-add{border:0;background:none;cursor:pointer;opacity:0;color:var(--muted);font-size:14px;line-height:1}
+.cal-cell:hover .cal-add{opacity:1}
+.cal-pill{padding:2px 6px;border-radius:5px;font-size:12px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-pill.dragging{opacity:.4}.cal-pill.done{opacity:.55}
+.cal-more{border:0;background:none;color:var(--muted);font-size:11px;cursor:pointer;text-align:left;padding:0 4px}
+.cal-un{border-top:1px solid var(--line);padding:10px 12px}
+.cal-unh{font-size:12px;color:var(--muted);margin-bottom:6px}
+.cal-unl{display:flex;flex-wrap:wrap;gap:6px}
+/* workload */
+.wl-wrap{overflow:auto;padding:0 12px}
+.wl-t{border-collapse:collapse;width:100%;min-width:720px}
+.wl-t th,.wl-t td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:center;font-size:12px}
+.wl-t th.now{color:var(--err,#d33)}
+.wl-p{text-align:left!important;white-space:nowrap;position:sticky;left:0;background:var(--canvas,#fff)}
+.wl-who{display:flex;align-items:center;gap:8px;border:0;background:none;cursor:pointer;font:inherit;color:inherit}
+.wl-who em{font-style:normal;color:var(--muted);font-size:11px}
+.wl-b{border:0;border-radius:6px;padding:3px 10px;cursor:pointer;font:inherit;font-weight:600;color:inherit;background:transparent}
+.wl-c.ok .wl-b{background:var(--ok-bg);color:var(--ok-ink)}
+.wl-c.warn .wl-b{background:var(--warn-bg);color:var(--warn-ink)}
+.wl-c.over .wl-b{background:var(--err-bg);color:var(--err-ink)}
+.wl-note{padding:8px 12px;font-size:11px;color:var(--muted)}
+.wl-pop{padding:8px;min-width:220px}
+/* form */
+.frm{padding-bottom:24px}
+.frm-box{max-width:560px;margin:20px auto;padding:20px;border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;gap:12px}
+.frm-box h3{margin:0}.frm-box p{margin:0}
+.frm-f{display:flex;flex-direction:column;gap:4px}
+.frm-l{font-size:12px;font-weight:600}.frm-l .req{color:var(--err,#d33);font-style:normal}
+.frm-f.frm-bad{outline:2px solid var(--err,#d33);outline-offset:4px;border-radius:6px}
+.frm-dates{display:flex;gap:6px;align-items:center}
+.frm-chips{display:flex;flex-wrap:wrap;gap:6px}
+.frm-chip{cursor:pointer;opacity:.5;border:0}.frm-chip.on{opacity:1;outline:2px solid var(--sel)}
+.frm-act{display:flex;gap:8px}
+.frm-cfg{display:flex;flex-direction:column}
+.frm-row{display:grid;grid-template-columns:1fr 60px 70px;gap:8px;align-items:center;padding:4px 0;border-bottom:1px solid var(--line);font-size:13px}
+.frm-row.hd{font-size:11px;color:var(--muted)}
+.frm-ok{align-items:center;text-align:center}
+.frm-check{width:40px;height:40px;border-radius:50%;background:var(--ok-bg);color:var(--ok-ink);display:flex;align-items:center;justify-content:center}
+.frm-hint{font-size:11px}
+.tl-bar,.cal-pill{box-shadow:inset 0 0 0 1px rgba(128,128,128,.35);font-weight:500}.tl-bar:hover,.cal-pill:hover{filter:brightness(1.15)}
 </style>
 </head>
 <body class="app-root">
@@ -8039,6 +8139,7 @@ function dbExportTable(db, view) { const cols = [dbProp(db, TITLE), ...viewCols(
 const DB_TYPES = [['formula', 'Formula', 'ƒ'], ['relation', 'Relation', '↗'], ['rollup', 'Rollup', '∑']];
 const dbPropIcon = t => t === 'title' ? 'Aa' : (DB_TYPES.find(x => x[0] === t) || [0, 0, propIcon(t)])[2];
 const VIEW_IC = { table: '▤', board: '▥', gallery: '▦', list: '☰' };
+const DB_VIEWS = {};
 const rectAnchor = el => { const r = el.getBoundingClientRect(); return { getBoundingClientRect: () => r }; };
 function commitDb(db, fn, row) {
   checkpoint(); fn(); if (row) row.updatedAt = now(); db.updatedAt = now(); save(); refreshDb(db.id);
@@ -8070,7 +8171,7 @@ function dbPlaceEl(loc, opts) {
   el.dataset.vid = view.id; el.append(dbHead(ctx), dbBar(ctx));
   const fs = dbChips(ctx); if (fs) el.append(fs);
   const sc = h('div', { class: 'dbv-scroll dbv-wheel', 'data-nodrag': '1' });
-  sc.append(({ table: dbTable, board: dbBoard, gallery: dbGallery, list: dbList }[view.type] || dbTable)(ctx));
+  sc.append((DB_VIEWS[view.type] || dbTable)(ctx));
   if (isFreshDb(db, pl)) sc.append(dbChooser(ctx));
   el.append(sc);
   el.addEventListener('contextmenu', e => { e.stopPropagation(); const r = e.target.closest('[data-row]'); if (!r || e.target.closest('input')) return; e.preventDefault(); rowMenu(e.clientX, e.clientY, ctx, ST.pages[r.dataset.row]); });
@@ -8105,7 +8206,7 @@ function dbBar(ctx) {
   const nf = (view.filters || []).filter(f => dbProp(db, f.prop)).length, ns = (view.sorts || []).filter(s => dbProp(db, s.prop)).length;
   const acts = h('div', { class: 'dbv-acts' },
     tb('Filter' + (nf ? ` · ${nf}` : ''), b => filterPop(b, ctx), nf > 0), tb('Sort' + (ns ? ` · ${ns}` : ''), b => sortPop(b, ctx), ns > 0),
-    view.type !== 'gallery' ? tb('Group', b => groupPop(b, ctx), !!view.groupBy && view.type !== 'board') : null,
+    !['gallery', 'calendar', 'workload', 'form'].includes(view.type) ? tb('Group', b => groupPop(b, ctx), !!view.groupBy && view.type !== 'board') : null,
     tb('Properties', b => propsPop(b, ctx)), tb('•••', b => dbMoreMenu(b, ctx), false, 'More: rename, CSV, template'),
     h('button', { class: 'dbv-btn primary', onclick: () => addRow(ctx) }, '+ New'));
   return h('div', { class: 'dbv-bar', 'data-nodrag': '1' }, tabs, acts);
@@ -9799,7 +9900,7 @@ function t2Row(it, c, where) {
   const sub = (it.subtasks || []).length ? h('span', { class: 't2-sub', title: 'Subtasks' }, `${it.subtasks.filter(s => s.done).length}/${it.subtasks.length}`) : null;
   const sun = h('button', { class: 't2-sun' + (inToday ? ' on' : ''), title: inToday ? 'Remove from Today' : 'Add to Today', html: ICON.sun, onclick: e => { e.stopPropagation(); toggleToday(it.id); } });
   const row = h('div', { class: 't2row' + (it.done ? ' done' : ''), 'data-tid': it.id, 'data-where': where, tabindex: '0', draggable: 'true' },
-    chk, h('span', { class: 't2-dot', style: { background: bd.color || '#5f8ff0' }, title: `${boardName(c.boardId)} · ${listName(c)}` }, bd.icon || ''), title, sub, tags, flag('urgent', 'bolt', 'Urgent'), flag('important', 'star', 'Important'), date, sun);
+    chk, h('span', { class: 't2-dot', style: { background: bd.color || '#5f8ff0' }, title: `${boardName(c.boardId)} · ${listName(c)}` }, bd.icon || ''), title, (typeof taskBadges === 'function' ? taskBadges(it) : null), sub, tags, flag('urgent', 'bolt', 'Urgent'), flag('important', 'star', 'Important'), date, sun);
   row.addEventListener('dblclick', e => { if (S.tvSelMode || e.target.closest('button,input')) return; clearTimeout(title._t); openTask(it.id); });
   row.addEventListener('dragstart', e => { if (S.tvSelMode) { e.preventDefault(); return; } e.dataTransfer.setData('text/plain', it.id); e.dataTransfer.effectAllowed = 'move'; S.t2drag = { id: it.id, from: where }; row.classList.add('dragging'); });
   row.addEventListener('dragend', () => { S.t2drag = null; row.classList.remove('dragging'); $$('.t2-over').forEach(x => x.classList.remove('t2-over')); });
@@ -11180,10 +11281,13 @@ function buildProductionBoard() {
   const sNum = P('text', 'Shot'), sScene = P('text', 'Scene'), sType = P('select', 'Size', ['Wide', 'Medium', 'Close-up', 'Macro', 'Drone']), sMove = P('select', 'Movement', ['Static', 'Dolly', 'Slider', 'Handheld', 'Gimbal']),
     sLens = P('text', 'Lens'), sLoc = P('text', 'Location'), sDay = P('select', 'Day', ['Day 1', 'Day 2', 'Day 3']), sCall = P('text', 'Time'),
     sStat = P('status', 'Status', [['Planned', 'gray', 'todo'], ['Next', 'yellow', 'prog'], ['Shot', 'green', 'done']]), sDone = P('checkbox', 'Done');
-  sdb.schema = [sNum, sScene, sType, sMove, sLens, sLoc, sDay, sCall, sStat, sDone];
+  const sShoot = P('date', 'Shoot date'), sBlk = dbP('blocked', 'Blocked by'), sWho = dbP('person', 'Assigned');
+  sdb.schema = [sNum, sScene, sType, sMove, sLens, sLoc, sDay, sCall, sStat, sDone, sShoot, sBlk, sWho];
   const rows = [['Surgeon enters OR, wide establishing', '1A', '1', 'Wide', 'Dolly', '24mm', 'OR 2', 'Day 1', '8:30', 'Shot'], ['Hands on device, macro detail', '1B', '1', 'Macro', 'Static', '100mm', 'OR 2', 'Day 1', '9:15', 'Next'], ['Interview: key talking point', '2A', '2', 'Medium', 'Slider', '50mm', 'Studio', 'Day 1', '1:00', 'Planned'], ['Exterior building, drone reveal', '3A', '3', 'Drone', 'Gimbal', '24mm', 'Campus', 'Day 2', '7:00', 'Planned']];
-  for (const r of rows) { const p = newRow(sdb, { title: r[0] }); Object.assign(p.values, { [sNum.id]: r[1], [sScene.id]: r[2], [sType.id]: optId(sType, r[3]), [sMove.id]: optId(sMove, r[4]), [sLens.id]: r[5], [sLoc.id]: r[6], [sDay.id]: optId(sDay, r[7]), [sCall.id]: r[8], [sStat.id]: optId(sStat, r[9]) }); }
-  sc.data.views = [dbV('table', 'Shot list', { sorts: [{ prop: sNum.id, dir: 'asc' }] }), dbV('gallery', 'Storyboard'), dbV('board', 'By status', { groupBy: sStat.id })]; sc.data.cur = sc.data.views[0].id;
+  const created = [];
+  for (const r of rows) { const p = newRow(sdb, { title: r[0] }); Object.assign(p.values, { [sNum.id]: r[1], [sScene.id]: r[2], [sType.id]: optId(sType, r[3]), [sMove.id]: optId(sMove, r[4]), [sLens.id]: r[5], [sLoc.id]: r[6], [sDay.id]: optId(sDay, r[7]), [sCall.id]: r[8], [sStat.id]: optId(sStat, r[9]) }); const dn = +String(r[7]).replace(/\D/g, '') - 1; p.values[sShoot.id] = { start: addDays(todayStr(), 7 + dn) }; created.push(p); }
+  created[1].values[sBlk.id] = [created[0].id]; created[2].values[sBlk.id] = [created[1].id];
+  sc.data.views = [dbV('table', 'Shot list', { sorts: [{ prop: sNum.id, dir: 'asc' }] }), dbV('gallery', 'Storyboard'), dbV('board', 'By status', { groupBy: sStat.id }), dbV('timeline', 'Timeline', { dateProp: sShoot.id, scale: 'day', groupBy: sDay.id }), dbV('calendar', 'Shoot days', { dateProp: sShoot.id })]; sc.data.cur = sc.data.views[0].id;
   /* schedule: linked view of the same shots, grouped by day */
   const sch = newCard('database', 40, 510, { dbId: sdb.id, linked: true, views: [dbV('table', 'Schedule', { groupBy: sDay.id, sorts: [{ prop: sCall.id, dir: 'asc' }], hidden: [sMove.id, sLens.id, sDone.id] })] }); sch.data.cur = sch.data.views[0].id; sch.w = 760; sch.h = 340;
   /* crew */
@@ -11248,6 +11352,395 @@ function fieldMsg(input, msg, type) {
 }
 /* API key field: validate on save */
 { const _ac = typeof aiKeyField !== 'undefined'; }
+
+/* ========== v4.0: people, planning views, dependencies, time, approvals, forms ========== */
+/* ---- people (labels, no accounts) ---- */
+const PEOPLE_COLORS = ['#4f7cf0', '#8b5cf6', '#22a06b', '#e08a1e', '#d6498f', '#139fa3', '#d9534f', '#6b7280'];
+function peopleList() { const s = ST.settings; if (!Array.isArray(s.people)) s.people = []; return s.people; }
+function personById(id) { return peopleList().find(p => p.id === id); }
+const initials = n => String(n || '?').trim().split(/\s+/).slice(0, 2).map(x => x[0]).join('').toUpperCase() || '?';
+function avatar(p, size) { return h('span', { class: 'avatar' + (size === 'sm' ? ' sm' : ''), title: p.name, style: { background: p.color } }, initials(p.name)); }
+function addPerson(name) { name = String(name || '').trim().slice(0, 40); if (!name) return null; const ex = peopleList().find(p => p.name.toLowerCase() === name.toLowerCase()); if (ex) return ex; const p = { id: uid(), name, color: PEOPLE_COLORS[peopleList().length % PEOPLE_COLORS.length] }; peopleList().push(p); save(); return p; }
+function peoplePop(anchor, current, onChange, single) {
+  closeTransient(); let cur = [...current];
+  const box = h('div', { class: 'ppl-pop' }), list = h('div', { class: 'ppl-list' }), inp = h('input', { class: 'tm-input', placeholder: 'Add a person…' });
+  const draw = () => {
+    list.innerHTML = '';
+    for (const p of peopleList()) {
+      const on = cur.includes(p.id), row = h('div', { class: 'ppl-row' + (on ? ' on' : '') }, h('button', { class: 'ppl-pick', onclick: () => { cur = single ? (on ? [] : [p.id]) : (on ? cur.filter(x => x !== p.id) : [...cur, p.id]); onChange(cur); draw(); if (single) closeTransient(); } }, avatar(p, 'sm'), h('span', { class: 'ppl-n' }, p.name), on ? h('span', { class: 'ppl-ck', html: ICON.check }) : null),
+        h('button', { class: 'ppl-x', title: 'Remove from the people list', onclick: () => { const i = peopleList().indexOf(p); peopleList().splice(i, 1); cur = cur.filter(x => x !== p.id); save(); draw(); onChange(cur); } }, '×'));
+      list.append(row);
+    }
+    if (!peopleList().length) list.append(h('div', { class: 'muted ppl-empty' }, 'No people yet. Add a name below.'));
+  };
+  const add = () => { const p = addPerson(inp.value); if (!p) return; inp.value = ''; cur = single ? [p.id] : [...cur, p.id]; onChange(cur); draw(); if (single) closeTransient(); };
+  inp.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') add(); });
+  draw(); box.append(list, h('div', { class: 'ppl-add' }, inp, h('button', { class: 'btn', onclick: add }, 'Add')));
+  const p = h('div', { class: 'pop' }, box); document.body.append(p); const r = anchor.getBoundingClientRect(); placeEl(p, r.left, r.bottom + 4); setTimeout(() => inp.focus(), 0); return p;
+}
+/* ---- helpers ---- */
+const fmtDur = s => { s = Math.round(s || 0); if (s < 60) return s ? s + 's' : '0m'; const m = Math.round(s / 60), hh = Math.floor(m / 60); return hh ? hh + 'h' + (m % 60 ? ' ' + (m % 60) + 'm' : '') : m + 'm'; };
+function timerSec(t) { return t ? (t.sec || 0) + (t.run ? Math.max(0, (Date.now() - t.run) / 1000) : 0) : 0; }
+function timerLog(t, secs, day) { if (secs <= 0) return; t.log = t.log || []; day = day || todayStr(); const e = t.log.find(x => x.d === day); if (e) e.s += secs; else t.log.push({ d: day, s: secs }); }
+function timerStop(t) { if (t && t.run) { const s = (Date.now() - t.run) / 1000; t.sec = (t.sec || 0) + s; timerLog(t, s); t.run = null; } }
+function timerAdd(t, secs) { t.sec = Math.max(0, (t.sec || 0) + secs); if (secs > 0) timerLog(t, secs); }
+function rowDone(db, row) {
+  const st = db.schema.find(p => p.type === 'status'); if (st) { const o = st.options.find(o => o.id === row.values[st.id]); return !!(o && o.group === 'done'); }
+  const ck = db.schema.find(p => p.type === 'checkbox'); return !!(ck && row.values[ck.id]);
+}
+function blockers(db, row, pr) { return (row.values[pr.id] || []).map(id => ST.pages[id]).filter(p => p && !p.trashed && db.rows.includes(p.id)); }
+function isBlocked(db, row) { return db.schema.some(pr => pr.type === 'blocked' && blockers(db, row, pr).some(b => !rowDone(db, b))); }
+const APPROVAL = { pending: ['Pending', 'gray'], approved: ['Approved', 'green'], changes: ['Changes requested', 'orange'] };
+/* ---- property types ---- */
+PROP_TYPES.push(['person', 'Person', '☺'], ['approval', 'Approval', '✔'], ['timer', 'Time tracked', '⏱']);
+DB_TYPES.push(['blocked', 'Blocked by', '⛔']);
+{
+  const _tn = typeof TYPE_NAME;
+}
+{
+  const _rv = rawVal;
+  rawVal = function (db, row, pr, depth) {
+    const v = row.values[pr.id];
+    if (pr.type === 'person') return (v || []).map(id => (personById(id) || {}).name).filter(Boolean);
+    if (pr.type === 'approval') return v && v.s ? APPROVAL[v.s][0] : '';
+    if (pr.type === 'timer') return v ? Math.round(timerSec(v)) : null;
+    if (pr.type === 'blocked') return blockers(db, row, pr).map(r => r.title || 'Untitled');
+    return _rv.apply(this, arguments);
+  };
+  const _pt = propText;
+  propText = function (pr, v, page) {
+    if (pr.type === 'person') return (v || []).map(id => (personById(id) || {}).name).filter(Boolean).join(', ');
+    if (pr.type === 'approval') return v && v.s ? APPROVAL[v.s][0] : '';
+    if (pr.type === 'timer') return v ? fmtDur(timerSec(v)) : '';
+    if (pr.type === 'blocked') { const db = rowDb(page); return db ? blockers(db, page, pr).map(r => r.title || 'Untitled').join(', ') : ''; }
+    return _pt.apply(this, arguments);
+  };
+  const _ck = cellText;
+  cellText = function (db, row, pr) { if (pr.type === 'blocked') return propText(pr, row.values[pr.id], row); return _ck.apply(this, arguments); };
+}
+/* editors: popovers shared by table cells, page properties and cards */
+function approvalPop(anchor, row, pr, commit) {
+  closeTransient(); const v = row.values[pr.id] || {}, note = h('input', { class: 'tm-input', placeholder: 'Comment (optional)', value: v.note || '' });
+  const reviewer = (personById(v.by) || {}).name;
+  const set = s => { commit(() => { row.values[pr.id] = { s, by: v.by || '', at: now(), note: note.value.trim() }; }); closeTransient(); };
+  const p = h('div', { class: 'pop apv-pop' }, h('div', { class: 'apv-hd' }, v.s ? h('span', { class: 'opt c-' + APPROVAL[v.s][1] }, APPROVAL[v.s][0]) : h('span', { class: 'muted' }, 'Not requested'), v.at ? h('span', { class: 'muted' }, (reviewer ? reviewer + ' · ' : '') + new Date(v.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })) : null),
+    h('button', { class: 'btn apv-ok', onclick: () => set('approved') }, 'Approve'), h('button', { class: 'btn apv-ch', onclick: () => set('changes') }, 'Request changes'), note,
+    h('div', { class: 'apv-row' }, h('button', { class: 'btn', onclick: () => peoplePop(anchor, v.by ? [v.by] : [], ids => commit(() => { row.values[pr.id] = Object.assign({ s: v.s || 'pending', at: v.at || now(), note: v.note || '' }, { by: ids[0] || '' }); }), true) }, reviewer ? 'Reviewer: ' + reviewer : 'Set reviewer'),
+      h('button', { class: 'btn', onclick: () => set('pending') }, 'Request approval'), v.s ? h('button', { class: 'btn', onclick: () => { commit(() => { delete row.values[pr.id]; }); closeTransient(); } }, 'Clear') : null));
+  document.body.append(p); const r = anchor.getBoundingClientRect(); placeEl(p, r.left, r.bottom + 4);
+}
+function timerPop(anchor, row, pr, commit) {
+  closeTransient(); const t = row.values[pr.id] || {}, mins = h('input', { class: 'tm-input', type: 'number', min: '1', placeholder: 'Minutes', style: { width: '90px' } });
+  const toggle = () => { commit(() => { const x = row.values[pr.id] || (row.values[pr.id] = { sec: 0, run: null }); if (x.run) timerStop(x); else x.run = Date.now(); }); closeTransient(); };
+  const addM = sign => { const m = +mins.value; if (!m || m < 0) { fieldMsg(mins, 'Enter minutes', 'err'); return; } commit(() => { const x = row.values[pr.id] || (row.values[pr.id] = { sec: 0, run: null }); timerAdd(x, sign * m * 60); }); closeTransient(); };
+  const p = h('div', { class: 'pop tmr-pop' }, h('div', { class: 'tmr-big' }, fmtDur(timerSec(t))), h('button', { class: 'btn primary', onclick: toggle }, t.run ? 'Stop timer' : 'Start timer'),
+    h('div', { class: 'apv-row' }, mins, h('button', { class: 'btn', onclick: () => addM(1) }, 'Add'), h('button', { class: 'btn', onclick: () => addM(-1) }, 'Subtract')),
+    t.sec || t.run ? h('button', { class: 'btn', onclick: () => { commit(() => { delete row.values[pr.id]; }); closeTransient(); } }, 'Reset') : null);
+  mins.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') addM(1); });
+  document.body.append(p); const r = anchor.getBoundingClientRect(); placeEl(p, r.left, r.bottom + 4);
+}
+function blockedPicker(anchor, db, row, pr, commit) {
+  closeTransient(); let cur = [...(row.values[pr.id] || [])]; const q = h('input', { class: 'tm-input', placeholder: 'Search rows…' }), list = h('div', { class: 'ppl-list' });
+  const draw = () => { list.innerHTML = ''; const s = q.value.toLowerCase(); for (const r of dbRows(db)) { if (r.id === row.id || (s && !(r.title || '').toLowerCase().includes(s))) continue; const on = cur.includes(r.id);
+    list.append(h('button', { class: 'ppl-pick' + (on ? ' on' : ''), onclick: () => { cur = on ? cur.filter(x => x !== r.id) : [...cur, r.id]; commit(() => { row.values[pr.id] = cur; }); draw(); } }, h('span', { class: 'ppl-n' }, (r.icon ? r.icon + ' ' : '') + (r.title || 'Untitled')), on ? h('span', { class: 'ppl-ck', html: ICON.check }) : null)); } };
+  q.addEventListener('input', draw); q.addEventListener('keydown', e => e.stopPropagation()); draw();
+  const p = h('div', { class: 'pop' }, h('div', { class: 'ppl-pop' }, q, list)); document.body.append(p); const r = anchor.getBoundingClientRect(); placeEl(p, r.left, r.bottom + 4); setTimeout(() => q.focus(), 0);
+}
+function extCell(db, row, pr) {
+  const v = row.values[pr.id];
+  if (pr.type === 'person') return h('span', { class: 'ppl-cell' }, (v || []).map(personById).filter(Boolean).map(p => h('span', { class: 'ppl-chip' }, avatar(p, 'sm'), h('span', null, p.name))));
+  if (pr.type === 'approval') return v && v.s ? h('span', { class: 'opt c-' + APPROVAL[v.s][1] }, APPROVAL[v.s][0]) : null;
+  if (pr.type === 'timer') return v && (v.sec || v.run) ? h('span', { class: 'tmr-cell' + (v.run ? ' live' : ''), 'data-tmr': '1' }, v.run ? h('i', { class: 'tmr-dot' }) : null, fmtDur(timerSec(v))) : null;
+  if (pr.type === 'blocked') { const bs = blockers(db, row, pr); if (!bs.length) return null; const lock = bs.some(b => !rowDone(db, b)); return [lock ? h('span', { class: 'lockb', title: 'Waiting on an unfinished item' }, '🔒') : h('span', { class: 'lockb ok', title: 'All blockers done' }, '✓'), ...bs.map(r => { const a = h('span', { class: 'relpill' + (rowDone(db, r) ? ' done' : ''), title: 'Open' }, (r.title || 'Untitled')); a.onclick = e => { e.stopPropagation(); openPage(r.id); }; return a; })]; }
+  return null;
+}
+const EXT_TYPES = new Set(['person', 'approval', 'timer', 'blocked']);
+{
+  const _ce = cellEl; cellEl = function (db, row, pr) {
+    if (EXT_TYPES.has(pr.type)) return extCell(db, row, pr);
+    if (pr.type === 'rollup' && pr.fn === 'pct') { const t = cellText(db, row, pr), n = parseInt(t); if (!isNaN(n)) return h('span', { class: 'pbar', title: t }, h('i', { style: { width: Math.min(100, n) + '%' } }), h('b', null, t)); }
+    return _ce.apply(this, arguments);
+  };
+  const _ec = editCell; editCell = function (td, ctx, row, pr) {
+    const { db } = ctx, rc = fn => commitDb(db, fn, row);
+    if (pr.type === 'person') return peoplePop(td, row.values[pr.id] || [], ids => rc(() => { row.values[pr.id] = ids; }));
+    if (pr.type === 'approval') return approvalPop(td, row, pr, rc);
+    if (pr.type === 'timer') return timerPop(td, row, pr, rc);
+    if (pr.type === 'blocked') return blockedPicker(td, db, row, pr, rc);
+    return _ec.apply(this, arguments);
+  };
+  const _pe = propEditor; propEditor = function (page, pr, commit) {
+    if (EXT_TYPES.has(pr.type)) {
+      const db = rowDb(page), v = page.values[pr.id], empty = () => h('span', { class: 'pp-empty' }, 'Empty');
+      const el = db ? extCell(db, page, pr) : null, b = h('button', { class: 'pp-opts' }, el && (!Array.isArray(el) || el.length) ? el : empty());
+      b.onclick = () => pr.type === 'person' ? peoplePop(b, v || [], ids => commit(() => { page.values[pr.id] = ids; })) : pr.type === 'approval' ? approvalPop(b, page, pr, commit) : pr.type === 'timer' ? timerPop(b, page, pr, commit) : db && blockedPicker(b, db, page, pr, commit);
+      return b;
+    }
+    return _pe.apply(this, arguments);
+  };
+}
+/* live timer text */
+setInterval(() => { for (const el of $$('.tmr-cell.live')) { const row = el.closest('[data-row]'); if (!row) continue; const p = ST.pages[row.dataset.row]; if (!p) continue; const pr = Object.values(ST.dbs).flatMap(d => d.schema).find(x => x.type === 'timer' && p.values && p.values[x.id] && p.values[x.id].run); if (pr) { const t = fmtDur(timerSec(p.values[pr.id])); const tn = [...el.childNodes].find(n => n.nodeType === 3); if (tn) tn.textContent = t; } } }, 20000);
+
+/* ---- views: Timeline, Calendar, Workload, Form ---- */
+Object.assign(VIEW_NAMES, { timeline: 'Timeline', calendar: 'Calendar', workload: 'Workload', form: 'Form' });
+Object.assign(VIEW_IC, { timeline: '▭', calendar: '▦', workload: '▤', form: '✎' });
+Object.assign(DB_VIEWS, { table: dbTable, board: dbBoard, gallery: dbGallery, list: dbList });
+const dayDiff = (a, b) => Math.round((parseYmd(b) - parseYmd(a)) / 864e5);
+const dateProps = db => db.schema.filter(p => p.type === 'date');
+function viewDateProp(db, view) { const ps = dateProps(db); return ps.find(p => p.id === view.dateProp) || ps[0] || null; }
+function rowRange(row, pr) { const v = row.values[pr.id]; if (!v || !v.start) return null; return { s: v.start, e: v.end && v.end >= v.start ? v.end : v.start }; }
+function setRange(db, row, pr, s, e) { commitDb(db, () => { const old = row.values[pr.id] || {}; row.values[pr.id] = e && e !== s ? { start: s, end: e } : (old.end ? { start: s, end: s } : { start: s }); }, row); }
+function rowColor(db, row) { const pr = db.schema.find(p => p.type === 'status') || db.schema.find(p => p.type === 'select'); const o = pr && pr.options.find(o => o.id === row.values[pr.id]); return o ? o.color || 'gray' : 'blue'; }
+function vwNeed(ctx, what, btnLabel, mk) { const { db, loc } = ctx; return h('div', { class: 'vw-need' }, h('div', null, what), h('button', { class: 'btn primary', onclick: () => commitDb(db, mk) }, btnLabel)); }
+function vwBar(ctx, parts) { return h('div', { class: 'vw-bar', 'data-nodrag': '1' }, parts.filter(Boolean)); }
+function vwSeg(opts, cur, fn) { return h('span', { class: 'vw-seg' }, opts.map(([k, l]) => h('button', { class: k === cur ? 'on' : '', onclick: () => fn(k) }, l))); }
+function vwSel(label, items, cur, fn) { const s = h('select', { class: 'vw-sel', title: label }, items.map(([k, l]) => h('option', { value: k, selected: k === cur ? '' : null }, l))); s.value = cur; s.onchange = () => fn(s.value); return s; }
+const vset = (ctx, patch) => commitView(ctx.loc, (pl, v) => Object.assign(v, patch), true);
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+const TL_DONE = new Set();
+/* ---- Timeline ---- */
+function dbTimeline(ctx) {
+  const { db, view, rows } = ctx, dp = viewDateProp(db, view), wrap = h('div', { class: 'tl' });
+  if (!dp) return h('div', { class: 'tl' }, vwNeed(ctx, 'Timeline needs a Date property (use a range with an end date for bars).', 'Add Date property', () => db.schema.push(newProp('date', 'Dates'))));
+  const scale = view.scale || 'week', ppd = { day: 40, week: 18, month: 6 }[scale], t0 = todayStr(), LW = 220, RH = 32;
+  const items = rows.map(r => ({ r, rg: rowRange(r, dp) })), sched = items.filter(x => x.rg);
+  let min = t0, max = addDays(t0, 30); for (const x of sched) { if (x.rg.s < min) min = x.rg.s; if (x.rg.e > max) max = x.rg.e; }
+  const origin = addDays(min, -7), days = dayDiff(origin, addDays(max, 21)) + 1, W = days * ppd, X = d => dayDiff(origin, d) * ppd;
+  const blk = db.schema.filter(p => p.type === 'blocked');
+  const lines = []; const idxOf = new Map(); const labels = h('div', { class: 'tl-labels' }), tracks = h('div', { class: 'tl-tracks', style: { width: W + 'px' } });
+  let n = 0;
+  const addRowEl = (item, group) => {
+    const r = item && item.r, lab = h('div', { class: 'tl-lab' + (group ? ' grp' : ''), style: { height: RH + 'px' } }), tr = h('div', { class: 'tl-row' + (group ? ' grp' : ''), style: { top: n * RH + 'px', height: RH + 'px' } });
+    if (group) { lab.append(group); }
+    else {
+      lab.append(...[h('span', { class: 'tl-t', title: r.title || 'Untitled', onclick: () => openPage(r.id) }, (r.icon ? r.icon + ' ' : '') + (r.title || 'Untitled')), isBlocked(db, r) ? h('span', { class: 'lockb', title: 'Waiting on an unfinished item' }, '🔒') : null].filter(Boolean));
+      idxOf.set(r.id, n);
+      if (item.rg) {
+        const { s, e } = item.rg, bar = h('div', { class: 'tl-bar opt c-' + rowColor(db, r) + (rowDone(db, r) ? ' done' : ''), style: { left: X(s) + 'px', width: Math.max(ppd, (dayDiff(s, e) + 1) * ppd) + 'px' }, title: (r.title || 'Untitled') + ' · ' + fmtDateVal(r.values[dp.id]) }, h('i', { class: 'tl-h l' }), h('span', { class: 'tl-bt' }, r.title || 'Untitled'), h('i', { class: 'tl-h r' }));
+        item.bar = { s, e, left: X(s), right: X(addDays(e, 1)) };
+        bar.addEventListener('pointerdown', ev => tlDrag(ev, bar, item, ctx, dp, ppd));
+        tr.append(bar);
+      } else tr.append(h('span', { class: 'tl-unsch' }, 'Click a day to schedule')), tr.onclick = ev => { const x = ev.clientX - tracks.getBoundingClientRect().left; setRange(db, r, dp, addDays(origin, Math.floor(x / ppd))); };
+    }
+    labels.append(lab); tracks.append(tr); n++;
+  };
+  const gr = groupRows(db, view, rows);
+  if (gr) for (const g of gr.groups) { const its = items.filter(x => g.rows.includes(x.r)); if (!its.length) continue; addRowEl(null, h('span', { class: 'tl-g' }, g.opt ? h('span', { class: 'opt c-' + (g.opt.color || 'gray') }, g.opt.name) : 'No ' + gr.pr.name)); its.forEach(x => addRowEl(x)); }
+  else items.forEach(x => addRowEl(x));
+  if (!items.length) labels.append(h('div', { class: 'tl-lab muted' }, 'No rows yet'));
+  const todayX = X(t0); if (todayX >= 0 && todayX <= W) tracks.append(h('div', { class: 'tl-today', style: { left: todayX + ppd / 2 + 'px' } }));
+  /* dependency connectors */
+  if (blk.length) {
+    const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg'); svg.setAttribute('class', 'tl-deps'); svg.setAttribute('width', W); svg.setAttribute('height', Math.max(1, n * RH));
+    const defs = document.createElementNS(NS, 'defs'); defs.innerHTML = '<marker id="tlarr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L8 4L0 8z" fill="currentColor"/></marker>'; svg.append(defs);
+    for (const it of items) { if (!it.bar) continue; for (const pr of blk) for (const b of blockers(db, it.r, pr)) { const bi = items.find(x => x.r.id === b.id); if (!bi || !bi.bar) continue;
+      const y1 = idxOf.get(b.id) * RH + RH / 2, y2 = idxOf.get(it.r.id) * RH + RH / 2, x1 = bi.bar.right, x2 = it.bar.left, bad = it.bar.s <= bi.bar.e, mx = Math.max(x1 + 8, x2 - 8);
+      const path = document.createElementNS(NS, 'path'); path.setAttribute('d', `M${x1} ${y1} H${x1 + 8} V${(y1 + y2) / 2} H${x2 - 8} V${y2} H${x2}`); path.setAttribute('class', 'tl-dep' + (bad ? ' bad' : '')); path.setAttribute('marker-end', 'url(#tlarr)'); svg.append(path); } }
+    tracks.append(svg);
+  }
+  /* header */
+  const head = h('div', { class: 'tl-hd', style: { width: LW + W + 'px' } }, h('div', { class: 'tl-hl', style: { width: LW + 'px' } }), h('div', { class: 'tl-hr', style: { width: W + 'px' } }));
+  const hr = head.lastChild; let d = origin;
+  while (dayDiff(origin, d) < days) { const dt = parseYmd(d), mEnd = Math.min(days, dayDiff(origin, ymd(new Date(dt.getFullYear(), dt.getMonth() + 1, 1)))), w = (mEnd - dayDiff(origin, d)) * ppd;
+    hr.append(h('div', { class: 'tl-mo', style: { left: dayDiff(origin, d) * ppd + 'px', width: w + 'px' } }, w > 50 ? MONTHS[dt.getMonth()].slice(0, scale === 'month' ? 3 : 9) + (dt.getMonth() === 0 || d === origin ? ' ' + dt.getFullYear() : '') : '')); d = ymd(new Date(dt.getFullYear(), dt.getMonth() + 1, 1)); }
+  if (scale !== 'month') for (let i = 0; i < days; i++) { const dd = addDays(origin, i), dw = parseYmd(dd).getDay(); if (scale === 'day' || dw === 1) hr.append(h('div', { class: 'tl-dy' + (dd === t0 ? ' today' : '') + (dw === 0 || dw === 6 ? ' we' : ''), style: { left: i * ppd + 'px', width: (scale === 'day' ? ppd : ppd * 7) + 'px' } }, String(parseYmd(dd).getDate()))); }
+  const body = h('div', { class: 'tl-body', style: { width: LW + W + 'px' } }, labels, tracks);
+  const bar = vwBar(ctx, [h('span', { class: 'vw-ttl' }, 'Timeline'), vwSeg([['day', 'Day'], ['week', 'Week'], ['month', 'Month']], scale, k => vset(ctx, { scale: k })),
+    h('button', { class: 'btn', onclick: ev => { const sc = ev.target.closest('.dbv').querySelector('.dbv-scroll'); sc.scrollLeft = LW + X(t0) - sc.clientWidth / 2 + 80; } }, 'Today'),
+    dateProps(db).length > 1 ? vwSel('Date property', dateProps(db).map(p => [p.id, p.name]), dp.id, v => vset(ctx, { dateProp: v })) : null]);
+  wrap.append(bar, h('div', { class: 'tl-canvas' }, head, body));
+  requestAnimationFrame(() => { const sc = wrap.closest('.dbv-scroll'); if (sc && !TL_DONE.has(view.id)) { TL_DONE.add(view.id); sc.scrollLeft = Math.max(0, LW + X(t0) - sc.clientWidth / 2 + 80); } });
+  return wrap;
+}
+function tlDrag(ev, bar, item, ctx, dp, ppd) {
+  if (ev.button > 0) return; const { db } = ctx, r = item.r, rect = bar.getBoundingClientRect(), edge = Math.min(8, rect.width / 3), x0 = ev.clientX;
+  const mode = ev.clientX - rect.left <= edge ? 'l' : rect.right - ev.clientX <= edge ? 'r' : 'm'; let dx = 0, moved = false;
+  bar.setPointerCapture(ev.pointerId); bar.classList.add('drag');
+  const mv = e => { const nd = Math.round((e.clientX - x0) / ppd); if (Math.abs(e.clientX - x0) > 3) moved = true; if (nd === dx) return; dx = nd;
+    if (mode === 'm') bar.style.transform = `translateX(${dx * ppd}px)`; else if (mode === 'r') bar.style.width = Math.max(ppd, rect.width + dx * ppd) + 'px'; else { const w = Math.max(ppd, rect.width - dx * ppd); bar.style.width = w + 'px'; bar.style.transform = `translateX(${rect.width - w}px)`; } };
+  const up = () => { bar.removeEventListener('pointermove', mv); bar.removeEventListener('pointerup', up); bar.removeEventListener('pointercancel', up); bar.classList.remove('drag');
+    if (!moved) { openPage(r.id); return; } if (!dx) { bar.style.transform = ''; return; }
+    let { s, e } = item.bar; if (mode === 'm') { s = addDays(s, dx); e = addDays(e, dx); } else if (mode === 'l') { s = addDays(s, dx); if (s > e) s = e; } else { e = addDays(e, dx); if (e < s) e = s; }
+    setRange(db, r, dp, s, e);
+    const late = db.schema.filter(p => p.type === 'blocked').flatMap(pr => dbRows(db).filter(o => (o.values[pr.id] || []).includes(r.id)).filter(o => { const rg = rowRange(o, dp); return rg && rg.s <= e; }));
+    if (late.length) toast(`“${r.title || 'Untitled'}” now ends after ${late.length} dependent item${late.length > 1 ? 's' : ''} start${late.length > 1 ? '' : 's'}`, 4500, { type: 'err' }); };
+  bar.addEventListener('pointermove', mv); bar.addEventListener('pointerup', up); bar.addEventListener('pointercancel', up);
+}
+DB_VIEWS.timeline = dbTimeline;
+
+/* ---- Calendar ---- */
+function dbCalendar(ctx) {
+  const { db, view, rows } = ctx, dp = viewDateProp(db, view), wrap = h('div', { class: 'cal' });
+  if (!dp) return h('div', { class: 'cal' }, vwNeed(ctx, 'Calendar needs a Date property.', 'Add Date property', () => db.schema.push(newProp('date', 'Date'))));
+  const mode = view.calMode || 'month', t0 = todayStr(), a = view.calAnchor || t0, ad = parseYmd(a);
+  let first, count; if (mode === 'week') { first = addDays(a, -ad.getDay()); count = 7; } else { const m1 = ymd(new Date(ad.getFullYear(), ad.getMonth(), 1)); first = addDays(m1, -parseYmd(m1).getDay()); count = 42; }
+  const items = rows.map(r => ({ r, rg: rowRange(r, dp) })), byDay = {};
+  for (const it of items) { if (!it.rg) continue; for (let d = it.rg.s > first ? it.rg.s : first, lastD = addDays(first, count - 1), last = it.rg.e < lastD ? it.rg.e : lastD; d <= last; d = addDays(d, 1)) (byDay[d] = byDay[d] || []).push(it); }
+  const pill = (it, day, big) => { const { r, rg } = it, p = h('div', { class: 'cal-pill opt c-' + rowColor(db, r) + (rowDone(db, r) ? ' done' : ''), draggable: 'true', title: (r.title || 'Untitled') + (rg ? ' · ' + fmtDateVal(r.values[dp.id]) : '') }, h('span', { class: 'cal-pt' }, (isBlocked(db, r) ? '🔒 ' : '') + (r.title || 'Untitled')));
+    p.addEventListener('click', e => { e.stopPropagation(); openPage(r.id); });
+    p.addEventListener('dragstart', e => { S.calDrag = { id: r.id, ofs: rg ? dayDiff(rg.s, day || rg.s) : 0 }; e.dataTransfer.setData('text/plain', r.id); e.dataTransfer.effectAllowed = 'move'; setTimeout(() => p.classList.add('dragging'), 0); });
+    p.addEventListener('dragend', () => { S.calDrag = null; p.classList.remove('dragging'); $$('.cal-over').forEach(x => x.classList.remove('cal-over')); }); return p; };
+  const grid = h('div', { class: 'cal-grid' + (mode === 'week' ? ' wk' : '') });
+  for (const dn of ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']) grid.append(h('div', { class: 'cal-dn' }, dn));
+  for (let i = 0; i < count; i++) {
+    const d = addDays(first, i), dt = parseYmd(d), out = mode === 'month' && dt.getMonth() !== ad.getMonth(), list = byDay[d] || [], cap = mode === 'week' ? 99 : 3;
+    const cell = h('div', { class: 'cal-cell' + (d === t0 ? ' today' : '') + (out ? ' out' : ''), 'data-day': d }, h('div', { class: 'cal-d' }, h('span', null, dt.getDate() === 1 ? MONTHS[dt.getMonth()].slice(0, 3) + ' 1' : String(dt.getDate())), h('button', { class: 'cal-add', title: 'Add on this day', onclick: e => { e.stopPropagation(); addRow(ctx, { [dp.id]: { start: d } }); } }, '+')), ...list.slice(0, cap).map(it => pill(it, d)));
+    if (list.length > cap) cell.append(h('button', { class: 'cal-more', onclick: e => { e.stopPropagation(); vset(ctx, { calMode: 'week', calAnchor: d }); } }, `+${list.length - cap} more`));
+    cell.addEventListener('dblclick', e => { if (e.target === cell || e.target.classList.contains('cal-d')) addRow(ctx, { [dp.id]: { start: d } }); });
+    cell.addEventListener('dragover', e => { if (S.calDrag) { e.preventDefault(); cell.classList.add('cal-over'); } }); cell.addEventListener('dragleave', () => cell.classList.remove('cal-over'));
+    cell.addEventListener('drop', e => { const cd = S.calDrag; S.calDrag = null; cell.classList.remove('cal-over'); if (!cd) return; e.preventDefault(); const row = ST.pages[cd.id], rg = row && rowRange(row, dp), ns = addDays(d, -cd.ofs); if (!row) return; const len = rg ? dayDiff(rg.s, rg.e) : 0; setRange(db, row, dp, ns, len ? addDays(ns, len) : null); });
+    grid.append(cell);
+  }
+  const un = items.filter(x => !x.rg), shift = n => { const dt = parseYmd(a); if (mode === 'week') dt.setDate(dt.getDate() + 7 * n); else dt.setMonth(dt.getMonth() + n, 1); return ymd(dt); };
+  const title = mode === 'week' ? fmtDateVal({ start: first, end: addDays(first, 6) }).replace(/, \d{4}/, '') : MONTHS[ad.getMonth()] + ' ' + ad.getFullYear();
+  const bar = vwBar(ctx, [h('button', { class: 'ib', title: 'Previous', onclick: () => vset(ctx, { calAnchor: shift(-1) }) }, '‹'), h('button', { class: 'ib', title: 'Next', onclick: () => vset(ctx, { calAnchor: shift(1) }) }, '›'), h('span', { class: 'vw-ttl' }, title), h('button', { class: 'btn', onclick: () => vset(ctx, { calAnchor: t0 }) }, 'Today'),
+    vwSeg([['month', 'Month'], ['week', 'Week']], mode, k => vset(ctx, { calMode: k })), dateProps(db).length > 1 ? vwSel('Date property', dateProps(db).map(p => [p.id, p.name]), dp.id, v => vset(ctx, { dateProp: v })) : null]);
+  wrap.append(bar, grid);
+  if (un.length) wrap.append(h('div', { class: 'cal-un' }, h('div', { class: 'cal-unh' }, `Unscheduled · ${un.length} · drag onto a day`), h('div', { class: 'cal-unl' }, un.map(it => pill(it, null)))));
+  return wrap;
+}
+DB_VIEWS.calendar = dbCalendar;
+
+/* ---- Workload ---- */
+function mondayOf(s) { const d = parseYmd(s), k = (d.getDay() + 6) % 7; return addDays(s, -k); }
+function dbWorkload(ctx) {
+  const { db, view, rows } = ctx, dp = viewDateProp(db, view), pp = db.schema.find(p => p.id === view.personProp && p.type === 'person') || db.schema.find(p => p.type === 'person'), wrap = h('div', { class: 'wl' });
+  if (!pp) return h('div', { class: 'wl' }, vwNeed(ctx, 'Workload groups work by person. Add a Person property to assign items.', 'Add Person property', () => db.schema.push(newProp('person', 'Assignee'))));
+  if (!dp) return h('div', { class: 'wl' }, vwNeed(ctx, 'Workload needs a Date property to place work in weeks.', 'Add Date property', () => db.schema.push(newProp('date', 'Dates'))));
+  const hp = db.schema.find(p => p.id === view.hoursProp && p.type === 'number'), nums = db.schema.filter(p => p.type === 'number'), t0 = todayStr(), anchor = view.wkAnchor || mondayOf(t0), NW = 8, hours = !!hp;
+  const weeks = Array.from({ length: NW }, (_, i) => addDays(anchor, i * 7)), capOf = p => hours ? (p.capH ?? 40) : (p.capN ?? 5);
+  const people = [...peopleList().map(p => ({ p, key: p.id })), { p: { id: '', name: 'Unassigned', color: '#9aa0a6' }, key: '' }];
+  const cells = new Map(); const bump = (pk, wi, row, amt) => { const k = pk + '|' + wi; const c = cells.get(k) || { v: 0, rows: [] }; c.v += amt; if (!c.rows.some(x => x.r === row)) c.rows.push({ r: row, a: amt }); else c.rows.find(x => x.r === row).a += amt; cells.set(k, c); };
+  for (const r of rows) {
+    const rg = rowRange(r, dp); if (!rg || rowDone(db, r)) continue; const ids = (r.values[pp.id] || []).filter(id => personById(id)), who = ids.length ? ids : [''], hrs = hours ? (+r.values[hp.id] || 0) : 1;
+    const wd = []; for (let d = rg.s; d <= rg.e; d = addDays(d, 1)) { const w = parseYmd(d).getDay(); if (w !== 0 && w !== 6) wd.push(d); } const days = wd.length ? wd : [rg.s];
+    for (const pk of who) { const share = hours ? hrs / who.length : 1; if (hours) { for (const d of days) { const wi = Math.floor(dayDiff(anchor, d) / 7); if (wi >= 0 && wi < NW) bump(pk, wi, r, share / days.length); } }
+      else { const seen = new Set(); for (let d = rg.s; d <= rg.e; d = addDays(d, 1)) { const wi = Math.floor(dayDiff(anchor, d) / 7); if (wi >= 0 && wi < NW && !seen.has(wi)) { seen.add(wi); bump(pk, wi, r, 1); } } } }
+  }
+  const tbl = h('table', { class: 'wl-t' }), thead = h('tr', null, h('th', { class: 'wl-p' }, ''), weeks.map(w => h('th', { class: w === mondayOf(t0) ? 'now' : '' }, fmtDateVal({ start: w }).replace(/, \d{4}/, ''))));
+  tbl.append(h('thead', null, thead)); const tb = h('tbody');
+  for (const { p, key } of people) {
+    if (!key && ![...cells.keys()].some(k => k.startsWith('|'))) continue;
+    const cap = capOf(p), tr = h('tr', null, h('td', { class: 'wl-p' }, h('button', { class: 'wl-who', title: key ? 'Click to set weekly capacity' : '', onclick: e => { if (!key) return; askText(e.currentTarget, `Capacity per week (${hours ? 'hours' : 'items'})`, String(cap), v => { const n = +v; if (!isNaN(n) && n > 0) { if (hours) p.capH = n; else p.capN = n; save(); refreshDb(); } }); } }, avatar(p, 'sm'), h('span', null, p.name), key ? h('em', null, cap + (hours ? 'h' : '')) : null)));
+    weeks.forEach((w, wi) => { const c = cells.get(key + '|' + wi), v = c ? c.v : 0, ratio = cap ? v / cap : 0, lvl = !v ? '' : ratio > 1 ? ' over' : ratio > .8 ? ' warn' : ' ok';
+      const td = h('td', { class: 'wl-c' + lvl }, v ? h('button', { class: 'wl-b', title: `${Math.round(ratio * 100)}% of capacity`, onclick: e => { closeTransient(); const pop = h('div', { class: 'pop wl-pop' }, h('div', { class: 'ppl-n' }, `${p.name} · week of ${fmtDateVal({ start: w }).replace(/, \d{4}/, '')}`), ...c.rows.map(x => h('button', { class: 'ppl-pick', onclick: () => { closeTransient(); openPage(x.r.id); } }, h('span', { class: 'ppl-n' }, x.r.title || 'Untitled'), hours ? h('span', { class: 'muted' }, (Math.round(x.a * 10) / 10) + 'h') : null))); document.body.append(pop); const rr = e.currentTarget.getBoundingClientRect(); placeEl(pop, rr.left, rr.bottom + 4); } }, hours ? (Math.round(v * 10) / 10) + 'h' : String(v)) : null); tr.append(td); });
+    tb.append(tr);
+  }
+  tbl.append(tb);
+  const bar = vwBar(ctx, [h('button', { class: 'ib', title: 'Earlier', onclick: () => vset(ctx, { wkAnchor: addDays(anchor, -28) }) }, '‹'), h('button', { class: 'ib', title: 'Later', onclick: () => vset(ctx, { wkAnchor: addDays(anchor, 28) }) }, '›'), h('span', { class: 'vw-ttl' }, 'Workload'), h('button', { class: 'btn', onclick: () => vset(ctx, { wkAnchor: mondayOf(t0) }) }, 'This week'),
+    vwSel('Measure', [['', 'Count items'], ...nums.map(p => [p.id, 'Hours: ' + p.name])], hp ? hp.id : '', v => vset(ctx, { hoursProp: v || null })),
+    db.schema.filter(p => p.type === 'person').length > 1 ? vwSel('Person property', db.schema.filter(p => p.type === 'person').map(p => [p.id, p.name]), pp.id, v => vset(ctx, { personProp: v })) : null,
+    dateProps(db).length > 1 ? vwSel('Date property', dateProps(db).map(p => [p.id, p.name]), dp.id, v => vset(ctx, { dateProp: v })) : null,
+    !nums.length ? h('button', { class: 'btn', title: 'Add an hours estimate column', onclick: () => commitDb(db, () => db.schema.push(newProp('number', 'Hours'))) }, '+ Hours column') : null]);
+  wrap.append(bar, peopleList().length ? h('div', { class: 'wl-wrap' }, tbl) : h('div', { class: 'vw-need' }, h('div', null, 'Add the people on your team to see their load.'), h('button', { class: 'btn primary', onclick: e => peoplePop(e.currentTarget, [], () => refreshDb()) }, 'Add people')), h('div', { class: 'wl-note' }, hours ? 'Hours are spread across the weekdays of each item and split between assignees. Done items are excluded.' : 'Counts items touching each week. Pick an hours column to measure effort. Done items are excluded.'));
+  return wrap;
+}
+DB_VIEWS.workload = dbWorkload;
+
+/* ---- Form ---- */
+const FORM_OK = new Set(['text', 'number', 'select', 'multi', 'status', 'date', 'checkbox', 'url', 'email', 'phone', 'person']);
+function formCfg(db, view) {
+  const f = view.form = view.form || { title: db.title ? 'New ' + db.title.replace(/s$/i, '').toLowerCase() : 'New entry', desc: '', props: db.schema.filter(p => FORM_OK.has(p.type)).slice(0, 6).map(p => p.id), req: [], labels: {} };
+  f.props = f.props.filter(id => db.schema.some(p => p.id === id)); return f;
+}
+function dbForm(ctx) {
+  const { db, view } = ctx, f = formCfg(db, view), wrap = h('div', { class: 'frm' }), edit = !!view.formEdit, elig = db.schema.filter(p => FORM_OK.has(p.type));
+  const bar = vwBar(ctx, [h('span', { class: 'vw-ttl' }, 'Form'), vwSeg([['fill', 'Fill out'], ['edit', 'Edit form']], edit ? 'edit' : 'fill', k => vset(ctx, { formEdit: k === 'edit' }))]);
+  wrap.append(bar);
+  if (edit) {
+    const tin = h('input', { class: 'tm-input', value: f.title }), din = h('textarea', { class: 'tm-input', rows: 2, placeholder: 'Description shown above the form' }, f.desc || '');
+    tin.onchange = () => commitView(ctx.loc, (pl, v) => { v.form.title = tin.value.trim() || f.title; }); din.onchange = () => commitView(ctx.loc, (pl, v) => { v.form.desc = din.value.trim(); });
+    const list = h('div', { class: 'frm-cfg' }, h('div', { class: 'frm-row hd' }, h('span', null, 'Field'), h('span', null, 'Show'), h('span', null, 'Required')),
+      h('div', { class: 'frm-row' }, h('span', null, db.titleName || 'Name'), h('span', { class: 'muted' }, 'Always'), h('span', { class: 'muted' }, 'Always')));
+    for (const p of elig) { const on = f.props.includes(p.id), req = f.req.includes(p.id), lab = h('input', { class: 'tm-input', value: f.labels[p.id] || '', placeholder: p.name });
+      lab.onchange = () => commitView(ctx.loc, (pl, v) => { v.form.labels[p.id] = lab.value.trim(); });
+      list.append(h('div', { class: 'frm-row' }, h('span', { class: 'frm-lab' }, lab), h('span', null, h('button', { class: 'chk' + (on ? ' on' : ''), html: on ? ICON.check : '', onclick: () => commitView(ctx.loc, (pl, v) => { const x = v.form.props; if (x.includes(p.id)) { v.form.props = x.filter(i => i !== p.id); v.form.req = v.form.req.filter(i => i !== p.id); } else x.push(p.id); }) })),
+        h('span', null, on ? h('button', { class: 'chk' + (req ? ' on' : ''), html: req ? ICON.check : '', onclick: () => commitView(ctx.loc, (pl, v) => { const x = v.form.req; v.form.req = x.includes(p.id) ? x.filter(i => i !== p.id) : [...x, p.id]; }) }) : null))); }
+    wrap.append(h('div', { class: 'frm-box' }, h('label', { class: 'frm-l' }, 'Form title'), tin, h('label', { class: 'frm-l' }, 'Description'), din, list, h('div', { class: 'muted frm-hint' }, 'Submissions add a row to this database. Formulas, rollups and relations are not available in forms.')));
+    return wrap;
+  }
+  if (S.formDone === view.id) { S.formDone = null; wrap.append(h('div', { class: 'frm-box frm-ok' }, h('div', { class: 'frm-check', html: ICON.check }), h('h3', null, 'Submitted'), h('p', { class: 'muted' }, 'A new row was added to ' + (db.title || 'this database') + '.'), h('button', { class: 'btn primary', onclick: () => refreshDb() }, 'Submit another'))); return wrap; }
+  const inputs = [], box = h('div', { class: 'frm-box' }, h('h3', null, f.title), f.desc ? h('p', { class: 'muted' }, f.desc) : null);
+  const field = (key, label, req, el, get, kind) => { const g = h('div', { class: 'frm-f' }, h('label', { class: 'frm-l' }, label, req ? h('i', { class: 'req' }, ' *') : null), el); inputs.push({ key, req, el, get, g, kind }); box.append(g); };
+  const tIn = h('input', { class: 'tm-input', placeholder: ' ' }); field(TITLE, f.labels[TITLE] || db.titleName || 'Name', true, tIn, () => tIn.value.trim());
+  for (const id of f.props) { const p = db.schema.find(x => x.id === id); if (!p) continue; const lab = f.labels[id] || p.name, req = f.req.includes(id); let el, get;
+    if (p.type === 'text' || p.type === 'url' || p.type === 'email' || p.type === 'phone') { el = h('input', { class: 'tm-input', type: p.type === 'email' ? 'email' : p.type === 'url' ? 'url' : p.type === 'phone' ? 'tel' : 'text' }); get = () => el.value.trim(); }
+    else if (p.type === 'number') { el = h('input', { class: 'tm-input', type: 'number', step: 'any' }); get = () => el.value === '' ? '' : +el.value; }
+    else if (p.type === 'select' || p.type === 'status') { el = h('select', { class: 'tm-input' }, h('option', { value: '' }, 'Choose…'), p.options.map(o => h('option', { value: o.id }, o.name))); get = () => el.value; }
+    else if (p.type === 'multi') { const sel = new Set(); el = h('div', { class: 'frm-chips' }, p.options.map(o => { const b = h('button', { type: 'button', class: 'opt c-' + (o.color || 'gray') + ' frm-chip', onclick: () => { sel.has(o.id) ? sel.delete(o.id) : sel.add(o.id); b.classList.toggle('on', sel.has(o.id)); } }, o.name); return b; })); get = () => [...sel]; }
+    else if (p.type === 'date') { const s = h('input', { class: 'tm-input', type: 'date' }), e2 = h('input', { class: 'tm-input', type: 'date', title: 'End date (optional)' }); el = h('div', { class: 'frm-dates' }, s, h('span', { class: 'muted' }, 'to'), e2); get = () => s.value ? (e2.value && e2.value >= s.value ? { start: s.value, end: e2.value } : { start: s.value }) : null; el._in = s; }
+    else if (p.type === 'checkbox') { const c = h('input', { type: 'checkbox' }); el = h('label', { class: 'frm-ck' }, c, ' Yes'); get = () => c.checked; }
+    else if (p.type === 'person') { let ids = []; const b = h('button', { type: 'button', class: 'btn' }, 'Choose people'); const paint = () => { b.innerHTML = ''; if (!ids.length) b.append('Choose people'); else ids.map(personById).filter(Boolean).forEach(x => b.append(avatar(x, 'sm'), ' ' + x.name + '  ')); }; b.onclick = () => peoplePop(b, ids, v => { ids = v; paint(); }); el = b; get = () => ids; }
+    else continue; field(id, lab, req, el, get, p.type); }
+  const msgHost = h('div', { class: 'frm-err' });
+  const submit = h('button', { class: 'btn primary', onclick: () => {
+    let bad = false, vals = {}, title = '';
+    for (const x of inputs) { const v = x.get(), target = x.el._in || x.el; if (target.classList) fieldMsg(target.tagName === 'DIV' || target.tagName === 'LABEL' ? null : target, ''); const empty = v === '' || v == null || (Array.isArray(v) && !v.length) || v === false && x.kind !== 'checkbox';
+      if (x.req && (empty || (x.kind === 'checkbox' && !v)) && x.key !== TITLE || (x.key === TITLE && !v)) { bad = true; if (target.tagName === 'INPUT' || target.tagName === 'SELECT') fieldMsg(target, 'This field is required', 'err'); else { x.g.classList.add('frm-bad'); setTimeout(() => x.g.classList.remove('frm-bad'), 1800); } continue; }
+      if (x.kind === 'email' && v && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { bad = true; fieldMsg(target, 'Enter a valid email address', 'err'); continue; }
+      if (x.kind === 'url' && v && !/^(https?:\/\/)?[^\s.]+\.[^\s]+$/.test(v)) { fieldMsg(target, 'This does not look like a web address', 'warn'); }
+      if (x.key === TITLE) title = v; else if (!empty) vals[x.key] = v; }
+    if (bad) { const first = inputs.find(x => x.g.querySelector('.field-err') || x.g.classList.contains('frm-bad')); if (first) first.g.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
+    S.formDone = view.id; commitDb(db, () => { newRow(db, { title, values: vals }); }); toast('Form submitted', null, { type: 'ok' });
+  } }, 'Submit');
+  box.append(msgHost, h('div', { class: 'frm-act' }, submit, h('button', { class: 'btn', onclick: () => refreshDb() }, 'Clear')));
+  wrap.append(box); return wrap;
+}
+DB_VIEWS.form = dbForm;
+
+/* ---- tasks: start, assignee, blocked-by, time ---- */
+{ const _nt = normTask; normTask = function (it) { _nt(it); it.start = it.start || null; it.assignee = it.assignee || []; it.blockedBy = it.blockedBy || []; it.timer = it.timer || null; return it; }; }
+function taskBlockers(it) { return (it.blockedBy || []).map(id => findTask(id)).filter(f => f && !f.item.done).map(f => f.item); }
+function taskBadges(it) {
+  const out = [], bl = taskBlockers(it);
+  if (bl.length) out.push(h('span', { class: 'lockb', title: 'Blocked by: ' + bl.map(b => b.text).join(', ') }, '🔒'));
+  if (it.start) out.push(h('span', { class: 'muted', style: { fontSize: '11px' }, title: 'Start date' }, '▶ ' + fmtDateVal({ start: it.start }).replace(/, \d{4}/, '')));
+  (it.assignee || []).map(personById).filter(Boolean).slice(0, 3).forEach(p => out.push(avatar(p, 'sm')));
+  if (it.timer && (it.timer.sec || it.timer.run)) out.push(h('span', { class: 'muted', style: { fontSize: '11px' }, title: 'Time tracked' }, '⏱ ' + fmtDur(timerSec(it.timer))));
+  return out.length ? h('span', { class: 't2-plan', style: { display: 'inline-flex', gap: '4px', alignItems: 'center' } }, out) : null;
+}
+{ const _ot = openTask; openTask = function (tid, opts) {
+  _ot(tid, opts); const f = findTask(tid), due = f && document.querySelector('.modal-bg input[type=date].tm-input'); if (!due) return;
+  const it = f.item, cp = { v: !!(opts && opts.fresh) };
+  const change = fn => { if (!cp.v) { checkpoint(); cp.v = true; } const cur = findTask(tid); fn(cur.item); cur.card.updatedAt = now(); save(); refreshTaskViews([cur.card.id]); };
+  const box = h('div', { class: 'tm-plan', style: { display: 'flex', flexDirection: 'column', gap: '8px', margin: '8px 0' } });
+  const paint = () => {
+    const cur = findTask(tid).item; box.innerHTML = '';
+    const start = h('input', { type: 'date', class: 'tm-input', value: cur.start || '' }); start.onchange = () => { if (start.value && cur.due && start.value > cur.due) { fieldMsg(start, 'Start is after the due date', 'warn'); } change(x => { x.start = start.value || null; }); };
+    const who = h('button', { class: 'btn', onclick: e => peoplePop(e.currentTarget, cur.assignee || [], v => { change(x => { x.assignee = v; }); paint(); }) }, (cur.assignee || []).length ? (cur.assignee).map(personById).filter(Boolean).map(p => p.name).join(', ') : 'Assign people');
+    const bl = h('button', { class: 'btn', onclick: e => { closeTransient(); const pop = h('div', { class: 'pop ppl-pop' }); const others = Object.values(ST.cards).filter(c => c.type === 'todo').flatMap(c => c.data.items.filter(x => x.id !== tid)).slice(0, 80);
+      for (const o of others) { const on = (cur.blockedBy || []).includes(o.id); pop.append(h('button', { class: 'ppl-pick', onclick: () => { change(x => { x.blockedBy = on ? x.blockedBy.filter(i => i !== o.id) : [...(x.blockedBy || []), o.id]; }); closeTransient(); paint(); } }, h('span', null, on ? '✓' : ''), h('span', { class: 'ppl-n' }, o.text || 'Untitled'))); }
+      if (!others.length) pop.append(h('div', { class: 'muted' }, 'No other tasks')); document.body.append(pop); const r = e.currentTarget.getBoundingClientRect(); placeEl(pop, r.left, r.bottom + 4); } }, (cur.blockedBy || []).length ? (cur.blockedBy.length + ' blocking task' + (cur.blockedBy.length > 1 ? 's' : '')) : 'Blocked by…');
+    const tm = h('button', { class: 'btn', onclick: e => timerPop(e.currentTarget, taskTimerHost(tid), { id: 'timer' }, fn => { change(() => fn()); paint(); }) }, '⏱ ' + fmtDur(timerSec(cur.timer || {})) + (cur.timer && cur.timer.run ? ' (running)' : ''));
+    box.append(h('div', { class: 'tm-row', style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } }, h('label', { class: 'muted' }, 'Start'), start, who, bl, tm));
+  };
+  paint(); const anchor = due.closest('.tm-row, .tm-field, div') || due.parentElement; anchor.after(box);
+}; }
+/* adapter so timerPop (written for database rows) can drive a task item */
+function taskTimerHost(tid) { const f = findTask(tid); const holder = { get values() { const it = findTask(tid).item; return new Proxy({}, { get: (_, k) => k === 'timer' ? it.timer : undefined, set: (_, k, v) => { if (k === 'timer') it.timer = v; return true; }, deleteProperty: (_, k) => { if (k === 'timer') it.timer = null; return true; } }); } }; return holder; }
+
+/* ---- weekly time report ---- */
+function timeReport() {
+  closeTransient(); $$('.modal-bg').forEach(m => m.remove());
+  const logs = []; const addLogs = (name, t) => { if (!t) return; for (const l of t.log || []) logs.push({ name, d: l.d, s: l.s }); if (t.run) logs.push({ name, d: ymd(new Date()), s: Math.floor((Date.now() - t.run) / 1e3) }); };
+  for (const c of Object.values(ST.cards)) if (c.type === 'todo') for (const it of c.data.items) addLogs(it.text || 'Untitled', it.timer);
+  for (const db of Object.values(ST.dbs)) { const pr = db.schema.filter(p => p.type === 'timer'); for (const r of dbRows(db)) for (const p of pr) addLogs((r.title || 'Untitled'), r.values[p.id]); }
+  const wk = {}; for (const l of logs) { const w = mondayOf(l.d); (wk[w] = wk[w] || {})[l.name] = (wk[w][l.name] || 0) + l.s; }
+  const weeks = Object.keys(wk).sort().reverse();
+  const body = h('div', { class: 'tr-body', style: { maxHeight: '60vh', overflow: 'auto', minWidth: '320px' } });
+  if (!weeks.length) body.append(h('div', { class: 'muted' }, 'No time logged yet. Start a timer on a task or a database row.'));
+  for (const w of weeks) { const items = Object.entries(wk[w]).sort((a, b) => b[1] - a[1]), tot = items.reduce((s, x) => s + x[1], 0);
+    body.append(h('div', { style: { fontWeight: '600', margin: '10px 0 4px', display: 'flex', justifyContent: 'space-between' } }, h('span', null, 'Week of ' + fmtDateVal({ start: w }).replace(/, \d{4}/, '')), h('span', null, fmtDur(tot))), ...items.map(([n, s]) => h('div', { style: { display: 'flex', justifyContent: 'space-between', fontSize: '13px', padding: '2px 0' } }, h('span', null, n), h('span', { class: 'muted' }, fmtDur(s))))); }
+  const bg = h('div', { class: 'modal-bg', onclick: e => { if (e.target === bg) bg.remove(); } }, h('div', { class: 'modal', style: { padding: '20px', maxWidth: '480px' } }, h('h3', { style: { margin: '0 0 8px' } }, 'Time report'), body, h('div', { style: { marginTop: '12px', textAlign: 'right' } }, h('button', { class: 'btn', onclick: () => bg.remove() }, 'Close'))));
+  document.body.append(bg);
+}
+{ const _rh = renderTVHead; renderTVHead = function () { _rh.apply(this, arguments); const sel = document.querySelector('.tasksview .tv-sel'); if (sel && !document.querySelector('.tv-time')) sel.before(h('button', { class: 'btn tv-time', title: 'Weekly time report', onclick: timeReport }, '⏱ Time report')); }; }
+
+/* ---- progress bar in database header ---- */
+{ const _dh = dbHead; dbHead = function (ctx) { const el = _dh(ctx), { db, rows } = ctx; const done = rows.filter(r => rowDone(db, r)).length; const has = db.schema.some(p => p.type === 'status' && p.options.some(o => o.group === 'done')) || db.schema.some(p => p.type === 'checkbox');
+  const cnt = el.querySelector('.dbv-count'); if (cnt && has && rows.length) cnt.after(h('span', { class: 'pbar', title: `${done} of ${rows.length} done` }, h('i', { style: { width: Math.round(done / rows.length * 100) + '%' } }))); return el; }; }
 
 /* ========== events + init ========== */
 function migrate() {
