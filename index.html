@@ -2835,6 +2835,41 @@ input:focus-visible,textarea:focus-visible{outline:none;box-shadow:0 0 0 3px col
 .frm-check{width:40px;height:40px;border-radius:50%;background:var(--ok-bg);color:var(--ok-ink);display:flex;align-items:center;justify-content:center}
 .frm-hint{font-size:11px}
 .tl-bar,.cal-pill{box-shadow:inset 0 0 0 1px rgba(128,128,128,.35);font-weight:500}.tl-bar:hover,.cal-pill:hover{filter:brightness(1.15)}
+
+/* ===== v4.2: line icons, calm palette, overlays, workspace card ===== */
+.lic{display:inline-block;width:1em;height:1em;vertical-align:-.14em;line-height:0}
+.lic svg{width:1em;height:1em;display:block}
+.ic-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:2px;padding:4px 0}
+.ic-grid button{border:0;background:transparent;border-radius:6px;padding:6px;font-size:16px;cursor:pointer;color:var(--text,inherit)}
+.ic-grid button:hover,.ic-grid button.cur{background:var(--hover)}
+.emopop .dd-h{font-size:11px;color:var(--muted);padding:4px 6px 0;text-transform:uppercase;letter-spacing:.04em}
+/* calm palette */
+.app-root:not(.classic){--sel:#2f6f62;--selh:#265a50;--accent:#2f6f62;--link:#2f6f62}
+.app-root.dark:not(.classic){--sel:#5fb3a1;--selh:#7cc4b4;--accent:#5fb3a1;--link:#7cc4b4}
+.app-root:not(.classic) .opt{filter:saturate(.6)}
+/* hero overlay: directional gradient + progressive blur, image heroes only */
+.t2-hero[style*="url("]{position:relative;isolation:isolate}
+.t2-hero[style*="url("]::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);-webkit-mask-image:linear-gradient(to top right,#000 0,rgba(0,0,0,.6) 35%,transparent 65%);mask-image:linear-gradient(to top right,#000 0,rgba(0,0,0,.6) 35%,transparent 65%)}
+.t2-hero[style*="url("]::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to top right,rgba(0,0,0,.7) 0,rgba(0,0,0,.45) 35%,transparent 70%)}
+.t2-hero[style*="url("] .hero-txt{position:relative;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.t2-hero .hero-change{z-index:3}
+/* pop-out video: no flat tint */
+.video-popped::before{background:linear-gradient(to top,rgba(0,0,0,.55),transparent 60%)!important}
+.video-popped .vp-in{background:rgba(0,0,0,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:6px 12px;border-radius:999px;color:#fff;font-size:12px}
+/* board cover */
+.board-cover.img::after{background:linear-gradient(to top right,rgba(0,0,0,.4),transparent 55%)!important}
+/* workspace card */
+.ws-card{display:flex;align-items:center;gap:8px;width:100%;border:0;background:transparent;padding:6px 8px;border-radius:8px;cursor:pointer;text-align:left;color:inherit}
+.ws-card:hover{background:var(--hover)}
+.ws-av{width:24px;height:24px;border-radius:6px;background:var(--sel);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:600;flex:none}
+.ws-t{display:flex;flex-direction:column;min-width:0;flex:1;line-height:1.2}.ws-t b{font-size:13px;font-weight:600}.ws-t i{font-size:11px;color:var(--muted);font-style:normal}
+.ws-ch{color:var(--muted)}
+#btnSettings,#btnView,#btnExport,#btnHelp{position:fixed;left:16px;bottom:44px;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden}
+.sb-logo{display:none}
+.app-root:not(.classic) .t2-stat{--kc:var(--muted)!important}
+.app-root:not(.classic) .t2-stat.on{--kc:var(--sel)!important}
+.app-root:not(.classic) .btn.primary{background:var(--sel);border-color:var(--sel)}
+.app-root:not(.classic) .btn.primary:hover{background:var(--selh);border-color:var(--selh)}
 </style>
 </head>
 <body class="app-root">
@@ -3086,7 +3121,7 @@ function defaultState() {
   const root = uid();
   return {
     v: 1, rootId: root,
-    boards: { [root]: { id: root, title: 'Home', parentId: null, color: '#f2a65a', icon: '🏠', bg: null, grid: true, createdAt: now(), updatedAt: now(), view: { x: 60, y: 40, z: 1 } } },
+    boards: { [root]: { id: root, title: 'Home', parentId: null, color: '#f2a65a', icon: 'ic:home', bg: null, grid: true, createdAt: now(), updatedAt: now(), view: { x: 60, y: 40, z: 1 } } },
     cards: {}, lines: {},
     labels: [{ id: uid(), name: 'Important', color: '#ef6f6c' }, { id: uid(), name: 'Idea', color: '#5f8ff0' }, { id: uid(), name: 'In progress', color: '#f2a65a' }, { id: uid(), name: 'Done', color: '#5bb85d' }],
     recent: [root], settings: { dark: true, v3theme: 1, snap: true, name: 'Me' },
@@ -8138,7 +8173,7 @@ function dbExportTable(db, view) { const cols = [dbProp(db, TITLE), ...viewCols(
 /* ========== database views: table, board, gallery, list ========== */
 const DB_TYPES = [['formula', 'Formula', 'ƒ'], ['relation', 'Relation', '↗'], ['rollup', 'Rollup', '∑']];
 const dbPropIcon = t => t === 'title' ? 'Aa' : (DB_TYPES.find(x => x[0] === t) || [0, 0, propIcon(t)])[2];
-const VIEW_IC = { table: '▤', board: '▥', gallery: '▦', list: '☰' };
+const VIEW_IC = { table: 'ic:table', board: 'ic:columns', gallery: 'ic:grid', list: 'ic:list' };
 const DB_VIEWS = {};
 const rectAnchor = el => { const r = el.getBoundingClientRect(); return { getBoundingClientRect: () => r }; };
 function commitDb(db, fn, row) {
@@ -9104,20 +9139,20 @@ const tCol = (title, kids) => ({ type: 'column', data: { title }, kids });
 const tNote = html => ({ type: 'note', data: { html } });
 const tTodo = (title, items) => ({ type: 'todo', data: { title, showTitle: true, items: items.map(t => newTask(t)) } });
 const BOARD_TEMPLATES = [
-  { id: 'content', name: 'Content calendar', icon: '🗓', desc: 'Move ideas from script to scheduled.', cards: [{ type: 'heading', x: 40, y: 30, w: 600, data: { text: 'Content calendar' } },
+  { id: 'content', name: 'Content calendar', icon: 'ic:calendar', desc: 'Move ideas from script to scheduled.', cards: [{ type: 'heading', x: 40, y: 30, w: 600, data: { text: 'Content calendar' } },
     { ...tCol('Ideas', [tNote('Idea: …'), tNote('Idea: …')]), x: 40, y: 110 }, { ...tCol('Scripting', [tNote('Hook, outline, CTA')]), x: 370, y: 110 }, { ...tCol('Filming', []), x: 700, y: 110 }, { ...tCol('Editing', []), x: 1030, y: 110 }, { ...tCol('Scheduled', []), x: 1360, y: 110 }] },
-  { id: 'shoot', name: 'Shoot planning', icon: '🎬', desc: 'Checklist, shot list, schedule and gear.', cards: [{ type: 'heading', x: 40, y: 30, w: 600, data: { text: 'Shoot plan' } },
+  { id: 'shoot', name: 'Shoot planning', icon: 'ic:film', desc: 'Checklist, shot list, schedule and gear.', cards: [{ type: 'heading', x: 40, y: 30, w: 600, data: { text: 'Shoot plan' } },
     { ...tTodo('Pre-production', ['Scout location', 'Confirm talent and crew', 'Permits and releases', 'Gear check', 'Send call sheet']), x: 40, y: 110 },
     { ...tNote('<b>Call sheet</b><br>Date · Call time · Location · Contacts'), x: 380, y: 110 },
     { type: 'table', x: 380, y: 300, w: 440, data: { rows: [['Time', 'Scene', 'Notes'], ['', '', ''], ['', '', ''], ['', '', '']], header: true } },
     { ...tCol('Shot list', [tNote('Wide establishing'), tNote('Close-up detail')]), x: 860, y: 110 }, { ...tTodo('Gear', ['Camera + batteries', 'Lenses', 'Audio kit', 'Lights', 'Media cards']), x: 40, y: 420 }] },
-  { id: 'client', name: 'Client project', icon: '🤝', desc: 'Overview, deliverables, milestones, feedback.', cards: [{ type: 'heading', x: 40, y: 30, w: 600, data: { text: 'Client project' } },
+  { id: 'client', name: 'Client project', icon: 'ic:briefcase', desc: 'Overview, deliverables, milestones, feedback.', cards: [{ type: 'heading', x: 40, y: 30, w: 600, data: { text: 'Client project' } },
     { ...tNote('<b>Overview</b><br>Client · Goal · Budget · Deadline'), x: 40, y: 110 }, { ...tTodo('Deliverables', ['Kickoff call', 'First draft', 'Revisions', 'Final delivery']), x: 380, y: 110 },
     { ...tTodo('Milestones', ['Brief approved', 'Draft due', 'Final due']), x: 720, y: 110 }, { ...tCol('Feedback', [tNote('Paste client notes here')]), x: 1060, y: 110 },
     { type: 'table', x: 40, y: 330, w: 440, data: { rows: [['Item', 'Estimate', 'Actual'], ['', '', ''], ['', '', '']], header: true } }] },
-  { id: 'weekly', name: 'Weekly review', icon: '🔁', desc: 'Wins, misses, lessons and next week.', cards: [{ type: 'heading', x: 40, y: 30, w: 600, data: { text: 'Weekly review' } },
+  { id: 'weekly', name: 'Weekly review', icon: 'ic:repeat', desc: 'Wins, misses, lessons and next week.', cards: [{ type: 'heading', x: 40, y: 30, w: 600, data: { text: 'Weekly review' } },
     { ...tNote('<b>Wins</b><br>•'), x: 40, y: 110 }, { ...tNote('<b>What slipped</b><br>•'), x: 380, y: 110 }, { ...tNote('<b>Lessons</b><br>•'), x: 720, y: 110 }, { ...tTodo('Next week: top 3', ['', '', '']), x: 1060, y: 110 }] },
-  { id: 'blank', name: 'Blank board', icon: '▫️', desc: 'Start with an empty board.', cards: [] },
+  { id: 'blank', name: 'Blank board', icon: 'ic:note', desc: 'Start with an empty board.', cards: [] },
 ];
 function createBoardFromTemplate(t) {
   closeDashes(); closePageView(); closeTransient(); $$('.modal-bg').forEach(m => m.remove());
@@ -10431,7 +10466,7 @@ const HEROES = {
   mono: ['Lines', 'repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 2px,transparent 2px 14px),linear-gradient(120deg,#1b1d22,#31353d)'],
 };
 function heroState() { const s = ST.settings; if (!s.hero) s.hero = { kind: 'builtin', id: 'slate' }; if (!s.userName) s.userName = 'Greg'; return s.hero; }
-function heroBg() { const hs = heroState(); if (hs.kind === 'img' && hs.src) return { backgroundImage: `linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.45)),url("${hs.src}")`, backgroundSize: 'cover', backgroundPosition: 'center' }; return { background: (HEROES[hs.id] || HEROES.slate)[1] }; }
+function heroBg() { const hs = heroState(); if (hs.kind === 'img' && hs.src) return { backgroundImage: `url("${hs.src}")`, backgroundSize: 'cover', backgroundPosition: 'center' }; return { background: (HEROES[hs.id] || HEROES.slate)[1] }; }
 function greetWord() { const hr = new Date().getHours(); return hr < 5 ? 'Good evening' : hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening'; }
 function heroSummary() {
   const t = todayStr(), today = todayItems().filter(x => !x.it.done).length;
@@ -11271,12 +11306,12 @@ function arrangePop(anchor, ids) {
 const optId = (pr, name) => (pr.options.find(o => o.name === name) || {}).id || '';
 function buildProductionBoard() {
   closeDashes(); closePageView(); closeTransient(); $$('.modal-bg').forEach(m => m.remove());
-  checkpoint(); const nb2 = createBoardIn(S.boardId, 'Production project'); nb2.icon = '🎬';
+  checkpoint(); const nb2 = createBoardIn(S.boardId, 'Production project'); nb2.icon = 'ic:film';
   const prev = S.boardId; S.boardId = nb2.id;
   newCard('heading', 40, 30, { text: 'Production project' }).w = 700;
   /* shot list (source database) */
   const sc = newCard('database', 40, 110, {}); sc.w = 760; sc.h = 360;
-  const sdb = ST.dbs[sc.data.dbId]; sdb.title = 'Shot list'; sdb.icon = '🎬'; sdb.titleName = 'Description';
+  const sdb = ST.dbs[sc.data.dbId]; sdb.title = 'Shot list'; sdb.icon = 'ic:film'; sdb.titleName = 'Description';
   const P = (t, n, o) => dbP(t, n, o);
   const sNum = P('text', 'Shot'), sScene = P('text', 'Scene'), sType = P('select', 'Size', ['Wide', 'Medium', 'Close-up', 'Macro', 'Drone']), sMove = P('select', 'Movement', ['Static', 'Dolly', 'Slider', 'Handheld', 'Gimbal']),
     sLens = P('text', 'Lens'), sLoc = P('text', 'Location'), sDay = P('select', 'Day', ['Day 1', 'Day 2', 'Day 3']), sCall = P('text', 'Time'),
@@ -11292,7 +11327,7 @@ function buildProductionBoard() {
   const sch = newCard('database', 40, 510, { dbId: sdb.id, linked: true, views: [dbV('table', 'Schedule', { groupBy: sDay.id, sorts: [{ prop: sCall.id, dir: 'asc' }], hidden: [sMove.id, sLens.id, sDone.id] })] }); sch.data.cur = sch.data.views[0].id; sch.w = 760; sch.h = 340;
   /* crew */
   const cc = newCard('database', 840, 330, {}); cc.w = 520; cc.h = 300;
-  const cdb = ST.dbs[cc.data.dbId]; cdb.title = 'Crew and contacts'; cdb.icon = '👥'; cdb.titleName = 'Name';
+  const cdb = ST.dbs[cc.data.dbId]; cdb.title = 'Crew and contacts'; cdb.icon = 'ic:users'; cdb.titleName = 'Name';
   const cRole = P('select', 'Role', ['Director', 'DP', 'Camera op', 'Sound', 'Talent', 'Client']), cPh = P('phone', 'Phone'), cEm = P('email', 'Email'), cCall = P('text', 'Call time'), cOk = P('checkbox', 'Confirmed');
   cdb.schema = [cRole, cPh, cEm, cCall, cOk];
   for (const r of [['Alex Rivera', 'DP', '6:30'], ['Sam Lee', 'Sound', '7:00'], ['Dr. Patel', 'Talent', '8:00']]) { const p = newRow(cdb, { title: r[0] }); Object.assign(p.values, { [cRole.id]: optId(cRole, r[1]), [cCall.id]: r[2] }); }
@@ -11303,7 +11338,7 @@ function buildProductionBoard() {
   const mc = newCard('column', 1400, 330, { title: 'Mood board' }); mc.w = 300;
   S.boardId = prev; save(); renderBoard(); openBoard(nb2.id); toast('Created “Production project”', 3200);
 }
-BOARD_TEMPLATES.splice(1, 0, { id: 'production', name: 'Production project', icon: '🎬', desc: 'Shot list, storyboard, schedule, call sheet, crew.', cards: [], build: buildProductionBoard });
+BOARD_TEMPLATES.splice(1, 0, { id: 'production', name: 'Production project', icon: 'ic:film', desc: 'Shot list, storyboard, schedule, call sheet, crew.', cards: [], build: buildProductionBoard });
 { const _c = createBoardFromTemplate; createBoardFromTemplate = function (t) { return t && t.build ? t.build() : _c.apply(this, arguments); }; }
 
 /* ---------- toast v2: typed, stacked, optional action ---------- */
@@ -11484,7 +11519,7 @@ setInterval(() => { for (const el of $$('.tmr-cell.live')) { const row = el.clos
 
 /* ---- views: Timeline, Calendar, Workload, Form ---- */
 Object.assign(VIEW_NAMES, { timeline: 'Timeline', calendar: 'Calendar', workload: 'Workload', form: 'Form' });
-Object.assign(VIEW_IC, { timeline: '▭', calendar: '▦', workload: '▤', form: '✎' });
+Object.assign(VIEW_IC, { timeline: 'ic:timeline', calendar: 'ic:calendar', workload: 'ic:users', form: 'ic:edit' });
 Object.assign(DB_VIEWS, { table: dbTable, board: dbBoard, gallery: dbGallery, list: dbList });
 const dayDiff = (a, b) => Math.round((parseYmd(b) - parseYmd(a)) / 864e5);
 const dateProps = db => db.schema.filter(p => p.type === 'date');
@@ -11745,7 +11780,7 @@ function timeReport() {
 /* ========== v4.1: Look book template ========== */
 function buildLookBook() {
   closeDashes(); closePageView(); closeTransient(); $$('.modal-bg').forEach(m => m.remove());
-  checkpoint(); const nb = createBoardIn(S.boardId, 'Look book'); nb.icon = '👁'; const prev = S.boardId; S.boardId = nb.id;
+  checkpoint(); const nb = createBoardIn(S.boardId, 'Look book'); nb.icon = 'ic:eye'; const prev = S.boardId; S.boardId = nb.id;
   const frame = (t, x, y, w, hh) => { const f = newCard('frame', x, y, { title: t }); f.w = w; f.h = hh; return f; };
   newCard('heading', 40, 24, { text: 'Look book · Project name' }).w = 760;
   /* frames first so they sit behind content */
@@ -11763,7 +11798,7 @@ function buildLookBook() {
   [[64, 770], [304, 770], [544, 770]].forEach(([x, y]) => { const p = newCard('placeholder', x, y, {}); p.w = 220; p.h = 140; });
   /* looks database: one row per reference frame, linked to shots */
   const lc = newCard('database', 784, 770, {}); lc.w = 440; lc.h = 210;
-  const db = ST.dbs[lc.data.dbId]; db.title = 'Looks'; db.icon = '👁'; db.titleName = 'Reference';
+  const db = ST.dbs[lc.data.dbId]; db.title = 'Looks'; db.icon = 'ic:eye'; db.titleName = 'Reference';
   const P = (t, n, o) => dbP(t, n, o);
   const lShot = P('text', 'Shot'), lScene = P('text', 'Scene'), lTag = P('select', 'Look', ['Wide OR', 'Macro', 'Interview', 'Drone', 'Exterior']),
     lSt = P('status', 'Status', [['Concept', 'gray', 'todo'], ['In review', 'yellow', 'prog'], ['Approved', 'green', 'done']]), lAp = dbP('approval', 'Sign-off'), lWho = dbP('person', 'Owner'), lNote = P('text', 'Notes');
@@ -11772,7 +11807,71 @@ function buildLookBook() {
   lc.data.views = [dbV('gallery', 'Gallery'), dbV('table', 'All references', { sorts: [{ prop: lShot.id, dir: 'asc' }] }), dbV('board', 'By status', { groupBy: lSt.id })]; lc.data.cur = lc.data.views[0].id;
   S.boardId = prev; save(); renderBoard(); openBoard(nb.id); toast('Created “Look book”', 3200);
 }
-BOARD_TEMPLATES.splice(2, 0, { id: 'lookbook', name: 'Look book', icon: '👁', desc: 'Concept, palette, reference frames, lens notes, looks gallery.', cards: [], build: buildLookBook });
+BOARD_TEMPLATES.splice(2, 0, { id: 'lookbook', name: 'Look book', icon: 'ic:eye', desc: 'Concept, palette, reference frames, lens notes, looks gallery.', cards: [], build: buildLookBook });
+
+/* ========== v4.2: line icons, calm palette, workspace card, quieter rows ========== */
+const LINE_ICONS = {
+  home: 'M3 11l9-8 9 8M5 10v10h14V10M10 20v-6h4v6', folder: 'M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z',
+  film: 'M4 4h16v16H4zM8 4v16M16 4v16M4 9h4M4 15h4M16 9h4M16 15h4', camera: 'M4 8h3l2-3h6l2 3h3v11H4zM12 17a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7',
+  bulb: 'M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3', rocket: 'M14 4c3 0 6 0 6 6-2 3-5 5-8 6l-4-4c1-3 3-6 6-8zM9 15l-4 4M8 12l-3 1M12 16l-1 3',
+  pin: 'M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10M12 11.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3', book: 'M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11',
+  target: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8M12 12h.01', tool: 'M14.5 6.5a4 4 0 0 0 5 5L10 21a2 2 0 0 1-3-3l9.5-9.5',
+  briefcase: 'M4 8h16v11H4zM9 8V5h6v3M4 13h16', plane: 'M3 12l18-8-5 17-4-7zM12 14l9-10', dollar: 'M12 3v18M16 7H10a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6H8',
+  chart: 'M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-6', palette: 'M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.5-2-.6-1.2.2-2.5 1.5-2.5H17a4 4 0 0 0 4-4c0-5-4-9.5-9-9.5M7.5 11h.01M10 7.5h.01M14.5 7.5h.01',
+  music: 'M9 18V5l11-2v13M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3M20 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3', leaf: 'M5 19c0-8 5-14 15-14 0 10-6 15-14 15M5 19l7-7',
+  heart: 'M12 20s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 9c0 6-8 11-8 11', star: 'M12 3l2.8 5.8 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.3l1-6.2L3 9.7l6.2-.9z',
+  dumbbell: 'M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12', puzzle: 'M10 4a2 2 0 1 1 4 0v2h4v4h-2a2 2 0 1 0 0 4h2v4h-4v-2a2 2 0 1 0-4 0v2H6v-4h2a2 2 0 1 0 0-4H6V6h4z',
+  note: 'M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5', flame: 'M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9', users: 'M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6M3 20c0-3 3-5 6-5s6 2 6 5M16 5a3 3 0 0 1 0 6M18 15c2 .5 3 2.5 3 5',
+  calendar: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4', repeat: 'M4 12V9a3 3 0 0 1 3-3h12M16 3l3 3-3 3M20 12v3a3 3 0 0 1-3 3H5M8 21l-3-3 3-3', eye: 'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6',
+  lock: 'M6 11h12v9H6zM8 11V8a4 4 0 0 1 8 0v3', clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3 2', user: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M4 21c0-4 4-6 8-6s8 2 8 6',
+  warning: 'M12 4l10 17H2zM12 10v5M12 18h.01', check: 'M5 12l5 5 10-10', ban: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M5.6 5.6l12.8 12.8', list: 'M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01',
+  table: 'M4 5h16v14H4zM4 10h16M10 5v14', columns: 'M4 5h5v14H4zM10 5h4v10h-4zM15 5h5v7h-5', grid: 'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7h-7zM13 13h7v7h-7z', timeline: 'M4 7h9M8 12h12M6 17h8', edit: 'M4 20h4L19 9l-4-4L4 16zM13 7l4 4',
+  chev: 'M6 9l6 6 6-6', settings: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2-1.2L14.3 3h-4l-.4 2.7a7 7 0 0 0-2 1.2l-2.3-1-2 3.4 2 1.5a7 7 0 0 0 0 2.4l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2 1.2l.4 2.7h4l.4-2.7a7 7 0 0 0 2-1.2l2.3 1 2-3.4-2-1.5c.1-.4.1-.8.1-1.2'
+};
+const PICK_ICONS = ['home', 'folder', 'film', 'camera', 'bulb', 'rocket', 'pin', 'book', 'target', 'tool', 'briefcase', 'plane', 'dollar', 'chart', 'palette', 'music', 'leaf', 'heart', 'star', 'dumbbell', 'puzzle', 'note', 'flame', 'users', 'calendar', 'repeat', 'eye'];
+function lineIcon(n) { const d = LINE_ICONS[n]; if (!d) return null; const s = document.createElement('span'); s.className = 'lic'; s.innerHTML = `<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`; return s; }
+const GLYPH_MAP = { '🔒': 'lock', '⚠': 'warning', '⏱': 'clock', '⛔': 'ban', '✔': 'check', '✓': 'check', '☺': 'user', '▤': 'table', '▥': 'columns', '▦': 'grid', '☰': 'list', '▭': 'timeline', '✎': 'edit' };
+const ICON_RE = /ic:([a-z]+)|([🔒⚠⏱⛔✔✓☺▤▥▦☰▭✎])️?/gu;
+function convIcons(root) {
+  if (!root || root.nodeType === 8) return; const tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), hits = []; let n;
+  if (root.nodeType === 3) hits.push(root); else while ((n = tw.nextNode())) hits.push(n);
+  for (const t of hits) { const v = t.nodeValue; if (!v || (v.indexOf('ic:') < 0 && !/[🔒⚠⏱⛔✔✓☺▤▥▦☰▭✎]/u.test(v))) continue; const p = t.parentElement; if (!p || p.closest('[contenteditable="true"],textarea,input,script,style,.rt,.lic')) continue;
+    ICON_RE.lastIndex = 0; const frag = document.createDocumentFragment(); let last = 0, m, any = false;
+    while ((m = ICON_RE.exec(v))) { const ic = m[1] ? m[1] : GLYPH_MAP[m[2]], el = ic && lineIcon(ic); if (!el) continue; any = true; if (m.index > last) frag.append(v.slice(last, m.index)); frag.append(el); last = m.index + m[0].length; }
+    if (any) { if (last < v.length) frag.append(v.slice(last)); t.replaceWith(frag); } }
+}
+{ let q = new Set(), tm = 0; const flush = () => { tm = 0; const a = [...q]; q.clear(); a.forEach(x => { if (x.isConnected) convIcons(x); }); };
+  const mo = new MutationObserver(ms => { for (const m of ms) { if (m.type === 'characterData') q.add(m.target); else m.addedNodes.forEach(x => q.add(x)); } if (!tm) tm = requestAnimationFrame(flush); });
+  const start = () => { convIcons(document.body); mo.observe(document.body, { childList: true, subtree: true, characterData: true }); };
+  if (document.body) start(); else document.addEventListener('DOMContentLoaded', start); }
+
+/* icon tab in pickers */
+{ const _ep = emojiPop; emojiPop = function (anchor, onPick, onRemove) { _ep(anchor, onPick, onRemove); const p = $('.emopop'); if (!p) return; const row = h('div', { class: 'ic-grid' }, PICK_ICONS.map(n => h('button', { class: 'emo', title: n, onclick: () => { closeTransient(); onPick('ic:' + n); } }, 'ic:' + n))); p.prepend(h('div', { class: 'dd-h' }, 'Icons'), row, h('div', { class: 'dd-h' }, 'Emoji')); convIcons(p); }; }
+{ const _ip = iconPop; iconPop = function (anchor, c) { _ip(anchor, c); const b = ST.boards[c.data.boardId]; const pop = [...document.querySelectorAll('.pop')].pop(); if (!pop || !b) return;
+  const row = h('div', { class: 'ic-grid' }, PICK_ICONS.map(n => h('button', { class: (b.icon || '') === 'ic:' + n ? 'cur' : '', title: n, onclick: () => { checkpoint(); b.icon = 'ic:' + n; save(); rerenderCard(c.id); renderCrumbs(); closeTransient(); } }, 'ic:' + n)));
+  const h4 = pop.querySelector('h4'); if (h4) h4.after(row); convIcons(pop); }; }
+
+/* ---- classic / calm theme ---- */
+function applyCalm() { document.body.classList.toggle('classic', !!ST.settings.classic); }
+{ const _at = applyTheme; applyTheme = function () { _at(); applyCalm(); }; }
+{ const soft = ['#6b8fb5', '#c99a5e', '#bf7a75', '#7fa584', '#9a8bb8', '#6fa59f', '#b583a8', '#c4b06a', '#3a3a38', '#8b6f5c']; BOARD_COLORS.splice(0, BOARD_COLORS.length, ...soft); }
+
+/* ---- workspace card ---- */
+function buildWsCard() {
+  const foot = $('.sb-foot'); if (!foot || $('#wsCard')) return;
+  const card = h('button', { id: 'wsCard', class: 'ws-card', title: 'Workspace menu' }, h('span', { class: 'ws-av' }, (ST.settings.userName || 'G').slice(0, 1).toUpperCase()), h('span', { class: 'ws-t' }, h('b', null, ST.settings.userName || 'Corkboard'), h('i', null, 'Workspace')), h('span', { class: 'ws-ch', html: '' }, 'ic:chev'));
+  card.onclick = () => { const r = card.getBoundingClientRect(); showMenu(r.left, r.top - 4, [
+    { label: 'Settings', fn: () => $('#btnSettings').click() }, { label: 'View, zoom and present', fn: () => $('#btnView').click() }, { label: 'Export this board', fn: () => $('#btnExport').click() }, { label: 'Keyboard shortcuts', fn: () => $('#btnHelp').click() },
+    '-', { label: (ST.settings.classic ? 'Use calm colors' : 'Use classic colors'), fn: () => { ST.settings.classic = !ST.settings.classic; save(); applyCalm(); } }]); const m = [...document.querySelectorAll('.menu')].pop(); if (m) { const mr = m.getBoundingClientRect(); m.style.top = Math.max(8, r.top - mr.height - 6) + 'px'; } };
+  foot.prepend(card); convIcons(card);
+}
+{ const _rs = renderSidebar; renderSidebar = function () { _rs.apply(this, arguments); buildWsCard(); }; }
+
+/* ---- task rows: hover actions, icon badges ---- */
+{ const _tbd = taskBadges; taskBadges = function (it) { return _tbd(it); }; }
+
+/* ---- progress bar only where completion is meaningful ---- */
+{ const _dh2 = dbHead; dbHead = function (ctx) { const el = _dh2(ctx); const t = ctx.view.type; if (t === 'workload' || t === 'form' || t === 'calendar' || t === 'timeline' || t === 'gallery') el.querySelectorAll('.dbv-head .pbar, .pbar').forEach(x => { if (x.title && /of \d+ done/.test(x.title)) x.remove(); }); return el; }; }
 
 /* ========== events + init ========== */
 function migrate() {
@@ -11787,7 +11886,7 @@ function seedWelcome() {
   const hd = newCard('heading', 40, 20, { text: 'Welcome to Corkboard' }); hd.w = 520;
   const n = newCard('note', 40, 110, { html: '<h2>Getting started</h2><ul><li>Drag a card from the dock at the bottom onto the board, or click it to add one in the middle.</li><li>Double-click empty space to add a note.</li><li>Right-click (long-press on touch) for more options.</li><li>Drop images, videos, audio and files straight onto the board.</li><li>Scroll to pan; hold Ctrl/⌘ and scroll (or pinch) to zoom.</li></ul>' }); n.w = 320;
   const t = newCard('todo', 420, 110, { title: 'First steps', items: [{ id: uid(), text: 'Create a board for a project', done: false }, { id: uid(), text: 'Add an image or a link', done: false }, { id: uid(), text: 'Connect two cards with a line', done: false }] });
-  const b = newCard('board', 780, 120); ST.boards[b.data.boardId].title = 'My first board'; ST.boards[b.data.boardId].icon = '📌';
+  const b = newCard('board', 780, 120); ST.boards[b.data.boardId].title = 'My first board'; ST.boards[b.data.boardId].icon = 'ic:pin';
   newLine({ cardId: n.id }, { cardId: t.id });
   S.hist = []; S.fut = []; save(); renderBoard();
 }
