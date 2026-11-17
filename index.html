@@ -11742,6 +11742,38 @@ function timeReport() {
 { const _dh = dbHead; dbHead = function (ctx) { const el = _dh(ctx), { db, rows } = ctx; const done = rows.filter(r => rowDone(db, r)).length; const has = db.schema.some(p => p.type === 'status' && p.options.some(o => o.group === 'done')) || db.schema.some(p => p.type === 'checkbox');
   const cnt = el.querySelector('.dbv-count'); if (cnt && has && rows.length) cnt.after(h('span', { class: 'pbar', title: `${done} of ${rows.length} done` }, h('i', { style: { width: Math.round(done / rows.length * 100) + '%' } }))); return el; }; }
 
+/* ========== v4.1: Look book template ========== */
+function buildLookBook() {
+  closeDashes(); closePageView(); closeTransient(); $$('.modal-bg').forEach(m => m.remove());
+  checkpoint(); const nb = createBoardIn(S.boardId, 'Look book'); nb.icon = '👁'; const prev = S.boardId; S.boardId = nb.id;
+  const frame = (t, x, y, w, hh) => { const f = newCard('frame', x, y, { title: t }); f.w = w; f.h = hh; return f; };
+  newCard('heading', 40, 24, { text: 'Look book · Project name' }).w = 760;
+  /* frames first so they sit behind content */
+  frame('Concept', 40, 90, 560, 420); frame('Color and grade', 640, 90, 600, 420); frame('Reference frames', 40, 550, 1200, 450);
+  frame('Camera, lens and lighting', 1280, 90, 420, 420); frame('Wardrobe, props, locations', 1280, 550, 420, 400);
+  newCard('note', 64, 150, { html: '<b>One-line look</b><br>Cool, clean, clinical. Top light, shallow depth, warm skin tones against teal shadows.<br><br><b>Mood words</b><br>Precise · calm · confident · human' }).w = 510;
+  const hero = newCard('placeholder', 64, 340, {}); hero.w = 510; hero.h = 150;
+  newCard('note', 664, 150, { html: '<b>Palette</b>  (click a swatch to edit the hex)' }).w = 540;
+  [['#1F3A4D', 664], ['#5B8FA8', 804], ['#D9C7B0', 944], ['#B84A3C', 1084]].forEach(([c, x]) => { const s = newCard('swatch', x, 210, { color: c }); s.w = 130; });
+  newCard('note', 664, 340, { html: '<b>Grade</b><br>Lifted blacks, teal in the shadows, protect skin tone.<br>Accent red used sparingly.<br><br><b>Type</b><br>Titles: Inter, caps, wide tracking. Lower thirds: Inter Medium.' }).w = 540;
+  newCard('table', 1304, 150, { rows: [['Shot type', 'Lens', 'Notes'], ['Wide', '24mm', 'f/4, dolly'], ['Interview', '85mm', 'f/2.8, slider'], ['Macro', '100mm', 'Static'], ['Drone', '24mm', 'Gimbal']] });
+  newCard('note', 1304, 360, { html: '<b>Lighting</b><br>Key: soft top light 5600K. Minimal fill. Keep practicals visible.' }).w = 370;
+  newCard('todo', 1304, 600, { title: 'Wardrobe, props, locations', showTitle: true, items: ['Navy scrubs, no white, no fine patterns', 'Device props cleaned and staged', 'Location photos and layout', 'Clearances for branding'].map(t => newTask(t)) });
+  [[64, 600], [304, 600], [544, 600], [784, 600], [1024, 600]].forEach(([x, y], i) => { const p = newCard('placeholder', x, y, {}); p.w = 220; p.h = 140; });
+  [[64, 770], [304, 770], [544, 770]].forEach(([x, y]) => { const p = newCard('placeholder', x, y, {}); p.w = 220; p.h = 140; });
+  /* looks database: one row per reference frame, linked to shots */
+  const lc = newCard('database', 784, 770, {}); lc.w = 440; lc.h = 210;
+  const db = ST.dbs[lc.data.dbId]; db.title = 'Looks'; db.icon = '👁'; db.titleName = 'Reference';
+  const P = (t, n, o) => dbP(t, n, o);
+  const lShot = P('text', 'Shot'), lScene = P('text', 'Scene'), lTag = P('select', 'Look', ['Wide OR', 'Macro', 'Interview', 'Drone', 'Exterior']),
+    lSt = P('status', 'Status', [['Concept', 'gray', 'todo'], ['In review', 'yellow', 'prog'], ['Approved', 'green', 'done']]), lAp = dbP('approval', 'Sign-off'), lWho = dbP('person', 'Owner'), lNote = P('text', 'Notes');
+  db.schema = [lShot, lScene, lTag, lSt, lAp, lWho, lNote];
+  [['Overhead light, hands in focus', '1A', '1', 'Wide OR', 'Approved'], ['Macro device detail', '1B', '1', 'Macro', 'In review'], ['Interview key light', '2A', '2', 'Interview', 'In review'], ['Drone reveal at dawn', '3A', '3', 'Drone', 'Concept']].forEach(r => { const p = newRow(db, { title: r[0] }); Object.assign(p.values, { [lShot.id]: r[1], [lScene.id]: r[2], [lTag.id]: optId(lTag, r[3]), [lSt.id]: optId(lSt, r[4]) }); });
+  lc.data.views = [dbV('gallery', 'Gallery'), dbV('table', 'All references', { sorts: [{ prop: lShot.id, dir: 'asc' }] }), dbV('board', 'By status', { groupBy: lSt.id })]; lc.data.cur = lc.data.views[0].id;
+  S.boardId = prev; save(); renderBoard(); openBoard(nb.id); toast('Created “Look book”', 3200);
+}
+BOARD_TEMPLATES.splice(2, 0, { id: 'lookbook', name: 'Look book', icon: '👁', desc: 'Concept, palette, reference frames, lens notes, looks gallery.', cards: [], build: buildLookBook });
+
 /* ========== events + init ========== */
 function migrate() {
   ST.settings = Object.assign({ dark: true, snap: true, name: 'Me' }, ST.settings || {});
