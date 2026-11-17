@@ -2688,6 +2688,53 @@ input:focus-visible,textarea:focus-visible{outline:none;box-shadow:0 0 0 3px col
 @keyframes popIn{from{opacity:0;transform:scale(.97) translateY(4px)}to{opacity:1;transform:none}}
 @keyframes chkPop{0%{transform:scale(.8)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){.tst,.modal-bg,.modal-bg>*,.menu,.pop,.pv-wrap,.dashview,.dbfull,.chk,.card.just-added{animation:none!important;transition:none!important}}
+
+/* ===== v3.9 tabs: flat text tabs, groups, pinned, overflow, drop highlight ===== */
+#tabrow #tabbar,#tabbar{height:36px;gap:0;padding:0 8px;background:none;align-items:stretch;overflow:visible;position:relative;border-bottom:0}
+#tabbar::after{content:"";position:absolute;left:8px;right:8px;bottom:0;height:1px;background:var(--line);pointer-events:none}
+#tabbar .tab{flex:0 1 168px;min-width:88px;max-width:220px;height:auto;align-self:stretch;margin:0;padding:0 12px;border:0!important;border-radius:0;background:none!important;box-shadow:none;color:var(--muted);font-size:13px;line-height:16px;gap:8px;position:relative;transition:color .15s ease,margin .12s ease,opacity .12s ease}
+#tabbar .tab::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;z-index:1;background:color-mix(in srgb,var(--gc,var(--text)) 16%,transparent);transition:background .15s ease}
+#tabbar .tab:hover{color:var(--text)}#tabbar .tab:hover::after{background:color-mix(in srgb,var(--gc,var(--text)) 34%,transparent)}
+#tabbar .tab.cur{color:var(--text);font-weight:600}#tabbar .tab.cur::after{background:var(--gc,var(--sel))}
+#tabbar .tab-ic{width:16px;height:16px;border-radius:4px;font-size:11px;line-height:16px}
+#tabbar .tab-ic:empty{display:none}
+#tabbar .tab-x{width:20px;height:20px;font-size:16px}
+#tabbar .tab.pinned{flex:none;min-width:0;padding:0 12px}
+#tabbar .tab-ic.pin{width:18px;height:18px;border-radius:5px;font-size:12px;font-weight:600;background:var(--hover);color:var(--text);display:grid}
+.tab-pins{display:flex;flex:none}
+.tab-div{width:1px;margin:10px 6px;background:var(--line);flex:none}
+.tabs-scroll{display:flex;align-items:stretch;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;flex:0 1 auto;min-width:0}
+.tabs-scroll::-webkit-scrollbar{display:none}
+.tabs-scroll.fade-l{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28px);mask-image:linear-gradient(90deg,transparent 0,#000 28px)}
+.tabs-scroll.fade-r{-webkit-mask-image:linear-gradient(270deg,transparent 0,#000 28px);mask-image:linear-gradient(270deg,transparent 0,#000 28px)}
+.tabs-scroll.fade-l.fade-r{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent 100%)}
+.tab-grp{display:flex;align-items:stretch;flex:0 1 auto;min-width:0;margin:0 4px;border-radius:6px;transition:background .12s,box-shadow .12s}
+.tab-grp .tab::after{background:color-mix(in srgb,var(--gc) 38%,transparent)}
+.tab-grp .tab.cur::after{background:var(--gc)}
+.tab-glabel{align-self:center;display:inline-flex;align-items:center;gap:8px;height:20px;padding:0 8px;margin-right:4px;border-radius:10px;background:color-mix(in srgb,var(--gc) 16%,transparent);color:color-mix(in srgb,var(--gc) 80%,var(--text));font-size:11px;line-height:14px;font-weight:600;white-space:nowrap;flex:none;cursor:pointer}
+.tab-glabel:hover{background:color-mix(in srgb,var(--gc) 26%,transparent)}
+.tg-c{min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--gc);color:#fff;font-size:11px;line-height:16px;text-align:center}
+.tab-grp.collapsed{margin-right:8px}
+.tab-more,#tabbar .tab-new{flex:none;align-self:center;width:24px;height:24px;border-radius:6px;color:var(--muted);display:grid;place-items:center;margin-left:4px;margin-bottom:0}
+.tab-more svg{width:14px;height:14px;fill:none;stroke:currentColor}
+.tab-more:hover,#tabbar .tab-new:hover{background:var(--hover);color:var(--text)}
+.tab-drop{position:absolute;top:6px;bottom:3px;width:3px;margin-left:-1px;border-radius:2px;background:var(--sel);box-shadow:0 0 0 3px color-mix(in srgb,var(--sel) 25%,transparent);pointer-events:none;z-index:6;animation:fadeIn .1s ease}
+#tabbar .tab.dragging{opacity:.4}
+#tabbar .tab.gap-l{margin-left:10px}#tabbar .tab.gap-r{margin-right:10px}
+.tab-grp.drop-join{background:color-mix(in srgb,var(--gc) 12%,transparent);box-shadow:inset 0 0 0 1px var(--gc)}
+.tab-all{min-width:260px;max-height:60vh;overflow:auto;display:flex;flex-direction:column;gap:2px;padding:4px}
+.ta-row{display:flex;align-items:center;border-radius:6px}.ta-row:hover{background:var(--hover)}.ta-row.cur .ta-go{font-weight:600}
+.ta-go{flex:1;min-width:0;display:flex;align-items:center;gap:8px;padding:8px;text-align:left;font-size:13px;line-height:16px}
+.ta-dot{width:8px;height:8px;border-radius:50%;flex:none}.ta-ic{width:16px;text-align:center;flex:none}.ta-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ta-pin{font-size:11px;color:var(--muted)}.ta-x{width:24px;height:24px;border-radius:6px;color:var(--muted);font-size:16px}.ta-x:hover{background:var(--line);color:var(--text)}
+.ta-g{font-size:11px;font-weight:600;padding:8px 8px 4px}
+@media (prefers-reduced-motion:reduce){#tabbar .tab,.tab-grp,.tab-drop{transition:none!important;animation:none!important}}
+@media(max-width:700px){#tabbar{height:44px}#tabbar .tab{font-size:15px;min-width:104px}#tabbar .tab-more,#tabbar .tab-new{width:36px;height:36px}}
+.tab-grp{flex:none}.tab-grp .tab{flex:0 0 auto;min-width:88px;max-width:180px}
+#tabbar .tab .tab-x{position:absolute;right:4px;top:50%;margin-top:-10px;background:var(--bar,var(--canvas))}
+#tabbar .tab:hover .tab-t,#tabbar .tab.cur .tab-t{padding-right:12px}
+#tabbar .tab{min-width:96px}.tab-grp .tab{min-width:96px}
+.tab-grp.collapsed .tab:not(.cur){display:none}
 </style>
 </head>
 <body class="app-root">
@@ -10105,21 +10152,122 @@ function tabSync() {
 }
 let _tabSyncQ = false;
 function tabSyncSoon() { if (_tabSyncQ) return; _tabSyncQ = true; Promise.resolve().then(() => { _tabSyncQ = false; tabSync(); }); }
-function renderTabs() {
-  const bar = $('#tabbar'); if (!bar) return; const tabs = tabList(), cur = ST.settings.tabCur; bar.innerHTML = '';
-  tabs.forEach((t, i) => {
-    const [title, color, icon] = tabLabel(t);
-    const el = h('div', { class: 'tab' + (i === cur ? ' cur' : ''), title, draggable: 'true' }, h('span', { class: 'tab-ic', style: color ? { background: color } : {} }, icon || ''), h('span', { class: 'tab-t' }, title),
-      tabs.length > 1 ? h('button', { class: 'tab-x', title: 'Close tab', onclick: e => { e.stopPropagation(); closeTab(i); } }, '×') : null);
-    el.addEventListener('click', () => switchTab(i));
-    el.addEventListener('auxclick', e => { if (e.button === 1) { e.preventDefault(); closeTab(i); } });
-    el.addEventListener('dragstart', e => { TABS.drag = i; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', 'tab'); });
-    el.addEventListener('dragover', e => { if (TABS.drag !== undefined && TABS.drag !== null) e.preventDefault(); });
-    el.addEventListener('drop', e => { const from = TABS.drag; TABS.drag = null; if (from === null || from === undefined || from === i) return; e.preventDefault(); const curTab = tabs[ST.settings.tabCur]; const [mv] = tabs.splice(from, 1); tabs.splice(i, 0, mv); ST.settings.tabCur = tabs.indexOf(curTab); save(); renderTabs(); });
-    bar.append(el);
-  });
-  bar.append(h('button', { class: 'tab-new', title: 'New tab', onclick: () => openInNewTab({ t: 'board', id: S.boardId }) }, '+'));
+ICON.chevd = ICON.chevd || sv('<path d="m6 9 6 6 6-6"/>', 'stroke-width="2"');
+const TAB_COLORS = ['#4f7cf0', '#8b5cf6', '#22a06b', '#e08a1e', '#d6498f', '#139fa3'];
+function tabGroups() { const s = ST.settings; if (!Array.isArray(s.tabGroups)) s.tabGroups = []; return s.tabGroups; }
+function tabGroup(id) { return tabGroups().find(g => g.id === id); }
+/* keep pinned tabs first and each group contiguous; keep the current tab selected */
+function tabNormalize() {
+  const tabs = tabList(), cur = tabs[ST.settings.tabCur], gs = tabGroups();
+  for (const t of tabs) { if (t.g && !tabGroup(t.g)) delete t.g; if (t.pin) delete t.g; }
+  const out = tabs.filter(t => t.pin), rest = tabs.filter(t => !t.pin), seen = new Set();
+  for (const t of rest) { if (!t.g) { out.push(t); continue; } if (seen.has(t.g)) continue; seen.add(t.g); for (const u of rest) if (u.g === t.g) out.push(u); }
+  if (out.some((t, i) => t !== tabs[i])) { tabs.splice(0, tabs.length, ...out); }
+  ST.settings.tabCur = Math.max(0, tabs.indexOf(cur));
+  const used = new Set(tabs.map(t => t.g).filter(Boolean)); for (let i = gs.length - 1; i >= 0; i--) if (!used.has(gs[i].id)) gs.splice(i, 1);
 }
+function tabInitial(title) { return (String(title || '?').trim()[0] || '?').toUpperCase(); }
+function tabMenu(e, i) {
+  e.preventDefault(); const tabs = tabList(), t = tabs[i], gs = tabGroups(), items = [];
+  items.push({ label: t.pin ? 'Unpin tab' : 'Pin tab', fn: () => tabPin(i) });
+  if (!t.pin) {
+    items.push({ label: 'Add to new group', fn: () => tabNewGroup(i) });
+    for (const g of gs) if (g.id !== t.g) items.push({ label: 'Add to “' + g.name + '”', fn: () => tabSetGroup(i, g.id) });
+    if (t.g) items.push({ label: 'Remove from group', fn: () => tabSetGroup(i, null) });
+  }
+  items.push('-', { label: 'Duplicate tab', fn: () => { const c = { ...t }; delete c.pin; tabs.splice(i + 1, 0, c); save(); renderTabs(); } });
+  if (!t.pin && tabs.length > 1) items.push({ label: 'Close tab', danger: true, fn: () => closeTab(i) });
+  showMenu(e.clientX, e.clientY, items);
+}
+function tabPin(i) { const tabs = tabList(), t = tabs[i], cur = tabs[ST.settings.tabCur]; if (!t) return; if (t.pin) delete t.pin; else { t.pin = true; delete t.g; } tabNormalize(); ST.settings.tabCur = tabs.indexOf(cur); save(); renderTabs(); }
+function tabSetGroup(i, gid) { const tabs = tabList(), t = tabs[i], cur = tabs[ST.settings.tabCur]; if (!t) return; if (gid) { t.g = gid; delete t.pin; const g = tabGroup(gid); if (g) g.collapsed = false; } else delete t.g; tabNormalize(); ST.settings.tabCur = tabs.indexOf(cur); save(); renderTabs(); }
+function tabNewGroup(i) {
+  const gs = tabGroups(), id = uid(), n = gs.length + 1; gs.push({ id, name: 'Group ' + n, color: TAB_COLORS[(n - 1) % TAB_COLORS.length], collapsed: false });
+  tabSetGroup(i, id); const lab = $('#tabbar .tab-glabel[data-g="' + id + '"]'); if (lab) tabGroupRename(lab, id);
+}
+function tabGroupRename(anchor, gid) { const g = tabGroup(gid); if (!g) return; askText(anchor, 'Group name', g.name, v => { if (v && v.trim()) { g.name = v.trim().slice(0, 24); save(); renderTabs(); } }); }
+function tabGroupMenu(e, gid) {
+  e.preventDefault(); const g = tabGroup(gid); if (!g) return; const lab = e.currentTarget, tabs = tabList();
+  const items = [{ label: 'Rename group', fn: () => tabGroupRename(lab, gid) }, { label: g.collapsed ? 'Expand group' : 'Collapse group', fn: () => { g.collapsed = !g.collapsed; save(); renderTabs(); } }, '-'];
+  const names = ['Blue', 'Purple', 'Green', 'Orange', 'Pink', 'Teal']; TAB_COLORS.forEach((c, k) => { if (c !== g.color) items.push({ label: 'Color: ' + names[k], fn: () => { g.color = c; save(); renderTabs(); } }); });
+  items.push('-', { label: 'Ungroup', fn: () => { tabs.forEach(t => { if (t.g === gid) delete t.g; }); tabNormalize(); save(); renderTabs(); } });
+  if (tabs.filter(t => t.g !== gid).length) items.push({ label: 'Close group', danger: true, fn: () => { const cur = tabs[ST.settings.tabCur], keep = tabs.filter(t => t.g !== gid); const wasCur = cur && cur.g === gid; tabs.splice(0, tabs.length, ...keep); ST.settings.tabCur = wasCur ? 0 : tabs.indexOf(cur); if (wasCur) tabApply(tabs[0]); else { save(); renderTabs(); } } });
+  showMenu(e.clientX, e.clientY, items);
+}
+function tabAll(anchor) {
+  const tabs = tabList(), cur = ST.settings.tabCur, box = h('div', { class: 'tab-all' });
+  const row = (t, i) => { const [title, color, icon] = tabLabel(t); const g = t.g && tabGroup(t.g);
+    return h('div', { class: 'ta-row' + (i === cur ? ' cur' : '') }, h('button', { class: 'ta-go', onclick: () => { closeTransient(); switchTab(i); } }, h('span', { class: 'ta-dot', style: { background: g ? g.color : 'transparent' } }), h('span', { class: 'ta-ic' }, icon || tabInitial(title)), h('span', { class: 'ta-t' }, title), t.pin ? h('span', { class: 'ta-pin' }, 'Pinned') : null),
+      !t.pin && tabs.length > 1 ? h('button', { class: 'ta-x', title: 'Close tab', onclick: e => { e.stopPropagation(); closeTab(i); closeTransient(); tabAll(anchor); } }, '×') : null); };
+  let lastG = '__';
+  tabs.forEach((t, i) => { if ((t.g || '') !== lastG) { lastG = t.g || ''; const g = t.g && tabGroup(t.g); if (g) box.append(h('div', { class: 'ta-g', style: { color: g.color } }, g.name)); } box.append(row(t, i)); });
+  popAt(anchor, box);
+}
+function tabDropCalc(e, bar) {
+  const scr = bar.querySelector('.tabs-scroll'), pins = bar.querySelector('.tab-pins'), els = [...bar.querySelectorAll('.tab')].filter(x => x.offsetParent !== null);
+  const tabs = tabList(); let over = null;
+  for (const el of els) { const r = el.getBoundingClientRect(); if (e.clientX >= r.left && e.clientX <= r.right) { over = el; break; } }
+  const pinsR = pins ? pins.getBoundingClientRect() : null, inPins = pinsR && pinsR.width > 0 && e.clientX < pinsR.right + 4;
+  if (!over) { const lab = [...bar.querySelectorAll('.tab-glabel')].find(l => { const r = l.getBoundingClientRect(); return e.clientX >= r.left && e.clientX <= r.right; });
+    if (lab) { const r = lab.getBoundingClientRect(), gid = lab.dataset.g, first = tabs.findIndex(t => t.g === gid); return e.clientX < r.left + r.width / 2 ? { idx: first, g: null, pin: false, x: r.left, grp: null, el: lab } : { idx: first, g: gid, pin: false, x: r.right, grp: gid, el: lab }; }
+    const last = els[els.length - 1]; if (!last) return { idx: tabs.length, g: null, pin: false, x: bar.getBoundingClientRect().left + 8, grp: null };
+    const lr = last.getBoundingClientRect(); if (e.clientX > lr.right) return { idx: tabs.length, g: null, pin: false, x: lr.right + 1, grp: null, el: last }; return null; }
+  const i = els.indexOf(over), gi = [...bar.querySelectorAll('.tab')].indexOf(over), r = over.getBoundingClientRect(), left = e.clientX < r.left + r.width / 2, t = tabs[gi];
+  const idx = left ? gi : gi + 1;
+  if (t.pin) return { idx, g: null, pin: true, x: left ? r.left : r.right, grp: null, el: over };
+  if (inPins) return { idx: tabs.filter(u => u.pin).length, g: null, pin: true, x: r.left, grp: null, el: over };
+  const nb = tabs[left ? gi - 1 : gi + 1]; const sameG = t.g && (nb ? nb.g === t.g : true);
+  let g = t.g || null; if (t.g && !sameG && ((left && !(nb && nb.g === t.g)) || (!left && !(nb && nb.g === t.g)))) g = t.g; /* edge of a group still joins it */
+  return { idx, g, pin: false, x: left ? r.left : r.right, grp: g, el: over, left };
+}
+function tabDropClear(bar) { bar.querySelectorAll('.drop-join,.gap-l,.gap-r').forEach(x => x.classList.remove('drop-join', 'gap-l', 'gap-r')); const d = bar.querySelector('.tab-drop'); if (d) d.remove(); }
+function tabDropShow(bar, d) {
+  tabDropClear(bar); if (!d) return; const br = bar.getBoundingClientRect();
+  const ind = h('div', { class: 'tab-drop' }); ind.style.left = Math.round(d.x - br.left) + 'px'; bar.append(ind);
+  if (d.grp) { const w = bar.querySelector('.tab-grp[data-g="' + d.grp + '"]'); if (w) w.classList.add('drop-join'); }
+  if (d.el && d.el.classList.contains('tab')) d.el.classList.add(d.left ? 'gap-l' : 'gap-r');
+}
+function tabMove(from, d) {
+  const tabs = tabList(), cur = tabs[ST.settings.tabCur], [mv] = tabs.splice(from, 1); let idx = d.idx; if (from < idx) idx--;
+  if (d.pin) { mv.pin = true; delete mv.g; } else { delete mv.pin; if (d.g) mv.g = d.g; else delete mv.g; }
+  tabs.splice(Math.max(0, Math.min(idx, tabs.length)), 0, mv); tabNormalize(); ST.settings.tabCur = tabs.indexOf(cur); save(); renderTabs();
+}
+function renderTabs() {
+  const bar = $('#tabbar'); if (!bar) return; tabNormalize(); const tabs = tabList(), cur = ST.settings.tabCur, gs = tabGroups(); bar.innerHTML = '';
+  const pins = h('div', { class: 'tab-pins' }), scr = h('div', { class: 'tabs-scroll' }); let wrap = null, wrapG = null;
+  tabs.forEach((t, i) => {
+    const [title, color, icon] = tabLabel(t), g = t.g && tabGroup(t.g);
+    const ic = h('span', { class: 'tab-ic' + (t.pin ? ' pin' : ''), style: color ? { background: color } : {} }, icon || (t.pin ? tabInitial(title) : ''));
+    const el = h('div', { class: 'tab' + (i === cur ? ' cur' : '') + (t.pin ? ' pinned' : ''), title: t.pin ? title : title, draggable: 'true', style: g ? { '--gc': g.color } : {} }, ic, t.pin ? null : h('span', { class: 'tab-t' }, title),
+      !t.pin && tabs.length > 1 ? h('button', { class: 'tab-x', title: 'Close tab', onclick: e => { e.stopPropagation(); closeTab(i); } }, '×') : null);
+    el.addEventListener('click', () => switchTab(i));
+    el.addEventListener('contextmenu', e => tabMenu(e, i));
+    el.addEventListener('auxclick', e => { if (e.button === 1 && !t.pin) { e.preventDefault(); closeTab(i); } });
+    el.addEventListener('dragstart', e => { TABS.drag = i; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', 'tab'); setTimeout(() => el.classList.add('dragging'), 0); });
+    el.addEventListener('dragend', () => { TABS.drag = null; el.classList.remove('dragging'); tabDropClear(bar); });
+    if (t.pin) { pins.append(el); return; }
+    if (g) {
+      if (wrapG !== g.id) { wrapG = g.id; const n = tabs.filter(u => u.g === g.id).length;
+        const lab = h('button', { class: 'tab-glabel', 'data-g': g.id, title: g.collapsed ? 'Expand group' : 'Collapse group' }, h('span', { class: 'tg-n' }, g.name), g.collapsed ? h('span', { class: 'tg-c' }, String(n)) : null);
+        lab.addEventListener('click', () => { g.collapsed = !g.collapsed; save(); renderTabs(); }); lab.addEventListener('contextmenu', e => tabGroupMenu(e, g.id));
+        wrap = h('div', { class: 'tab-grp' + (g.collapsed ? ' collapsed' : ''), 'data-g': g.id, style: { '--gc': g.color } }, lab); scr.append(wrap); }
+      wrap.append(el);
+    } else { wrapG = null; wrap = null; scr.append(el); }
+  });
+  bar.append(pins); if (pins.children.length) bar.append(h('span', { class: 'tab-div' })); bar.append(scr);
+  const more = h('button', { class: 'tab-more', title: 'All tabs', onclick: e => tabAll(e.currentTarget), html: ICON.chevd || '⌄' });
+  bar.append(h('button', { class: 'tab-new', title: 'New tab', onclick: () => openInNewTab({ t: 'board', id: S.boardId }) }, '+'), more);
+  /* drag highlight */
+  bar.ondragover = e => { if (TABS.drag === null || TABS.drag === undefined) return; e.preventDefault(); e.dataTransfer.dropEffect = 'move'; TABS.dz = tabDropCalc(e, bar); tabDropShow(bar, TABS.dz); };
+  bar.ondragleave = e => { if (!bar.contains(e.relatedTarget)) { TABS.dz = null; tabDropClear(bar); } };
+  bar.ondrop = e => { const from = TABS.drag; TABS.drag = null; const d = TABS.dz || tabDropCalc(e, bar); TABS.dz = null; tabDropClear(bar); if (from === null || from === undefined || !d) return; e.preventDefault(); tabMove(from, d); };
+  /* overflow: wheel scroll, fade edges, list button, keep current in view */
+  const upd = () => { const o = scr.scrollWidth > scr.clientWidth + 1; scr.classList.toggle('fade-l', o && scr.scrollLeft > 2); scr.classList.toggle('fade-r', o && scr.scrollLeft + scr.clientWidth < scr.scrollWidth - 2); more.style.display = o ? '' : 'none'; };
+  scr.addEventListener('scroll', upd, { passive: true }); TABS.upd = upd;
+  scr.addEventListener('wheel', e => { if (scr.scrollWidth > scr.clientWidth && Math.abs(e.deltaY) > Math.abs(e.deltaX)) { scr.scrollLeft += e.deltaY; e.preventDefault(); } }, { passive: false });
+  requestAnimationFrame(() => { upd(); const c = scr.querySelector('.tab.cur'); if (c) { const r = c.getBoundingClientRect(), s = scr.getBoundingClientRect(); if (r.left < s.left) scr.scrollLeft -= s.left - r.left + 12; else if (r.right > s.right) scr.scrollLeft += r.right - s.right + 12; } upd(); });
+}
+window.addEventListener('resize', () => { try { TABS.upd && TABS.upd(); } catch (e) { } });
 function tabApply(t) {
   TABS.switching = true;
   try {
