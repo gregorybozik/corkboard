@@ -2961,6 +2961,21 @@ button:focus-visible,[role="tab"]:focus-visible,[role="link"]:focus-visible,[rol
 .app-root:not(.classic) :focus-visible{outline-color:#F97316}
 button:focus-visible,[role="tab"]:focus-visible,[role="link"]:focus-visible,[role="button"]:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible,.crumb:focus-visible,.ws-card:focus-visible{outline-color:#F97316!important}
 .ws-av,.app-root.dark:not(.classic) .ws-av{color:#202124!important}
+
+/* v4.5: click-shield over video/embed iframes */
+.video-wrap,.embed-wrap{position:relative}
+.if-shield{position:absolute;inset:0;z-index:3;cursor:grab;background:transparent}
+.if-shield::after{content:"Click again to play";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:6px 12px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;font-weight:500;opacity:0;transition:opacity .15s;pointer-events:none;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.card.selected .if-shield:hover::after{opacity:1}
+.card:not(.selected) .if-shield:hover::after{content:"Click to select · drag to move";opacity:1}
+.if-grip{position:absolute;left:0;right:0;top:0;height:26px;z-index:4;display:none;align-items:center;justify-content:space-between;padding:0 8px;background:linear-gradient(to bottom,rgba(0,0,0,.7),rgba(0,0,0,.35));color:#fff;font-size:11px;cursor:grab}
+.if-done{pointer-events:auto;border:0;border-radius:999px;background:#F97316;color:#fff;font-size:11px;font-weight:600;padding:3px 10px;cursor:pointer}
+.card.emb-live .if-shield{display:none}
+.card.emb-live .if-grip{display:flex}
+.card.emb-live .embed-bar{display:none}
+.embed-conv{border:0;cursor:pointer}
+@media (pointer:coarse){.if-shield::after{display:none}}
+.embed-bar{z-index:5}.yt-open{z-index:5!important}
 </style>
 </head>
 <body class="app-root">
@@ -12028,7 +12043,7 @@ function embedHostOk(u) { try { const x = new URL(u); if (x.protocol !== 'https:
 /* turn a pasted URL into its embeddable form, or null */
 function embedFromUrl(u) {
   let m; u = (u || '').trim(); if (!/^https?:\/\//i.test(u)) return null;
-  const yt = ytId(u); if (yt) return 'https://' + (ST.settings.ytPriv ? 'www.youtube-nocookie.com' : 'www.youtube.com') + '/embed/' + yt;
+  const yt = ytId(u); if (yt) return 'https://' + (ST.settings.ytPriv ? 'www.youtube-nocookie.com' : 'www.youtube.com') + '/embed/' + yt + '?rel=0&modestbranding=1&playsinline=1';
   if ((m = /vimeo\.com\/(?:video\/)?(\d+)/.exec(u))) return 'https://player.vimeo.com/video/' + m[1];
   if ((m = /open\.spotify\.com\/(?:intl-[a-z]+\/)?(track|album|playlist|episode|show|artist)\/([\w]+)/.exec(u))) return 'https://open.spotify.com/embed/' + m[1] + '/' + m[2];
   if ((m = /loom\.com\/(?:share|embed)\/([\w]+)/.exec(u))) return 'https://www.loom.com/embed/' + m[1];
@@ -12080,6 +12095,29 @@ const BRAND_PIN = '<svg viewBox="0 0 64 64" width="1em" height="1em" aria-hidden
 function brandLogo() { const l = $('#sbLogo'); if (l && !l.dataset.brand) { l.dataset.brand = '1'; l.innerHTML = BRAND_PIN; l.setAttribute('aria-label', 'Corkboard'); } }
 { const _rs = renderSidebar; renderSidebar = function () { _rs.apply(this, arguments); brandLogo(); }; }
 if (document.readyState !== 'loading') brandLogo(); else document.addEventListener('DOMContentLoaded', brandLogo);
+
+/* ========== v4.5: stable video/embed cards — click-shield, drag grip, tap-again-to-interact, convert to Video card ========== */
+function shieldWrap(wrap) {
+  if (!wrap || wrap.querySelector('.if-shield')) return;
+  wrap.append(h('div', { class: 'if-shield', 'aria-hidden': 'true' }),
+    h('div', { class: 'if-grip', title: 'Drag to move this card' }, h('span', { class: 'if-grip-l' }, 'Drag here to move'), h('button', { class: 'if-done', 'data-nodrag': '1', onclick: e => { e.stopPropagation(); e.target.closest('.card')?.classList.remove('emb-live'); } }, 'Done')));
+}
+{ const _v = RENDER.video; RENDER.video = function (c) { const el = _v.apply(this, arguments); if (el && el.querySelector && (c.data.yt || c.data.vimeo)) shieldWrap(el.querySelector('.video-wrap')); return el; }; }
+{ const _e = RENDER.embed; RENDER.embed = function (c) { const el = _e.apply(this, arguments); if (c.data.src && el && el.classList && el.classList.contains('embed-wrap')) {
+  shieldWrap(el);
+  const info = videoInfo(embedWatchUrl(c.data)); const bar = el.querySelector('.embed-bar');
+  if (info && info.kind !== 'file' && bar) bar.insertBefore(h('button', { class: 'embed-open embed-conv', 'data-nodrag': '1', title: 'Convert to a Video card: frame capture, pop-out, theater and ±5s controls', onclick: e => { e.stopPropagation(); const cc = ST.cards[c.id]; checkpoint(); const raw = embedWatchUrl(c.data); cc.type = 'video'; cc.data = {}; applyVideoInfo(cc.data, info, raw); cc.h = null; save(); renderBoard(); toast('Converted to a Video card'); } }, 'Use video tools'), bar.lastChild);
+} return el; }; }
+/* first click selects (so it can be dragged); clicking again — or double-click — makes it interactive */
+{ let pd = null;
+  document.addEventListener('pointerdown', e => {
+    const sh = e.target.closest && e.target.closest('.if-shield');
+    if (sh) { const card = sh.closest('.card'); pd = { card, was: card.classList.contains('selected'), x: e.clientX, y: e.clientY }; }
+    else { pd = null; document.querySelectorAll('.card.emb-live').forEach(c => { if (!c.contains(e.target)) c.classList.remove('emb-live'); }); }
+  }, true);
+  document.addEventListener('pointerup', e => { if (!pd) return; const { card, was, x, y } = pd; pd = null; if (Math.hypot(e.clientX - x, e.clientY - y) < 5 && was) card.classList.add('emb-live'); }, true);
+  document.addEventListener('dblclick', e => { const sh = e.target.closest && e.target.closest('.if-shield'); if (sh) { e.stopPropagation(); sh.closest('.card').classList.add('emb-live'); } }, true);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.card.emb-live').forEach(c => c.classList.remove('emb-live')); }, true); }
 
 /* ========== events + init ========== */
 function migrate() {
