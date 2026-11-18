@@ -1366,7 +1366,7 @@ a.mention:hover{background:var(--hover)}
 .dbb-col.drop{box-shadow:inset 0 0 0 2px var(--sel)}
 .dbb-h{display:flex;align-items:center;padding:2px 2px 4px}
 .dbb-card,.dbg-card{background:var(--card);border-radius:6px;box-shadow:var(--shadow);cursor:pointer;overflow:hidden;text-align:left;color:var(--text)}
-.dbb-card{padding:8px 12px;touch-action:none;user-select:none}
+.dbb-card{padding:8px 12px;user-select:none}
 .dbb-card:hover,.dbg-card:hover{box-shadow:0 0 0 1.5px var(--sel)}
 .dbb-card.dragging{opacity:.35}
 .dbb-cover{height:70px;margin:-9px -10px 8px;background-size:cover;background-position:center}
@@ -3166,6 +3166,35 @@ body.editing-other .if-shield::after,body.editing-other .yt-open,body.editing-ot
 .dbfull.peek .dbfull-sheet{width:min(1100px,calc(100% - 64px));height:calc(100% - 48px);border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.35);overflow:hidden}
 .dbfull.full .dbfull-sheet{position:absolute;inset:10px;border-radius:16px;border:1px solid var(--line);box-shadow:0 10px 40px rgba(0,0,0,.35);overflow:hidden}
 @media (max-width:700px){.dbfull{top:0;bottom:0}.dbfull.full .dbfull-sheet{inset:0;border-radius:0;border:0}}
+
+/* ===== v5.4 ===== */
+/* a coloured card gets a line in its colour along the bottom edge */
+.card.colored:not(.t-heading):not(.t-image):not(.t-ink)::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--cc);border-radius:0 0 var(--r-md,3px) var(--r-md,3px);pointer-events:none;z-index:2}
+/* board corner: dim, transparent copy-link + last-edited */
+#binfo{position:absolute;top:10px;right:16px;z-index:44;display:flex;align-items:center;gap:4px;background:none;font-size:11.5px;color:var(--muted);opacity:.45;transition:opacity .15s;user-select:none}
+#binfo:hover{opacity:.95}
+#binfo .bi-link{width:24px;height:24px;display:grid;place-items:center;border-radius:6px;color:inherit;background:none}
+#binfo .bi-link:hover{background:var(--hover);color:var(--text)}
+#binfo .bi-link svg{width:14px;height:14px}
+.presenting #binfo{display:none}
+@media (max-width:700px){#binfo .bi-t{display:none}}
+/* page top bar: same quiet style */
+.pv-acts .pv-edited{color:var(--muted);opacity:.5;font-size:11.5px}
+.pv-acts .ib[title="Copy link to this page"]{opacity:.5}
+.pv-acts .ib[title="Copy link to this page"]:hover{opacity:1}
+
+.wse-wrap{display:grid;place-items:center;margin:4px 0 12px}
+.wse-stage{position:relative;overflow:hidden;border-radius:18px;background:#111;cursor:grab;touch-action:none;box-shadow:0 0 0 1px var(--line)}
+.wse-stage.drag{cursor:grabbing}
+.wse-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.wse-zoom{flex:1}
+.wse-btns{display:flex;justify-content:flex-end;gap:8px}
+
+.rd-line{position:fixed;z-index:30500;pointer-events:none;background:var(--sel,#4f8cff);border-radius:2px}
+.dbv.rd-over{box-shadow:inset 0 0 0 2px var(--sel,#4f8cff);border-radius:6px}
+.blk-ghost.to-board{background:var(--sel,#4f8cff);color:#fff}
+body.rd-active,body.rd-active *{user-select:none!important;-webkit-user-select:none!important;cursor:grabbing!important}
+.dbt tr[data-row],.dbl-row,.dbg-card[data-row],.dbb-card{cursor:grab}
 </style>
 </head>
 <body class="app-root">
@@ -4134,6 +4163,12 @@ function moveDrag(e, w) {
       const ind = h('div', { class: 'col-drop' }); if (kids[idx]) body.insertBefore(ind, kids[idx]); else body.append(ind);
     }
   }
+  $$('.rd-line').forEach(x => x.remove()); $$('.dbv.rd-over,.dbb-col.drop').forEach(x => x.classList.remove('rd-over', 'drop')); P.dropDb = null;
+  if (P.items.length === 1 && prim.c.type === 'page' && !prim.c.data.linked && ST.pages[prim.c.data.pageId]) {
+    prim.el.style.pointerEvents = 'none';
+    const t = rdTarget(e, null, false);
+    if (t && t.kind !== 'self') { P.dropDb = t; P.dropCol = null; $$('.card.drop-target').forEach(x => x.classList.remove('drop-target')); $$('.col-drop').forEach(x => x.remove()); rdShow(t); if (t.kind !== 'row' && t.kind !== 'col') t.dv.classList.add('rd-over'); }
+  }
   const tr = P.trashEl || (P.trashEl = $('#tbTrash')); if (tr) { const r = P.trashR || (P.trashR = tr.getBoundingClientRect()); P.overTrash = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom; tr.classList.toggle('active', P.overTrash); }
   scheduleLines();
 }
@@ -4145,6 +4180,9 @@ function endDrag(p, e) {
   if (!p.moved) { handleCardClick(p, e); return; }
   if (!p.items || !p.items.length) { renderBoard(); return; }
   if (p.overTrash) { trashCards(p.items.map(i => i.id), true); return; }
+  $$('.rd-line').forEach(x => x.remove()); $$('.dbv.rd-over,.dbb-col.drop').forEach(x => x.classList.remove('rd-over', 'drop'));
+  for (const it of p.items) if (it.el) it.el.style.pointerEvents = '';
+  if (p.dropDb && p.items.length === 1 && ST.cards[p.items[0].id]) { const t = p.dropDb; p.dropDb = null; pageToRow(p.items[0].c, t); return; }
   let z = maxZ(S.boardId);
   for (const it of p.items) { it.c.x = Math.round(it.x0 + (p.dx || 0)); it.c.y = Math.round(it.y0 + (p.dy || 0)); it.c.updatedAt = now(); if (it.c.type !== 'frame') it.c.z = ++z; }
   if (p.dropCol) { const col = ST.cards[p.dropCol.id], c = p.items[0].c; c.columnId = col.id; col.data.childIds = col.data.childIds.filter(x => x !== c.id); col.data.childIds.splice(p.dropCol.index, 0, c.id); }
@@ -8540,6 +8578,140 @@ function refreshDb() {
 }
 function isFreshDb(db, pl) { return !pl.linked && !db.rows.length && !db.schema.length && !db.title; }
 
+/* ---- v5.4 database row drag: reorder, pull out to board, page card into database ---- */
+const RD = { on: false, pending: false };
+document.addEventListener('touchmove', e => { if (RD.on) e.preventDefault(); }, { passive: false });
+const RD_COMPUTED = new Set(['formula', 'rollup', 'created', 'edited', 'relation', 'title']);
+function rdMapVal(sp, pr, v) {
+  if (v === undefined || v === null || v === '') return undefined;
+  const sel = t => t === 'select' || t === 'status';
+  if (sel(sp.type) && sel(pr.type)) { const so = (sp.options || []).find(o => o.id === v); const d = so && (pr.options || []).find(o => o.name.trim().toLowerCase() === so.name.trim().toLowerCase()); return d ? d.id : undefined; }
+  if (sp.type === 'multi' && pr.type === 'multi') { const out = (v || []).map(id => (sp.options || []).find(o => o.id === id)).filter(Boolean).map(so => (pr.options || []).find(o => o.name.trim().toLowerCase() === so.name.trim().toLowerCase())).filter(Boolean).map(o => o.id); return out.length ? out : undefined; }
+  return sp.type === pr.type ? v : undefined;
+}
+/* make a page a row of db. Matching properties (same name and type) are filled; stored values are never deleted. */
+function adoptRow(page, db) {
+  const prev = page.parent && page.parent.t === 'db' ? ST.dbs[page.parent.id] : (page.fromDb && ST.dbs[page.fromDb]);
+  const src = [...(prev && prev.id !== db.id ? prev.schema : []), ...(page.schema || [])];
+  page.values = page.values || {};
+  for (const pr of db.schema) {
+    if (RD_COMPUTED.has(pr.type) || pr.id === TITLE || page.values[pr.id] !== undefined) continue;
+    const sp = src.find(x => !RD_COMPUTED.has(x.type) && x.name.trim().toLowerCase() === pr.name.trim().toLowerCase());
+    if (!sp) continue; const v = rdMapVal(sp, pr, page.values[sp.id]); if (v !== undefined) page.values[pr.id] = v;
+  }
+  page.parent = { t: 'db', id: db.id }; delete page.fromDb;
+}
+/* t = drop target from rdTarget. Moves (or adopts) the row and applies the column/group value. */
+function rdApply(row, t, clearSort) {
+  const db = t.db, view = t.tc.view;
+  if (clearSort && (view.sorts || []).length) {
+    const vis = t.tc.rows.map(r => r.id), slots = []; db.rows.forEach((id, i) => { if (vis.includes(id)) slots.push(i); });
+    slots.forEach((sl, k) => { db.rows[sl] = vis[k]; }); view.sorts = [];
+  }
+  const oldDbId = row.parent && row.parent.t === 'db' ? row.parent.id : null, oldDb = oldDbId && ST.dbs[oldDbId];
+  if (oldDb) { oldDb.rows = oldDb.rows.filter(i => i !== row.id); oldDb.updatedAt = now(); }
+  db.rows = db.rows.filter(i => i !== row.id);
+  let idx = db.rows.length;
+  if (t.kind === 'row') { const i = db.rows.indexOf(t.rowId); if (i >= 0) idx = i + (t.after ? 1 : 0); }
+  else if (t.kind === 'col') { const last = t.tc.rows.filter(r => (r.values[view.groupBy] || '') === t.key && r.id !== row.id).pop(); if (last) { const i = db.rows.indexOf(last.id); if (i >= 0) idx = i + 1; } }
+  db.rows.splice(idx, 0, row.id);
+  if (oldDbId !== db.id) adoptRow(row, db);
+  const gb = view.type !== 'gallery' && view.groupBy && db.schema.find(p => p.id === view.groupBy && (p.type === 'select' || p.type === 'status'));
+  if (gb) {
+    let key = null; if (t.kind === 'col') key = t.key; else if (t.kind === 'row') key = (ST.pages[t.rowId].values || {})[gb.id] || '';
+    if (key !== null) { row.values = row.values || {}; if (key) row.values[gb.id] = key; else delete row.values[gb.id]; }
+  }
+  row.updatedAt = db.updatedAt = now();
+}
+function rdConfirmSort(ok) {
+  let bg; const close = () => bg.remove();
+  bg = modal([h('h3', null, 'Turn off sorting?'), h('p', { class: 'muted' }, 'This view is sorted, so rows cannot hold a manual order. Turn the sort off and use your order?'), h('div', { class: 'wse-btns' }, h('button', { class: 'btn', onclick: close }, 'Cancel'), h('button', { class: 'btn primary', onclick: () => { close(); ok(); } }, 'Turn off sort'))]);
+}
+function rowToCard(row, x, y) {
+  const db = row.parent && row.parent.t === 'db' && ST.dbs[row.parent.id]; if (!db) return;
+  if ($('.dbfull')) closeDbFull();
+  checkpoint(); const w = toWorld(x, y);
+  const c = newCard('page', w.x - 60, w.y - 14, { pageId: row.id });
+  row.parent = { t: 'card', id: c.id }; row.fromDb = db.id; row.updatedAt = now(); db.rows = db.rows.filter(i => i !== row.id); db.updatedAt = now();
+  snapCard(c); S.sel = new Set([c.id]); save(); renderBoard(); refreshDb(); toast('Moved out of the database. It is now a page card on the board.');
+}
+function pageToRow(card, t) {
+  const page = ST.pages[card.data.pageId]; if (!page) return; checkpoint();
+  if (card.columnId) { const col = ST.cards[card.columnId]; if (col) col.data.childIds = col.data.childIds.filter(x => x !== card.id); }
+  delete ST.cards[card.id]; for (const l of Object.values(ST.lines)) if (l.from.cardId === card.id || l.to.cardId === card.id) delete ST.lines[l.id];
+  rdApply(page, t, false); S.sel = new Set(); save(); renderBoard(); refreshDb(); toast('Added to the database as a row');
+}
+/* drop target under the pointer. allowBoard: empty board space (rows only) */
+function rdTarget(ev, selfId, allowBoard) {
+  const u = document.elementFromPoint(ev.clientX, ev.clientY); if (!u) return null;
+  const dv = u.closest('.dbv');
+  if (dv && dv._loc && dv._ctx) {
+    const tc = dv._ctx, db = tc.db; if (!db || !dbIsLive(db.id)) return null;
+    if (u.closest('.dbv-head,.dbv-bar,.dbv-chips')) return { kind: 'end', dv, db, tc, u };
+    const rEl = u.closest('[data-row]');
+    if (rEl && dv.contains(rEl)) {
+      if (rEl.dataset.row === selfId) return { kind: 'self', u };
+      const r = rEl.getBoundingClientRect(), after = tc.view.type === 'gallery' ? ev.clientX > r.left + r.width / 2 : ev.clientY > r.top + r.height / 2;
+      return { kind: 'row', dv, db, tc, rEl, rowId: rEl.dataset.row, after, u };
+    }
+    const col = u.closest('.dbb-col'); if (col && dv.contains(col)) return { kind: 'col', dv, db, tc, col, key: col.dataset.key || '', u };
+    if (u.closest('.dbv-scroll')) return { kind: 'end', dv, db, tc, u };
+    return null;
+  }
+  if (!allowBoard || u.closest('#cards .card,#bhead,#binfo,.modal-bg,.menu,.pop')) return null;
+  const fr = $('.dbfull');
+  if ((fr && u === fr && S.dbMode === 'peek') || (!fr && u.closest('#viewport') && !u.closest('.pv-wrap'))) return { kind: 'board', u };
+  return null;
+}
+function rdShow(t, ghost) {
+  $$('.rd-line').forEach(x => x.remove()); $$('.dbv.rd-over,.dbb-col.drop').forEach(x => x.classList.remove('rd-over', 'drop'));
+  if (ghost) ghost.classList.toggle('to-board', !!(t && t.kind === 'board'));
+  if (!t || t.kind === 'self' || t.kind === 'board') return;
+  if (t.kind === 'row') {
+    const r = t.rEl.getBoundingClientRect(), vert = t.tc.view.type === 'gallery', ln = h('div', { class: 'rd-line' });
+    if (vert) Object.assign(ln.style, { left: (t.after ? r.right + 2 : r.left - 4) + 'px', top: r.top + 'px', width: '3px', height: r.height + 'px' });
+    else Object.assign(ln.style, { left: r.left + 'px', top: (t.after ? r.bottom - 1 : r.top - 2) + 'px', width: r.width + 'px', height: '3px' });
+    document.body.append(ln);
+  } else if (t.kind === 'col') t.col.classList.add('drop'); else t.dv.classList.add('rd-over');
+}
+function rowDragInit(el, ctx) {
+  el.addEventListener('pointerdown', e => {
+    if (e.button || RD.on || RD.pending) return;
+    if (e.target.closest('input,textarea,select,button,a,.dbt-rz,[contenteditable="true"],[contenteditable="plaintext-only"],.dbck,.relpill')) return;
+    const rowEl = e.target.closest('[data-row]'); if (!rowEl || !el.contains(rowEl)) return;
+    const row = ST.pages[rowEl.dataset.row]; if (!row) return;
+    const touch = e.pointerType === 'touch', isBc = rowEl.classList.contains('dbb-card');
+    if (!touch) e.preventDefault();
+    const sx = e.clientX, sy = e.clientY; let started = false, ghost = null, tgt = null, timer = null, last = { x: sx, y: sy };
+    RD.pending = true;
+    const begin = () => { started = true; RD.on = true; document.body.classList.add('rd-active'); ghost = h('div', { class: 'blk-ghost' }, row.title || 'Untitled'); document.body.append(ghost); rowEl.classList.add('dragging'); upd(last); };
+    const upd = ev => {
+      ghost.style.left = ev.clientX + 12 + 'px'; ghost.style.top = ev.clientY + 8 + 'px';
+      tgt = rdTarget(ev, row.id, true); rdShow(tgt, ghost);
+      const scr = tgt && tgt.u && tgt.u.closest('.dbv-scroll'); if (scr) { const sr = scr.getBoundingClientRect(); if (ev.clientX > sr.right - 40) scr.scrollLeft += 20; else if (ev.clientX < sr.left + 40) scr.scrollLeft -= 20; if (ev.clientY > sr.bottom - 40) scr.scrollTop += 18; else if (ev.clientY < sr.top + 40) scr.scrollTop -= 18; }
+    };
+    const stop = () => { clearTimeout(timer); removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', cancel); RD.pending = false; RD.on = false; document.body.classList.remove('rd-active'); ghost && ghost.remove(); rowEl.classList.remove('dragging'); rdShow(null); };
+    const mv = ev => {
+      last = { clientX: ev.clientX, clientY: ev.clientY, x: ev.clientX, y: ev.clientY };
+      if (!started) { const d = Math.hypot(ev.clientX - sx, ev.clientY - sy); if (touch) { if (d > 8) stop(); return; } if (d < 6) return; begin(); }
+      upd(ev);
+    };
+    const cancel = () => stop();
+    const up = ev => {
+      const t = tgt, was = started; stop();
+      if (!was) { if (isBc) openPage(row.id); return; }
+      const sup = x => { x.stopPropagation(); x.preventDefault(); }; window.addEventListener('click', sup, true); setTimeout(() => window.removeEventListener('click', sup, true), 0);
+      if (!t || t.kind === 'self') return;
+      if (t.kind === 'board') { rowToCard(row, ev.clientX, ev.clientY); return; }
+      const sorted = (t.tc.view.sorts || []).some(s => dbProp(t.db, s.prop)) && row.parent && row.parent.t === 'db' && row.parent.id === t.db.id;
+      const go = clr => { checkpoint(); rdApply(row, t, clr); save(); refreshDb(); };
+      if (sorted) rdConfirmSort(() => go(true)); else go(false);
+    };
+    if (touch) timer = setTimeout(() => { if (RD.pending) begin(); }, 320);
+    addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', cancel);
+  });
+}
+
 function dbPlaceEl(loc, opts) {
   const mode = opts.mode, pl = placeObj(loc), el = h('div', { class: 'dbv m-' + mode }); el._loc = loc; el._mode = mode;
   const note = t => { el.append(h('div', { class: 'dbv-msg' }, t)); return el; };
@@ -8553,7 +8725,7 @@ function dbPlaceEl(loc, opts) {
   const sc = h('div', { class: 'dbv-scroll dbv-wheel', 'data-nodrag': '1' });
   sc.append((DB_VIEWS[view.type] || dbTable)(ctx));
   if (isFreshDb(db, pl)) sc.append(dbChooser(ctx));
-  el.append(sc);
+  el.append(sc); el._ctx = ctx; rowDragInit(el, ctx);
   el.addEventListener('contextmenu', e => { e.stopPropagation(); const r = e.target.closest('[data-row]'); if (!r || e.target.closest('input')) return; e.preventDefault(); rowMenu(e.clientX, e.clientY, ctx, ST.pages[r.dataset.row]); });
   return el;
 }
@@ -8729,22 +8901,6 @@ function dbBoard(ctx) {
     col.append(h('button', { class: 'dbb-new', onclick: () => addRow(ctx, gr.opt ? { [g.pr.id]: gr.opt.id } : {}) }, '+ New'));
     wrap.append(col);
   }
-  wrap.addEventListener('pointerdown', e => {
-    const cd = e.target.closest('.dbb-card'); if (!cd || e.button) return; const row = ST.pages[cd.dataset.row]; if (!row) return; e.preventDefault();
-    const sx = e.clientX, sy = e.clientY; let moved = false, ghost = null, over = null;
-    const mv = ev => {
-      if (!moved) { if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 6) return; moved = true; ghost = h('div', { class: 'blk-ghost' }, row.title || 'Untitled'); document.body.append(ghost); cd.classList.add('dragging'); }
-      ghost.style.left = ev.clientX + 12 + 'px'; ghost.style.top = ev.clientY + 8 + 'px';
-      const scr = wrap.closest('.dbv-scroll'); if (scr) { const sr = scr.getBoundingClientRect(); if (ev.clientX > sr.right - 48) scr.scrollLeft += 24; else if (ev.clientX < sr.left + 48) scr.scrollLeft -= 24; }
-      const u = document.elementFromPoint(ev.clientX, ev.clientY), c2 = u && u.closest('.dbb-col'); if (over && over !== c2) over.classList.remove('drop'); over = c2 && wrap.contains(c2) ? c2 : null; if (over) over.classList.add('drop');
-    };
-    const up = () => {
-      removeEventListener('pointermove', mv); removeEventListener('pointerup', up); ghost && ghost.remove(); cd.classList.remove('dragging'); if (over) over.classList.remove('drop');
-      if (!moved) { openPage(row.id); return; }
-      if (over) { const key = over.dataset.key || null; if ((row.values[g.pr.id] || null) !== key) commitDb(db, () => { if (key) row.values[g.pr.id] = key; else delete row.values[g.pr.id]; }, row); }
-    };
-    addEventListener('pointermove', mv); addEventListener('pointerup', up);
-  });
   return wrap;
 }
 function dbGallery(ctx) {
@@ -10885,6 +11041,30 @@ function untileIcons(root) {
   const mo = new MutationObserver(ms => { for (const m of ms) m.addedNodes.forEach(x => { if (x.nodeType === 1) q.add(x); }); if (!tm) tm = requestAnimationFrame(flush); });
   const go = () => { untileIcons(document.body); mo.observe(document.body, { childList: true, subtree: true }); };
   if (document.body) go(); else document.addEventListener('DOMContentLoaded', go); }
+
+/* ---- v5.4: dim copy-link + last-edited in the board's top-right corner ---- */
+function copyBoardLink() {
+  const url = location.origin + location.pathname + '#' + S.boardId;
+  const done = () => toast('Link copied. It opens this board in Corkboard in this browser.');
+  const fallback = () => { const t = h('textarea', { style: { position: 'fixed', opacity: '0', left: '-999px' } }); t.value = url; document.body.append(t); t.select(); try { document.execCommand('copy'); done(); } catch (_) { toast('Could not copy. Link: ' + url, 6000); } t.remove(); };
+  try { navigator.clipboard.writeText(url).then(done, fallback); } catch (_) { fallback(); }
+}
+function updBinfo() {
+  const el = $('#binfo'), b = ST.boards[S.boardId]; if (!el || !b) return;
+  const t = el.querySelector('.bi-t'); if (!t) return;
+  const when = b.updatedAt || b.createdAt || now(); t.textContent = 'Edited ' + timeAgo(when); t.title = new Date(when).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+}
+function renderBinfo() {
+  const vp = $('#viewport'); if (!vp) return; let el = $('#binfo');
+  if (!el) {
+    el = h('div', { id: 'binfo' }, h('span', { class: 'bi-t' }), h('button', { class: 'bi-link', title: 'Copy link to this board', 'aria-label': 'Copy link to this board', html: ICON.link, onclick: copyBoardLink }));
+    ['pointerdown', 'dblclick', 'contextmenu'].forEach(ev => el.addEventListener(ev, e => e.stopPropagation())); vp.append(el);
+  }
+  updBinfo();
+}
+{ const _rbi = renderBoard; renderBoard = function () { const r = _rbi.apply(this, arguments); try { renderBinfo(); } catch (e) { console.warn(e); } return r; }; }
+{ const _svi = save; save = function () { const r = _svi.apply(this, arguments); try { updBinfo(); } catch (_) { } return r; }; }
+setInterval(() => { try { updBinfo(); } catch (_) { } }, 30000);
 { const _rb9 = renderBoard; renderBoard = function () { const r = _rb9.apply(this, arguments); try { renderBhead(); } catch (e) { console.warn(e); } return r; }; }
 
 /* ========== v2.5: bottom status bar, dashboard hero, shapes ========== */
@@ -12323,10 +12503,36 @@ function applyWsPic() {
 function pickWsPic(done) {
   const inp = h('input', { type: 'file', accept: 'image/*', style: { display: 'none' } }); document.body.append(inp);
   inp.onchange = () => { const f = inp.files && inp.files[0]; inp.remove(); if (!f) return; const url = URL.createObjectURL(f), img = new Image();
-    img.onload = () => { const n = 256, c = document.createElement('canvas'); c.width = c.height = n; const x = c.getContext('2d'), m = Math.min(img.width, img.height); x.fillStyle = '#fff'; x.fillRect(0, 0, n, n); x.drawImage(img, (img.width - m) / 2, (img.height - m) / 2, m, m, 0, 0, n, n); URL.revokeObjectURL(url);
-      checkpoint(); ST.settings.wsPic = c.toDataURL('image/jpeg', .88); save(); applyWsPic(); done && done(); };
+    img.onload = () => editWsPic(img, () => { URL.revokeObjectURL(url); done && done(); }, () => URL.revokeObjectURL(url));
     img.onerror = () => { URL.revokeObjectURL(url); toast('That file could not be read as an image'); }; img.src = url; };
   inp.click();
+}
+/* drag to reposition + zoom slider, then save a 256px square */
+function editWsPic(img, saved, cancelled) {
+  const N = 240, base = N / Math.min(img.width, img.height); let z = 1, ox = 0, oy = 0;
+  const pic = h('img', { src: img.src, draggable: 'false', style: { position: 'absolute', left: '0', top: '0', maxWidth: 'none', userSelect: 'none', pointerEvents: 'none' } });
+  const stage = h('div', { class: 'wse-stage', style: { width: N + 'px', height: N + 'px' } }, pic);
+  const dw = () => img.width * base * z, dh = () => img.height * base * z;
+  const clampPos = () => { ox = Math.min(0, Math.max(N - dw(), ox)); oy = Math.min(0, Math.max(N - dh(), oy)); };
+  const paint = () => { clampPos(); pic.style.width = dw() + 'px'; pic.style.height = dh() + 'px'; pic.style.transform = `translate(${ox}px,${oy}px)`; };
+  const setZoom = nz => { nz = Math.min(4, Math.max(1, nz)); const cx = (N / 2 - ox) / dw(), cy = (N / 2 - oy) / dh(); z = nz; ox = N / 2 - cx * dw(); oy = N / 2 - cy * dh(); slider.value = z; paint(); };
+  const slider = h('input', { type: 'range', min: '1', max: '4', step: '0.01', value: '1', class: 'wse-zoom', 'aria-label': 'Zoom' });
+  slider.addEventListener('input', () => setZoom(+slider.value));
+  let drag = null;
+  stage.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, ox, oy }; stage.setPointerCapture(e.pointerId); stage.classList.add('drag'); });
+  stage.addEventListener('pointermove', e => { if (!drag) return; ox = drag.ox + e.clientX - drag.x; oy = drag.oy + e.clientY - drag.y; paint(); });
+  const end = () => { drag = null; stage.classList.remove('drag'); }; stage.addEventListener('pointerup', end); stage.addEventListener('pointercancel', end);
+  stage.addEventListener('wheel', e => { e.preventDefault(); setZoom(z * (e.deltaY < 0 ? 1.06 : 1 / 1.06)); }, { passive: false });
+  ox = (N - dw()) / 2; oy = (N - dh()) / 2; paint();
+  let bg;
+  const close = () => { bg.remove(); };
+  const save1 = h('button', { class: 'btn primary', onclick: () => {
+    const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'), sc = base * z;
+    x.fillStyle = '#fff'; x.fillRect(0, 0, 256, 256); x.drawImage(img, -ox / sc, -oy / sc, N / sc, N / sc, 0, 0, 256, 256);
+    checkpoint(); ST.settings.wsPic = c.toDataURL('image/jpeg', .88); save(); applyWsPic(); close(); saved && saved(); } }, 'Save');
+  const cancel = h('button', { class: 'btn', onclick: () => { close(); cancelled && cancelled(); } }, 'Cancel');
+  bg = modal([h('h3', null, 'Adjust picture'), h('div', { class: 'muted', style: { marginBottom: '10px' } }, 'Drag to reposition, use the slider to zoom.'), h('div', { class: 'wse-wrap' }, stage), h('div', { class: 'wse-row' }, h('span', { class: 'muted' }, 'Zoom'), slider), h('div', { class: 'wse-btns' }, cancel, save1)]);
+  bg.closeOverlay = () => { close(); cancelled && cancelled(); };
 }
 { const _rs = renderSidebar; renderSidebar = function () { _rs.apply(this, arguments); buildWsCard(); applyWsPic(); }; }
 
