@@ -3134,6 +3134,38 @@ body.editing-other .if-shield::after,body.editing-other .yt-open,body.editing-ot
 .tasksview .t2-title,.tasksview .todo-title,.tasksview .bb-name,.tasksview .bb-n{font-size:14px}
 .tasksview .t2-stat b{font-size:24px;line-height:1}
 @media (max-width:700px){#bhead{top:8px;left:8px;max-width:calc(100% - 16px)}}
+
+/* ===== v5.2 ===== */
+/* line icons: small grey, as tall as the words beside them */
+.lic{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;font-size:inherit;line-height:1;vertical-align:-.14em;flex:none;color:var(--muted)}
+.lic svg{width:1em;height:1em;display:block}
+.btn.primary .lic,.board-icon .lic,.sb-logo .lic,.kpi.on .lic,.t2-stat.on .lic,.tvchip.on .lic,.tv-sel.on .lic,.mark-on .lic{color:inherit}
+.tr-bic,.crumb .ci,.bb-tile,.tv-btile,.bemb-h .tr-bic,.pv-cr .tr-bic,.tr-pic{color:var(--muted)!important;font-size:1em!important;line-height:1;width:1em;min-width:1em;height:1em;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.crumb .ci{width:1em;height:1em}
+#tabbar .tab-ic{font-size:1em;line-height:1;width:1em;height:1em;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);background:none!important}
+.tab.cur .tab-ic{color:var(--text)}
+.tr-row .tr-bic,.tr-row .tr-pic{font-size:1em!important}
+.sbar .lic,#statusbar .lic,.statusbar .lic{font-size:1em}
+.t2-dot.has-ic,.t2-cdot.has-ic{background:none!important;color:var(--muted)!important;font-size:1em!important;width:1em;height:1em;min-width:1em;border-radius:0;box-shadow:none;display:inline-flex;align-items:center;justify-content:center}
+/* workspace picture */
+.ws-av{width:28px;height:28px;border-radius:8px;overflow:hidden}
+.ws-av.has-img{background:none!important}
+.ws-av img{width:100%;height:100%;object-fit:cover;display:block}
+.wsp-row{display:flex;align-items:center;gap:12px}
+.wsp-prev{width:48px;height:48px;border-radius:12px;overflow:hidden;display:grid;place-items:center;background:var(--sel);color:var(--on-sel,#fff);font-weight:700;font-size:18px;flex:none}
+.wsp-prev img{width:100%;height:100%;object-fit:cover;display:block}
+/* the Trash row under the workspace menu is gone (Trash lives in Settings → Data) */
+.sb-foot #tbTrash,#tbTrash{display:none!important}
+
+
+/* ===== v5.3: database opens in a centered frame first (Expand to full page) ===== */
+.dbfull{top:32px;bottom:28px;background:transparent;flex-direction:row;align-items:center;justify-content:center}
+.dbfull.peek{background:rgba(15,17,20,.38)}
+.dbfull.full{background:var(--canvas)}
+.dbfull-sheet{position:relative;background:var(--card);display:flex;flex-direction:column;min-height:0;color:var(--text)}
+.dbfull.peek .dbfull-sheet{width:min(1100px,calc(100% - 64px));height:calc(100% - 48px);border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.35);overflow:hidden}
+.dbfull.full .dbfull-sheet{position:absolute;inset:10px;border-radius:16px;border:1px solid var(--line);box-shadow:0 10px 40px rgba(0,0,0,.35);overflow:hidden}
+@media (max-width:700px){.dbfull{top:0;bottom:0}.dbfull.full .dbfull-sheet{inset:0;border-radius:0;border:0}}
 </style>
 </head>
 <body class="app-root">
@@ -3202,7 +3234,7 @@ function h(tag, attrs, ...kids) {
     else if (k === 'value') el.value = v;
     else el.setAttribute(k, v === true ? '' : v);
   }
-  for (const c of kids.flat(3)) { if (c == null || c === false) continue; el.append(c.nodeType ? c : document.createTextNode(String(c))); }
+  for (const c of kids.flat(3)) { if (c == null || c === false) continue; if (typeof c === 'string' && c.length > 3 && c.length < 24 && c.startsWith('ic:')) { let li = null; try { li = lineIcon(c.slice(3)); } catch (_) { } if (li) { el.append(li); continue; } } el.append(c.nodeType ? c : document.createTextNode(String(c))); }
   return el;
 }
 function svgEl(tag, attrs) { const e = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const k in attrs) if (attrs[k] != null) e.setAttribute(k, attrs[k]); return e; }
@@ -4917,7 +4949,7 @@ function openTrash() {
   function render() {
     list.innerHTML = '';
     const items = cardsOf(S.boardId, true).filter(c => c.trashed).sort((a, b) => (b.trashedAt || 0) - (a.trashedAt || 0));
-    if (!items.length) list.append(h('div', { class: 'muted' }, 'Trash is empty. Drag cards onto the Trash icon or press Delete to remove them from this board.'));
+    if (!items.length) list.append(h('div', { class: 'muted' }, 'Trash is empty. Select a card and press Delete to remove it from this board; removed items show up here.'));
     for (const c of items) list.append(h('div', { class: 'trow' }, thumb(c), h('div', { class: 'tt' }, h('div', null, cardTitle(c)), h('div', null, TYPE_NAME[c.type] + ' · deleted ' + timeAgo(c.trashedAt || c.updatedAt))),
       h('button', { class: 'ib', title: 'Restore', html: ICON.restore, onclick: () => { restoreCard(c.id); render(); } }),
       h('button', { class: 'ib', title: 'Delete forever', html: ICON.close, onclick: () => { checkpoint(); purgeCard(c.id); save(); render(); } })));
@@ -7199,7 +7231,7 @@ function openPage(pid, opts) {
   if (prev && prev !== pid && ST.pages[prev]) syncPageCard(prev);
   pushRecent('p:' + pid); save();
   let w = $('.pv-wrap');
-  const mode = isMobileSb() ? 'full' : (opts && opts.mode) || (isRow(ST.pages[pid]) ? ST.settings.pvRowMode || 'rside' : 'peek');
+  const mode = isMobileSb() ? 'full' : (opts && opts.mode) || 'peek';
   if (!w) {
     w = h('div', { class: 'pv-wrap ' + mode });
     const back = h('div', { class: 'pv-back' }); back.onclick = closePageView;
@@ -7211,7 +7243,7 @@ function openPage(pid, opts) {
   const p = ST.pages[pid]; if (!p.title && isBlankPage(p)) setTimeout(() => w.querySelector('.pv-title')?.focus(), 30);
 }
 function isBlankPage(p) { return !p.title && !(p.schema || []).length && !p.banner && !p.icon && p.blocks.length <= 1 && !(p.blocks[0] && (p.blocks[0].html || p.blocks[0].type !== 'text')); }
-function setPvMode(mode) { if (isRow(ST.pages[S.pageId])) ST.settings.pvRowMode = mode; save(); const w = $('.pv-wrap'); if (w) { w.className = 'pv-wrap ' + mode; renderPvTop(); } }
+function setPvMode(mode) { const w = $('.pv-wrap'); if (w) { w.className = 'pv-wrap ' + mode; renderPvTop(); } }
 function renderPvTop() {
   const w = $('.pv-wrap'); if (!w) return; const p = ST.pages[S.pageId]; if (!p) return;
   const top = w.querySelector('.pv-top'); top.innerHTML = '';
@@ -7221,7 +7253,7 @@ function renderPvTop() {
   const rdb = rowDb(pageRoot(p.id));
   if (rdb) { const own = dbOwnerLoc(rdb); if (own && own.kind === 'block') for (const pp of pagePath(own.pageId)) crumbs.append(h('span', { class: 'crumb-sep' }, '/'), h('button', { class: 'pv-cr', onclick: () => openPage(pp.id) }, pp.icon ? pp.icon + ' ' : '', pp.title || 'Untitled')); crumbs.append(h('span', { class: 'crumb-sep' }, '/'), h('button', { class: 'pv-cr', title: 'Open the database', onclick: () => { if (own) openDbFull(own); } }, (rdb.icon ? rdb.icon + ' ' : '▤ ') + (rdb.title || 'Untitled database'))); }
   for (const pp of pagePath(p.id)) { crumbs.append(h('span', { class: 'crumb-sep' }, '/')); crumbs.append(h('button', { class: 'pv-cr' + (pp.id === p.id ? ' cur' : ''), onclick: () => openPage(pp.id) }, pp.icon ? pp.icon + ' ' : '', pp.title || 'Untitled')); }
-  const mode = w.classList.contains('full') ? 'full' : 'peek', key = 'p:' + p.id, alt = isRow(p) ? 'rside' : 'peek';
+  const mode = w.classList.contains('full') ? 'full' : 'peek', key = 'p:' + p.id, alt = 'peek';
   const ib = (ic, title, fn, on) => h('button', { class: 'ib' + (on ? ' on' : ''), title, html: ICON[ic], onclick: fn });
   top.append(crumbs, h('div', { class: 'pv-acts' },
     h('span', { class: 'pv-edited' }, 'Edited ' + timeAgo(p.updatedAt)),
@@ -8941,20 +8973,20 @@ function openDbFull(loc) {
   const pl = placeObj(loc); if (!pl || !ST.dbs[pl.dbId]) return toast('That database no longer exists');
   closeTransient(); endEdit(); const from = $('.pv-wrap') && loc.kind === 'block' ? loc.pageId : null; closePageView();
   if ($('.tasksview')) closeTasksView(); $$('.dashview,.dbfull').forEach(x => x.remove());
-  S.dbFull = loc; S.dbFullFrom = from; document.body.append(h('div', { class: 'dbfull' })); renderDbFull(); pushRecent('d:' + pl.dbId); save(); scheduleSidebar();
+  S.dbFull = loc; S.dbFullFrom = from; S.dbMode = isMobileSb() ? 'full' : 'peek'; const ovd = h('div', { class: 'dbfull peek' }); ovd.addEventListener('pointerdown', e => { if (e.target === ovd && ovd.classList.contains('peek')) closeDbFull(); }); document.body.append(ovd); renderDbFull(); pushRecent('d:' + pl.dbId); save(); scheduleSidebar();
 }
 function renderDbFull() {
   const ov = $('.dbfull'); if (!ov) return; const pl = placeObj(S.dbFull), db = pl && ST.dbs[pl.dbId];
   if (!db || (!pl.linked && !dbIsLive(db.id))) { ov.remove(); S.dbFull = null; return; }
-  const sc = ov.querySelector('.dbv-scroll'), pos = sc ? [sc.scrollLeft, sc.scrollTop] : null, vid0 = (ov.querySelector('.dbv') || { dataset: {} }).dataset.vid; ov.innerHTML = '';
+  const sc = ov.querySelector('.dbv-scroll'), pos = sc ? [sc.scrollLeft, sc.scrollTop] : null, vid0 = (ov.querySelector('.dbv') || { dataset: {} }).dataset.vid; ov.innerHTML = ''; ov.className = 'dbfull ' + (S.dbMode === 'full' ? 'full' : 'peek');
   const bid = S.dbFull.kind === 'card' ? ST.cards[S.dbFull.id].boardId : pageBoardId(S.dbFull.pageId), b = ST.boards[bid], key = 'd:' + db.id;
   const crumbs = h('div', { class: 'pv-crumbs' });
   if (b) crumbs.append(h('button', { class: 'pv-cr', onclick: () => { closeDbFull(); if (S.boardId !== b.id) openBoard(b.id); } }, h('span', { class: 'tr-bic', style: { background: b.color || '#5f8ff0' } }, b.icon || ''), b.title || 'Untitled'));
   if (S.dbFull.kind === 'block') for (const pp of pagePath(S.dbFull.pageId)) crumbs.append(h('span', { class: 'crumb-sep' }, '/'), h('button', { class: 'pv-cr', onclick: () => { S.dbFullFrom = null; closeDbFull(); openPage(pp.id); } }, pp.icon ? pp.icon + ' ' : '', pp.title || 'Untitled'));
   crumbs.append(h('span', { class: 'crumb-sep' }, '/'), h('span', { class: 'pv-cr cur' }, (db.icon ? db.icon + ' ' : '') + (db.title || 'Untitled database')));
-  ov.append(h('div', { class: 'pv-top' }, h('button', { class: 'tbtn', onclick: closeDbFull }, h('span', { html: ICON.back, style: { width: '16px', height: '16px', display: 'block' } }), h('span', { class: 'tl' }, 'Back')), crumbs,
-    h('div', { class: 'pv-acts' }, !pl.linked ? h('button', { class: 'ib' + (isFav(key) ? ' on' : ''), title: isFav(key) ? 'Remove from favorites' : 'Add to favorites', html: isFav(key) ? ICON.starfill : ICON.starline, onclick: () => { toggleFav(key); renderDbFull(); } }) : null, h('button', { class: 'ib', title: 'Close (Esc)', html: ICON.close, onclick: closeDbFull }))),
-    h('div', { class: 'dbfull-body' }, dbPlaceEl(S.dbFull, { mode: 'full' })));
+  ov.append(h('div', { class: 'dbfull-sheet' }, h('div', { class: 'pv-top' }, h('button', { class: 'tbtn', onclick: closeDbFull }, h('span', { html: ICON.back, style: { width: '16px', height: '16px', display: 'block' } }), h('span', { class: 'tl' }, 'Back')), crumbs,
+    h('div', { class: 'pv-acts' }, !pl.linked ? h('button', { class: 'ib' + (isFav(key) ? ' on' : ''), title: isFav(key) ? 'Remove from favorites' : 'Add to favorites', html: isFav(key) ? ICON.starfill : ICON.starline, onclick: () => { toggleFav(key); renderDbFull(); } }) : null, isMobileSb() ? null : h('button', { class: 'ib', title: S.dbMode === 'full' ? 'Open as centered peek' : 'Expand to full page', html: S.dbMode === 'full' ? ICON.shrink : ICON.expand2, onclick: () => { S.dbMode = S.dbMode === 'full' ? 'peek' : 'full'; renderDbFull(); } }), h('button', { class: 'ib', title: 'Close (Esc)', html: ICON.close, onclick: closeDbFull }))),
+    h('div', { class: 'dbfull-body' }, dbPlaceEl(S.dbFull, { mode: 'full' }))));
   const ns = ov.querySelector('.dbv-scroll'); if (ns && pos && ov.querySelector('.dbv').dataset.vid === vid0) { ns.scrollLeft = pos[0]; ns.scrollTop = pos[1]; }
 }
 
@@ -9042,6 +9074,10 @@ function openSettings() {
   const TABS = {
     General: () => [
       row('Your name', name),
+      (() => { const prev = h('div', { class: 'wsp-prev' }), up = h('button', { class: 'btn' }), rm = h('button', { class: 'btn' }, 'Remove');
+        const paint = () => { prev.textContent = ''; if (st.wsPic) prev.append(h('img', { src: st.wsPic, alt: '' })); else prev.textContent = (st.userName || 'G').slice(0, 1).toUpperCase(); up.textContent = st.wsPic ? 'Change picture' : 'Upload picture'; rm.style.display = st.wsPic ? '' : 'none'; };
+        up.onclick = () => pickWsPic(paint); rm.onclick = () => { checkpoint(); delete st.wsPic; save(); applyWsPic(); paint(); }; paint();
+        return row('Workspace picture', h('div', { class: 'wsp-row' }, prev, up, rm), 'Shown on your workspace card in the sidebar'); })(),
       row('Theme', seg([['0', 'Light'], ['1', 'Dark']], st.dark ? '1' : '0', v => { st.dark = v === '1'; save(); applyTheme(); renderLines(); })),
       row('Accent color', accentCtl(), 'Buttons, active items and highlights'),
       row('Text size', seg([['s', 'Small'], ['m', 'Medium'], ['l', 'Large']], st.fs || 'm', v => { st.fs = v; save(); applyPrefs(); renderBoard(); }), 'Cards and pages'),
@@ -9066,6 +9102,7 @@ function openSettings() {
     ],
     AI: () => aiSettingsSection().slice(1),
     Data: () => [
+      row('Trash', h('button', { class: 'btn', onclick: () => { bg.remove(); closePageView(); closeDashes(); openTrash(); } }, 'Open Trash'), 'Restore or permanently delete removed boards, pages and cards'),
       h('div', { class: 'set-sub', style: { marginBottom: '10px' } }, 'Everything is saved in this browser only. Export a backup to keep a copy or move it to another device.'),
       h('div', { class: 'set-btns' }, h('button', { class: 'btn', onclick: exportBackup }, 'Export full backup (.json)'), h('button', { class: 'btn', onclick: importBackup }, 'Import backup…')),
       ...(typeof backupSection === 'function' ? backupSection() : []),
@@ -10694,7 +10731,11 @@ function tabMove(from, d) {
   tabs.splice(Math.max(0, Math.min(idx, tabs.length)), 0, mv); tabNormalize(); ST.settings.tabCur = tabs.indexOf(cur); save(); renderTabs();
 }
 function renderTabs() {
-  const bar = $('#tabbar'); if (!bar) return; tabNormalize(); const tabs = tabList(), cur = ST.settings.tabCur, gs = tabGroups(); bar.innerHTML = '';
+  const bar = $('#tabbar'); if (!bar) return; tabNormalize(); const tabs = tabList(), cur = ST.settings.tabCur, gs = tabGroups();
+  /* the tab bar is redrawn from many places (sidebar refreshes, pointer activity); rebuilding identical tabs made icons flicker */
+  let sig = ''; try { sig = JSON.stringify([cur, tabs.map(t => [t.b, t.o, t.pin, t.g, tabLabel(t)]), gs]); } catch (_) { sig = ''; }
+  if (sig && bar.dataset.sig === sig && bar.childElementCount && !(typeof TABS !== 'undefined' && TABS.renaming)) return;
+  bar.dataset.sig = sig; bar.innerHTML = '';
   const pins = h('div', { class: 'tab-pins' }), scr = h('div', { class: 'tabs-scroll' }); let wrap = null, wrapG = null;
   tabs.forEach((t, i) => {
     const [title, color, icon] = tabLabel(t), g = t.g && tabGroup(t.g);
@@ -10835,7 +10876,10 @@ function untileIcons(root) {
   if (!root || root.nodeType !== 1) return;
   const sel = '.tr-bic,.ci,.bb-tile,.tv-btile';
   const list = root.matches && root.matches(sel) ? [root] : []; root.querySelectorAll && root.querySelectorAll(sel).forEach(x => list.push(x));
-  for (const el of list) { const bg = el.style.background || el.style.backgroundColor; if (bg && bg !== 'none') { el.style.color = bg; el.style.background = 'none'; } }
+  for (const el of list) { const bg = el.style.background || el.style.backgroundColor; if (bg && bg !== 'none') el.style.background = 'none'; }
+  /* board dots that carry an icon (Tasks group headers, board chips): plain icon; empty ones stay as colour dots */
+  const dots = root.matches && root.matches('.t2-dot,.t2-cdot') ? [root] : []; root.querySelectorAll && root.querySelectorAll('.t2-dot,.t2-cdot').forEach(x => dots.push(x));
+  for (const el of dots) if ((el.textContent || '').trim() || el.querySelector('.lic')) el.classList.add('has-ic');
 }
 { const q = new Set(); let tm = 0; const flush = () => { tm = 0; q.forEach(x => { if (x.isConnected) untileIcons(x); }); q.clear(); };
   const mo = new MutationObserver(ms => { for (const m of ms) m.addedNodes.forEach(x => { if (x.nodeType === 1) q.add(x); }); if (!tm) tm = requestAnimationFrame(flush); });
@@ -12271,7 +12315,20 @@ function buildWsCard() {
     '-', { label: (ST.settings.classic ? 'Use calm colors' : 'Use classic colors'), fn: () => { ST.settings.classic = !ST.settings.classic; save(); applyCalm(); } }]); const m = [...document.querySelectorAll('.menu')].pop(); if (m) { const mr = m.getBoundingClientRect(); m.style.top = Math.max(8, r.top - mr.height - 6) + 'px'; } };
   foot.prepend(card); convIcons(card);
 }
-{ const _rs = renderSidebar; renderSidebar = function () { _rs.apply(this, arguments); buildWsCard(); }; }
+function applyWsPic() {
+  const av = $('#wsCard .ws-av'); if (!av) return; const pic = ST.settings.wsPic;
+  if (pic) { if (!av.querySelector('img') || av.querySelector('img').src !== pic) { av.textContent = ''; av.append(h('img', { src: pic, alt: '' })); } av.classList.add('has-img'); }
+  else { av.classList.remove('has-img'); av.textContent = (ST.settings.userName || 'G').slice(0, 1).toUpperCase(); }
+}
+function pickWsPic(done) {
+  const inp = h('input', { type: 'file', accept: 'image/*', style: { display: 'none' } }); document.body.append(inp);
+  inp.onchange = () => { const f = inp.files && inp.files[0]; inp.remove(); if (!f) return; const url = URL.createObjectURL(f), img = new Image();
+    img.onload = () => { const n = 256, c = document.createElement('canvas'); c.width = c.height = n; const x = c.getContext('2d'), m = Math.min(img.width, img.height); x.fillStyle = '#fff'; x.fillRect(0, 0, n, n); x.drawImage(img, (img.width - m) / 2, (img.height - m) / 2, m, m, 0, 0, n, n); URL.revokeObjectURL(url);
+      checkpoint(); ST.settings.wsPic = c.toDataURL('image/jpeg', .88); save(); applyWsPic(); done && done(); };
+    img.onerror = () => { URL.revokeObjectURL(url); toast('That file could not be read as an image'); }; img.src = url; };
+  inp.click();
+}
+{ const _rs = renderSidebar; renderSidebar = function () { _rs.apply(this, arguments); buildWsCard(); applyWsPic(); }; }
 
 /* ---- task rows: hover actions, icon badges ---- */
 { const _tbd = taskBadges; taskBadges = function (it) { return _tbd(it); }; }
