@@ -3109,6 +3109,30 @@ body.editing-other .if-shield::after,body.editing-other .yt-open,body.editing-ot
 #bhead .pp-name{width:104px;font-size:12px}
 #bhead .pp-val{font-size:12px}
 .presenting #bhead{display:none}
+
+/* ===== v5.1 ===== */
+/* tag picker: keyboard highlight */
+.op-row.hl{background:var(--hover)}
+/* icons: no background tiles anywhere; the colour moves onto the glyph (see untileIcons) */
+.tr-bic,.crumb .ci,.bb-tile,.tv-btile,.bemb-h .tr-bic,.pv-cr .tr-bic{background:none!important;box-shadow:none!important;color:var(--text);width:auto;min-width:16px;height:auto;font-size:15px;border-radius:0}
+.tr-bic svg,.crumb .ci svg,.bb-tile svg,.tv-btile svg,.lic svg{width:1em;height:1em}
+.crumb .ci{font-size:14px;width:auto;height:auto}
+.board-icon{background:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;color:#fff;filter:drop-shadow(0 1px 3px rgba(0,0,0,.65))}
+.kpi-ic,.fv-bic,.fv-badge.got .fv-bic{background:none!important}
+#tabbar .tab-ic.pin{background:none!important}
+/* Tasks dashboard: one type scale. H1 28 / H2 18 / H3 14 / body 14 / small 12 / KPI 24 */
+.tasksview{--fs-display:28px;--fs-page:28px;--fs-section:18px;--fs-card:14px;--fs-title:18px;--fs-body:14px;--fs-small:12px;--fs-meta:12px}
+.tasksview .hero-txt h2,.tasksview .hero-name{font-size:28px;line-height:1.15;letter-spacing:-.02em}
+.tasksview .hero-txt h2{font-weight:500}
+.tasksview .hero-name{font-weight:700}
+.tasksview .hero-txt p{font-size:14px;margin-top:6px}
+.tasksview .t2-h{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.tasksview .vp-title,.tasksview .t2-phead b,.tasksview .tv-head h2{font-size:18px;font-weight:650;line-height:1.25;letter-spacing:-.01em}
+.tasksview .vp-sub,.tasksview .tvh-sub,.tasksview .t2-phead .muted,.tasksview .t2-pn,.tasksview .cc-lab,.tasksview .cc-val,.tasksview .t2-empty{font-size:12px}
+.tasksview .t2-empty{font-size:13px}
+.tasksview .t2-ghead b,.tasksview .tv-ghead b{font-size:14px;font-weight:650}
+.tasksview .t2-title,.tasksview .todo-title,.tasksview .bb-name,.tasksview .bb-n{font-size:14px}
+.tasksview .t2-stat b{font-size:24px;line-height:1}
 @media (max-width:700px){#bhead{top:8px;left:8px;max-width:calc(100% - 16px)}}
 </style>
 </head>
@@ -7023,9 +7047,14 @@ function propChip(pr, v, page) {
   const t = propText(pr, v, page); return t ? h('span', { class: 'pg-chip', title: pr.name }, (pr.type === 'date' ? '▦ ' : '') + t) : null;
 }
 function propsPanel(page, onChange) {
-  const schema = schemaOf(page), vals = page.values, wrap = h('div', { class: 'pv-props' });
+  const schema = schemaOf(page), vals = page.values, wrap = h('div', { class: 'pv-props', 'data-ppid': page.id });
   const commit = (fn, rerender) => { checkpoint(); fn(); page.updatedAt = now(); save(); onChange && onChange(); if (rerender !== false) redraw(); };
-  function redraw() { const n = propsPanel(page, onChange); wrap.replaceWith(n); }
+  function redraw() {
+    /* a picker that stays open (multi-select) keeps calling this closure after the panel was already replaced; redraw whichever panels are live */
+    const live = [...document.querySelectorAll('.pv-props[data-ppid="' + page.id + '"]')];
+    if (!live.length) return;
+    live.forEach(el => el.replaceWith(propsPanel(page, onChange)));
+  }
   for (const pr of schema) {
     const name = h('button', { class: 'pp-name', title: 'Edit property' }, h('span', { class: 'pp-ic' }, propIcon(pr.type)), h('span', { class: 'pp-nm' }, pr.name));
     name.onclick = () => isRow(page) ? dbPropMenu(name, rowDb(page), pr) : propMenu(name, page, pr, commit);
@@ -7089,28 +7118,45 @@ function propEditor(page, pr, commit) {
 }
 function optionPicker(anchor, page, pr, commit) {
   closeTransient();
-  const vals = page.values, multi = pr.type === 'multi';
+  const multi = pr.type === 'multi';
   const q = h('input', { class: 'rp-q', placeholder: multi ? 'Search or create a tag…' : 'Search or create an option…' }), list = h('div', { class: 'rp-list' });
   const p = h('div', { class: 'pop optpick' }, q, list); document.body.append(p);
-  const has = id => multi ? (vals[pr.id] || []).includes(id) : vals[pr.id] === id;
-  const pick = o => { commit(() => { if (multi) { const cur = vals[pr.id] || []; vals[pr.id] = cur.includes(o.id) ? cur.filter(x => x !== o.id) : [...cur, o.id]; } else vals[pr.id] = vals[pr.id] === o.id ? null : o.id; }); if (!multi) p.remove(); else { q.value = ''; draw(); } };
+  const has = id => multi ? (page.values[pr.id] || []).includes(id) : page.values[pr.id] === id;
+  let hl = 0;
+  const pick = o => { commit(() => { const vals = page.values; if (multi) { const cur = vals[pr.id] || []; vals[pr.id] = cur.includes(o.id) ? cur.filter(x => x !== o.id) : [...cur, o.id]; } else vals[pr.id] = vals[pr.id] === o.id ? null : o.id; }); if (!multi) p.remove(); else { q.value = ''; hl = 0; draw(); } };
+  const create = t => { const o = { id: uid(), name: t, color: OPT_COLORS[pr.options.length % OPT_COLORS.length] }; if (pr.type === 'status') o.group = 'todo'; commit(() => { pr.options.push(o); const vals = page.values; if (multi) vals[pr.id] = [...(vals[pr.id] || []), o.id]; else vals[pr.id] = o.id; }); if (!multi) p.remove(); else { q.value = ''; hl = 0; draw(); } };
+  const matches = () => { const tl = q.value.trim().toLowerCase(); return pr.options.filter(o => !tl || o.name.toLowerCase().includes(tl)); };
   const draw = () => {
     list.innerHTML = ''; const t = q.value.trim(), tl = t.toLowerCase();
     const groups = pr.type === 'status' ? [['todo', 'To do'], ['prog', 'In progress'], ['done', 'Complete']] : [[null, null]];
+    const ms = matches(); if (hl >= ms.length) hl = Math.max(0, ms.length - 1);
     for (const [g, gl] of groups) {
-      const os = pr.options.filter(o => (g == null || o.group === g) && (!tl || o.name.toLowerCase().includes(tl)));
-      if (gl) list.append(h('div', { class: 'op-g' }, gl));
+      const os = ms.filter(o => g == null || o.group === g);
+      if (gl && os.length) list.append(h('div', { class: 'op-g' }, gl));
       for (const o of os) {
         const more = h('button', { class: 'op-more', title: 'Edit option', html: ICON.dots });
         more.onclick = e => { e.stopPropagation(); optEdit(more, pr, o, commit, () => { if (p.isConnected) draw(); }); };
-        list.append(h('div', { class: 'op-row' + (has(o.id) ? ' on' : ''), onmousedown: e => { if (e.target.closest('.op-more')) return; e.preventDefault(); pick(o); } }, optPill(o), has(o.id) ? h('span', { class: 'op-ck', html: ICON.check }) : null, more));
+        list.append(h('div', { class: 'op-row' + (has(o.id) ? ' on' : '') + (ms[hl] === o ? ' hl' : ''), onmousedown: e => { if (e.target.closest('.op-more')) return; e.preventDefault(); pick(o); } }, optPill(o), has(o.id) ? h('span', { class: 'op-ck', html: ICON.check }) : null, more));
       }
     }
-    if (t && !pr.options.some(o => o.name.toLowerCase() === tl)) list.append(h('div', { class: 'op-row create', onmousedown: e => { e.preventDefault(); const o = { id: uid(), name: t, color: OPT_COLORS[pr.options.length % OPT_COLORS.length] }; if (pr.type === 'status') o.group = 'todo'; commit(() => pr.options.push(o)); q.value = ''; pick(o); } }, 'Create ', optPill({ name: t, color: OPT_COLORS[pr.options.length % OPT_COLORS.length] })));
+    if (t && !pr.options.some(o => o.name.toLowerCase() === tl)) list.append(h('div', { class: 'op-row create' + (!ms.length ? ' hl' : ''), onmousedown: e => { e.preventDefault(); create(t); } }, 'Create ', optPill({ name: t, color: OPT_COLORS[pr.options.length % OPT_COLORS.length] })));
     if (!list.children.length) list.append(h('div', { class: 'dd-sub', style: { padding: '8px' } }, 'Type to create an option'));
+    list.querySelector('.hl')?.scrollIntoView({ block: 'nearest' });
   };
-  q.addEventListener('input', draw);
-  q.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Escape') p.remove(); if (e.key === 'Enter') { e.preventDefault(); list.querySelector('.op-row')?.dispatchEvent(new MouseEvent('mousedown')); } });
+  q.addEventListener('input', () => { hl = 0; draw(); });
+  q.addEventListener('keydown', e => {
+    e.stopPropagation(); const ms = matches();
+    if (e.key === 'Escape') p.remove();
+    else if (e.key === 'ArrowDown') { e.preventDefault(); if (ms.length) { hl = (hl + 1) % ms.length; draw(); } }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); if (ms.length) { hl = (hl - 1 + ms.length) % ms.length; draw(); } }
+    else if (e.key === 'Enter') {
+      e.preventDefault(); const t = q.value.trim();
+      if (t && (e.metaKey || e.ctrlKey) && !pr.options.some(o => o.name.toLowerCase() === t.toLowerCase())) return create(t);   /* Cmd/Ctrl+Enter always creates what was typed */
+      const top = ms[hl];
+      if (top) { if (has(top.id)) { if (multi) { q.value = ''; hl = 0; draw(); } else p.remove(); } else pick(top); }   /* never toggles an existing choice off */
+      else if (t) create(t);
+    }
+  });
   draw(); const r = anchor.getBoundingClientRect(); placeEl(p, r.left, r.bottom + 4); q.focus();
 }
 function optEdit(anchor, pr, o, commit, after) {
@@ -10783,6 +10829,18 @@ function renderBhead(force) {
   }
 }
 function setBoardHeader(what, on) { const b = board(); if (what === 'header') b.hideHeader = !on; else b.hideProps = !on; b.updatedAt = now(); save(); renderBhead(true); }
+
+/* ---- v5.1: icon tiles -> plain glyphs. The board colour moves from the tile background onto the icon itself ---- */
+function untileIcons(root) {
+  if (!root || root.nodeType !== 1) return;
+  const sel = '.tr-bic,.ci,.bb-tile,.tv-btile';
+  const list = root.matches && root.matches(sel) ? [root] : []; root.querySelectorAll && root.querySelectorAll(sel).forEach(x => list.push(x));
+  for (const el of list) { const bg = el.style.background || el.style.backgroundColor; if (bg && bg !== 'none') { el.style.color = bg; el.style.background = 'none'; } }
+}
+{ const q = new Set(); let tm = 0; const flush = () => { tm = 0; q.forEach(x => { if (x.isConnected) untileIcons(x); }); q.clear(); };
+  const mo = new MutationObserver(ms => { for (const m of ms) m.addedNodes.forEach(x => { if (x.nodeType === 1) q.add(x); }); if (!tm) tm = requestAnimationFrame(flush); });
+  const go = () => { untileIcons(document.body); mo.observe(document.body, { childList: true, subtree: true }); };
+  if (document.body) go(); else document.addEventListener('DOMContentLoaded', go); }
 { const _rb9 = renderBoard; renderBoard = function () { const r = _rb9.apply(this, arguments); try { renderBhead(); } catch (e) { console.warn(e); } return r; }; }
 
 /* ========== v2.5: bottom status bar, dashboard hero, shapes ========== */
