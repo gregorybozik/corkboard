@@ -3774,10 +3774,13 @@ function zoomAt(z, cx, cy) {
 const zoomBy = f => zoomAt(view().z * f);
 const setZoom = z => zoomAt(z);
 function fitView() {
-  const els = $$('#cards > .card'); const r = $('#viewport').getBoundingClientRect();
-  if (!els.length) { Object.assign(view(), { x: 60, y: 40, z: 1 }); applyView(); return; }
+  const r = $('#viewport').getBoundingClientRect();
+  /* only measure cards that are actually laid out: hidden / zero-size / non-finite ones would count as a phantom point at the screen corner */
+  const els = $$('#cards > .card').filter(el => { const b = el.getBoundingClientRect(); return b.width > 1 && b.height > 1 && isFinite(b.left) && isFinite(b.top) && getComputedStyle(el).display !== 'none'; });
+  if (!els.length || r.width < 50 || r.height < 50) { if (r.width >= 50 && r.height >= 50) { Object.assign(view(), { x: 60, y: 40, z: 1 }); applyView(); } return; }
   let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
   for (const el of els) { const w = worldRect(el); x0 = Math.min(x0, w.x); y0 = Math.min(y0, w.y); x1 = Math.max(x1, w.x + w.w); y1 = Math.max(y1, w.y + w.h); }
+  if (![x0, y0, x1, y1].every(isFinite) || x1 - x0 < 1 || y1 - y0 < 1) return;
   const pad = 60, z = clamp(Math.min((r.width - pad * 2) / (x1 - x0), (r.height - pad * 2) / (y1 - y0)), 0.1, 1.5);
   const v = view(); v.z = z; v.x = (r.width - (x1 - x0) * z) / 2 - x0 * z; v.y = (r.height - (y1 - y0) * z) / 2 - y0 * z;
   applyView(); saveViewSoon(); scheduleLines();
