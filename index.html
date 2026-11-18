@@ -2998,6 +2998,89 @@ button:focus-visible,[role="tab"]:focus-visible,[role="link"]:focus-visible,[rol
 .video-wrap,.embed-wrap{overflow:hidden}
 body.editing-other .if-shield::after,body.editing-other .yt-open,body.editing-other .embed-bar{display:none!important}
 .card:not(.selected) .if-grip{display:none}
+
+/* v4.8: task box layout */
+.modal.tm-wrap{max-width:720px;width:min(720px,94vw);max-height:92vh;overflow:auto}
+.tm-grid{grid-template-columns:88px minmax(0,1fr);gap:14px 16px;align-items:center}
+.tm-grid>.tm-label{align-self:center}
+.tm-span:not(:has(.tm-newboard[style*="flex"])){display:none}
+.tm-grid .tm-row select.tm-input{width:100%;max-width:360px;min-width:0}
+.tm-dates{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:360px}
+.tm-df{display:flex;flex-direction:column;gap:4px;min-width:0}
+.tm-cap{font-size:11px;color:var(--muted);font-weight:600}
+.tm-dates .tm-input{width:100%;min-width:0;padding:6px 8px}
+.tm-row .btn,.tm-row .mini,.flagbtn{white-space:nowrap}
+.tm-plan{flex-wrap:wrap}
+.tm-colors{flex-wrap:wrap;gap:6px}
+.tm-tags{min-height:32px;padding:2px 8px;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+.tm-tagwrap{flex:1;min-width:140px}
+.tm-taginput{width:100%}
+.tm-grid .page-row,.tm-grid .tm-page{white-space:nowrap}
+@media (max-width:640px){
+  .modal.tm-wrap{width:96vw;padding:14px}
+  .tm-grid{grid-template-columns:1fr;gap:6px}
+  .tm-grid>.tm-label:empty{display:none}
+  .tm-grid>.tm-label{margin-top:8px}
+  .tm-grid .tm-row select.tm-input{max-width:none}
+  .tm-dates{max-width:none}
+}
+
+/* v4.8: drag grips live in front of the checkbox */
+.thandle{opacity:.5;margin-top:0;align-self:center;width:16px}
+.todo-item:hover .thandle{opacity:.9}
+.tv-handle{position:static;order:0;flex:none;opacity:.5;margin-top:3px;width:16px;height:16px}
+.tv-handle svg{transform:none}
+.tv-row:hover .tv-handle{opacity:.9}
+.t2-grip,.pv-grip{flex:none;width:16px;height:20px;display:grid;place-items:center;color:var(--muted);opacity:.5;cursor:grab;touch-action:none}
+.t2-grip svg,.pv-grip svg{width:14px;height:14px}
+.t2row:hover .t2-grip,.pv-task:hover .pv-grip{opacity:.95}
+.t2row{gap:6px}
+.t2row.selmode .t2-grip{display:none}
+.pv-tasks .pv-task{padding-left:4px}
+.pv-task.dragging{opacity:.4}
+.pv-task.pv-over{box-shadow:inset 0 2px 0 var(--sel)}
+
+/* ===== v4.8: fresh page look ===== */
+.pv-wrap.peek .pv{border-radius:16px}
+.pv-wrap.full .pv{inset:10px;border-radius:16px;border:1px solid var(--line);box-shadow:0 10px 40px rgba(0,0,0,.35);overflow:hidden}
+.pv-wrap.full{background:var(--canvas)}
+.pv-top{height:42px}
+.pv-banner{height:96px}
+.pv-wrap.peek .pv-banner{height:84px}
+.pv-doc{padding:0 48px 30vh}
+.pv-doc.full{padding:0 56px 30vh}
+.pv-head{padding-top:22px}
+.pv-head.has-banner{padding-top:12px}
+.pv-head.has-icon.has-banner{padding-top:0}
+.pv-icon{font-size:38px;width:52px;height:52px;border-radius:12px;margin-left:-4px}
+.pv-head.has-banner .pv-icon{margin-top:-26px}
+.pv-adds{height:26px;margin:0 0 0 -6px}
+.pv-title{font:700 28px/1.2 var(--serif);padding:2px 0 8px}
+.pv-propt{display:flex;align-items:center;gap:6px;width:100%;text-align:left;font-size:12px;font-weight:600;color:var(--muted);padding:4px 6px;margin:0 0 2px -6px;border-radius:8px;min-width:0}
+.pv-propt:hover{background:var(--hover);color:var(--text)}
+.pv-propt .tr-chev{flex:none}
+.pv-propt-s{font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;opacity:.8}
+.pv-props{padding:2px 0 10px}
+.pp-row{min-height:30px}
+.b-callout .bc,.b-code .bc{border-radius:12px}
+.pv-body img{border-radius:12px}
+.pp-in,.pp-opts,.pp-show{border-radius:8px}
+@media (max-width:700px){
+  .pv-wrap.full .pv{inset:0;border-radius:0;border:0}
+  .pv-doc,.pv-doc.full{padding:0 18px 30vh}
+  .pv-title{font-size:24px}
+}
+/* darker canvas with a soft gradient and faint grain (dark theme) */
+.app-root.dark{--canvas:#0f1114;--dot:#23272d;--vig:rgba(0,0,0,.34);--grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .055 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");--bgrad:radial-gradient(ellipse 85% 70% at 50% 28%,#1b1f26 0%,#12151a 52%,#0a0c0f 100%)}
+.app-root.dark #viewport::before{opacity:1;background:radial-gradient(ellipse 85% 70% at 50% 25%,rgba(70,88,120,.14) 0%,rgba(0,0,0,0) 58%),radial-gradient(ellipse 75% 70% at 50% 45%,transparent 45%,var(--vig) 100%),var(--grain);background-size:100% 100%,100% 100%,160px 160px}
+.app-root.dark .pv-wrap.full{background-color:var(--canvas);background-image:var(--bgrad),var(--grain);background-size:100% 100%,160px 160px}
+.app-root.dark .pv{background-image:linear-gradient(180deg,rgba(255,255,255,.018),rgba(0,0,0,.10))}
+
+.pg-linked,.bsub-l{font-size:11px;font-weight:600;color:var(--muted);background:var(--hover);padding:1px 7px;border-radius:10px}
+.pg-card.pg-gone{border:1px dashed var(--line);background:transparent}
+.bsub.linked{border-style:dashed}
+.bsub.gone{opacity:.65}
+.bsub-l{margin-left:auto}
 </style>
 </head>
 <body class="app-root">
@@ -3983,7 +4066,8 @@ function handleCardClick(p, e) {
   const t = p.target, c = ST.cards[p.id]; if (!c) return;
   const open = t.closest('[data-open]'); if (open) { window.open(open.dataset.open, '_blank', 'noopener'); return; }
   const il = t.closest('a.ilink'); if (il) { jumpRef(il.dataset.ref); return; }
-  if (c.type === 'page' && !e.shiftKey && !e.metaKey && !e.ctrlKey) { if (wantTab(e)) openInNewTab({ t: 'page', id: c.data.pageId }); else openPage(c.data.pageId); return; }
+  if (c.type === 'page' && (e.metaKey || e.ctrlKey)) { openInNewTab({ t: 'page', id: c.data.pageId }); return; } /* v4.8: plain click selects; double-click opens */
+  if (c.type === 'page' && !e.shiftKey) return;
   const li = c.type === 'note' && t.closest('.rt ul.cl > li');
   if (li && clHit(li, e.clientX)) { checkpoint(); toggleCl(li); const b = li.closest('.note-body'); c.data.html = b.innerHTML; c.updatedAt = now(); save(); return; }
   const ed = t.closest('[data-edit]');
@@ -4139,8 +4223,9 @@ function serializeCards(ids) {
   const pages = {}; for (const c of [...cards, ...extra]) if (c.type === 'page') collectPageTree(c.data.pageId, ST.pages, pages);
   return JSON.parse(JSON.stringify({ src: S.boardId, cards, extra, boards, lines, pages }));
 }
-function pasteCards(data, pt) {
+function pasteCards(data, pt, opts) {
   if (!data || !data.cards || !data.cards.length) return;
+  const cloneIt = !!(opts && opts.clone);
   checkpoint();
   const idm = {}, bm = {}, gm = {};
   for (const b of data.boards) bm[b.id] = uid();
@@ -4159,8 +4244,9 @@ function pasteCards(data, pt) {
     if (sel) { n.trashed = false; n.unsorted = false; }
     if (n.type === 'column') n.data.childIds = n.data.childIds.map(i => idm[i]).filter(Boolean);
     if (n.type === 'board') n.data.boardId = bm[c.data.boardId] || n.data.boardId;
-    if (n.type === 'database') { if (ST.dbs[n.data.dbId]) n.data.linked = true; else { n.data = defaultData('database'); n.data.dbId = newDb({ t: 'card', id: n.id }).id; } }
-    if (n.type === 'page') { const src = data.pages && data.pages[c.data.pageId] ? collectPageTree(c.data.pageId, data.pages) : null; n.data.pageId = src ? clonePageTree(src, c.data.pageId, { t: 'card', id: n.id }) : newPage({}, { t: 'card', id: n.id }).id; }
+    if (n.type === 'database') { if (ST.dbs[n.data.dbId] && dbIsLive(n.data.dbId)) n.data.linked = true; else { n.data = defaultData('database'); n.data.dbId = newDb({ t: 'card', id: n.id }).id; } }
+    if (n.type === 'page' && !cloneIt && ST.pages[c.data.pageId] && pageIsLive(c.data.pageId)) { n.data.linked = true; n.data.pageId = c.data.pageId; }
+    else if (n.type === 'page') { n.data.linked = false; const src = data.pages && data.pages[c.data.pageId] ? collectPageTree(c.data.pageId, data.pages) : null; n.data.pageId = src ? clonePageTree(src, c.data.pageId, { t: 'card', id: n.id }) : newPage({}, { t: 'card', id: n.id }).id; }
     n.createdAt = n.updatedAt = now(); if (n.type === 'todo') reseedTodo(n); ST.cards[n.id] = n;
   }
   for (const l of data.lines) {
@@ -4179,7 +4265,7 @@ function copySel(cut) {
   try { navigator.clipboard && navigator.clipboard.writeText(text || ' ').catch(() => { }); } catch { }
   if (cut) trashCards(selTopIds()); else toast(`Copied ${data.cards.length} card${data.cards.length > 1 ? 's' : ''}`);
 }
-function duplicateSel() { const data = serializeCards(selTopIds()); if (data) pasteCards(data, null); }
+function duplicateSel() { const data = serializeCards(selTopIds()); if (data) pasteCards(data, null, { clone: true }); }
 function selectAll() { endEdit(); S.sel = new Set(topLevel(S.boardId).map(c => c.id)); S.selLine = null; updateSelUI(); }
 let nudgeT = 0;
 function nudge(dx, dy) {
@@ -4877,6 +4963,7 @@ const ACT = {
   jump(id) { jumpToCapture(id); },
   toggle(id, a) { toggleTask(a.dataset.item); },
   'open-task'(id, a) { openTask(a.dataset.item); },
+  'remove-linked'(id) { trashCards([id]); },
   addtask(id) { endEdit(); checkpoint(); const c = ST.cards[id], it = newTask(''); c.data.items.push(it); save(); rerenderCard(id); focusEdit(id, 'item:' + it.id); },
   'open-board'(id) { openBoard(ST.cards[id].data.boardId); },
   'open-doc'(id) { openDoc(id); },
@@ -5442,9 +5529,9 @@ function taskRowEl(it) {
   const meta = taskChips(it);
   const row = h('div', { class: 'todo-item' + (it.done ? ' done' : ''), 'data-item': it.id },
     it.color ? h('span', { class: 'tline' }) : null,
+    h('span', { class: 'thandle', 'data-taskhandle': it.id, title: 'Drag to move this task (drop on the board to make a new list)', html: ICON.grip }),
     h('button', { class: 'chk', 'data-act': 'toggle', 'data-item': it.id, html: it.done ? ICON.check : '' }),
     h('div', { class: 'todo-main' }, h('div', { class: 'todo-line' }, flagIcons(it), h('div', { class: 'todo-text', 'data-edit': 'item:' + it.id }, it.text)), meta.length ? h('div', { class: 'tmeta', 'data-act': 'open-task', 'data-item': it.id, title: 'Open task details' }, meta) : null),
-    h('span', { class: 'thandle', 'data-taskhandle': it.id, title: 'Drag to move this task (drop on the board to make a new list)', html: ICON.grip }),
     h('button', { class: 'topen', 'data-act': 'open-task', 'data-item': it.id, title: 'Open task details', html: ICON.open }));
   if (it.color) row.style.setProperty('--tc', it.color);
   return row;
@@ -5685,7 +5772,7 @@ function taskMatches(it, c, o) {
 }
 function tvRow(it, c, showList) {
   const row = h('div', { class: 'tv-row' + (it.done ? ' done' : ''), 'data-tid': it.id },
-    h('span', { class: 'tv-handle', title: 'Drag to move', html: ICON.dots }),
+    h('span', { class: 'tv-handle', title: 'Drag to move', html: ICON.grip }),
     it.color ? h('span', { class: 'tline' }) : null,
     h('button', { class: 'chk' + (it.done ? ' on' : ''), html: it.done ? ICON.check : '', title: 'Mark complete', onclick: e => { e.stopPropagation(); toggleTask(it.id); } }),
     h('div', { class: 'tv-main' }, h('div', { class: 'tv-text' }, flagIcons(it), it.text || h('span', { class: 'muted' }, 'Untitled task')), h('div', { class: 'tmeta' }, taskChips(it), showList ? h('span', { class: 'tv-where' }, `${listName(c)} · ${boardName(c.boardId)}`) : null)));
@@ -6693,7 +6780,7 @@ let sbT = 0; function scheduleSidebar() { if (sbT) return; sbT = requestAnimatio
 function treeKids(key) {
   const [k, id] = key.split(':'); let kids = [];
   if (k === 'b') {
-    const cs = Object.values(ST.cards).filter(c => c.boardId === id && !c.trashed && !c.unsorted && (c.type === 'board' || c.type === 'page' || (c.type === 'database' && !c.data.linked && ST.dbs[c.data.dbId])) && (!c.columnId || (ST.cards[c.columnId] && !ST.cards[c.columnId].trashed)));
+    const cs = Object.values(ST.cards).filter(c => c.boardId === id && !c.trashed && !c.unsorted && (c.type === 'board' || (c.type === 'page' && !c.data.linked) || (c.type === 'database' && !c.data.linked && ST.dbs[c.data.dbId])) && (!c.columnId || (ST.cards[c.columnId] && !ST.cards[c.columnId].trashed)));
     const ord = (ST.treeOrder || {})[id] || [];
     cs.sort((a, b) => { const ia = ord.indexOf(a.id), ib = ord.indexOf(b.id); if (ia !== -1 || ib !== -1) return (ia === -1 ? 1e9 : ia) - (ib === -1 ? 1e9 : ib); return (a.createdAt || 0) - (b.createdAt || 0); });
     kids = cs.map(c => ({ key: c.type === 'board' ? 'b:' + c.data.boardId : c.type === 'database' ? 'd:' + c.data.dbId : 'p:' + c.data.pageId, cardId: c.id })).filter(x => refExists(x.key));
@@ -6803,8 +6890,8 @@ function newPage(init, parent) {
 }
 /* walk every block (including inside columns) */
 function eachBlock(arr, fn) { for (const b of arr || []) { fn(b); if (b.type === 'cols') for (const c of b.cols) eachBlock(c.blocks, fn); } }
-function subPageIds(pid) { const p = ST.pages[pid], out = []; if (p) eachBlock(p.blocks, b => { if (b.type === 'subpage' && b.pageId && ST.pages[b.pageId]) out.push(b.pageId); }); return out; }
-function pageCard(pid) { return Object.values(ST.cards).find(c => c.type === 'page' && c.data.pageId === pid); }
+function subPageIds(pid) { const p = ST.pages[pid], out = []; if (p) eachBlock(p.blocks, b => { if (b.type === 'subpage' && b.pageId && ST.pages[b.pageId] && !b.linked) out.push(b.pageId); }); return out; }
+function pageCard(pid) { return Object.values(ST.cards).find(c => c.type === 'page' && c.data.pageId === pid && !c.data.linked); }
 function pageRoot(pid) { let p = ST.pages[pid], n = 0; while (p && p.parent && p.parent.t === 'page' && n++ < 50) p = ST.pages[p.parent.id]; return p; }
 function pageIsLive(pid) {
   let p = ST.pages[pid], n = 0;
@@ -6827,7 +6914,7 @@ function pageText(p) {
 }
 function blobIdsOfPage(p) { const out = []; if (p.banner && p.banner.blobId) out.push(p.banner.blobId); eachBlock(p.blocks, b => { if (b.blobId) out.push(b.blobId); }); return out; }
 /* clone a page tree from a source map (used by duplicate/paste/templates) */
-function collectPageTree(pid, src, out) { src = src || ST.pages; out = out || {}; const p = src[pid]; if (!p || out[pid]) return out; out[pid] = JSON.parse(JSON.stringify(p)); eachBlock(p.blocks, b => { if (b.type === 'subpage' && b.pageId) collectPageTree(b.pageId, src, out); }); return out; }
+function collectPageTree(pid, src, out) { src = src || ST.pages; out = out || {}; const p = src[pid]; if (!p || out[pid]) return out; out[pid] = JSON.parse(JSON.stringify(p)); eachBlock(p.blocks, b => { if (b.type === 'subpage' && b.pageId && !b.linked) collectPageTree(b.pageId, src, out); }); return out; }
 function clonePageTree(src, rootId, parent) {
   const map = {}; for (const id in src) map[id] = uid();
   const t = now();
@@ -6841,13 +6928,14 @@ function clonePageTree(src, rootId, parent) {
 }
 function purgePage(pid) { const p = ST.pages[pid]; if (!p) return; const subs = subPageIds(pid); delete ST.pages[pid]; subs.forEach(purgePage); }
 const _purgeCard = purgeCard;
-purgeCard = function (id) { const c = ST.cards[id]; if (c && c.type === 'page') purgePage(c.data.pageId); return _purgeCard(id); };
+purgeCard = function (id) { const c = ST.cards[id]; if (c && c.type === 'page' && !c.data.linked) purgePage(c.data.pageId); return _purgeCard(id); };
 
 /* ---- page card on the board ---- */
 const GRADS = { g1: 'linear-gradient(120deg,#f6d365,#fda085)', g2: 'linear-gradient(120deg,#84fab0,#8fd3f4)', g3: 'linear-gradient(120deg,#a18cd1,#fbc2eb)', g4: 'linear-gradient(120deg,#fccb90,#d57eeb)', g5: 'linear-gradient(120deg,#4facfe,#00f2fe)', g6: 'linear-gradient(120deg,#43e97b,#38f9d7)', g7: 'linear-gradient(120deg,#30cfd0,#330867)', g8: 'linear-gradient(120deg,#232526,#414345)', g9: 'linear-gradient(120deg,#ff9a9e,#fecfef)', g10: 'linear-gradient(120deg,#e0c3fc,#8ec5fc)' };
 function bannerCss(bn) { if (!bn) return null; if (bn.grad) return { background: GRADS[bn.grad] || GRADS.g1 }; if (bn.blobId || bn.src) return { backgroundImage: `url("${bn.blobId ? Blobs.url(bn.blobId) : bn.src}")`, backgroundSize: 'cover', backgroundPosition: `center ${bn.y ?? 50}%` }; return null; }
 RENDER.page = c => {
-  const p = ST.pages[c.data.pageId]; if (!p) return h('div', { class: 'pg-card' }, h('div', { class: 'pg-main muted' }, 'Missing page'));
+  const p = ST.pages[c.data.pageId]; if (!p && !c.data.linked) return h('div', { class: 'pg-card' }, h('div', { class: 'pg-main muted' }, 'Missing page'));
+  if (c.data.linked && (!p || !pageIsLive(c.data.pageId))) return h('div', { class: 'pg-card pg-gone' }, h('div', { class: 'pg-main' }, h('div', { class: 'pg-ic emoji' }, '↗'), h('div', { class: 'pg-title' }, 'Original page deleted'), h('div', { class: 'pg-prev' }, p ? `“${p.title || 'Untitled page'}” is in the Trash. Restore it to bring this link back.` : 'The page this card linked to no longer exists.'), h('div', { class: 'pg-foot' }, h('button', { class: 'btn', 'data-act': 'remove-linked' }, 'Remove this link'))));
   const chips = (p.schema || []).map(pr => propChip(pr, p.values[pr.id], p)).filter(Boolean).slice(0, 4);
   const lines = []; eachBlock(p.blocks, b => { if (lines.length < 4 && b.html && strip(b.html).trim()) lines.push(strip(b.html).trim()); });
   let todos = 0, done = 0; eachBlock(p.blocks, b => { if (b.type === 'todo') { todos++; if (b.checked) done++; } });
@@ -6858,13 +6946,13 @@ RENDER.page = c => {
       h('div', { class: 'pg-title' }, p.title || 'Untitled page'),
       chips.length ? h('div', { class: 'pg-chips' }, chips) : null,
       lines.length ? h('div', { class: 'pg-prev' }, lines.join(' · ').slice(0, 220)) : null,
-      h('div', { class: 'pg-foot' }, todos ? h('span', null, `${done}/${todos} done`) : null, h('span', null, 'Edited ' + timeAgo(p.updatedAt || p.createdAt)), h('span', { class: 'pg-open' }, 'Open ', h('span', { html: ICON.chevr })))));
+      h('div', { class: 'pg-foot' }, c.data.linked ? h('span', { class: 'pg-linked', title: 'Linked page — it is the same page as the original, so edits show in every place' }, '↗ Linked') : null, todos ? h('span', null, `${done}/${todos} done`) : null, h('span', null, 'Edited ' + timeAgo(p.updatedAt || p.createdAt)), h('span', { class: 'pg-open' }, 'Open ', h('span', { html: ICON.chevr })))));
 };
-function syncPageCard(pid) { const r = pageRoot(pid); if (r && isRow(r)) refreshDb(); const c = r && r.parent && r.parent.t === 'card' && ST.cards[r.parent.id]; if (c && c.boardId === S.boardId) rerenderCard(c.id); scheduleSidebar(); }
+function syncPageCard(pid) { const r = pageRoot(pid); if (r && isRow(r)) refreshDb(); const c = r && r.parent && r.parent.t === 'card' && ST.cards[r.parent.id]; if (c && c.boardId === S.boardId) rerenderCard(c.id); for (const lc of Object.values(ST.cards)) if (lc.type === 'page' && lc.data.linked && lc.data.pageId === pid && lc.boardId === S.boardId && (!c || lc.id !== c.id)) rerenderCard(lc.id); scheduleSidebar(); }
 function newPageOnBoard(tpl) {
   closeDashes(); closePageView();
   const pt = centerPt('page'); let guard = 0; while (guard++ < 20 && cardsOf(S.boardId).some(c => Math.abs(c.x - pt.x) < 24 && Math.abs(c.y - pt.y) < 24)) { pt.x += 32; pt.y += 32; } checkpoint();
-  const c = newCard('page', pt.x, pt.y); snapCard(c); S.sel = new Set([c.id]); save(); renderBoard(); toast('Page added to the board. Click it to open.');
+  const c = newCard('page', pt.x, pt.y); snapCard(c); S.sel = new Set([c.id]); save(); renderBoard(); toast('Page added to the board. Double-click it to open.');
 }
 
 /* ---- properties ---- */
@@ -7030,7 +7118,7 @@ function openPage(pid, opts) {
   if (prev && prev !== pid && ST.pages[prev]) syncPageCard(prev);
   pushRecent('p:' + pid); save();
   let w = $('.pv-wrap');
-  const mode = isMobileSb() ? 'full' : (opts && opts.mode) || (isRow(ST.pages[pid]) ? ST.settings.pvRowMode || 'rside' : ST.settings.pvMode || 'peek');
+  const mode = isMobileSb() ? 'full' : (opts && opts.mode) || (isRow(ST.pages[pid]) ? ST.settings.pvRowMode || 'rside' : 'peek');
   if (!w) {
     w = h('div', { class: 'pv-wrap ' + mode });
     const back = h('div', { class: 'pv-back' }); back.onclick = closePageView;
@@ -7042,7 +7130,7 @@ function openPage(pid, opts) {
   const p = ST.pages[pid]; if (!p.title && isBlankPage(p)) setTimeout(() => w.querySelector('.pv-title')?.focus(), 30);
 }
 function isBlankPage(p) { return !p.title && !(p.schema || []).length && !p.banner && !p.icon && p.blocks.length <= 1 && !(p.blocks[0] && (p.blocks[0].html || p.blocks[0].type !== 'text')); }
-function setPvMode(mode) { if (isRow(ST.pages[S.pageId])) ST.settings.pvRowMode = mode; else ST.settings.pvMode = mode; save(); const w = $('.pv-wrap'); if (w) { w.className = 'pv-wrap ' + mode; renderPvTop(); } }
+function setPvMode(mode) { if (isRow(ST.pages[S.pageId])) ST.settings.pvRowMode = mode; save(); const w = $('.pv-wrap'); if (w) { w.className = 'pv-wrap ' + mode; renderPvTop(); } }
 function renderPvTop() {
   const w = $('.pv-wrap'); if (!w) return; const p = ST.pages[S.pageId]; if (!p) return;
   const top = w.querySelector('.pv-top'); top.innerHTML = '';
@@ -7067,6 +7155,7 @@ function renderPageView(focus) {
   renderPvTop();
   const sc = w.querySelector('.pv-scroll'), y = sc.scrollTop; sc.innerHTML = '';
   const doc = h('div', { class: 'pv-doc' + (p.full ? ' full' : '') });
+  { const ts = p.textSize || ST.settings.pageText; if (ts) doc.style.setProperty('--page-fs', ts === 's' ? '14px' : '16px'); } /* v4.8 */
   // banner
   if (p.banner) {
     const bn = h('div', { class: 'pv-banner', style: bannerCss(p.banner) });
@@ -7085,7 +7174,12 @@ function renderPageView(focus) {
   title.addEventListener('input', () => { pageTouch(p); p.title = title.textContent.replace(/\n/g, ' ').trim(); scheduleTitleSync(p.id); if (p.title) $('.pv-doc > .tpl-box')?.remove(); });
   title.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); focusFirstBlock(); } if (e.key === 'ArrowDown') { e.preventDefault(); focusFirstBlock(); } });
   head.append(title);
-  if (schemaOf(p).length || isRow(p)) head.append(propsPanel(p, () => { syncPageCard(p.id); renderPvTop(); }));
+  if (schemaOf(p).length || isRow(p)) {
+    const hid = !!p.propsHidden, sch = schemaOf(p);
+    const tg = h('button', { class: 'pv-propt', title: hid ? 'Show properties' : 'Hide properties' }, h('span', { class: 'tr-chev' + (hid ? '' : ' open'), html: ICON.chevr }), h('span', { class: 'pv-propt-l' }, 'Properties'), hid ? h('span', { class: 'pv-propt-s' }, sch.length + (sch.length === 1 ? ' property · ' : ' properties · ') + sch.slice(0, 4).map(x => x.name).join(', ') + (sch.length > 4 ? '…' : '')) : null);
+    tg.onclick = () => { p.propsHidden = !p.propsHidden; save(); renderPageView(); };
+    head.append(tg); if (!hid) head.append(propsPanel(p, () => { syncPageCard(p.id); renderPvTop(); }));
+  }
   const bl = backlinksTo(p.id);
   if (bl.length) {
     const open = !!S.blOpen; const bx = h('div', { class: 'pv-bl' });
@@ -7126,7 +7220,10 @@ function pageMenu(anchor, p) {
   const r = anchor.getBoundingClientRect(), card = pageCard(pageRoot(p.id).id);
   showMenu(r.right - 220, r.bottom + 4, [
     { label: (p.full ? '✓ ' : '') + 'Full width', fn: () => pageCommit(p, () => { p.full = !p.full; }, true) },
+    { label: (((p.textSize || ST.settings.pageText) === 's') ? '✓ ' : '') + 'Small text', fn: () => pageCommit(p, () => { p.textSize = 's'; }, true) },
+    { label: (((p.textSize || ST.settings.pageText) === 'm') ? '✓ ' : '') + 'Medium text', fn: () => pageCommit(p, () => { p.textSize = 'm'; }, true) },
     { label: 'Copy link', fn: () => copyPageLink(p.id) },
+    { label: 'Copy page (paste it elsewhere as a linked page)', fn: () => copyAsLinked('page', p.id) },
     { label: 'Open in new tab', fn: () => { closePageView(); openInNewTab({ t: 'page', id: p.id }); } },
     { label: 'Save as template…', fn: () => askText(anchor, 'Template name', p.title || 'My template', v => saveTemplate(p, v)) },
     '-',
@@ -7276,7 +7373,7 @@ function migratePages() {
     p.createdAt = c.createdAt || now(); p.updatedAt = c.updatedAt || now();
     c.type = 'page'; c.data = { pageId: p.id }; c.w = Math.max(c.w || 300, 260); c.h = null;
   }
-  for (const c of Object.values(ST.cards)) if (c.type === 'page' && (!c.data.pageId || !ST.pages[c.data.pageId])) { const p = newPage({}, { t: 'card', id: c.id }); c.data.pageId = p.id; }
+  for (const c of Object.values(ST.cards)) if (c.type === 'page' && !c.data.linked && (!c.data.pageId || !ST.pages[c.data.pageId])) { const p = newPage({}, { t: 'card', id: c.id }); c.data.pageId = p.id; }
 }
 
 /* ---- trash + search for sub-pages ---- */
@@ -7434,7 +7531,7 @@ function blockEl(b, n) {
       if (b.url) bc.append(h('a', { class: 'bbm', href: b.url, target: '_blank', rel: 'noopener' }, h('div', { class: 'bbm-t' }, h('div', { class: 'bbm-title' }, b.title || hostOf(b.url)), b.desc ? h('div', { class: 'bbm-d' }, b.desc) : null, h('div', { class: 'bbm-u' }, b.favicon ? h('img', { src: b.favicon, alt: '', referrerpolicy: 'no-referrer' }) : null, b.url)), b.image ? h('div', { class: 'bbm-img', style: { backgroundImage: `url("${b.image}")` } }) : null));
       else bc.append(placeholderEl(b, 'bookmark', 'Add a web bookmark', [h('input', { class: 'bph-in', 'data-kind': 'bookmark', placeholder: 'Paste a link and press Enter' })]));
       break;
-    case 'subpage': { const sp = ST.pages[b.pageId]; bc.append(h('div', { class: 'bsub', title: 'Open page' }, h('span', { class: 'bsub-ic' }, sp && sp.icon ? sp.icon : h('span', { html: ICON.page })), h('span', { class: 'bsub-t' }, sp ? (sp.title || 'Untitled') : 'Missing page'))); break; }
+    case 'subpage': { const sp = ST.pages[b.pageId]; const gone = b.linked && (!sp || !pageIsLive(b.pageId)); bc.append(h('div', { class: 'bsub' + (b.linked ? ' linked' : '') + (gone ? ' gone' : ''), title: gone ? 'The original page was deleted' : 'Open page' }, h('span', { class: 'bsub-ic' }, sp && sp.icon ? sp.icon : h('span', { html: ICON.page })), h('span', { class: 'bsub-t' }, gone ? 'Original page deleted — remove this link' : sp ? (sp.title || 'Untitled') : 'Missing page'), b.linked && !gone ? h('span', { class: 'bsub-l', title: 'Linked page — same page as the original' }, '↗ Linked') : null)); break; }
     case 'link': bc.append(b.ref ? h('div', { class: 'blink', title: 'Open' }, h('span', { class: 'blink-ic' }, '↗'), h('span', null, refLabel(b.ref))) : placeholderEl(b, 'link', 'Link to a board, page or card', [h('button', { class: 'btn', 'data-pa': 'pick-link' }, 'Choose…')])); break;
     case 'toc': bc.append(tocEl()); break;
     case 'board': bc.append(boardEmbedEl(b)); break;
@@ -7525,11 +7622,11 @@ function convertBlock(f, k) {
 }
 function deleteBlock(f) {
   const b = f.b, end = b.type === 'toggle' ? subtreeEnd(f.arr, f.i) : f.i + 1;
-  commitOp(() => { const gone = f.arr.splice(f.i, end - f.i); eachBlock(gone, x => { if (x.type === 'subpage' && ST.pages[x.pageId]) { ST.pages[x.pageId].trashed = true; ST.pages[x.pageId].trashedAt = now(); } }); });
+  commitOp(() => { const gone = f.arr.splice(f.i, end - f.i); eachBlock(gone, x => { if (x.type === 'subpage' && !x.linked && ST.pages[x.pageId]) { ST.pages[x.pageId].trashed = true; ST.pages[x.pageId].trashedAt = now(); } }); });
 }
 function cloneBlocks(list) {
   const out = JSON.parse(JSON.stringify(list));
-  eachBlock(out, x => { x.id = uid(); if (x.type === 'cols') x.cols.forEach(c => c.id = uid()); if (x.type === 'db') x.linked = true; if (x.type === 'subpage' && ST.pages[x.pageId]) x.pageId = clonePageTree(collectPageTree(x.pageId), x.pageId, { t: 'page', id: PE.page.id }); });
+  eachBlock(out, x => { x.id = uid(); if (x.type === 'cols') x.cols.forEach(c => c.id = uid()); if (x.type === 'db') x.linked = true; if (x.type === 'subpage' && !x.linked && ST.pages[x.pageId]) x.pageId = clonePageTree(collectPageTree(x.pageId), x.pageId, { t: 'page', id: PE.page.id }); });
   return out;
 }
 function duplicateBlock(f) { const end = f.b.type === 'toggle' || f.b.type === 'cols' ? subtreeEnd(f.arr, f.i) : f.i + 1; let first; commitOp(() => { const c = cloneBlocks(f.arr.slice(f.i, end)); first = c[0]; f.arr.splice(end, 0, ...c); }); }
@@ -7554,7 +7651,7 @@ function blockMenu(anchor, f) {
   if (b.type === 'image' && (b.blobId || b.src)) items.push({ label: 'Width', sub: [['sm', 'Small'], ['md', 'Medium'], ['full', 'Full']].map(([k, l]) => ({ label: l, check: (b.width || 'full') === k, fn: () => commitOp(() => { b.width = k; }) })) });
   if (['image', 'video', 'bookmark', 'file', 'link'].includes(b.type) && (b.blobId || b.src || b.url || b.yt || b.vimeo || b.ref)) items.push({ label: 'Replace…', fn: () => commitOp(() => { for (const k of ['blobId', 'src', 'url', 'yt', 'vimeo', 'vh', 'start', 'title', 'desc', 'image', 'favicon', 'ref', 'name', 'size', 'mime']) delete b[k]; }) });
   if (b.type === 'subpage' && ST.pages[b.pageId]) items.push({ label: 'Open page', fn: () => openPage(b.pageId) });
-  items.push('-', { label: 'Duplicate', fn: () => duplicateBlock(f) }, { label: 'Move up', fn: () => moveBlockStep(f, -1) }, { label: 'Move down', fn: () => moveBlockStep(f, 1) }, '-', { label: b.type === 'subpage' ? 'Delete (moves page to Trash)' : 'Delete', fn: () => deleteBlock(f) });
+  items.push('-', { label: 'Duplicate', fn: () => duplicateBlock(f) }, { label: 'Move up', fn: () => moveBlockStep(f, -1) }, { label: 'Move down', fn: () => moveBlockStep(f, 1) }, '-', { label: b.type === 'subpage' && !b.linked ? 'Delete (moves page to Trash)' : b.type === 'subpage' ? 'Delete (removes only this link)' : 'Delete', fn: () => deleteBlock(f) });
   showMenu(r.left, r.bottom + 4, items);
 }
 
@@ -7563,7 +7660,7 @@ const SLASH = [
   ['text', 'Text', 'Plain text', 'Aa'], ['h1', 'Heading 1', 'Big section heading', 'H1'], ['h2', 'Heading 2', 'Medium section heading', 'H2'], ['h3', 'Heading 3', 'Small section heading', 'H3'],
   ['bullet', 'Bulleted list', 'Simple bulleted list', '•'], ['number', 'Numbered list', 'List with numbering', '1.'], ['todo', 'To-do list', 'Track tasks with a checkbox', '☑'], ['toggle', 'Toggle list', 'Hide and show content inside', '▸'],
   ['quote', 'Quote', 'Capture a quote', '❝'], ['callout', 'Callout', 'Make writing stand out', '💡'], ['divider', 'Divider', 'Visually divide blocks', '—'], ['code', 'Code', 'Capture a code snippet', '</>'],
-  ['subpage', 'Page', 'Embed a sub-page inside this page', '📄'], ['link', 'Link to board or page', 'Link to a board, page or card', '↗'], ['mention', 'Mention', 'Mention a page, board or date', '@'], ['date', 'Date', 'Insert today’s date', '▦'],
+  ['subpage', 'Page', 'Embed a sub-page inside this page', '📄'], ['pagelink', 'Linked page', 'Show another page here — the same page, not a copy', '↗'], ['link', 'Link to board or page', 'Link to a board, page or card', '↗'], ['mention', 'Mention', 'Mention a page, board or date', '@'], ['date', 'Date', 'Insert today’s date', '▦'],
   ['image', 'Image', 'Upload or embed an image', '🖼'], ['video', 'Video', 'YouTube, Vimeo or a video file', '▶'], ['bookmark', 'Web bookmark', 'Visual preview of a link', '🔖'], ['file', 'File', 'Upload a file', '📎'],
   ['table', 'Table', 'Simple table with rows and columns', '▥'],
   ['db', 'Database', 'Rows with properties: table, board, gallery, list', '▤'], ['dblink', 'Linked view of database', 'Show an existing database here', '↗'],
@@ -7614,6 +7711,7 @@ function applySlash(k) {
   if (k === 'date') { placeCaretAt(t, caretOff); insertInline(t, dateMentionHtml(todayStr())); return; }
   if (TURN.some(x => x[0] === k)) { const keep = caretOff; convertBlock(f, k); focusBlock(b.id, keep); return; }
   if (k === 'boardemb') { pickBoard(rectAnchor(t), bd => { const g = findBlock(b.id); if (!g) return; commitOp(() => { const n2 = nb('board', '', { boardId: bd.id, h: 320, view: null }); if (isEmptyEl(t) && g.b.type === 'text') g.arr.splice(g.i, 1, n2); else insertBlockAfter(g, n2); }); }); return; }
+  if (k === 'pagelink') { pickPage(rectAnchor(t), pg => { const g = findBlock(b.id); if (!g || !pg || pg.id === PE.page.id) return; commitOp(() => { const n2 = nb('subpage', '', { pageId: pg.id, linked: true }); if (isEmptyEl(t) && g.b.type === 'text') g.arr.splice(g.i, 1, n2); else g.arr.splice(g.i + 1, 0, n2); }); }); return; }
   if (k === 'dblink') { pickDb(rectAnchor(t), d => { const g = findBlock(b.id); if (!g) return; commitOp(() => { const n2 = nb('db', '', { dbId: d.id, linked: true, views: [newView('table')], cur: null }); if (isEmptyEl(t) && g.b.type === 'text') g.arr.splice(g.i, 1, n2); else g.arr.splice(g.i + 1, 0, n2); }); }, 'Show which database here?'); return; }
   checkpoint();
   let n;
@@ -7803,6 +7901,10 @@ function bindBody(body) {
     const dt = e.clipboardData; if (!dt) return; const files = [...dt.files], bid = t.closest('.blk').dataset.bid;
     if (files.length) { e.preventDefault(); dropFilesIntoPage(files, bid); return; }
     const txt = dt.getData('text/plain') || ''; e.preventDefault();
+    if (S.clip && S.clip.data && txt === (S.clip.text || ' ') && S.clip.data.cards.some(c => c.type === 'page' || c.type === 'database')) {
+      const made = []; for (const c of S.clip.data.cards) { if (c.type === 'page' && c.data.pageId && c.data.pageId !== PE.page.id && ST.pages[c.data.pageId] && pageIsLive(c.data.pageId)) made.push(nb('subpage', '', { pageId: c.data.pageId, linked: true })); else if (c.type === 'database' && ST.dbs[c.data.dbId] && dbIsLive(c.data.dbId)) made.push(nb('db', '', { dbId: c.data.dbId, linked: true, views: [newView('table')], cur: null })); }
+      if (made.length) { const f = findBlock(bid); if (f) { commitOp(() => { if (f.b.type === 'text' && !strip(f.b.html || '').trim()) f.arr.splice(f.i, 1, ...made); else f.arr.splice(f.i + 1, 0, ...made); }); toast('Pasted as a linked ' + (made.length > 1 ? 'items' : made[0].type === 'db' ? 'view' : 'page') + ' — not a copy'); return; } }
+    }
     if (t.classList.contains('bcode')) { document.execCommand('insertText', false, txt); return; }
     if (!txt.includes('\n')) { if (isUrl(txt.trim()) && !getSelection().isCollapsed) document.execCommand('createLink', false, normUrl(txt.trim())); else document.execCommand('insertText', false, txt); return; }
     const lines = txt.replace(/\r/g, '').split('\n'); while (lines.length > 1 && !lines[lines.length - 1].trim()) lines.pop();
@@ -8604,6 +8706,7 @@ function dbMoreMenu(anchor, ctx) {
     { label: 'Rename database…', fn: () => askText(anchor, 'Database name', db.title, v => commitDb(db, () => { db.title = v.trim(); })) },
     mode !== 'full' ? { label: 'Open as full page', fn: () => openDbFull(loc) } : null,
     pl.linked && own ? { label: 'Go to the original database', fn: () => openDbFull(own) } : null,
+    { label: 'Copy database (paste elsewhere as a linked view)', fn: () => copyAsLinked('database', db.id) },
     '-',
     { label: 'Export CSV (this view)', fn: () => download(new Blob([dbToCsv(db, rows)], { type: 'text/csv' }), safeName(db.title || 'database') + '.csv') },
     { label: 'Import CSV…', fn: () => pickCsv(db) },
@@ -8861,6 +8964,7 @@ function openSettings() {
       row('Theme', seg([['0', 'Light'], ['1', 'Dark']], st.dark ? '1' : '0', v => { st.dark = v === '1'; save(); applyTheme(); renderLines(); })),
       row('Accent color', accentCtl(), 'Buttons, active items and highlights'),
       row('Text size', seg([['s', 'Small'], ['m', 'Medium'], ['l', 'Large']], st.fs || 'm', v => { st.fs = v; save(); applyPrefs(); renderBoard(); }), 'Cards and pages'),
+      row('Page text size', seg([['', 'Follow'], ['s', 'Small'], ['m', 'Medium']], st.pageText || '', v => { st.pageText = v; save(); if ($('.pv-wrap')) renderPageView(); }), 'Default for pages that have no size of their own (set per page in the page menu)'),
       tgl('Transparent notes', 'New and uncolored notes match the theme instead of a solid fill', st.noteTint !== false, v => { st.noteTint = v; save(); applyPrefs(); }),
       tgl('Open boards and pages in a new tab', 'Double-click a board, or click a page, to open it in a new tab (Cmd/Ctrl+click always does)', st.openInTab === true, v => { st.openInTab = v; save(); }),
       tgl('Edge shading', 'Slightly darker board edges', st.vignette !== false, v => { st.vignette = v; save(); applyPrefs(); }),
@@ -9317,7 +9421,14 @@ function pageTasksBox(p) {
   for (const { item } of list) {
     const chk = h('button', { class: 'chk' + (item.done ? ' on' : ''), title: 'Mark complete', html: item.done ? ICON.check : '' });
     chk.onclick = () => { toggleTask(item.id); renderPageView(); };
-    bx.append(h('div', { class: 'pv-task' }, chk, h('button', { class: 'pv-task-t' + (item.done ? ' done' : ''), onclick: () => openTask(item.id) }, item.text || 'Untitled task')));
+    const grip = h('span', { class: 'pv-grip', title: 'Drag to reorder', draggable: 'true', html: ICON.grip });
+    const prow = h('div', { class: 'pv-task', 'data-tid': item.id }, grip, chk, h('button', { class: 'pv-task-t' + (item.done ? ' done' : ''), onclick: () => openTask(item.id) }, item.text || 'Untitled task'));
+    grip.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', item.id); e.dataTransfer.effectAllowed = 'move'; S.pvDrag = item.id; prow.classList.add('dragging'); });
+    grip.addEventListener('dragend', () => { S.pvDrag = null; prow.classList.remove('dragging'); $$('.pv-task.pv-over').forEach(x => x.classList.remove('pv-over')); });
+    prow.addEventListener('dragover', e => { if (S.pvDrag && S.pvDrag !== item.id) { e.preventDefault(); prow.classList.add('pv-over'); } });
+    prow.addEventListener('dragleave', () => prow.classList.remove('pv-over'));
+    prow.addEventListener('drop', e => { e.preventDefault(); prow.classList.remove('pv-over'); const dragId = S.pvDrag; S.pvDrag = null; const tf = findTask(item.id); if (dragId && dragId !== item.id && tf) { moveTask(dragId, tf.card.id, item.id); renderPageView(); } });
+    bx.append(prow);
   }
   const add = h('button', { class: 'pv-bl-it', onclick: newT }, '+ New task for this page');
   const link = h('button', { class: 'pv-bl-it', onclick: e => pickTaskForPage(e.currentTarget, p) }, 'Link an existing task…');
@@ -10066,7 +10177,7 @@ function t2Row(it, c, where) {
   const sub = (it.subtasks || []).length ? h('span', { class: 't2-sub', title: 'Subtasks' }, `${it.subtasks.filter(s => s.done).length}/${it.subtasks.length}`) : null;
   const sun = h('button', { class: 't2-sun' + (inToday ? ' on' : ''), title: inToday ? 'Remove from Today' : 'Add to Today', html: ICON.sun, onclick: e => { e.stopPropagation(); toggleToday(it.id); } });
   const row = h('div', { class: 't2row' + (it.done ? ' done' : ''), 'data-tid': it.id, 'data-where': where, tabindex: '0', draggable: 'true' },
-    chk, h('span', { class: 't2-dot', style: { background: bd.color || '#5f8ff0' }, title: `${boardName(c.boardId)} · ${listName(c)}` }, bd.icon || ''), title, (typeof taskBadges === 'function' ? taskBadges(it) : null), sub, tags, flag('urgent', 'bolt', 'Urgent'), flag('important', 'star', 'Important'), date, sun);
+    h('span', { class: 't2-grip', title: 'Drag to move', html: ICON.grip }), chk, h('span', { class: 't2-dot', style: { background: bd.color || '#5f8ff0' }, title: `${boardName(c.boardId)} · ${listName(c)}` }, bd.icon || ''), title, (typeof taskBadges === 'function' ? taskBadges(it) : null), sub, tags, flag('urgent', 'bolt', 'Urgent'), flag('important', 'star', 'Important'), date, sun);
   row.addEventListener('dblclick', e => { if (S.tvSelMode || e.target.closest('button,input')) return; clearTimeout(title._t); openTask(it.id); });
   row.addEventListener('dragstart', e => { if (S.tvSelMode) { e.preventDefault(); return; } e.dataTransfer.setData('text/plain', it.id); e.dataTransfer.effectAllowed = 'move'; S.t2drag = { id: it.id, from: where }; row.classList.add('dragging'); });
   row.addEventListener('dragend', () => { S.t2drag = null; row.classList.remove('dragging'); $$('.t2-over').forEach(x => x.classList.remove('t2-over')); });
@@ -10541,7 +10652,7 @@ function tabApply(t) {
     closeDashes(); if ($('.pv-wrap')) closePageView();
     if (ST.boards[t.b]) openBoard(t.b);
     if (t.o === 'd:tasks') openTasksView(); else if (t.o === 'd:notes') openNotesView(); else if (t.o === 'd:focus') openFocusView();
-    else if (t.o && t.o[0] === 'p') { const pid = t.o.slice(2); if (ST.pages[pid] && pageIsLive(pid)) openPage(pid, { mode: 'full' }); else t.o = null; }
+    else if (t.o && t.o[0] === 'p') { const pid = t.o.slice(2); if (ST.pages[pid] && pageIsLive(pid)) openPage(pid); else t.o = null; }
   } finally { TABS.switching = false; }
   save(); renderTabs();
 }
@@ -10572,6 +10683,38 @@ try { new MutationObserver(() => tabSyncSoon()).observe(document.body, { childLi
 if (typeof scheduleSidebar === 'function') { const _ss = scheduleSidebar; scheduleSidebar = function () { const r = _ss.apply(this, arguments); if (TABS.ready) setTimeout(renderTabs, 0); return r; }; }
 document.addEventListener('click', e => { TABS.mod = e.metaKey || e.ctrlKey; setTimeout(() => { TABS.mod = false; }, 0); }, true);
 if (typeof openRef === 'function') { const _or = openRef; openRef = function (key) { if (TABS.mod && TABS.ready) { const [k, id] = String(key).split(':'); if (k === 'b' && ST.boards[id]) return openInNewTab({ t: 'board', id }); if (k === 'p' && ST.pages[id]) return openInNewTab({ t: 'page', id }); } return _or.apply(this, arguments); }; }
+
+/* ========== v4.8: jump to an already-open tab instead of opening a duplicate ========== */
+function tabIndexOf(target) { return tabList().findIndex(x => target.t === 'page' ? x.o === 'p:' + target.id : target.t === 'dash' ? x.o === 'd:' + target.k : (x.b === target.id && !x.o)); }
+{
+  const _oin = openInNewTab;
+  openInNewTab = function (target) {
+    if (TABS.ready) { tabSync(); const i = tabIndexOf(target); if (i >= 0) { if (i !== ST.settings.tabCur) switchTab(i); return; } }
+    return _oin.apply(this, arguments);
+  };
+  const DASHK = { openTasksView: 'tasks', openNotesView: 'notes', openFocusView: 'focus' };
+  for (const name of ['openBoard', 'openPage', 'openTasksView', 'openNotesView', 'openFocusView']) {
+    const orig = window[name]; if (typeof orig !== 'function') continue;
+    window[name] = function (id) {
+      if (TABS.ready && !TABS.switching) {
+        tabSync();
+        const tgt = name === 'openBoard' ? (id !== S.boardId || S.pageId || curOverlay() ? { t: 'board', id } : null) : name === 'openPage' ? (id !== S.pageId ? { t: 'page', id } : null) : (curOverlay() !== 'd:' + DASHK[name] ? { t: 'dash', k: DASHK[name] } : null);
+        if (tgt && !(tgt.t === 'board' && id === S.boardId && !curOverlay())) { const i = tabIndexOf(tgt); if (i >= 0 && i !== ST.settings.tabCur) { switchTab(i); return; } }
+      }
+      return orig.apply(this, arguments);
+    };
+  }
+}
+
+/* ===== v4.8: copy a page/database so Paste creates a linked placement, not a duplicate ===== */
+function copyAsLinked(kind, id) {
+  const d = DEF[kind] || { w: 280 }, t = now(), title = kind === 'page' ? ((ST.pages[id] || {}).title || 'Untitled page') : ((ST.dbs[id] || {}).title || 'Untitled database');
+  const c = { id: uid(), boardId: S.boardId, type: kind, x: 0, y: 0, w: d.w, h: d.h || null, z: 1, color: null, locked: false, labels: [], reactions: {}, comments: [], caption: null, createdAt: t, updatedAt: t, data: kind === 'page' ? { pageId: id, linked: true } : { dbId: id, linked: true, views: [newView('table')], cur: null } };
+  const text = title + ' ';
+  S.clip = { data: { src: S.boardId, cards: [c], extra: [], boards: [], lines: [], pages: {} }, text };
+  try { navigator.clipboard && navigator.clipboard.writeText(text).catch(() => { }); } catch { }
+  toast('Copied — paste it on a board or into a page to add a linked ' + (kind === 'page' ? 'page' : 'view'));
+}
 
 /* ========== v2.5: bottom status bar, dashboard hero, shapes ========== */
 /* ---- shell: tab row (with actions) on top, slim status bar at the bottom ---- */
@@ -11869,20 +12012,25 @@ function taskBadges(it) {
 }
 { const _ot = openTask; openTask = function (tid, opts) {
   _ot(tid, opts); const f = findTask(tid), due = f && document.querySelector('.modal-bg input[type=date].tm-input'); if (!due) return;
-  const it = f.item, cp = { v: !!(opts && opts.fresh) };
+  const cp = { v: !!(opts && opts.fresh) };
   const change = fn => { if (!cp.v) { checkpoint(); cp.v = true; } const cur = findTask(tid); fn(cur.item); cur.card.updatedAt = now(); save(); refreshTaskViews([cur.card.id]); };
-  const box = h('div', { class: 'tm-plan', style: { display: 'flex', flexDirection: 'column', gap: '8px', margin: '8px 0' } });
+  /* v4.8: Start + Due sit side by side; plan buttons get their own proper grid row (no stray grid item) */
+  const start = h('input', { type: 'date', class: 'tm-input', value: f.item.start || '' });
+  start.onchange = () => { const cd = findTask(tid).item; if (start.value && cd.due && start.value > cd.due) { fieldMsg(start, 'Start is after the due date', 'warn'); } change(x => { x.start = start.value || null; }); };
+  const dueRow = due.closest('.tm-row'), dueLabel = dueRow && dueRow.previousElementSibling; if (!dueRow || !dueLabel) return;
+  const dates = h('div', { class: 'tm-dates' }, h('label', { class: 'tm-df' }, h('span', { class: 'tm-cap' }, 'Start'), start), h('label', { class: 'tm-df' }, h('span', { class: 'tm-cap' }, 'Due'), due));
+  dueLabel.textContent = 'Dates'; dueLabel.after(dates); dates.after(h('div', { class: 'tm-label' })); /* empty label cell keeps shortcuts aligned */
+  const planRow = h('div', { class: 'tm-row tm-plan' }); dueRow.after(h('div', { class: 'tm-label' }, 'Plan'), planRow);
   const paint = () => {
-    const cur = findTask(tid).item; box.innerHTML = '';
-    const start = h('input', { type: 'date', class: 'tm-input', value: cur.start || '' }); start.onchange = () => { if (start.value && cur.due && start.value > cur.due) { fieldMsg(start, 'Start is after the due date', 'warn'); } change(x => { x.start = start.value || null; }); };
+    const cur = findTask(tid).item; planRow.innerHTML = '';
     const who = h('button', { class: 'btn', onclick: e => peoplePop(e.currentTarget, cur.assignee || [], v => { change(x => { x.assignee = v; }); paint(); }) }, (cur.assignee || []).length ? (cur.assignee).map(personById).filter(Boolean).map(p => p.name).join(', ') : 'Assign people');
     const bl = h('button', { class: 'btn', onclick: e => { closeTransient(); const pop = h('div', { class: 'pop ppl-pop' }); const others = Object.values(ST.cards).filter(c => c.type === 'todo').flatMap(c => c.data.items.filter(x => x.id !== tid)).slice(0, 80);
       for (const o of others) { const on = (cur.blockedBy || []).includes(o.id); pop.append(h('button', { class: 'ppl-pick', onclick: () => { change(x => { x.blockedBy = on ? x.blockedBy.filter(i => i !== o.id) : [...(x.blockedBy || []), o.id]; }); closeTransient(); paint(); } }, h('span', null, on ? '✓' : ''), h('span', { class: 'ppl-n' }, o.text || 'Untitled'))); }
       if (!others.length) pop.append(h('div', { class: 'muted' }, 'No other tasks')); document.body.append(pop); const r = e.currentTarget.getBoundingClientRect(); placeEl(pop, r.left, r.bottom + 4); } }, (cur.blockedBy || []).length ? (cur.blockedBy.length + ' blocking task' + (cur.blockedBy.length > 1 ? 's' : '')) : 'Blocked by…');
     const tm = h('button', { class: 'btn', onclick: e => timerPop(e.currentTarget, taskTimerHost(tid), { id: 'timer' }, fn => { change(() => fn()); paint(); }) }, '⏱ ' + fmtDur(timerSec(cur.timer || {})) + (cur.timer && cur.timer.run ? ' (running)' : ''));
-    box.append(h('div', { class: 'tm-row', style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } }, h('label', { class: 'muted' }, 'Start'), start, who, bl, tm));
+    planRow.append(who, bl, tm);
   };
-  paint(); const anchor = due.closest('.tm-row, .tm-field, div') || due.parentElement; anchor.after(box);
+  paint();
 }; }
 /* adapter so timerPop (written for database rows) can drive a task item */
 function taskTimerHost(tid) { const f = findTask(tid); const holder = { get values() { const it = findTask(tid).item; return new Proxy({}, { get: (_, k) => k === 'timer' ? it.timer : undefined, set: (_, k, v) => { if (k === 'timer') it.timer = v; return true; }, deleteProperty: (_, k) => { if (k === 'timer') it.timer = null; return true; } }); } }; return holder; }
@@ -12280,7 +12428,7 @@ function onDbl(e) {
   const c = ST.cards[cardEl.dataset.id]; if (!c) return;
   const tr = e.target.closest('.todo-item[data-item]'); if (c.type === 'todo' && tr) { endEdit(); openTask(tr.dataset.item); return; }
   if (c.type === 'board') { if (wantTab(e)) openInNewTab({ t: 'board', id: c.data.boardId }); else openBoard(c.data.boardId); }
-  if (c.type === 'page') { openPage(c.data.pageId); return; }
+  if (c.type === 'page') { if (wantTab(e)) openInNewTab({ t: 'page', id: c.data.pageId }); else openPage(c.data.pageId); return; }
   else if (c.type === 'doc') openDoc(c.id);
   else if (c.type === 'sketch') enterSketch(c.id, 'sketch');
   else if (c.type === 'image' && c.data.blobId) lightbox(c);
@@ -12380,7 +12528,7 @@ async function init() {
   try { history.replaceState(null, '', '#' + S.boardId); } catch { }
   gcBlobs(); applySidebar(); bind(); renderAll(); renderSidebar(); resumeFocusOnLoad();
   if (!st) seedWelcome();
-  if (_pl) openPage(_pl, { mode: 'full' });
+  if (_pl) openPage(_pl);
   if (!DB.ok) toast('Browser storage is unavailable here — use Settings → Export backup to keep your work', 6000);
   try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch { }
 }
