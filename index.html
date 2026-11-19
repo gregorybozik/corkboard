@@ -3195,6 +3195,46 @@ body.editing-other .if-shield::after,body.editing-other .yt-open,body.editing-ot
 .blk-ghost.to-board{background:var(--sel,#4f8cff);color:#fff}
 body.rd-active,body.rd-active *{user-select:none!important;-webkit-user-select:none!important;cursor:grabbing!important}
 .dbt tr[data-row],.dbl-row,.dbg-card[data-row],.dbb-card{cursor:grab}
+
+/* v5.5 group scale */
+#gbox{position:absolute;pointer-events:none;border:1.5px dashed var(--sel,#4f8cff);border-radius:3px;z-index:999999;box-sizing:border-box}
+#gbox .gb-h{position:absolute;pointer-events:auto;width:calc(14px*var(--hz,1));height:calc(14px*var(--hz,1));margin:calc(-7px*var(--hz,1)) 0 0 calc(-7px*var(--hz,1));background:var(--bg,#fff);border:calc(2px*var(--hz,1)) solid var(--sel,#4f8cff);border-radius:calc(4px*var(--hz,1));box-sizing:border-box}
+#gbox .gb-h[data-g=nw]{left:0;top:0;cursor:nwse-resize}#gbox .gb-h[data-g=ne]{left:100%;top:0;cursor:nesw-resize}
+#gbox .gb-h[data-g=sw]{left:0;top:100%;cursor:nesw-resize}#gbox .gb-h[data-g=se]{left:100%;top:100%;cursor:nwse-resize}
+/* v5.5 AI chip */
+.card.t-aichip{padding:0;background:#080b10;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.45),0 0 0 1px #1d2530;overflow:visible;color:#d7dde5}
+.card.t-aichip.colored::after{display:none}
+.aichip{position:relative;height:100%;min-height:150px;padding:9px;box-sizing:border-box;--o:#ff8a3d;cursor:grab}
+.aichip .ac-pins{position:absolute;pointer-events:none;opacity:.75}
+.aichip .ac-pins.t,.aichip .ac-pins.b{left:22px;right:22px;height:5px;background:repeating-linear-gradient(90deg,#7b8490 0 6px,transparent 6px 15px)}
+.aichip .ac-pins.t{top:2px}.aichip .ac-pins.b{bottom:2px}
+.aichip .ac-pins.l,.aichip .ac-pins.r{top:22px;bottom:22px;width:5px;background:repeating-linear-gradient(180deg,#7b8490 0 6px,transparent 6px 15px)}
+.aichip .ac-pins.l{left:2px}.aichip .ac-pins.r{right:2px}
+.aichip .ac-die{position:relative;height:100%;border-radius:7px;background:radial-gradient(120% 90% at 50% 0,#141b24,#0a0e14);border:1px solid #2a3340;overflow:hidden}
+.aichip .ac-die::before{content:'';position:absolute;left:7px;top:7px;width:7px;height:7px;border-radius:50%;background:#2a3340;z-index:3}
+.aichip .ac-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.aichip .ac-svg path{fill:none;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.aichip .ac-svg .tr{stroke:#ff8a3d;stroke-opacity:.28;stroke-width:1.6}
+.aichip .ac-svg .fl{stroke:#ffb36b;stroke-width:2.4;stroke-linecap:round;stroke-dasharray:7 26;filter:drop-shadow(0 0 3px #ff8a3d);animation:acflow 2.4s linear infinite}
+.aichip.run .ac-svg .fl{animation-duration:.7s;stroke:#ffd9a8;stroke-dasharray:9 14}
+@keyframes acflow{to{stroke-dashoffset:-66}}
+.aichip .ac-screen{position:absolute;left:11.5%;right:11.5%;top:11.7%;bottom:11.7%;background:#0a0f15f2;border:1px solid #ff8a3d55;border-radius:5px;padding:9px 11px;overflow:auto;font-size:12.5px;line-height:1.5;box-shadow:0 0 14px #ff8a3d22,inset 0 0 18px #00000088;cursor:auto;user-select:text;z-index:2}
+.aichip.run .ac-screen{box-shadow:0 0 20px #ff8a3d66,inset 0 0 18px #00000088}
+.aichip .ac-res h3{font-size:13px;margin:8px 0 4px;color:#ffb36b}.aichip .ac-res h3:first-child{margin-top:0}
+.aichip .ac-res p{margin:0 0 6px}.aichip .ac-res ul{margin:0 0 6px;padding-left:18px}.aichip .ac-res a{color:#ffb36b}
+.aichip .ac-msg{color:#8b95a3;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12.5px}.aichip .ac-msg.err{color:#ff8a7a}
+.aichip .ac-dots i{display:inline-block;width:5px;height:5px;margin-right:3px;border-radius:50%;background:#ff8a3d;animation:acdot 1s infinite}
+.aichip .ac-dots i:nth-child(2){animation-delay:.15s}.aichip .ac-dots i:nth-child(3){animation-delay:.3s}
+@keyframes acdot{0%,100%{opacity:.25}50%{opacity:1}}
+.aichip .ac-tools{position:absolute;right:6px;top:4px;display:flex;gap:2px;z-index:4}
+.aichip .ac-b{width:22px;height:22px;display:grid;place-items:center;border-radius:6px;color:#8b95a3;background:none;opacity:.8}
+.aichip .ac-b:hover{color:#ffb36b;background:#ffffff12;opacity:1}.aichip .ac-b svg{width:14px;height:14px}
+.aichip .ac-stamp{position:absolute;left:20px;bottom:3px;font-size:10px;color:#ff8a3d99;z-index:4;pointer-events:none}
+.ac-prompt{width:100%;box-sizing:border-box;resize:vertical;font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text)}
+.ac-chk{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13px}
+.ac-warn{margin-top:8px;font-size:12.5px;color:#d97706}
+.bc .aichip,.bblock .aichip{margin:6px 0}
+@media (prefers-reduced-motion:reduce){.aichip .ac-svg .fl,.aichip .ac-dots i{animation:none}}
 </style>
 </head>
 <body class="app-root">
@@ -7688,6 +7728,7 @@ function blockEl(b, n) {
     case 'board': bc.append(boardEmbedEl(b)); break;
     case 'twidget': case 'tdwidget': bc.append(taskWidgetEl(b.type === 'tdwidget' ? 'today' : 'tasks', b, { pageId: PE.page.id }, () => { PE.page.updatedAt = now(); save(); })); break;
     case 'db': bc.append(dbPlaceEl({ kind: 'block', pageId: PE.page.id, bid: b.id }, { mode: 'block' })); break;
+    case 'aichip': bc.append(chipEl({ pageId: PE.page.id, bid: b.id }, () => { PE.page.updatedAt = now(); save(); }, b.h || 280)); break;
     case 'cols': { const w = h('div', { class: 'bcols n' + b.cols.length }); for (const col of b.cols) { const ce = h('div', { class: 'bcolc', 'data-col': col.id }); renderContainer(col.blocks, ce); w.append(ce); } bc.append(w); break; }
     default: bc.append(ed());
   }
@@ -11572,6 +11613,159 @@ function refreshWidgets() { for (const el of $$('.twg')) { if (el._draw && !(el.
 SLASH.push(['twidget', 'Tasks widget', 'Live task list with tag filters', '☑'], ['tdwidget', 'Today widget', 'Everything due or planned for today', '☀']);
 
 { const _i = init; init = async function () { const r = await _i.apply(this, arguments); try { await abStart(); } catch (e) { console.warn(e); } return r; }; }
+
+/* ========== v5.5: scale several selected cards together ========== */
+function gsItems() { return [...S.sel].map(id => ST.cards[id]).filter(c => c && !c.trashed && !c.columnId && !c.locked && !SCALE_NO.has(c.type) && $(`#cards > [data-id="${c.id}"]`)); }
+function gsRect(c) { const el = $(`#cards > [data-id="${c.id}"]`), sc = c.sc || 1; return { x: c.x, y: c.y, w: c.w * sc, h: (el ? el.offsetHeight : c.h || 100) * sc }; }
+function gsBounds(items) { const rs = items.map(gsRect), x0 = Math.min(...rs.map(r => r.x)), y0 = Math.min(...rs.map(r => r.y)), x1 = Math.max(...rs.map(r => r.x + r.w)), y1 = Math.max(...rs.map(r => r.y + r.h)); return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 }; }
+function updateGroupBox() {
+  const host = $('#cards'); if (!host) return; let box = $('#gbox');
+  const items = S.editing ? [] : gsItems();
+  if (items.length < 2) { box && box.remove(); return; }
+  const B = gsBounds(items), z = (view() || {}).z || 1;
+  if (!box) {
+    box = h('div', { id: 'gbox' });
+    for (const k of ['nw', 'ne', 'sw', 'se']) { const hd = h('div', { class: 'gb-h', 'data-g': k, title: 'Drag to scale the selection' }); hd.addEventListener('pointerdown', e => groupScaleStart(e, k)); box.append(hd); }
+    host.append(box);
+  }
+  Object.assign(box.style, { left: B.x + 'px', top: B.y + 'px', width: B.w + 'px', height: B.h + 'px' }); box.style.setProperty('--hz', 1 / z);
+}
+let GS = null;
+function groupScaleStart(e, k) {
+  if (e.button) return; e.stopPropagation(); e.preventDefault();
+  const items = gsItems(); if (items.length < 2) return;
+  const B = gsBounds(items), z = view().z;
+  const st = items.map(c => ({ c, el: $(`#cards > [data-id="${c.id}"]`), x0: c.x, y0: c.y, sc0: c.sc || 1 }));
+  const ax = k.includes('e') ? B.x : B.x + B.w, ay = k.includes('s') ? B.y : B.y + B.h;
+  const rmin = Math.max(...st.map(s => .25 / s.sc0)), rmax = Math.min(...st.map(s => 6 / s.sc0));
+  GS = { sx: e.clientX, sy: e.clientY, moved: false };
+  const sxd = k.includes('e') ? 1 : -1, syd = k.includes('s') ? 1 : -1;
+  const mv = ev => {
+    const dx = (ev.clientX - GS.sx) / z, dy = (ev.clientY - GS.sy) / z;
+    if (!GS.moved) { if (Math.hypot(dx, dy) * z < 3) return; checkpoint(); GS.moved = true; }
+    const r = Math.min(rmax, Math.max(rmin, 1 + (sxd * dx / B.w + syd * dy / B.h) / 2));
+    for (const s of st) {
+      const sc = Math.round(s.sc0 * r * 1000) / 1000; s.c.sc = sc; s.c.x = Math.round(ax + (s.x0 - ax) * r); s.c.y = Math.round(ay + (s.y0 - ay) * r);
+      s.el.style.left = s.c.x + 'px'; s.el.style.top = s.c.y + 'px'; s.el.style.transform = `scale(${sc})`; s.el.style.transformOrigin = '0 0'; s.el.style.setProperty('--sc', sc);
+    }
+    updateGroupBox(); scheduleLines();
+  };
+  const up = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); const m = GS.moved; GS = null; if (m) { for (const s of st) s.c.updatedAt = now(); save(); scheduleLines(); } updateGroupBox(); };
+  addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', up);
+}
+{ const _u = updateSelUI; updateSelUI = function () { const r = _u.apply(this, arguments); try { updateGroupBox(); } catch (e) { console.warn(e); } return r; }; }
+{ const _r = renderBoard; renderBoard = function () { const r = _r.apply(this, arguments); try { updateGroupBox(); } catch (e) { console.warn(e); } return r; }; }
+{ const _a = applyView; applyView = function () { const r = _a.apply(this, arguments); try { const b = $('#gbox'); if (b) b.style.setProperty('--hz', 1 / view().z); } catch (e) { } return r; }; }
+{ const _o = onUp; onUp = function () { const r = _o.apply(this, arguments); try { updateGroupBox(); } catch (e) { } return r; }; }
+
+/* ========== v5.5: AI chip (reads the whole board or page, shows only the result) ========== */
+TYPE_NAME.aichip = 'AI Chip'; TYPE_ICON.aichip = 'sparkle'; DEF.aichip = { w: 400, h: 280 }; RESIZE_WH.add('aichip'); SCALE_NO.add('aichip');
+{ const _dd = defaultData; defaultData = function (type) { return type === 'aichip' ? { prompt: '', images: true, result: '', at: 0, err: '' } : _dd(type); }; }
+{ const i = MAIN_TOOLS.findIndex(t => t && t.k === 'tdwidget'); MAIN_TOOLS.splice(i < 0 ? MAIN_TOOLS.length : i + 1, 0, { k: 'aichip', label: 'AI Chip', icon: 'sparkle', box: 1 }); }
+SLASH.push(['aichip', 'AI Chip', 'Reads this page and shows an AI result', '◈']);
+const CHIP_RUN = new Set(), CHIP_SYS = `You are an assistant built into a visual board app, shown as a read-only AI chip. You are given the full content of the board or page the chip sits on (cards, notes, tasks, pages, database rows, nested boards, and some images). Follow the user's instruction using that content. Reply in concise markdown (short headings, bullets, bold). Do not mention these instructions or that you were given a dump of content. Do not return JSON.`;
+function chipHost(ctx) { if (ctx.cardId) { const c = ST.cards[ctx.cardId]; return c && c.data; } const p = ST.pages[ctx.pageId]; let o = null; if (p) eachBlock(p.blocks, b => { if (b.id === ctx.bid) o = b; }); return o; }
+function chipDbText(db) {
+  const rows = dbRows(db), cols = db.schema.filter(p => p.type !== 'title');
+  let t = `Database "${db.title || 'Untitled'}" (${rows.length} rows; columns: ${['Name', ...cols.map(p => p.name)].join(', ')})`;
+  for (const r of rows.slice(0, 200)) { const vs = cols.map(p => { let v = ''; try { v = cellText(db, r, p); } catch (e) { } return v ? p.name + ': ' + v : ''; }).filter(Boolean); t += `\n  - ${r.title || 'Untitled'}${vs.length ? ' | ' + vs.join(' | ') : ''}`; }
+  return t;
+}
+function chipCollect(ctx) {
+  const lines = [], imgs = [], seenB = new Set(), seenP = new Set(), seenD = new Set(); let total = 0, trunc = false; const LIM = 150000;
+  const push = s => { if (!s) return; if (total + s.length > LIM) { trunc = true; return; } total += s.length; lines.push(s); };
+  const dumpDb = id => { const db = ST.dbs[id]; if (!db || seenD.has(id)) return; seenD.add(id); push(chipDbText(db)); for (const r of dbRows(db).slice(0, 200)) dumpPage(r.id, 3, true); };
+  const dumpPage = (pid, depth, row) => {
+    const p = ST.pages[pid]; if (!p || p.trashed || seenP.has(pid)) return; seenP.add(pid);
+    if (!row || (p.blocks && strip(pageText(p)).length > (p.title || '').length + 1)) push(`${row ? 'Row page' : 'Page'} "${p.title || 'Untitled'}":\n${pageText(p).slice(0, 12000)}`);
+    eachBlock(p.blocks, b => {
+      if (b.type === 'image' && b.blobId) imgs.push(b.blobId);
+      if (b.type === 'subpage' && b.pageId && depth < 5) dumpPage(b.pageId, depth + 1);
+      if (b.type === 'db' && b.dbId) dumpDb(b.dbId);
+    });
+  };
+  const dumpCard = (c, depth) => {
+    if (!c || c.trashed || c.type === 'aichip') return;
+    if (c.type === 'board') { const bd = ST.boards[c.data.boardId]; push(`Sub-board "${bd ? bd.title : ''}":`); if (depth < 4) dumpBoard(c.data.boardId, depth + 1); return; }
+    if (c.type === 'page') { dumpPage(c.data.pageId, depth); return; }
+    if (c.type === 'database') { dumpDb(c.data.dbId); return; }
+    if (c.type === 'column') { push(`Column "${c.data.title || 'Untitled'}":`); c.data.childIds.map(i => ST.cards[i]).forEach(k => dumpCard(k, depth)); return; }
+    if (c.type === 'image') { push(`Image "${c.data.name || 'image'}"${c.caption ? ': ' + c.caption : ''}`); if (c.data.blobId) imgs.push(c.data.blobId); return; }
+    push(aiCardText(c));
+  };
+  const dumpBoard = (bid, depth) => { if (seenB.has(bid)) return; seenB.add(bid); const b = ST.boards[bid]; push(`## Board "${b ? b.title : ''}"`); for (const c of topLevel(bid)) dumpCard(c, depth); };
+  if (ctx.cardId) { const me = ST.cards[ctx.cardId]; if (me) dumpBoard(me.boardId, 0); } else dumpPage(ctx.pageId, 0);
+  return { text: lines.join('\n\n'), imgs: [...new Set(imgs)], trunc };
+}
+async function chipImg(blobId) {
+  const bl = Blobs.mem[blobId]; if (!bl || !/^image\//.test(bl.type)) return null;
+  try { const bm = await createImageBitmap(bl), k = Math.min(1, 1024 / Math.max(bm.width, bm.height)), cv = document.createElement('canvas'); cv.width = Math.max(1, Math.round(bm.width * k)); cv.height = Math.max(1, Math.round(bm.height * k)); cv.getContext('2d').drawImage(bm, 0, 0, cv.width, cv.height); return { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: cv.toDataURL('image/jpeg', .8).split(',')[1] } }; } catch (e) { return null; }
+}
+function refreshChips() { for (const el of $$('.aichip')) if (el._draw) try { el._draw(); } catch (e) { console.warn(e); } }
+async function chipRun(ctx, persist) {
+  let host = chipHost(ctx); if (!host || !(host.prompt || '').trim() || CHIP_RUN.has(host)) return;
+  CHIP_RUN.add(host); host.err = ''; refreshChips();
+  let result = null, err = '';
+  try {
+    const key = aiGet(AI_KEY); if (!key) throw Object.assign(new Error('nokey'), { code: 'nokey' });
+    const col = chipCollect(ctx), imgs = [];
+    if (host.images !== false) for (const id of col.imgs.slice(0, 6)) { const im = await chipImg(id); if (im) imgs.push(im); }
+    const user = [...imgs, { type: 'text', text: `Today is ${todayStr()}.\n\nCONTENT OF THIS ${ctx.cardId ? 'BOARD' : 'PAGE'}:\n${col.text || '(empty)'}${col.trunc ? '\n\n[The content was truncated because it is very large.]' : ''}\n\nINSTRUCTION:\n${host.prompt.trim()}` }];
+    const j = await aiCall({ model: aiModel(), max_tokens: 2048, system: CHIP_SYS, messages: [{ role: 'user', content: user }] }, key);
+    const text = (j.content || []).filter(b => b.type === 'text').map(b => b.text).join('').trim();
+    if (!text) throw new Error('The AI returned an empty reply. Try again.');
+    result = { text, trunc: col.trunc, imgN: imgs.length };
+  } catch (e) { err = e.code === 'nokey' ? 'nokey' : (e.message || 'Something went wrong.'); }
+  const cur = chipHost(ctx) || host; CHIP_RUN.delete(host); CHIP_RUN.delete(cur);
+  if (result) { cur.result = result.text; cur.at = now(); cur.trunc = result.trunc; cur.imgN = result.imgN; cur.err = ''; } else cur.err = err;
+  persist(); refreshChips();
+}
+const CHIP_PATHS = ['M0 70H22L34 82H46', 'M0 130H46', 'M0 190H22L34 178H46', 'M0 240H30L40 226H46', 'M400 70H378L366 82H354', 'M400 130H354', 'M400 190H378L366 178H354', 'M400 240H370L360 226H354', 'M110 0V14L120 24V35', 'M200 0V35', 'M290 0V14L280 24V35', 'M110 300V286L120 276V265', 'M200 300V265', 'M290 300V286L280 276V265'];
+function chipSvg() {
+  const ns = 'http://www.w3.org/2000/svg', s = document.createElementNS(ns, 'svg'); s.setAttribute('viewBox', '0 0 400 300'); s.setAttribute('preserveAspectRatio', 'none'); s.setAttribute('class', 'ac-svg');
+  CHIP_PATHS.forEach((d, i) => { for (const cl of ['tr', 'fl']) { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', d); p.setAttribute('class', cl); if (cl === 'fl') p.style.animationDelay = (-(i * 0.37) % 2).toFixed(2) + 's'; s.append(p); } });
+  return s;
+}
+function chipSettings(ctx, persist) {
+  const host = chipHost(ctx); if (!host) return; let bg;
+  const ta = h('textarea', { class: 'ac-prompt', rows: '6', placeholder: ctx.cardId ? 'e.g. Summarize this board in five bullets and list the open risks.' : 'e.g. Pull out every decision and action item on this page.' }); ta.value = host.prompt || '';
+  const img = h('input', { type: 'checkbox' }); img.checked = host.images !== false;
+  const info = h('div', { class: 'muted', style: { fontSize: '12px', margin: '6px 0 2px' } }, 'Calculating what it will read…');
+  const upd = () => { try { const c = chipCollect(ctx); info.textContent = `Reads ${ctx.cardId ? 'this board and everything nested in it' : 'this page and its sub-pages'}: about ${c.text.length.toLocaleString()} characters${c.imgs.length ? `, ${Math.min(6, c.imgs.length)} image${c.imgs.length === 1 ? '' : 's'}${img.checked ? '' : ' (off)'}` : ''}${c.trunc ? '. Very large, so it will be shortened.' : '.'}`; } catch (e) { info.textContent = ''; } };
+  setTimeout(upd, 0); img.onchange = upd;
+  const nokey = aiGet(AI_KEY) ? null : h('div', { class: 'ac-warn' }, 'No API key yet. Add yours in Settings → General, under AI. It is stored only in this browser.');
+  const close = () => bg.remove();
+  const sv = run => { host.prompt = ta.value.trim(); host.images = img.checked; persist(); close(); refreshChips(); if (run) chipRun(ctx, persist); };
+  bg = modal([h('h3', null, 'AI Chip settings'), h('div', { class: 'muted', style: { marginBottom: '8px' } }, 'The chip shows only the result. Write what you want it to do with everything it can read.'), ta, h('label', { class: 'ac-chk' }, img, ' Include images'), info, nokey,
+    h('div', { class: 'wse-btns', style: { marginTop: '12px' } }, h('button', { class: 'btn', onclick: close }, 'Cancel'), h('button', { class: 'btn', onclick: () => sv(false) }, 'Save'), h('button', { class: 'btn primary', onclick: () => sv(true) }, 'Save and run'))]);
+  setTimeout(() => ta.focus(), 30);
+}
+function chipEl(ctx, persist, height) {
+  const root = h('div', { class: 'aichip' }); if (height) root.style.height = height + 'px';
+  const draw = () => {
+    const host = chipHost(ctx) || {}, running = CHIP_RUN.has(host);
+    root.classList.toggle('run', running); root.innerHTML = '';
+    const screen = h('div', { class: 'ac-screen' });
+    if (running) screen.append(h('div', { class: 'ac-msg' }, h('span', { class: 'ac-dots' }, h('i'), h('i'), h('i')), ' Reading ' + (ctx.cardId ? 'the board' : 'the page') + '…'));
+    else if (host.err === 'nokey') screen.append(h('div', { class: 'ac-msg' }, 'Add your Anthropic API key to use this chip.'), h('button', { class: 'btn', onclick: () => openSettings() }, 'Open Settings'));
+    else if (host.err) screen.append(h('div', { class: 'ac-msg err' }, host.err));
+    else if (!(host.prompt || '').trim()) screen.append(h('div', { class: 'ac-msg' }, 'Open settings (⚙) to write a prompt.'));
+    else if (!host.result) screen.append(h('div', { class: 'ac-msg' }, 'Press refresh to run.'));
+    if (!running && host.result && !host.err) screen.append(h('div', { class: 'ac-res', html: aiMd(host.result, { has: () => true }) }));
+    const tools = h('div', { class: 'ac-tools' },
+      h('button', { class: 'ac-b', title: 'Run again', html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>', onclick: e => { e.stopPropagation(); if (!(host.prompt || '').trim()) chipSettings(ctx, persist); else chipRun(ctx, persist); } }),
+      h('button', { class: 'ac-b', title: 'Settings', html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>', onclick: e => { e.stopPropagation(); chipSettings(ctx, persist); } }));
+    for (const b of tools.children) { b.addEventListener('pointerdown', e => e.stopPropagation()); }
+    const stamp = h('div', { class: 'ac-stamp' }, host.at && host.result && !host.err ? 'Updated ' + timeAgo(host.at) + (host.trunc ? ' · shortened' : '') : '');
+    const pins = ['t', 'b', 'l', 'r'].map(k => h('i', { class: 'ac-pins ' + k }));
+    root.append(...pins, h('div', { class: 'ac-die' }, chipSvg(), screen, tools, stamp));
+    screen.addEventListener('wheel', e => { if (screen.scrollHeight > screen.clientHeight) e.stopPropagation(); }, { passive: true });
+    screen.addEventListener('pointerdown', e => { if (screen.scrollHeight > screen.clientHeight || e.target.closest('a,button')) e.stopPropagation(); });
+  };
+  root._draw = draw; draw(); return root;
+}
+RENDER.aichip = c => chipEl({ cardId: c.id }, () => { c.updatedAt = now(); save(); });
+setInterval(() => { for (const el of $$('.aichip')) { const s = el.querySelector('.ac-stamp'); if (s && s.textContent) try { el._draw(); } catch (e) { } } }, 60000);
 
 /* ---------- iPhone: edge-swipe sidebar, one-finger select mode ---------- */
 {
