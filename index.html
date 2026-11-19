@@ -3429,6 +3429,70 @@ body.dark .m-home{--mh-bg:#131417;--mh-card:#1e2024;--mh-line:#2b2e34;--mh-text:
 body.kbbar-on #mhFab{display:none!important}
 .mh-dockhome .mh-i{display:inline-flex;width:22px;height:22px}.mh-dockhome svg{width:100%;height:100%}
 @media(min-width:701px){#mhFab,.mh-dockhome{display:none!important}}
+/* ===== v6.3 Focus & Time ===== */
+.ft-tabs{display:flex;align-items:center;gap:10px;padding:0 16px 10px;flex-wrap:wrap}
+.ft-tl{display:flex;gap:2px;background:var(--hover);border-radius:9px;padding:3px}
+.ft-tab{border:0;background:none;color:var(--muted);font:inherit;font-size:13px;font-weight:600;padding:6px 14px;border-radius:7px;cursor:pointer;min-height:32px}
+.ft-tab.on{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.ft-r{margin-left:auto}
+.ft-body{display:flex;flex-direction:column;gap:14px;padding:14px 16px 90px;overflow:auto;max-width:1000px;width:100%;margin:0 auto;box-sizing:border-box}
+.ft-day{display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:sticky;top:-14px;z-index:6;background:var(--canvas,var(--bar));padding:10px 0 8px;margin-top:-14px}
+.ft-fwd svg{transform:scaleX(-1)}
+.ft-sp{flex:1}.ft-tot,.ft-rl{font-size:14px;font-weight:600}
+.ft-gl{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.ft-gs{width:auto;min-width:0}
+.ft-chips{display:flex;gap:6px;flex-wrap:wrap}
+.ft-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 10px;border-radius:12px;background:var(--hover)}.ft-chip i{width:8px;height:8px;border-radius:50%}
+.ft-need{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 12px;border:1px dashed var(--line);border-radius:10px;font-size:13px}
+.ft-nb{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:8px;padding:6px 10px;font:inherit;font-size:12px;cursor:pointer;min-height:32px}
+.tt-wrap{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 10px 10px 4px;position:relative}
+.tt-axis{position:relative;width:46px;flex:none}.tt-axis span{position:absolute;right:6px;transform:translateY(-50%);font-size:11px;color:var(--muted)}
+.tt-col{position:relative;flex:1;min-width:0}
+.tt-hl{position:absolute;left:0;right:0;border-top:1px solid var(--line)}
+.tt-now{position:absolute;left:0;right:0;border-top:2px solid #e5484d;z-index:3}.tt-now:before{content:'';position:absolute;left:-4px;top:-5px;width:8px;height:8px;border-radius:50%;background:#e5484d}
+.tt-blk{position:absolute;box-sizing:border-box;padding:3px 8px;border-radius:7px;background:color-mix(in srgb,var(--bc) 22%,var(--card));border-left:4px solid var(--bc);overflow:hidden;cursor:pointer;z-index:2;font-size:12px;line-height:1.3;user-select:none;-webkit-user-select:none;touch-action:pan-y;outline-offset:1px}
+.tt-blk:hover,.tt-blk:focus-visible{background:color-mix(in srgb,var(--bc) 32%,var(--card))}
+.tt-blk.ro{opacity:.8;cursor:default;border-left-style:dashed}.tt-blk.live{box-shadow:0 0 0 1px var(--bc)}
+.tt-bt{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tt-bs{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
+.tt-h{position:absolute;left:0;right:0;height:9px;cursor:ns-resize;touch-action:none}.tt-h.t{top:0}.tt-h.b{bottom:0}
+.tt-h:after{content:'';position:absolute;left:50%;width:22px;margin-left:-11px;height:3px;border-radius:2px;background:var(--bc);opacity:0}.tt-h.t:after{top:2px}.tt-h.b:after{bottom:2px}
+.tt-blk:hover .tt-h:after{opacity:.7}
+@media(pointer:coarse){.tt-h{height:16px}.tt-h:after{opacity:.6}}
+.ft-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.ft-tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.ft-tile b{font-size:24px;letter-spacing:-.02em}.ft-tile i{font-style:normal;font-size:12px;color:var(--muted);font-weight:600}.ft-tile small{font-size:11px;color:var(--muted)}
+.ft-panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.ft-ph{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.ft-bars{display:flex;align-items:flex-end;gap:8px;height:150px;padding-top:16px}
+.ft-bars.dense{gap:3px}
+.ft-bar{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;position:relative}
+.ft-bf{width:100%;max-width:44px;background:color-mix(in srgb,var(--sel) 55%,transparent);border-radius:5px 5px 2px 2px;min-height:0}.ft-bf.today{background:var(--sel)}
+.ft-bv{font-size:10px;color:var(--muted);white-space:nowrap;position:absolute;top:-2px}.ft-bars.dense .ft-bv{display:none}
+.ft-bl{font-size:11px;color:var(--muted);height:14px}
+.ft-gt{display:flex;flex-direction:column}
+.ft-gr{display:grid;grid-template-columns:minmax(120px,2fr) minmax(60px,2fr) 84px 76px;align-items:center;gap:10px;padding:8px 2px;border-top:1px solid var(--line);font-size:13px;min-width:0}
+.ft-gr:first-child{border-top:0}
+.ft-gn{display:flex;align-items:center;gap:8px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ft-gn i{width:9px;height:9px;border-radius:3px;flex:none}
+.ft-gb{height:8px;border-radius:4px;background:var(--hover);overflow:hidden}.ft-gb span{display:block;height:100%;border-radius:4px}
+.ft-gm{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}.ft-gm small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+.ft-ga{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.ft-cs{grid-column:1/-1;max-width:220px;font-size:12px;padding:4px 8px}
+.ft-link{border:0;background:none;color:var(--text);font:inherit;padding:0;cursor:pointer;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ft-link:hover{text-decoration:underline}
+.ft-pv .ft-gr{grid-template-columns:minmax(120px,3fr) 70px 90px 100px 110px}.ft-gh{font-size:11px;color:var(--muted);font-weight:600}
+.ft-pv .over{color:#d6453d;font-weight:600}.ft-pv .under{color:#2e9b4e;font-weight:600}
+.ft-cr{display:flex;align-items:center;gap:8px;margin-bottom:6px}.ft-cr .tm-input{flex:1;min-width:0}.ft-rate{max-width:90px;flex:none!important}
+.ft-col{width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:8px;background:none;cursor:pointer;flex:none}
+.ft-opt{display:flex;align-items:center;gap:8px;font-size:13px}
+.tt-ed{max-width:460px;width:min(460px,94vw)}.tt-ed h3,.tt-idle-m h3{margin:0 0 10px;font-size:17px}.tt-ed h3 small{color:var(--muted);font-weight:400}
+.tt-grid{display:grid;grid-template-columns:70px 1fr;gap:8px 10px;align-items:center}.tt-grid label{font-size:12px;color:var(--muted);font-weight:600}.tt-grid .tm-input{width:100%;min-width:0;box-sizing:border-box}
+.tt-btnrow{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:14px}
+.tt-idle-m{max-width:400px;width:min(400px,92vw)}.tt-idle-m p{margin:0;line-height:1.5;font-size:14px}.tt-idle-m .tt-btnrow{justify-content:flex-start}
+.mini.danger{color:#d6453d}
+.tt-task{gap:8px}.tt-estl{font-size:12px;color:var(--muted)}.tt-est{width:84px!important;flex:none}.tt-trk{font-size:12px;color:var(--muted)}
+#ttChip{position:fixed;top:calc(8px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:25100;display:flex;align-items:center;gap:8px;background:#232427;color:#fff;border-radius:20px;padding:4px 6px 4px 12px;font-size:12px;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer;max-width:92vw}
+#ttChip .tt-dot{width:8px;height:8px;border-radius:50%;background:#e5484d;animation:ttp 1.4s infinite}@keyframes ttp{50%{opacity:.3}}
+#ttChip .tt-ct{font-variant-numeric:tabular-nums;font-weight:700}#ttChip .tt-cl{opacity:.75;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:36vw}
+#ttChip .tt-cs{border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:10px}
+@media(max-width:700px){.ft-tab{padding:6px 9px;font-size:12px}.ft-tabs{flex-wrap:nowrap;gap:6px}.ft-tiles{grid-template-columns:1fr 1fr}.ft-gr{grid-template-columns:minmax(0,1fr) 70px 70px}.ft-gb{display:none}.ft-pv .ft-gr{grid-template-columns:minmax(0,1fr) 56px 66px}.ft-pv .ft-gr>span:nth-child(4){display:none}.ft-body{padding:12px 12px 90px}.ft-tabs{padding:0 12px 10px}}
 </style>
 </head>
 <body class="app-root">
@@ -14700,6 +14764,359 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && mh
 window.addEventListener('pageshow', () => { if (mhOpen()) mhRender(); });
 /* always start on Home on phones */
 { const oi = init; init = async function () { const r = await oi.apply(this, arguments); try { if (mhPhone()) { showHome('home'); renderToolbar(); } } catch (e) { console.warn('home', e); } return r; }; }
+
+/* ========== v6.3: Focus & Time (time tracking, timeline, reports) ========== */
+const T_MIN = 60000;
+const TT = () => {
+  const f = FT(); if (!f.time) f.time = { entries: [], clients: [], boardClient: {}, grid: 15, idleMin: 3, auto: true, running: null };
+  const t = f.time; t.entries = t.entries || []; t.clients = t.clients || []; t.boardClient = t.boardClient || {};
+  if (t.grid == null) t.grid = 15; if (t.idleMin == null) t.idleMin = 3; if (t.auto == null) t.auto = true; return t;
+};
+const tMid = d => parseYmd(d).getTime();
+const tLoc = ms => { const d = new Date(ms), p = n => String(n).padStart(2, '0'); return `${ymd(d)}T${p(d.getHours())}:${p(d.getMinutes())}`; };
+const tClock = ms => new Date(ms).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+const fmtHM = mins => { const m = Math.round(mins); return m >= 60 ? `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, '0')}m` : `${m}m`; };
+const fmtMoney = n => '$' + (Math.round(n * 100) / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const TT_COLORS = ['#f26a1b', '#3d7cf5', '#2e9b4e', '#a259e6', '#e0527a', '#d9a400', '#16a6a6', '#7a8794'];
+const ttColorOf = k => { let n = 0; for (const ch of String(k || '-')) n = (n * 31 + ch.charCodeAt(0)) >>> 0; return TT_COLORS[n % TT_COLORS.length]; };
+
+/* ---- entry helpers ---- */
+function eBoard(e) {
+  if (e.boardId && ST.boards[e.boardId]) return e.boardId;
+  const f = e.taskId && findTask(e.taskId); if (f) return f.card.boardId;
+  if (e.pageId && ST.pages[e.pageId]) { const b = pageBoardId(e.pageId); if (b) return b; }
+  return null;
+}
+function eClient(e) { const t = TT(); const b = eBoard(e); const id = e.clientId || (b && t.boardClient[b]) || null; return t.clients.find(c => c.id === id) || null; }
+function eLabel(e) {
+  const f = e.taskId && findTask(e.taskId); if (f) return f.item.text || 'Untitled task';
+  if (e.pageId && ST.pages[e.pageId]) return ST.pages[e.pageId].title || 'Untitled page';
+  if (e.label) return e.label;
+  const b = eBoard(e); if (b) return boardName(b);
+  return e.note || 'Untracked time';
+}
+function eColor(e) { const c = eClient(e); if (c) return c.color; const b = eBoard(e); return (b && ST.boards[b] && ST.boards[b].color) || ttColorOf(b || e.src); }
+const eMins = e => Math.max(0, (e.end - e.start) / T_MIN);
+function ttAll(fromMs, toMs) {
+  const t = TT(), out = t.entries.filter(e => e.end > fromMs && e.start < toMs);
+  const own = out.filter(e => e.src === 'timer' || e.src === 'manual');
+  for (const s of FT().sessions) {
+    if (!(s.actual >= 1)) continue; const st = s.start, en = st + Math.round(s.actual * T_MIN); if (!(en > fromMs && st < toMs)) continue;
+    if (own.some(e => e.start < en && e.end > st && Math.min(e.end, en) - Math.max(e.start, st) >= (en - st) / 2)) continue;
+    out.push({ id: 'fs:' + s.id, start: st, end: en, src: 'focus', taskId: s.taskId || null, boardId: s.boardId || null, label: s.task || 'Focus session', ro: true });
+  }
+  return out.sort((a, b) => a.start - b.start);
+}
+function ttTracked(tid) { let m = 0; for (const e of ttAll(0, Infinity)) if (e.taskId === tid) m += eMins(e); return m; }
+
+/* ---- automatic tracker ---- */
+const TR = { last: Date.now(), cur: null, idleEntry: null, lastSave: 0, openTask: null };
+function trCtx() {
+  if (typeof mhOpen === 'function' && mhOpen()) return null;
+  if ($('.tm-wrap') && TR.openTask) { const f = findTask(TR.openTask); if (f) return { k: 'task', taskId: TR.openTask, boardId: f.card.boardId, label: f.item.text || 'Untitled task' }; }
+  if ($('.pv-wrap') && S.pageId && ST.pages[S.pageId]) { const p = ST.pages[S.pageId]; return { k: 'page', pageId: p.id, boardId: pageBoardId(p.id) || null, label: p.title || 'Untitled page' }; }
+  if ($('.tasksview,.dashview,.dbfull,.docedit')) return null;
+  if (S.boardId && ST.boards[S.boardId]) return { k: 'board', boardId: S.boardId, label: boardName(S.boardId) };
+  return null;
+}
+function trClose() {
+  const t = TT(); if (!TR.cur) return; const e = TR.cur; TR.cur = null;
+  if (e.end - e.start < T_MIN) { const i = t.entries.indexOf(e); if (i >= 0) t.entries.splice(i, 1); }
+}
+function trTick() {
+  if (!ST || !ST.boards) return; const t = TT(), n = Date.now();
+  if (t.running) {
+    const e = t.entries.find(x => x.id === t.running);
+    if (!e) t.running = null;
+    else if (n - e.end > 15 * T_MIN) { e.live = false; t.running = null; toast('Timer stopped — the app was closed'); ttChip(); ttRefresh(); }
+    else e.end = n;
+    trSaveSoon(); return;
+  }
+  const fa = FT().active, active = t.auto && !document.hidden && !(fa && !fa.paused) && (n - TR.last) < t.idleMin * T_MIN;
+  const ctx = active ? trCtx() : null;
+  if (!ctx) {
+    if (TR.cur) { if (!active && t.auto) { TR.cur.end = Math.max(TR.cur.start, Math.min(TR.cur.end, TR.last + 30000)); TR.idleEntry = TR.cur.id; } trClose(); trSaveSoon(true); }
+    return;
+  }
+  const id = ctx.taskId || ctx.pageId || ctx.boardId, key = ctx.k + ':' + id + ':' + todayStr();
+  if (TR.cur && TR.cur.key === key && n - TR.cur.end <= 30000) { TR.cur.end = n; TR.idleEntry = null; }
+  else {
+    trClose(); TR.idleEntry = null;
+    const prev = t.entries.filter(x => x.src === 'auto' && !x.live).sort((a, b) => b.end - a.end)[0];
+    if (prev && prev.key === key && n - prev.end <= 120000) { prev.end = n; TR.cur = prev; }
+    else { const e = { id: uid(), start: n, end: n, src: 'auto', key, taskId: ctx.taskId || null, pageId: ctx.pageId || null, boardId: ctx.boardId || null, label: ctx.label || '', note: '', clientId: null }; t.entries.push(e); TR.cur = e; }
+  }
+  trSaveSoon();
+}
+function trSaveSoon(now_) { const n = Date.now(); if (now_ || n - TR.lastSave > 30000) { TR.lastSave = n; try { save(); } catch (e) { } } }
+function trInput() {
+  const n = Date.now(), gap = n - TR.last; TR.last = n; if (!ST || !ST.boards) return; const t = TT();
+  if (gap >= 5 * T_MIN && TR.idleEntry && gap <= 12 * 3600e3 && t.auto && !t.running) {
+    const e = t.entries.find(x => x.id === TR.idleEntry); const from = e ? e.end : n - gap; TR.idleEntry = null; trIdlePrompt(e, from, n);
+  } else if (gap >= 5 * T_MIN) TR.idleEntry = null;
+}
+function trIdlePrompt(e, from, to) {
+  if ($('.tt-idle')) return;
+  const mins = Math.max(1, Math.round((to - from) / T_MIN)); const bg = h('div', { class: 'modal-bg tt-idle' }), close = () => bg.remove();
+  const keep = h('button', { class: 'btn primary' }, 'Keep as work'), disc = h('button', { class: 'btn' }, 'Discard'), asg = h('button', { class: 'btn' }, 'Assign to…');
+  keep.onclick = () => { const t = TT(); if (e && t.entries.includes(e) && Math.abs(e.end - from) < 5 * T_MIN) e.end = to; else t.entries.push({ id: uid(), start: from, end: to, src: 'manual', note: 'Away', label: 'Away', taskId: null, boardId: null, clientId: null }); save(); close(); ttRefresh(); };
+  disc.onclick = close;
+  asg.onclick = () => { const x = { id: uid(), start: from, end: to, src: 'manual', note: 'Away', label: 'Away', taskId: null, boardId: null, clientId: null }; TT().entries.push(x); save(); close(); ttEdit(x); };
+  bg.append(h('div', { class: 'modal tt-idle-m' }, h('h3', null, 'Welcome back'), h('p', null, `You were away for ${fmtHM(mins)} (${tClock(from)} – ${tClock(to)}). What should happen to that time?`), h('div', { class: 'tt-btnrow' }, keep, asg, disc)));
+  document.body.append(bg);
+}
+['pointerdown', 'keydown', 'touchstart', 'wheel', 'pointermove'].forEach(ev => document.addEventListener(ev, trInput, { capture: true, passive: true }));
+window.addEventListener('scroll', trInput, { capture: true, passive: true });
+document.addEventListener('visibilitychange', () => { if (document.hidden) { trTick(); trSaveSoon(true); } else trInput(); });
+window.addEventListener('focus', trInput);
+window.addEventListener('pagehide', () => { try { trTick(); TR.cur && trClose(); save(); } catch (e) { } });
+setInterval(trTick, 5000);
+
+/* ---- manual timer ---- */
+function ttRunning() { const t = TT(); return t.running ? t.entries.find(x => x.id === t.running) || null : null; }
+function ttStart(c) {
+  const t = TT(); if (t.running) ttStop(true); trClose(); const n = Date.now();
+  const e = { id: uid(), start: n, end: n, src: 'timer', live: true, taskId: c.taskId || null, pageId: null, boardId: c.boardId || null, clientId: c.clientId || null, note: c.note || '', label: c.label || '' };
+  if (e.taskId) { const f = findTask(e.taskId); if (f) { e.boardId = e.boardId || f.card.boardId; e.label = f.item.text || ''; } }
+  t.entries.push(e); t.running = e.id; save(); ttChip(); ttRefresh();
+}
+function ttStop(quiet) {
+  const t = TT(), e = ttRunning(); t.running = null;
+  if (e) { e.live = false; e.end = Date.now(); if (e.end - e.start < 30000) { const i = t.entries.indexOf(e); if (i >= 0) t.entries.splice(i, 1); if (!quiet) toast('Timer discarded (under 30 s)'); } else if (!quiet) toast(`Logged ${fmtHM(eMins(e))}`); }
+  save(); ttChip(); ttRefresh();
+}
+function ttChip() {
+  let c = $('#ttChip'); const e = ttRunning();
+  if (!e) { c && c.remove(); return; }
+  if (!c) { c = h('div', { id: 'ttChip' }, h('span', { class: 'tt-dot' }), h('span', { class: 'tt-ct' }), h('span', { class: 'tt-cl' }), h('button', { class: 'tt-cs', 'aria-label': 'Stop timer', title: 'Stop and log', onclick: e2 => { e2.stopPropagation(); ttStop(); } }, '■')); c.onclick = () => { S.fvTab = 'timeline'; S.ttDay = ymd(new Date(e.start)); openFocusView(); }; document.body.append(c); }
+  const s = Math.floor((Date.now() - e.start) / 1000), p = n => String(n).padStart(2, '0');
+  c.querySelector('.tt-ct').textContent = `${Math.floor(s / 3600)}:${p(Math.floor(s / 60) % 60)}:${p(s % 60)}`; c.querySelector('.tt-cl').textContent = eLabel(e).slice(0, 26);
+}
+setInterval(() => { if (ST && ST.focus && TT().running) ttChip(); }, 1000);
+function ttRefresh() { if ($('.focusview')) renderFocusView(); ttTaskInfo(); }
+
+/* ---- pickers + editor ---- */
+function ttBoardSel(val, fn, none) {
+  const s = h('select', { class: 'tm-input' }, h('option', { value: '' }, none || '— none —'));
+  for (const { b, depth } of boardTree()) s.append(h('option', { value: b.id }, ' '.repeat(depth) + (b.title || 'Untitled')));
+  s.value = val || ''; s.onchange = () => fn(s.value || null); return s;
+}
+function ttClientSel(val, fn, none) {
+  const s = h('select', { class: 'tm-input' }, h('option', { value: '' }, none || '— none —'));
+  for (const c of TT().clients) s.append(h('option', { value: c.id }, c.name || 'Client'));
+  s.value = val || ''; s.onchange = () => fn(s.value || null); return s;
+}
+function ttStartDlg() {
+  const c = { taskId: null, boardId: null, clientId: null, note: '' }; const bg = h('div', { class: 'modal-bg' }), close = () => bg.remove();
+  const tb = h('button', { class: 'btn' }, '+ Link a task (optional)'); tb.onclick = () => taskPickPop(tb, tid => { c.taskId = tid; const f = findTask(tid); if (f) { c.boardId = f.card.boardId; bsel.value = c.boardId; } tb.textContent = timerTaskText(tid); });
+  const bsel = ttBoardSel(null, v => { c.boardId = v; }, '— none (project) —'), csel = ttClientSel(null, v => { c.clientId = v; }, '— from project —'), note = h('input', { class: 'tm-input', placeholder: 'What are you working on?' });
+  const go = h('button', { class: 'btn primary' }, 'Start timer'); go.onclick = () => { c.note = note.value.trim(); c.label = c.note; close(); ttStart(c); };
+  bg.append(h('div', { class: 'modal tt-ed' }, h('h3', null, 'Start timer'), h('div', { class: 'tt-grid' }, h('label', null, 'Task'), tb, h('label', null, 'Project'), bsel, h('label', null, 'Client'), csel, h('label', null, 'Note'), note), h('div', { class: 'tt-btnrow' }, go, h('button', { class: 'btn', onclick: close }, 'Cancel'))));
+  bg.addEventListener('pointerdown', e => { if (e.target === bg) close(); }); document.body.append(bg); setTimeout(() => note.focus(), 0);
+}
+function ttEdit(e) {
+  if (e.ro) { toast('Focus sessions are edited in Overview → Session log'); return; }
+  closeTransient(); const t = TT(), bg = h('div', { class: 'modal-bg' }), m = h('div', { class: 'modal tt-ed' }); bg.append(m);
+  const close = () => { bg.remove(); ttRefresh(); };
+  const draw = () => {
+    m.innerHTML = '';
+    const st = h('input', { type: 'datetime-local', class: 'tm-input', value: tLoc(e.start) }), en = h('input', { type: 'datetime-local', class: 'tm-input', value: tLoc(e.end), disabled: e.live ? true : null });
+    const apply = () => { const a = new Date(st.value).getTime(), b = e.live ? e.end : new Date(en.value).getTime(); if (isNaN(a) || isNaN(b) || b <= a) { toast('End must be after start'); draw(); return; } e.start = a; e.end = b; save(); draw(); };
+    st.onchange = apply; en.onchange = apply;
+    const tk = h('button', { class: 'btn' }, e.taskId && findTask(e.taskId) ? timerTaskText(e.taskId) : '+ Link a task');
+    tk.onclick = () => taskPickPop(tk, tid => { e.taskId = tid; const f = findTask(tid); if (f) { e.boardId = f.card.boardId; e.label = f.item.text || ''; } save(); draw(); });
+    const tx = e.taskId ? h('button', { class: 'mini', onclick: () => { e.taskId = null; save(); draw(); } }, 'Clear') : null;
+    const bs = ttBoardSel(e.boardId, v => { e.boardId = v; save(); draw(); }, '— none —'), cs = ttClientSel(e.clientId, v => { e.clientId = v; save(); }, '— from project —');
+    const note = h('input', { class: 'tm-input', value: e.note || '', placeholder: 'Note' }); note.onchange = () => { e.note = note.value; save(); };
+    const mid = snapT(Math.round((e.start + e.end) / 2)), spl = h('input', { type: 'time', class: 'tm-input', value: tLoc(mid).slice(11) });
+    const split = h('button', { class: 'mini', title: 'Split this block at the time shown' }, 'Split at');
+    split.onclick = () => { const [hh, mm] = spl.value.split(':').map(Number), d = new Date(e.start); d.setHours(hh, mm, 0, 0); const x = d.getTime(); if (!(x > e.start && x < e.end)) return toast('Pick a time inside the block'); const n2 = Object.assign({}, e, { id: uid(), start: x, live: false }); if (e.live) { t.running = n2.id; n2.live = true; e.live = false; } e.end = x; t.entries.push(n2); save(); close(); };
+    const next = t.entries.filter(x => x !== e && x.start >= e.start).sort((a, b) => a.start - b.start)[0];
+    const merge = h('button', { class: 'mini' }, 'Merge with next'); merge.disabled = !next; merge.onclick = () => { if (!next) return; e.end = Math.max(e.end, next.end); if (next.live) { e.live = true; t.running = e.id; } const i = t.entries.indexOf(next); if (i >= 0) t.entries.splice(i, 1); save(); draw(); };
+    const del = h('button', { class: 'mini danger' }, 'Delete'); del.onclick = () => { if (!del.dataset.a) { del.dataset.a = '1'; del.textContent = 'Delete?'; return; } if (t.running === e.id) t.running = null; const i = t.entries.indexOf(e); if (i >= 0) t.entries.splice(i, 1); if (TR.cur === e) TR.cur = null; save(); ttChip(); close(); };
+    m.append(h('h3', null, 'Time entry', h('small', null, ` · ${fmtHM(eMins(e))}${e.live ? ' · running' : ''}`)),
+      h('div', { class: 'tt-grid' }, h('label', null, 'Start'), st, h('label', null, 'End'), en, h('label', null, 'Task'), h('div', { class: 'tm-row' }, tk, tx), h('label', null, 'Project'), bs, h('label', null, 'Client'), cs, h('label', null, 'Note'), note),
+      h('div', { class: 'tt-btnrow' }, h('div', { class: 'tm-row' }, spl, split, merge), h('div', { class: 'tm-row' }, del, h('button', { class: 'btn primary', onclick: close }, 'Done'))));
+  };
+  draw(); bg.addEventListener('pointerdown', ev => { if (ev.target === bg) close(); }); document.body.append(bg);
+}
+function snapT(ms) { const g = (TT().grid || 15) * T_MIN, d0 = tMid(ymd(new Date(ms))); return d0 + Math.round((ms - d0) / g) * g; }
+function ttNewEntry(day) {
+  const t = TT(), d = day || todayStr(), isT = d === todayStr(); const dayE = t.entries.filter(e => ymd(new Date(e.start)) === d).sort((a, b) => b.end - a.end)[0];
+  const start = snapT(dayE ? dayE.end : isT ? Date.now() - 30 * T_MIN : tMid(d) + 9 * 3600e3);
+  const e = { id: uid(), start, end: start + 30 * T_MIN, src: 'manual', taskId: null, boardId: null, clientId: null, note: '', label: '' };
+  t.entries.push(e); save(); ttEdit(e);
+}
+
+/* ---- Focus page: tabs ---- */
+function ttTabs() {
+  const tabs = [['overview', 'Overview'], ['timeline', 'Timeline'], ['reports', 'Reports']], cur = S.fvTab || 'overview', run = ttRunning();
+  return h('div', { class: 'ft-tabs' }, h('div', { class: 'ft-tl', role: 'tablist' }, tabs.map(([k, l]) => h('button', { class: 'ft-tab' + (cur === k ? ' on' : ''), role: 'tab', 'aria-selected': cur === k ? 'true' : 'false', onclick: () => { S.fvTab = k; renderFocusView(); } }, l))),
+    h('div', { class: 'ft-r' }, run ? h('button', { class: 'btn', onclick: () => ttStop() }, '■ Stop timer') : h('button', { class: 'btn primary', onclick: ttStartDlg }, innerWidth <= 700 ? '▶ Track' : '▶ Track time')));
+}
+{
+  const o = renderFocusView; renderFocusView = function () {
+    const ov = $('.focusview'); if (!ov) return; const tab = S.fvTab || 'overview';
+    if (tab === 'overview') { const r = o.apply(this, arguments); const top = ov.querySelector('.tv-top'); const h2 = ov.querySelector('.tv-head h2'); if (h2 && h2.firstChild) h2.firstChild.textContent = 'Focus & Time'; if (top) top.append(ttTabs()); return r; }
+    const prev = ov.querySelector('.tv-body'), y = prev ? prev.scrollTop : 0; ov.innerHTML = '';
+    const day = tab === 'timeline' ? S.ttDay || todayStr() : null; void day;
+    ov.append(h('div', { class: 'tv-top' }, dashHead('Focus & Time', tab === 'timeline' ? 'Timeline' : 'Reports'), ttTabs()));
+    const body = h('div', { class: 'tv-body ft-body' }); ov.append(body);
+    if (tab === 'timeline') ttTimeline(body); else ttReports(body);
+    if (tab !== 'timeline') body.scrollTop = y;
+  };
+}
+
+/* ---- Timeline ---- */
+function ttTimeline(body) {
+  const t = TT(), day = S.ttDay || (S.ttDay = todayStr()), grid = t.grid, ppm = 1.1;
+  const a = tMid(day), b = a + 864e5, ents = ttAll(a, b).filter(e => ymd(new Date(e.start)) === day || e.start >= a);
+  const total = ents.reduce((s, e) => s + eMins(e), 0);
+  const nav = h('div', { class: 'ft-day' }, h('button', { class: 'ib', 'aria-label': 'Previous day', html: ICON.back, onclick: () => { S.ttDay = addDays(day, -1); renderFocusView(); } }),
+    h('input', { type: 'date', class: 'tm-input', value: day, onchange: ev => { if (ev.target.value) { S.ttDay = ev.target.value; renderFocusView(); } } }),
+    h('button', { class: 'ib ft-fwd', 'aria-label': 'Next day', html: ICON.back, onclick: () => { S.ttDay = addDays(day, 1); renderFocusView(); } }),
+    h('button', { class: 'mini', onclick: () => { S.ttDay = todayStr(); renderFocusView(); } }, 'Today'),
+    h('span', { class: 'ft-tot' }, `${fmtHM(total)} tracked`),
+    h('span', { class: 'ft-sp' }),
+    h('label', { class: 'ft-gl' }, 'Snap', (() => { const s = h('select', { class: 'tm-input ft-gs' }, [[1, '1 min'], [5, '5 min'], [6, '6 min'], [15, '15 min'], [30, '30 min']].map(([v, l]) => h('option', { value: v }, l))); s.value = String(grid); s.onchange = () => { t.grid = +s.value; save(); }; return s; })()),
+    h('button', { class: 'btn', onclick: () => ttNewEntry(day) }, '+ Add time'));
+  body.append(nav);
+  const byProj = new Map(); for (const e of ents) { const k = eBoard(e) || '-'; byProj.set(k, (byProj.get(k) || 0) + eMins(e)); }
+  if (byProj.size) body.append(h('div', { class: 'ft-chips' }, [...byProj].sort((x, y) => y[1] - x[1]).slice(0, 6).map(([k, m]) => h('span', { class: 'ft-chip' }, h('i', { style: { background: (ST.boards[k] && ST.boards[k].color) || ttColorOf(k) } }), (k === '-' ? 'No project' : boardName(k)) + ' · ' + fmtHM(m)))));
+  const un = ents.filter(e => !e.ro && !e.taskId && !e.pageId && !eBoard(e) && !eClient(e));
+  if (un.length) body.append(h('div', { class: 'ft-need' }, h('b', null, `Needs assignment · ${un.length}`), un.map(e => h('button', { class: 'ft-nb', onclick: () => ttEdit(e) }, `${tClock(e.start)}–${tClock(e.end)} · ${fmtHM(eMins(e))}${e.note ? ' · ' + e.note : ''}`))));
+  if (!ents.length) body.append(h('div', { class: 'tv-empty' }, day === todayStr() ? 'Nothing tracked yet today. Time in tasks, pages and boards is logged automatically; use Track time for anything else.' : 'No time tracked on this day.'));
+  let min0 = 8 * 60, max0 = 18 * 60;
+  for (const e of ents) { min0 = Math.min(min0, Math.floor((e.start - a) / T_MIN / 60) * 60); max0 = Math.max(max0, Math.ceil((e.end - a) / T_MIN / 60) * 60); }
+  min0 = Math.max(0, min0); max0 = Math.min(30 * 60, max0);
+  const H = (max0 - min0) * ppm, col = h('div', { class: 'tt-col', style: { height: H + 'px' } }), axis = h('div', { class: 'tt-axis', style: { height: H + 'px' } });
+  for (let m = min0; m <= max0; m += 60) { const y = (m - min0) * ppm; col.append(h('div', { class: 'tt-hl', style: { top: y + 'px' } })); axis.append(h('span', { style: { top: y + 'px' } }, new Date(2000, 0, 1, m / 60 % 24).toLocaleTimeString([], { hour: 'numeric' }))); }
+  if (day === todayStr()) { const nm = (Date.now() - a) / T_MIN; if (nm >= min0 && nm <= max0) col.append(h('div', { class: 'tt-now', style: { top: (nm - min0) * ppm + 'px' } })); }
+  /* lane layout */
+  const lanes = []; const place = new Map(); let cluster = [], cEnd = 0;
+  const flush = () => { const n = Math.max(1, ...cluster.map(x => x.l + 1)); for (const x of cluster) place.set(x.e, { l: x.l, n }); cluster = []; lanes.length = 0; };
+  for (const e of ents) { if (cluster.length && e.start >= cEnd) flush(); let l = 0; while (lanes[l] && lanes[l] > e.start) l++; lanes[l] = e.end; cluster.push({ e, l }); cEnd = Math.max(cEnd, e.end); }
+  flush();
+  for (const e of ents) {
+    const p = place.get(e), top = Math.max(0, ((e.start - a) / T_MIN - min0)) * ppm, hh = Math.max(22, eMins(e) * ppm - 1), col2 = eColor(e);
+    const el = h('div', { class: 'tt-blk' + (e.ro ? ' ro' : '') + (e.live ? ' live' : ''), style: { top: top + 'px', height: hh + 'px', left: (p.l / p.n * 100) + '%', width: (100 / p.n) + '%', '--bc': col2 }, tabindex: '0', role: 'button', 'aria-label': `${eLabel(e)}, ${fmtHM(eMins(e))}` },
+      h('div', { class: 'tt-bt' }, eLabel(e)), h('div', { class: 'tt-bs' }, `${tClock(e.start)}–${e.live ? 'now' : tClock(e.end)} · ${fmtHM(eMins(e))}${e.src === 'auto' ? '' : ' · ' + (e.src === 'focus' ? 'focus' : e.src)}`));
+    if (!e.ro) { el.append(h('div', { class: 'tt-h t', 'data-h': 't' })); if (!e.live) el.append(h('div', { class: 'tt-h b', 'data-h': 'b' })); }
+    el.onclick = () => { if (el._moved) { el._moved = false; return; } ttEdit(e); };
+    el.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); ttEdit(e); } });
+    el.addEventListener('pointerdown', ev => {
+      if (e.ro || ev.button) return; const mode = ev.target.dataset && ev.target.dataset.h || 'body'; if (mode === 'body' && ev.pointerType === 'touch') return;
+      ev.preventDefault(); try { el.setPointerCapture(ev.pointerId); } catch (x) { } const y0 = ev.clientY, s0 = e.start, e0 = e.end, g = (t.grid || 15) * T_MIN; let ns = s0, ne = e0; el._moved = false;
+      const mv = m2 => {
+        const dy = m2.clientY - y0; if (Math.abs(dy) > 4) el._moved = true; if (!el._moved) return; const dm = Math.round(dy / ppm / (t.grid || 15)) * (t.grid || 15) * T_MIN;
+        if (mode === 't') { ns = Math.min(snapT(s0 + dm), e0 - g); ne = e0; } else if (mode === 'b') { ns = s0; ne = Math.max(snapT(e0 + dm), s0 + g); } else { ns = snapT(s0 + dm); ne = ns + (e0 - s0); }
+        el.style.top = Math.max(0, ((ns - a) / T_MIN - min0) * ppm) + 'px'; el.style.height = Math.max(22, (ne - ns) / T_MIN * ppm - 1) + 'px';
+      };
+      const up = () => { el.removeEventListener('pointermove', mv); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up); if (el._moved) { e.start = ns; e.end = ne; save(); setTimeout(() => { el._moved = false; }, 0); ttRefresh(); } };
+      el.addEventListener('pointermove', mv); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+    });
+    col.append(el);
+  }
+  const wrap = h('div', { class: 'tt-wrap' }, axis, col); body.append(wrap);
+  const first = ents[0]; requestAnimationFrame(() => { const nm = day === todayStr() ? (Date.now() - a) / T_MIN : null; const tgt = first ? (first.start - a) / T_MIN : nm != null ? nm : min0; body.scrollTop = Math.max(0, wrap.offsetTop + (tgt - min0) * ppm - 90); });
+}
+
+/* ---- Reports ---- */
+function ttRange() {
+  const t = todayStr(), k = S.trRange || 'week', off = S.trOff || 0; let a, b, label;
+  if (k === 'week') { a = addDays(weekStartStr(t), off * 7); b = addDays(a, 6); }
+  else if (k === 'month') { const d = parseYmd(t); d.setDate(1); d.setMonth(d.getMonth() + off); a = ymd(d); b = ymd(new Date(d.getFullYear(), d.getMonth() + 1, 0)); }
+  else { b = addDays(t, off * 30); a = addDays(b, -29); }
+  const f = s => parseYmd(s).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  label = k === 'month' ? parseYmd(a).toLocaleDateString(undefined, { month: 'long', year: 'numeric' }) : `${f(a)} – ${f(b)}`;
+  return { a, b, label, from: tMid(a), to: tMid(addDays(b, 1)) };
+}
+function ttGroup(ents, by) {
+  const m = new Map(), add = (key, label, color, mins, amt, extra) => { const g = m.get(key) || { key, label, color, mins: 0, amt: 0, extra }; g.mins += mins; g.amt += amt; m.set(key, g); };
+  for (const e of ents) {
+    const mins = eMins(e), c = eClient(e), amt = c && c.rate ? mins / 60 * c.rate : 0;
+    if (by === 'project') { const b = eBoard(e); add(b || '-', b ? boardName(b) : 'No project', (b && ST.boards[b].color) || ttColorOf(b), mins, amt, { board: b }); }
+    else if (by === 'client') add(c ? c.id : '-', c ? c.name || 'Client' : 'No client', c ? c.color : '#9aa0a6', mins, amt);
+    else if (by === 'task') { const f = e.taskId && findTask(e.taskId); add(e.taskId || '-', e.taskId ? (f ? f.item.text || 'Untitled task' : e.label || 'Deleted task') : 'No task', ttColorOf(e.taskId), mins, amt, { task: f ? e.taskId : null }); }
+    else { const f = e.taskId && findTask(e.taskId), tags = f ? (f.item.tags || []).map(tagById).filter(Boolean) : []; if (!tags.length) add('-', 'Untagged', '#9aa0a6', mins, amt); for (const l of tags) add(l.id, l.name, l.color, mins, amt); }
+  }
+  return [...m.values()].sort((x, y) => y.mins - x.mins);
+}
+function ttCsv(ents, r) {
+  const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; const rows = [['Date', 'Start', 'End', 'Minutes', 'Hours', 'Source', 'Project', 'Client', 'Task', 'Note', 'Rate', 'Amount']];
+  for (const e of ents) { const b = eBoard(e), c = eClient(e), mins = Math.round(eMins(e) * 10) / 10; rows.push([ymd(new Date(e.start)), tClock(e.start), tClock(e.end), mins, Math.round(mins / 6) / 10, e.src, b ? boardName(b) : '', c ? c.name : '', e.taskId ? eLabel(e) : '', e.note || '', c && c.rate ? c.rate : '', c && c.rate ? Math.round(mins / 60 * c.rate * 100) / 100 : '']); }
+  return rows.map(r2 => r2.map(q).join(',')).join('\r\n');
+}
+function ttReports(body) {
+  const t = TT(), r = ttRange(), ents = ttAll(r.from, r.to), by = S.trBy || 'project', k = S.trRange || 'week';
+  const total = ents.reduce((s, e) => s + eMins(e), 0), billable = ents.reduce((s, e) => { const c = eClient(e); return s + (c && c.rate ? eMins(e) / 60 * c.rate : 0); }, 0);
+  const days = []; for (let d = r.a; d <= r.b; d = addDays(d, 1)) days.push(d); const dmin = {}; for (const e of ents) { const d = ymd(new Date(e.start)); dmin[d] = (dmin[d] || 0) + eMins(e); }
+  const head = h('div', { class: 'ft-day' }, h('button', { class: 'ib', 'aria-label': 'Previous', html: ICON.back, onclick: () => { S.trOff = (S.trOff || 0) - 1; renderFocusView(); } }),
+    h('b', { class: 'ft-rl' }, r.label), h('button', { class: 'ib ft-fwd', 'aria-label': 'Next', html: ICON.back, onclick: () => { S.trOff = (S.trOff || 0) + 1; renderFocusView(); } }),
+    seg([['week', 'Week'], ['month', 'Month'], ['30d', '30 days']], k, v => { S.trRange = v; S.trOff = 0; renderFocusView(); }), h('span', { class: 'ft-sp' }),
+    h('button', { class: 'btn', onclick: () => { if (!ents.length) return toast('Nothing to export in this range'); download(new Blob([ttCsv(ents, r)], { type: 'text/csv' }), `corkboard-time-${r.a}_${r.b}.csv`); } }, 'Export CSV'));
+  body.append(head);
+  const tile = (n, l, s) => h('div', { class: 'ft-tile' }, h('b', null, n), h('i', null, l), s ? h('small', null, s) : null);
+  const workdays = Object.keys(dmin).length;
+  body.append(h('div', { class: 'ft-tiles' }, tile(fmtHM(total), 'Tracked', `${ents.length} entr${ents.length === 1 ? 'y' : 'ies'}`), tile(workdays ? fmtHM(total / workdays) : '—', 'Per active day', `${workdays} day${workdays === 1 ? '' : 's'}`), tile(billable ? fmtMoney(billable) : '—', 'Billable', billable ? 'clients with a rate' : 'set a client rate below'), tile(String(new Set(ents.map(eBoard).filter(Boolean)).size), 'Projects', 'boards with time')));
+  const mx = Math.max(60, ...days.map(d => dmin[d] || 0));
+  body.append(h('div', { class: 'ft-panel' }, h('div', { class: 'vp-title' }, 'Per day'), h('div', { class: 'ft-bars' + (days.length > 8 ? ' dense' : '') }, days.map(d => h('div', { class: 'ft-bar', title: `${parseYmd(d).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}: ${fmtHM(dmin[d] || 0)}` }, h('span', { class: 'ft-bv' }, dmin[d] ? fmtHM(dmin[d]) : ''), h('div', { class: 'ft-bf' + (d === todayStr() ? ' today' : ''), style: { height: Math.max(dmin[d] ? 3 : 0, (dmin[d] || 0) / mx * 100) + '%' } }), h('span', { class: 'ft-bl' }, days.length > 8 ? parseYmd(d).getDate() : parseYmd(d).toLocaleDateString(undefined, { weekday: 'short' })))))));
+  const gs = ttGroup(ents, by), gmax = Math.max(1, ...gs.map(g => g.mins));
+  const tbl = h('div', { class: 'ft-gt' });
+  if (!gs.length) tbl.append(h('div', { class: 'tv-empty' }, 'No time tracked in this range.'));
+  for (const g of gs) {
+    const row = h('div', { class: 'ft-gr' }, h('span', { class: 'ft-gn' }, h('i', { style: { background: g.color } }), g.extra && g.extra.task ? h('button', { class: 'ft-link', onclick: () => openTask(g.extra.task) }, g.label) : g.label),
+      h('span', { class: 'ft-gb' }, h('span', { style: { width: g.mins / gmax * 100 + '%', background: g.color } })), h('span', { class: 'ft-gm' }, fmtHM(g.mins), h('small', null, Math.round(g.mins / Math.max(1, total) * 100) + '%')), h('span', { class: 'ft-ga' }, g.amt ? fmtMoney(g.amt) : ''));
+    if (by === 'project' && g.extra && g.extra.board) { const cs = ttClientSel(t.boardClient[g.extra.board] || '', v => { if (v) t.boardClient[g.extra.board] = v; else delete t.boardClient[g.extra.board]; save(); renderFocusView(); }, 'Client…'); cs.classList.add('ft-cs'); row.append(cs); }
+    tbl.append(row);
+  }
+  body.append(h('div', { class: 'ft-panel' }, h('div', { class: 'ft-ph' }, h('div', { class: 'vp-title' }, 'Time by'), seg([['project', 'Project'], ['client', 'Client'], ['task', 'Task'], ['tag', 'Tag']], by, v => { S.trBy = v; renderFocusView(); })), tbl));
+  /* planned vs actual */
+  const all = {}; for (const e of ttAll(0, Infinity)) if (e.taskId) all[e.taskId] = (all[e.taskId] || 0) + eMins(e);
+  const inr = {}; for (const e of ents) if (e.taskId) inr[e.taskId] = (inr[e.taskId] || 0) + eMins(e);
+  const pv = Object.keys(inr).map(id => ({ id, f: findTask(id), tr: inr[id], al: all[id] || 0 })).filter(x => x.f).sort((x, y) => y.tr - x.tr);
+  const ss = FT().sessions.filter(s => s.date >= r.a && s.date <= r.b && s.actual >= 1), pl = ss.reduce((s, x) => s + x.planned, 0), ac = ss.reduce((s, x) => s + x.actual, 0);
+  const pt = h('div', { class: 'ft-gt ft-pv' }, h('div', { class: 'ft-gr ft-gh' }, h('span', null, 'Task'), h('span', null, 'Estimate'), h('span', null, 'Tracked (range)'), h('span', null, 'Tracked (all time)'), h('span', null, 'vs estimate')));
+  for (const x of pv) { const est = x.f.item.est || 0, d = est ? x.al - est : null; pt.append(h('div', { class: 'ft-gr' }, h('span', { class: 'ft-gn' }, h('button', { class: 'ft-link', onclick: () => openTask(x.id) }, x.f.item.text || 'Untitled task')), h('span', null, est ? fmtHM(est) : '—'), h('span', null, fmtHM(x.tr)), h('span', null, fmtHM(x.al)), h('span', { class: d > 0 ? 'over' : d != null ? 'under' : '' }, d == null ? '—' : d > 0 ? `+${fmtHM(d)} over` : `${fmtHM(-d)} left`))); }
+  if (!pv.length) pt.append(h('div', { class: 'tv-empty' }, 'No task time in this range. Set an estimate in a task’s details to compare.'));
+  body.append(h('div', { class: 'ft-panel' }, h('div', { class: 'vp-title' }, 'Planned vs actual'), h('div', { class: 'vp-sub' }, ss.length ? `Focus sessions in range: ${fmtHM(pl)} planned, ${fmtHM(ac)} actual (${ss.length})` : 'No focus sessions in this range'), pt));
+  /* clients */
+  const cl = h('div', { class: 'ft-clients' });
+  for (const c of t.clients) {
+    const nm = h('input', { class: 'tm-input', value: c.name || '', placeholder: 'Client name' }); nm.onchange = () => { c.name = nm.value.trim(); save(); renderFocusView(); };
+    const col = h('input', { type: 'color', class: 'ft-col', value: c.color || '#f26a1b' }); col.onchange = () => { c.color = col.value; save(); renderFocusView(); };
+    const rate = h('input', { class: 'tm-input ft-rate', type: 'number', min: 0, step: '0.5', placeholder: '$/h', value: c.rate || '' }); rate.onchange = () => { c.rate = +rate.value > 0 ? +rate.value : 0; save(); renderFocusView(); };
+    const del = h('button', { class: 'mini danger' }, 'Delete'); del.onclick = () => { if (!del.dataset.a) { del.dataset.a = '1'; del.textContent = 'Sure?'; return; } t.clients = t.clients.filter(x => x !== c); for (const e of t.entries) if (e.clientId === c.id) e.clientId = null; for (const b of Object.keys(t.boardClient)) if (t.boardClient[b] === c.id) delete t.boardClient[b]; save(); renderFocusView(); };
+    cl.append(h('div', { class: 'ft-cr' }, col, nm, rate, del));
+  }
+  const add = h('button', { class: 'btn', onclick: () => { t.clients.push({ id: uid(), name: 'New client', color: TT_COLORS[t.clients.length % TT_COLORS.length], rate: 0 }); save(); renderFocusView(); } }, '+ Add client');
+  const au = h('label', { class: 'ft-opt' }, h('input', { type: 'checkbox', checked: t.auto ? true : null, onchange: ev => { t.auto = ev.target.checked; if (!t.auto) trClose(); save(); } }), 'Track time automatically while I work in tasks, pages and boards');
+  const idl = h('label', { class: 'ft-opt' }, 'Idle after', (() => { const s = h('select', { class: 'tm-input ft-gs' }, [1, 2, 3, 5, 10].map(v => h('option', { value: v }, v + ' min'))); s.value = String(t.idleMin); s.onchange = () => { t.idleMin = +s.value; save(); }; return s; })());
+  body.append(h('div', { class: 'ft-panel' }, h('div', { class: 'vp-title' }, 'Clients & settings'), h('div', { class: 'vp-sub' }, 'A board can be mapped to a client in the Project table above. Rates drive the Billable total.'), cl, add, au, idl));
+}
+
+/* ---- task details: estimate + track ---- */
+function ttTaskInfo() {
+  const box = $('.tm-wrap .tt-task'); if (!box || !TR.openTask) return; const tid = TR.openTask, run = ttRunning();
+  const tr = box.querySelector('.tt-trk'), bt = box.querySelector('.tt-trbtn'); if (tr) tr.textContent = `Tracked: ${fmtHM(ttTracked(tid))}`;
+  if (bt) { const mine = run && run.taskId === tid; bt.textContent = mine ? '■ Stop timer' : '▶ Track time'; bt.onclick = () => mine ? ttStop() : ttStart({ taskId: tid }); }
+}
+{
+  const o = openTask; openTask = function (tid, opts) {
+    const r = o.apply(this, arguments);
+    try {
+      TR.openTask = tid; const f = findTask(tid), g = [...document.querySelectorAll('.tm-wrap .tm-grid')].pop();
+      if (f && g && !g.querySelector('.tt-task')) {
+        const est = h('input', { class: 'tm-input tt-est', type: 'number', min: 0, step: '5', placeholder: 'min', value: f.item.est || '' });
+        est.onchange = () => { const c = findTask(tid); if (!c) return; c.item.est = +est.value > 0 ? Math.round(+est.value) : null; save(); };
+        g.append(h('div', { class: 'tm-label' }, 'Time'), h('div', { class: 'tm-row tt-task' }, h('span', { class: 'tt-estl' }, 'Estimate'), est, h('span', { class: 'tt-trk' }), h('button', { class: 'mini tt-trbtn' })));
+        ttTaskInfo();
+      }
+    } catch (e) { console.warn('time', e); }
+    return r;
+  };
+}
+{ const oi2 = init; init = async function () { const r = await oi2.apply(this, arguments); try { ttChip(); } catch (e) { console.warn('chip', e); } return r; }; }
 
 init();
 </script>
