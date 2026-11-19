@@ -3201,40 +3201,55 @@ body.rd-active,body.rd-active *{user-select:none!important;-webkit-user-select:n
 #gbox .gb-h{position:absolute;pointer-events:auto;width:calc(14px*var(--hz,1));height:calc(14px*var(--hz,1));margin:calc(-7px*var(--hz,1)) 0 0 calc(-7px*var(--hz,1));background:var(--bg,#fff);border:calc(2px*var(--hz,1)) solid var(--sel,#4f8cff);border-radius:calc(4px*var(--hz,1));box-sizing:border-box}
 #gbox .gb-h[data-g=nw]{left:0;top:0;cursor:nwse-resize}#gbox .gb-h[data-g=ne]{left:100%;top:0;cursor:nesw-resize}
 #gbox .gb-h[data-g=sw]{left:0;top:100%;cursor:nesw-resize}#gbox .gb-h[data-g=se]{left:100%;top:100%;cursor:nwse-resize}
-/* v5.5 AI chip */
-.card.t-aichip{padding:0;background:#080b10;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.45),0 0 0 1px #1d2530;overflow:visible;color:#d7dde5}
+/* v5.6 AI chip: clean card with a Siri-style inner glow while it works */
+@property --ac-a{syntax:'<angle>';initial-value:0deg;inherits:false}
+.card.t-aichip{padding:0;background:#0c1015;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.4),0 0 0 1px #232b36;overflow:visible;color:#d9dee6}
 .card.t-aichip.colored::after{display:none}
-.aichip{position:relative;height:100%;min-height:150px;padding:9px;box-sizing:border-box;--o:#ff8a3d;cursor:grab}
-.aichip .ac-pins{position:absolute;pointer-events:none;opacity:.75}
-.aichip .ac-pins.t,.aichip .ac-pins.b{left:22px;right:22px;height:5px;background:repeating-linear-gradient(90deg,#7b8490 0 6px,transparent 6px 15px)}
-.aichip .ac-pins.t{top:2px}.aichip .ac-pins.b{bottom:2px}
-.aichip .ac-pins.l,.aichip .ac-pins.r{top:22px;bottom:22px;width:5px;background:repeating-linear-gradient(180deg,#7b8490 0 6px,transparent 6px 15px)}
-.aichip .ac-pins.l{left:2px}.aichip .ac-pins.r{right:2px}
-.aichip .ac-die{position:relative;height:100%;border-radius:7px;background:radial-gradient(120% 90% at 50% 0,#141b24,#0a0e14);border:1px solid #2a3340;overflow:hidden}
-.aichip .ac-die::before{content:'';position:absolute;left:7px;top:7px;width:7px;height:7px;border-radius:50%;background:#2a3340;z-index:3}
-.aichip .ac-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.aichip .ac-svg path{fill:none;vector-effect:non-scaling-stroke;stroke-linejoin:round}
-.aichip .ac-svg .tr{stroke:#ff8a3d;stroke-opacity:.28;stroke-width:1.6}
-.aichip .ac-svg .fl{stroke:#ffb36b;stroke-width:2.4;stroke-linecap:round;stroke-dasharray:7 26;filter:drop-shadow(0 0 3px #ff8a3d);animation:acflow 2.4s linear infinite}
-.aichip.run .ac-svg .fl{animation-duration:.7s;stroke:#ffd9a8;stroke-dasharray:9 14}
-@keyframes acflow{to{stroke-dashoffset:-66}}
-.aichip .ac-screen{position:absolute;left:11.5%;right:11.5%;top:11.7%;bottom:11.7%;background:#0a0f15f2;border:1px solid #ff8a3d55;border-radius:5px;padding:9px 11px;overflow:auto;font-size:12.5px;line-height:1.5;box-shadow:0 0 14px #ff8a3d22,inset 0 0 18px #00000088;cursor:auto;user-select:text;z-index:2}
-.aichip.run .ac-screen{box-shadow:0 0 20px #ff8a3d66,inset 0 0 18px #00000088}
-.aichip .ac-res h3{font-size:13px;margin:8px 0 4px;color:#ffb36b}.aichip .ac-res h3:first-child{margin-top:0}
-.aichip .ac-res p{margin:0 0 6px}.aichip .ac-res ul{margin:0 0 6px;padding-left:18px}.aichip .ac-res a{color:#ffb36b}
+.aichip{position:relative;height:100%;min-height:150px;box-sizing:border-box;border-radius:16px;overflow:hidden;cursor:grab}
+.aichip .ac-glow{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity 1s ease;z-index:1}
+.aichip.run .ac-glow{opacity:1;transition:opacity .35s ease}
+.aichip .ac-glow i{position:absolute;inset:0;border-radius:inherit;background:conic-gradient(from var(--ac-a),#F97316,#fbbf24,#fff7ed,#fbbf24,#F97316,#fb923c,#F97316);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.aichip .ac-glow .g1{padding:2px;filter:blur(1.5px)}
+.aichip .ac-glow .g2{padding:14px;filter:blur(16px);opacity:.75}
+.aichip.run .ac-glow i{animation:acspin 3.2s linear infinite}
+.aichip.run .ac-glow .g2{animation:acspin 3.2s linear infinite,acpulse 1.8s ease-in-out infinite}
+@keyframes acspin{to{--ac-a:360deg}}
+@keyframes acpulse{0%,100%{opacity:.55}50%{opacity:.95}}
+.aichip .ac-screen{position:absolute;inset:0;padding:16px 18px 24px;overflow:auto;font-size:13px;line-height:1.55;user-select:text;cursor:auto;z-index:2}
+.aichip .ac-res{outline:none;min-height:100%;caret-color:#F97316}
+.aichip .ac-res:focus{box-shadow:none}
+.aichip .ac-res h1,.aichip .ac-res h2,.aichip .ac-res h3{margin:12px 0 5px;line-height:1.25;font-weight:700;color:#fff}
+.aichip .ac-res h1{font-size:18px}.aichip .ac-res h2{font-size:15.5px}.aichip .ac-res h3{font-size:13.5px;color:#fdba74}
+.aichip .ac-res>:first-child{margin-top:0}
+.aichip .ac-res p{margin:0 0 8px}.aichip .ac-res strong,.aichip .ac-res b{color:#fff}
+.aichip .ac-res ul,.aichip .ac-res ol{margin:0 0 8px;padding-left:20px}.aichip .ac-res li{margin:2px 0}
+.aichip .ac-res ul.cl{list-style:none;padding-left:2px}.aichip .ac-res ul.cl input{accent-color:#F97316;margin-right:6px;transform:translateY(1px);cursor:pointer}
+.aichip .ac-res code{background:#ffffff14;border-radius:4px;padding:0 4px;font-size:12px}
+.aichip .ac-res a{color:#fdba74;text-decoration:underline;text-decoration-color:#fdba7466;cursor:pointer}
+.aichip .ac-res a.ilink{text-decoration:none;background:#F9731622;border-radius:10px;padding:0 8px 0 4px}.aichip .ac-res a.ilink::before{content:"↗ ";opacity:.8;font-size:.85em}
+.aichip .ac-res table{width:100%;border-collapse:collapse;margin:4px 0 10px;font-size:12.5px}
+.aichip .ac-res th,.aichip .ac-res td{border:1px solid #2a3340;padding:5px 8px;text-align:left;vertical-align:top}.aichip .ac-res th{background:#ffffff0d;color:#fff;font-weight:600}
+.aichip .ac-res .ac-co{margin:6px 0 10px;padding:8px 11px;border-radius:8px;border-left:3px solid #8b95a3;background:#ffffff0a}
+.aichip .ac-res .ac-co b{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;color:#9aa4b2}
+.aichip .ac-res .ac-co.dec{border-color:#F97316;background:#F9731614}.aichip .ac-res .ac-co.dec b{color:#fb923c}
+.aichip .ac-res .ac-co.warn{border-color:#ef4444;background:#ef444414}.aichip .ac-res .ac-co.warn b{color:#f87171}
+.aichip .ac-res .ac-stats{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}
+.aichip .ac-res .ac-stat{flex:1 1 90px;padding:8px 11px;border-radius:10px;background:#ffffff0a;border:1px solid #2a3340}
+.aichip .ac-res .ac-stat b{display:block;font-size:22px;line-height:1.15;color:#F97316}.aichip .ac-res .ac-stat span{font-size:11.5px;color:#9aa4b2}
 .aichip .ac-msg{color:#8b95a3;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12.5px}.aichip .ac-msg.err{color:#ff8a7a}
-.aichip .ac-dots i{display:inline-block;width:5px;height:5px;margin-right:3px;border-radius:50%;background:#ff8a3d;animation:acdot 1s infinite}
+.aichip .ac-dots i{display:inline-block;width:5px;height:5px;margin-right:3px;border-radius:50%;background:#F97316;animation:acdot 1s infinite}
 .aichip .ac-dots i:nth-child(2){animation-delay:.15s}.aichip .ac-dots i:nth-child(3){animation-delay:.3s}
 @keyframes acdot{0%,100%{opacity:.25}50%{opacity:1}}
-.aichip .ac-tools{position:absolute;right:6px;top:4px;display:flex;gap:2px;z-index:4}
-.aichip .ac-b{width:22px;height:22px;display:grid;place-items:center;border-radius:6px;color:#8b95a3;background:none;opacity:.8}
-.aichip .ac-b:hover{color:#ffb36b;background:#ffffff12;opacity:1}.aichip .ac-b svg{width:14px;height:14px}
-.aichip .ac-stamp{position:absolute;left:20px;bottom:3px;font-size:10px;color:#ff8a3d99;z-index:4;pointer-events:none}
+.aichip .ac-tools{position:absolute;right:8px;top:6px;display:flex;gap:2px;z-index:4;opacity:.45;transition:opacity .15s}
+.aichip:hover .ac-tools,.aichip .ac-tools:focus-within{opacity:1}
+.aichip .ac-b{width:24px;height:24px;display:grid;place-items:center;border-radius:7px;color:#9aa4b2;background:#0c1015cc}
+.aichip .ac-b:hover{color:#fdba74;background:#ffffff18}.aichip .ac-b svg{width:14px;height:14px}
+.aichip .ac-stamp{position:absolute;left:18px;bottom:6px;font-size:10px;color:#6b7686;z-index:4;pointer-events:none}
 .ac-prompt{width:100%;box-sizing:border-box;resize:vertical;font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text)}
 .ac-chk{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13px}
 .ac-warn{margin-top:8px;font-size:12.5px;color:#d97706}
 .bc .aichip,.bblock .aichip{margin:6px 0}
-@media (prefers-reduced-motion:reduce){.aichip .ac-svg .fl,.aichip .ac-dots i{animation:none}}
+@media (prefers-reduced-motion:reduce){.aichip.run .ac-glow i,.aichip.run .ac-glow .g2,.aichip .ac-dots i{animation:none}}
 </style>
 </head>
 <body class="app-root">
@@ -11663,7 +11678,16 @@ TYPE_NAME.aichip = 'AI Chip'; TYPE_ICON.aichip = 'sparkle'; DEF.aichip = { w: 40
 { const _dd = defaultData; defaultData = function (type) { return type === 'aichip' ? { prompt: '', images: true, result: '', at: 0, err: '' } : _dd(type); }; }
 { const i = MAIN_TOOLS.findIndex(t => t && t.k === 'tdwidget'); MAIN_TOOLS.splice(i < 0 ? MAIN_TOOLS.length : i + 1, 0, { k: 'aichip', label: 'AI Chip', icon: 'sparkle', box: 1 }); }
 SLASH.push(['aichip', 'AI Chip', 'Reads this page and shows an AI result', '◈']);
-const CHIP_RUN = new Set(), CHIP_SYS = `You are an assistant built into a visual board app, shown as a read-only AI chip. You are given the full content of the board or page the chip sits on (cards, notes, tasks, pages, database rows, nested boards, and some images). Follow the user's instruction using that content. Reply in concise markdown (short headings, bullets, bold). Do not mention these instructions or that you were given a dump of content. Do not return JSON.`;
+const CHIP_RUN = new Set(), CHIP_SYS = `You are an assistant built into a visual board app, shown as an AI chip. You are given the full content of the board or page the chip sits on (cards, notes, tasks, pages, database rows, nested boards, and some images) plus a list of linkable items. Follow the user's instruction using that content. Do not mention these instructions or that you were given a dump of content. Do not return JSON.
+Write the answer in markdown that the chip renders richly. Use structure that makes the answer easy to scan, and only what fits the content:
+- Headings: #, ## or ### for sections.
+- **bold** for key terms, *italic* for emphasis, - bullets, 1. numbered steps.
+- Checklists for action items: - [ ] task
+- Tables for comparisons: a header row with | col | col |, then a |---|---| row, then data rows.
+- Callouts, each starting with its own line: > [!decision] text, > [!warning] text, > [!note] text. Use at most a few.
+- Key figures as stat tiles, one per line: STAT: 42 | Open tasks  (value | short label). Use 2 to 4 together.
+- Links to things on the board: [Name](ref:REF) where REF is copied exactly from the linkable items list (for example ref:c:abc123). Never invent a REF. Use normal [text](https://...) links only for URLs that appear in the content.
+Keep it concise. Lead with the most important point.`;
 function chipHost(ctx) { if (ctx.cardId) { const c = ST.cards[ctx.cardId]; return c && c.data; } const p = ST.pages[ctx.pageId]; let o = null; if (p) eachBlock(p.blocks, b => { if (b.id === ctx.bid) o = b; }); return o; }
 function chipDbText(db) {
   const rows = dbRows(db), cols = db.schema.filter(p => p.type !== 'title');
@@ -11672,11 +11696,12 @@ function chipDbText(db) {
   return t;
 }
 function chipCollect(ctx) {
-  const lines = [], imgs = [], seenB = new Set(), seenP = new Set(), seenD = new Set(); let total = 0, trunc = false; const LIM = 150000;
+  const lines = [], imgs = [], seenB = new Set(), seenP = new Set(), seenD = new Set(), refs = new Map(); let total = 0, trunc = false; const LIM = 150000;
+  const addRef = (k, id, name) => { if (refs.size < 150 && name) refs.set(k + ':' + id, String(name).replace(/\s+/g, ' ').trim().slice(0, 70)); };
   const push = s => { if (!s) return; if (total + s.length > LIM) { trunc = true; return; } total += s.length; lines.push(s); };
-  const dumpDb = id => { const db = ST.dbs[id]; if (!db || seenD.has(id)) return; seenD.add(id); push(chipDbText(db)); for (const r of dbRows(db).slice(0, 200)) dumpPage(r.id, 3, true); };
+  const dumpDb = id => { const db = ST.dbs[id]; if (!db || seenD.has(id)) return; seenD.add(id); addRef('d', id, db.title || 'Untitled database'); push(chipDbText(db)); for (const r of dbRows(db).slice(0, 200)) dumpPage(r.id, 3, true); };
   const dumpPage = (pid, depth, row) => {
-    const p = ST.pages[pid]; if (!p || p.trashed || seenP.has(pid)) return; seenP.add(pid);
+    const p = ST.pages[pid]; if (!p || p.trashed || seenP.has(pid)) return; seenP.add(pid); addRef('p', pid, p.title || 'Untitled');
     if (!row || (p.blocks && strip(pageText(p)).length > (p.title || '').length + 1)) push(`${row ? 'Row page' : 'Page'} "${p.title || 'Untitled'}":\n${pageText(p).slice(0, 12000)}`);
     eachBlock(p.blocks, b => {
       if (b.type === 'image' && b.blobId) imgs.push(b.blobId);
@@ -11689,13 +11714,13 @@ function chipCollect(ctx) {
     if (c.type === 'board') { const bd = ST.boards[c.data.boardId]; push(`Sub-board "${bd ? bd.title : ''}":`); if (depth < 4) dumpBoard(c.data.boardId, depth + 1); return; }
     if (c.type === 'page') { dumpPage(c.data.pageId, depth); return; }
     if (c.type === 'database') { dumpDb(c.data.dbId); return; }
-    if (c.type === 'column') { push(`Column "${c.data.title || 'Untitled'}":`); c.data.childIds.map(i => ST.cards[i]).forEach(k => dumpCard(k, depth)); return; }
-    if (c.type === 'image') { push(`Image "${c.data.name || 'image'}"${c.caption ? ': ' + c.caption : ''}`); if (c.data.blobId) imgs.push(c.data.blobId); return; }
-    push(aiCardText(c));
+    if (c.type === 'column') { addRef('c', c.id, c.data.title || 'Column'); push(`Column "${c.data.title || 'Untitled'}":`); c.data.childIds.map(i => ST.cards[i]).forEach(k => dumpCard(k, depth)); return; }
+    if (c.type === 'image') { addRef('c', c.id, c.data.name || 'Image'); push(`Image "${c.data.name || 'image'}"${c.caption ? ': ' + c.caption : ''}`); if (c.data.blobId) imgs.push(c.data.blobId); return; }
+    addRef('c', c.id, cardTitle(c)); push(aiCardText(c));
   };
-  const dumpBoard = (bid, depth) => { if (seenB.has(bid)) return; seenB.add(bid); const b = ST.boards[bid]; push(`## Board "${b ? b.title : ''}"`); for (const c of topLevel(bid)) dumpCard(c, depth); };
+  const dumpBoard = (bid, depth) => { if (seenB.has(bid)) return; seenB.add(bid); const b = ST.boards[bid]; addRef('b', bid, b && b.title); push(`## Board "${b ? b.title : ''}"`); for (const c of topLevel(bid)) dumpCard(c, depth); };
   if (ctx.cardId) { const me = ST.cards[ctx.cardId]; if (me) dumpBoard(me.boardId, 0); } else dumpPage(ctx.pageId, 0);
-  return { text: lines.join('\n\n'), imgs: [...new Set(imgs)], trunc };
+  return { text: lines.join('\n\n'), imgs: [...new Set(imgs)], trunc, refs };
 }
 async function chipImg(blobId) {
   const bl = Blobs.mem[blobId]; if (!bl || !/^image\//.test(bl.type)) return null;
@@ -11710,21 +11735,15 @@ async function chipRun(ctx, persist) {
     const key = aiGet(AI_KEY); if (!key) throw Object.assign(new Error('nokey'), { code: 'nokey' });
     const col = chipCollect(ctx), imgs = [];
     if (host.images !== false) for (const id of col.imgs.slice(0, 6)) { const im = await chipImg(id); if (im) imgs.push(im); }
-    const user = [...imgs, { type: 'text', text: `Today is ${todayStr()}.\n\nCONTENT OF THIS ${ctx.cardId ? 'BOARD' : 'PAGE'}:\n${col.text || '(empty)'}${col.trunc ? '\n\n[The content was truncated because it is very large.]' : ''}\n\nINSTRUCTION:\n${host.prompt.trim()}` }];
-    const j = await aiCall({ model: aiModel(), max_tokens: 2048, system: CHIP_SYS, messages: [{ role: 'user', content: user }] }, key);
+    const user = [...imgs, { type: 'text', text: `Today is ${todayStr()}.\n\nCONTENT OF THIS ${ctx.cardId ? 'BOARD' : 'PAGE'}:\n${col.text || '(empty)'}${col.trunc ? '\n\n[The content was truncated because it is very large.]' : ''}\n\nLINKABLE ITEMS (use as [Name](ref:REF)):\n${[...col.refs].map(([k, n]) => '- ' + k + ' — ' + n).join('\n') || '(none)'}\n\nINSTRUCTION:\n${host.prompt.trim()}` }];
+    const j = await aiCall({ model: aiModel(), max_tokens: 3072, system: CHIP_SYS, messages: [{ role: 'user', content: user }] }, key);
     const text = (j.content || []).filter(b => b.type === 'text').map(b => b.text).join('').trim();
     if (!text) throw new Error('The AI returned an empty reply. Try again.');
-    result = { text, trunc: col.trunc, imgN: imgs.length };
+    result = { text, trunc: col.trunc, imgN: imgs.length, refs: new Set(col.refs.keys()) };
   } catch (e) { err = e.code === 'nokey' ? 'nokey' : (e.message || 'Something went wrong.'); }
   const cur = chipHost(ctx) || host; CHIP_RUN.delete(host); CHIP_RUN.delete(cur);
-  if (result) { cur.result = result.text; cur.at = now(); cur.trunc = result.trunc; cur.imgN = result.imgN; cur.err = ''; } else cur.err = err;
+  if (result) { if (cur.result) cur.prev = { result: cur.result, html: cur.html || '', at: cur.at, edited: !!cur.edited }; cur.result = result.text; cur.html = chipClean(chipMd(result.text, result.refs)); cur.edited = false; cur.at = now(); cur.trunc = result.trunc; cur.imgN = result.imgN; cur.err = ''; } else cur.err = err;
   persist(); refreshChips();
-}
-const CHIP_PATHS = ['M0 70H22L34 82H46', 'M0 130H46', 'M0 190H22L34 178H46', 'M0 240H30L40 226H46', 'M400 70H378L366 82H354', 'M400 130H354', 'M400 190H378L366 178H354', 'M400 240H370L360 226H354', 'M110 0V14L120 24V35', 'M200 0V35', 'M290 0V14L280 24V35', 'M110 300V286L120 276V265', 'M200 300V265', 'M290 300V286L280 276V265'];
-function chipSvg() {
-  const ns = 'http://www.w3.org/2000/svg', s = document.createElementNS(ns, 'svg'); s.setAttribute('viewBox', '0 0 400 300'); s.setAttribute('preserveAspectRatio', 'none'); s.setAttribute('class', 'ac-svg');
-  CHIP_PATHS.forEach((d, i) => { for (const cl of ['tr', 'fl']) { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', d); p.setAttribute('class', cl); if (cl === 'fl') p.style.animationDelay = (-(i * 0.37) % 2).toFixed(2) + 's'; s.append(p); } });
-  return s;
 }
 function chipSettings(ctx, persist) {
   const host = chipHost(ctx); if (!host) return; let bg;
@@ -11740,9 +11759,89 @@ function chipSettings(ctx, persist) {
     h('div', { class: 'wse-btns', style: { marginTop: '12px' } }, h('button', { class: 'btn', onclick: close }, 'Cancel'), h('button', { class: 'btn', onclick: () => sv(false) }, 'Save'), h('button', { class: 'btn primary', onclick: () => sv(true) }, 'Save and run'))]);
   setTimeout(() => ta.focus(), 30);
 }
+const ce2 = x => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+function chipInline(src, allowed) {
+  let t = ce2(src);
+  t = t.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, tx, u) => {
+    if (u.startsWith('ref:')) { const r = u.slice(4); return allowed && allowed.has(r) ? `<a class="ilink" data-ref="${r}">${tx}</a>` : tx; }
+    return /^https?:\/\//i.test(u) ? `<a href="${u}" target="_blank" rel="noopener">${tx}</a>` : tx;
+  });
+  return t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/(^|[^*\w])\*([^*\s][^*]*?)\*(?!\*)/g, '$1<em>$2</em>').replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+function chipMd(md, allowed) {
+  const L = String(md || '').replace(/\r/g, '').split('\n'), inl = t => chipInline(t, allowed); let out = '', i = 0;
+  const special = l => /^(#{1,4}\s|[-*•]\s|\d+[.)]\s|>\s*\[!|STAT:|\|.*\|$)/i.test(l);
+  const cells = l => l.replace(/^\||\|$/g, '').split('|').map(c => c.trim());
+  while (i < L.length) {
+    const l = L[i].trim(); let m;
+    if (!l) { i++; continue; }
+    if ((m = l.match(/^(#{1,4})\s+(.*)/))) { const n = Math.min(3, m[1].length); out += `<h${n}>${inl(m[2])}</h${n}>`; i++; continue; }
+    if (/^\|.*\|$/.test(l) && i + 1 < L.length && /^\|?\s*:?-{2,}[-:|\s]*$/.test(L[i + 1].trim())) {
+      const head = cells(l); i += 2; let rows = '';
+      while (i < L.length && /^\|.*\|$/.test(L[i].trim())) { rows += '<tr>' + cells(L[i].trim()).map(c => `<td>${inl(c)}</td>`).join('') + '</tr>'; i++; }
+      out += `<table><thead><tr>${head.map(c => `<th>${inl(c)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>`; continue;
+    }
+    if ((m = l.match(/^>\s*\[!(decision|warning|note)\]\s*(.*)/i))) {
+      const k = m[1].toLowerCase(), body = [m[2]]; i++;
+      while (i < L.length && /^>\s?/.test(L[i].trim()) && !/^>\s*\[!/.test(L[i].trim())) { body.push(L[i].trim().replace(/^>\s?/, '')); i++; }
+      out += `<div class="ac-co ${k === 'decision' ? 'dec' : k === 'warning' ? 'warn' : 'note'}"><b>${k === 'decision' ? 'Decision' : k === 'warning' ? 'Watch out' : 'Note'}</b> ${inl(body.join(' ').trim())}</div>`; continue;
+    }
+    if (/^STAT:/i.test(l)) {
+      let st = '';
+      while (i < L.length && /^STAT:/i.test(L[i].trim())) { const [v, ...r] = L[i].trim().replace(/^STAT:\s*/i, '').split('|'); st += `<div class="ac-stat"><b>${ce2(v.trim())}</b><span>${inl(r.join('|').trim())}</span></div>`; i++; }
+      out += `<div class="ac-stats">${st}</div>`; continue;
+    }
+    if (/^[-*]\s+\[[ xX]\]\s+/.test(l)) {
+      let li = ''; while (i < L.length && (m = L[i].trim().match(/^[-*]\s+\[([ xX])\]\s+(.*)/))) { li += `<li><input type="checkbox"${m[1] !== ' ' ? ' checked' : ''}> ${inl(m[2])}</li>`; i++; }
+      out += `<ul class="cl">${li}</ul>`; continue;
+    }
+    if (/^[-*•]\s+/.test(l)) { let li = ''; while (i < L.length && (m = L[i].trim().match(/^[-*•]\s+(.*)/))) { li += `<li>${inl(m[1])}</li>`; i++; } out += `<ul>${li}</ul>`; continue; }
+    if (/^\d+[.)]\s+/.test(l)) { let li = ''; while (i < L.length && (m = L[i].trim().match(/^\d+[.)]\s+(.*)/))) { li += `<li>${inl(m[1])}</li>`; i++; } out += `<ol>${li}</ol>`; continue; }
+    const para = [l]; i++; while (i < L.length && L[i].trim() && !special(L[i].trim())) { para.push(L[i].trim()); i++; }
+    out += `<p>${inl(para.join(' '))}</p>`;
+  }
+  return out;
+}
+const CHIP_OK = new Set(['H1', 'H2', 'H3', 'H4', 'P', 'UL', 'OL', 'LI', 'STRONG', 'EM', 'B', 'I', 'CODE', 'A', 'TABLE', 'THEAD', 'TBODY', 'TR', 'TH', 'TD', 'DIV', 'SPAN', 'BR', 'INPUT']);
+const CHIP_CLS = new Set(['ac-co', 'dec', 'warn', 'note', 'ac-stats', 'ac-stat', 'cl', 'ilink']);
+function chipCleanNode(n) {
+  for (const c of [...n.childNodes]) {
+    if (c.nodeType === 3) continue; if (c.nodeType !== 1) { c.remove(); continue; }
+    chipCleanNode(c); const tag = c.tagName;
+    if (['SCRIPT', 'STYLE', 'IFRAME', 'OBJECT', 'EMBED', 'LINK', 'META', 'FORM', 'SVG', 'IMG', 'VIDEO', 'AUDIO'].includes(tag)) { c.remove(); continue; }
+    if (!CHIP_OK.has(tag)) { c.replaceWith(...c.childNodes); continue; }
+    if (tag === 'INPUT' && c.getAttribute('type') !== 'checkbox') { c.remove(); continue; }
+    for (const a of [...c.attributes]) {
+      const k = a.name, v = a.value;
+      if (k === 'class') { const cl = v.split(/\s+/).filter(x => CHIP_CLS.has(x)); if (cl.length) c.setAttribute('class', cl.join(' ')); else c.removeAttribute('class'); }
+      else if (k === 'href' && tag === 'A' && /^https?:\/\//i.test(v)) { c.setAttribute('target', '_blank'); c.setAttribute('rel', 'noopener'); }
+      else if (k === 'data-ref' && tag === 'A' && /^[bcpd]:[\w-]+$/.test(v)) { }
+      else if (tag === 'INPUT' && (k === 'type' || k === 'checked')) { }
+      else if ((k === 'target' || k === 'rel') && tag === 'A') { }
+      else c.removeAttribute(k);
+    }
+  }
+}
+function chipClean(html) { const t = document.createElement('template'); t.innerHTML = String(html || ''); chipCleanNode(t.content); return t.innerHTML; }
+function chipJump(ref) {
+  const [k, id] = String(ref).split(':');
+  if (k === 'p') { if (ST.pages[id] && pageIsLive(id)) openPage(id); else toast('That page no longer exists'); }
+  else if (k === 'd') { const loc = dbOwnerLoc(ST.dbs[id]); if (loc && dbIsLive(id)) openDbFull(loc); else toast('That database no longer exists'); }
+  else jumpRef(ref);
+}
+function chipConfirmReplace(ok) {
+  let bg; const close = () => bg.remove();
+  bg = modal([h('h3', null, 'Replace your edits?'), h('p', { class: 'muted' }, 'You edited this result. Running again replaces it. You can bring the previous version back with the restore button.'), h('div', { class: 'wse-btns' }, h('button', { class: 'btn', onclick: close }, 'Cancel'), h('button', { class: 'btn primary', onclick: () => { close(); ok(); } }, 'Replace'))]);
+}
+const CHIP_ICO = {
+  refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>',
+  undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>',
+  gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>'
+};
 function chipEl(ctx, persist, height) {
   const root = h('div', { class: 'aichip' }); if (height) root.style.height = height + 'px';
   const draw = () => {
+    const ae = document.activeElement; if (ae && root.contains(ae) && ae.isContentEditable) return;
     const host = chipHost(ctx) || {}, running = CHIP_RUN.has(host);
     root.classList.toggle('run', running); root.innerHTML = '';
     const screen = h('div', { class: 'ac-screen' });
@@ -11751,16 +11850,30 @@ function chipEl(ctx, persist, height) {
     else if (host.err) screen.append(h('div', { class: 'ac-msg err' }, host.err));
     else if (!(host.prompt || '').trim()) screen.append(h('div', { class: 'ac-msg' }, 'Open settings (⚙) to write a prompt.'));
     else if (!host.result) screen.append(h('div', { class: 'ac-msg' }, 'Press refresh to run.'));
-    if (!running && host.result && !host.err) screen.append(h('div', { class: 'ac-res', html: aiMd(host.result, { has: () => true }) }));
+    if (!running && host.result && !host.err) {
+      const res = h('div', { class: 'ac-res', contenteditable: 'true', spellcheck: 'false', 'aria-label': 'AI result, editable' });
+      res.innerHTML = chipClean(host.html != null && host.html !== '' ? host.html : chipMd(host.result, null));
+      let tm = null; const commit = () => { clearTimeout(tm); const hh = chipHost(ctx); if (!hh) return; const nh = chipClean(res.innerHTML); if (nh === hh.html) return; hh.html = nh; hh.edited = true; persist(); root._stamp && root._stamp(); };
+      res.addEventListener('input', () => { clearTimeout(tm); tm = setTimeout(commit, 500); });
+      res.addEventListener('blur', commit);
+      res.addEventListener('change', e => { if (e.target.matches && e.target.matches('input[type=checkbox]')) { e.target.toggleAttribute('checked', e.target.checked); commit(); } });
+      res.addEventListener('click', e => { const a = e.target.closest('a'); if (!a) return; e.preventDefault(); if (a.dataset.ref) chipJump(a.dataset.ref); else if (a.href) window.open(a.href, '_blank', 'noopener'); });
+      res.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Escape') res.blur(); });
+      res.addEventListener('paste', e => { e.preventDefault(); const t = (e.clipboardData || window.clipboardData).getData('text/plain'); document.execCommand('insertText', false, t); });
+      res.addEventListener('dragstart', e => e.preventDefault());
+      screen.append(res);
+    }
+    const run = () => { if (!(host.prompt || '').trim()) return chipSettings(ctx, persist); if (host.edited) chipConfirmReplace(() => chipRun(ctx, persist)); else chipRun(ctx, persist); };
+    const mk = (title, ico, fn) => { const b = h('button', { class: 'ac-b', title, html: ico, onclick: e => { e.stopPropagation(); fn(); } }); b.addEventListener('pointerdown', e => e.stopPropagation()); return b; };
     const tools = h('div', { class: 'ac-tools' },
-      h('button', { class: 'ac-b', title: 'Run again', html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>', onclick: e => { e.stopPropagation(); if (!(host.prompt || '').trim()) chipSettings(ctx, persist); else chipRun(ctx, persist); } }),
-      h('button', { class: 'ac-b', title: 'Settings', html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>', onclick: e => { e.stopPropagation(); chipSettings(ctx, persist); } }));
-    for (const b of tools.children) { b.addEventListener('pointerdown', e => e.stopPropagation()); }
-    const stamp = h('div', { class: 'ac-stamp' }, host.at && host.result && !host.err ? 'Updated ' + timeAgo(host.at) + (host.trunc ? ' · shortened' : '') : '');
-    const pins = ['t', 'b', 'l', 'r'].map(k => h('i', { class: 'ac-pins ' + k }));
-    root.append(...pins, h('div', { class: 'ac-die' }, chipSvg(), screen, tools, stamp));
+      host.prev ? mk('Restore the previous result', CHIP_ICO.undo, () => { const hh = chipHost(ctx); if (!hh || !hh.prev) return; const cur = { result: hh.result, html: hh.html || '', at: hh.at, edited: !!hh.edited }; Object.assign(hh, { result: hh.prev.result, html: hh.prev.html, at: hh.prev.at, edited: hh.prev.edited }); hh.prev = cur; persist(); refreshChips(); }) : null,
+      mk('Run again', CHIP_ICO.refresh, run), mk('Settings', CHIP_ICO.gear, () => chipSettings(ctx, persist)));
+    const stampTxt = x => x.at && x.result && !x.err ? 'Updated ' + timeAgo(x.at) + (x.edited ? ' · edited' : '') + (x.trunc ? ' · shortened' : '') : '';
+    const stamp = h('div', { class: 'ac-stamp' }, stampTxt(host)); root._stamp = () => { const hh = chipHost(ctx); if (hh) stamp.textContent = stampTxt(hh); };
+    root.append(h('div', { class: 'ac-glow' }, h('i', { class: 'g1' }), h('i', { class: 'g2' })), screen, tools, stamp);
     screen.addEventListener('wheel', e => { if (screen.scrollHeight > screen.clientHeight) e.stopPropagation(); }, { passive: true });
-    screen.addEventListener('pointerdown', e => { if (screen.scrollHeight > screen.clientHeight || e.target.closest('a,button')) e.stopPropagation(); });
+    screen.addEventListener('pointerdown', e => { if (e.target.closest('.ac-res') || screen.scrollHeight > screen.clientHeight || e.target.closest('a,button')) e.stopPropagation(); });
+    screen.addEventListener('dblclick', e => e.stopPropagation());
   };
   root._draw = draw; draw(); return root;
 }
