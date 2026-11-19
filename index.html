@@ -3307,6 +3307,33 @@ body.rd-active,body.rd-active *{user-select:none!important;-webkit-user-select:n
 .dbpop .dbp-row{position:relative;padding-left:20px;cursor:grab}
 .dbpop .dbp-row::before{content:'⋮⋮';position:absolute;left:5px;top:50%;transform:translateY(-50%);color:var(--muted);letter-spacing:-2px;font-size:12px}
 .dbpop .dbp-row.dragging{opacity:.4}
+/* ===== v6.0 navigation bar under the tabs ===== */
+:root{--navtop:77px}
+#topbar.navbar{height:40px;border-top:0;border-bottom:1px solid var(--line);font-size:13px;padding:0 10px;gap:10px;order:0;box-sizing:border-box;padding-bottom:0;align-items:center}
+#topbar.navbar .ib{width:30px;height:30px}
+#topbar.navbar .crumbs{flex:1;min-width:0;font-size:13.5px;gap:1px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+#topbar.navbar .crumbs::-webkit-scrollbar{display:none}
+#topbar.navbar .crumb{padding:5px 9px;gap:7px;border-radius:7px;flex:none;color:var(--bar-text)}
+#topbar.navbar .crumb .ci{width:18px;height:18px;font-size:15px!important;display:inline-flex;align-items:center;justify-content:center;flex:none}
+#topbar.navbar .crumb.cur{cursor:default;font-weight:700;color:var(--text)}
+#topbar.navbar .crumb.cur:hover{background:none}
+#topbar.navbar .crumb.cs-more{font-weight:700;letter-spacing:1px}
+.crumb-sep.cs-btn{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:26px;border-radius:6px;color:var(--muted);flex:none;font-size:13px;padding:0 4px;background:none;border:0;cursor:pointer}
+.crumb-sep.cs-btn .cs-d{display:none;font-size:11px}
+.crumb-sep.cs-btn:hover,.crumb-sep.cs-btn:focus-visible{background:var(--hover);color:var(--text)}
+.crumb-sep.cs-btn:hover .cs-s,.crumb-sep.cs-btn:focus-visible .cs-s{display:none}
+.crumb-sep.cs-btn:hover .cs-d,.crumb-sep.cs-btn:focus-visible .cs-d,.crumb-sep.cs-btn .cs-d.show{display:inline}
+.cm-row{display:inline-flex;align-items:center;gap:8px}
+.cm-row .ci{width:18px;height:18px;font-size:15px!important;display:inline-flex;align-items:center;justify-content:center;flex:none;background:none!important}
+.bar-actions{display:flex;align-items:center;gap:2px;flex:none;padding-right:8px;margin-right:2px;border-right:1px solid var(--line)}
+#barStar.on{color:#f5b301}
+#topbar.navbar #unsortedBadge,#topbar.navbar #markBadge{height:28px;padding:0 11px;font-size:13px;border-radius:8px}
+#topbar.navbar .ab-stat{font-size:13px}
+.tasksview,.dashview,.pv-wrap,.dbfull{top:var(--navtop);bottom:0}
+@media (max-width:700px){#topbar.navbar{gap:2px;padding:0 4px;overflow:hidden}.bar-actions{padding-right:2px;margin-right:0;border-right:0}#topbar.navbar .ib{width:30px}#barSearch{display:none}
+#topbar.navbar .crumbs{flex:1 1 60px;min-width:60px}#topbar.navbar .crumb{padding:5px 6px}
+#topbar.navbar #unsortedBadge,#topbar.navbar #markBadge{font-size:0;padding:0 8px;gap:4px}#topbar.navbar #unsortedBadge b,#topbar.navbar #markBadge b{font-size:13px}#topbar.navbar #markBadge .mb-ic{font-size:13px}
+#topbar.navbar #unsortedBadge::after{content:'unsorted';font-size:11px;color:var(--muted)}}
 </style>
 </head>
 <body class="app-root">
@@ -3670,7 +3697,7 @@ function renderCrumbs() {
   const path = boardPath(S.boardId);
   path.forEach((b, i) => {
     if (i) c.append(h('span', { class: 'crumb-sep' }, '/'));
-    c.append(h('div', { class: 'crumb', onclick: () => openBoard(b.id) }, h('span', { class: 'ci', style: { background: b.color || '#5f8ff0' } }, b.icon || ''), h('span', null, b.title || 'Untitled')));
+    c.append(h('div', { class: 'crumb', onclick: () => openBoard(b.id) }, ciEl(b), h('span', null, b.title || 'Untitled')));
   });
 }
 function renderTitle() { const t = $('#boardTitle'); if (document.activeElement !== t) t.textContent = board().title || 'Untitled'; document.title = (board().title || 'Untitled') + ' — Corkboard'; }
@@ -13704,6 +13731,48 @@ function v59Table(tbl, ctx) {
 
 /* clicking anywhere outside a table clears the selected cell so typing never edits it by accident */
 document.addEventListener('pointerdown', e => { if (KB.row && !e.target.closest('.dbt,.pop,.menu,.fl-pop')) { KB.row = ''; kbPaint(); } }, true);
+
+/* ========== v6.0: navigation bar under the tabs ========== */
+(function barV60() {
+  const am = $('#appmain'), top = $('#topbar'), row = $('#tabrow'); if (!am || !top || !row || $('#barActions')) return;
+  row.after(top); top.classList.add('navbar');
+  const qa = h('div', { id: 'barActions', class: 'bar-actions' },
+    h('button', { class: 'ib', id: 'barStar', onclick: () => toggleFav('b:' + S.boardId) }),
+    h('button', { class: 'ib', title: 'Copy link to this board', 'aria-label': 'Copy link to this board', html: ICON.link, onclick: () => copyBoardLink() }),
+    h('button', { class: 'ib', id: 'barSearch', title: 'Search', 'aria-label': 'Search', html: ICON.search, onclick: () => $('#btnSearch').click() }));
+  top.insertBefore(qa, $('#sbPills') || null);
+  const setTop = () => { document.documentElement.style.setProperty('--navtop', Math.round(top.getBoundingClientRect().bottom) + 'px'); const cr = $('#crumbs'); if (cr) cr.scrollLeft = cr.scrollWidth; };
+  try { const ro = new ResizeObserver(setTop); ro.observe(top); ro.observe(row); } catch (_) { }
+  addEventListener('resize', setTop); setTimeout(setTop, 0);
+})();
+function barStarUpdate() {
+  const b = $('#barStar'); if (!b) return; const on = isFav('b:' + S.boardId);
+  b.innerHTML = on ? ICON.starfill : ICON.starline; b.classList.toggle('on', on); b.title = on ? 'Remove this board from favorites' : 'Add this board to favorites'; b.setAttribute('aria-label', b.title);
+}
+const ciEl = b => { const e = h('span', { class: 'ci' }, b.icon || ''); if (!b.icon && ICON.board) e.innerHTML = ICON.board; return e; };
+function crumbBoardMenu(btn, parentId, curId) {
+  const subs = subBoards(parentId); if (!subs.length) return toast('No sub-boards here');
+  showMenuAt(btn, subs.slice(0, 40).map(b => ({ label: h('span', { class: 'cm-row' }, ciEl(b), b.title || 'Untitled'), check: b.id === curId, fn: () => openBoard(b.id) })));
+}
+function crumbsV60() {
+  const c = $('#crumbs'); if (!c) return; c.innerHTML = '';
+  const path = boardPath(S.boardId), last = path.length - 1;
+  const crumb = (b, i) => i === last
+    ? h('div', { class: 'crumb cur', 'aria-current': 'page' }, ciEl(b), h('span', null, b.title || 'Untitled'))
+    : h('div', { class: 'crumb', title: 'Go to ' + (b.title || 'Untitled'), onclick: () => openBoard(b.id) }, ciEl(b), h('span', null, b.title || 'Untitled'));
+  const sep = i => h('button', { class: 'crumb-sep cs-btn', title: 'Boards inside ' + (path[i - 1].title || 'Untitled'), 'aria-label': 'Boards inside ' + (path[i - 1].title || 'Untitled'), onclick: e => { e.stopPropagation(); crumbBoardMenu(e.currentTarget, path[i - 1].id, path[i].id); } }, h('span', { class: 'cs-s' }, '/'), h('span', { class: 'cs-d' }, '▾'));
+  const collapse = path.length > 5, hidden = collapse ? path.slice(1, last - 2) : [];
+  path.forEach((b, i) => {
+    if (collapse && i > 0 && i < last - 2) { if (i === 1) { c.append(h('span', { class: 'crumb-sep' }, '/'), h('button', { class: 'crumb cs-more', title: 'Show hidden levels', onclick: e => showMenuAt(e.currentTarget, hidden.map(x => ({ label: h('span', { class: 'cm-row' }, ciEl(x), x.title || 'Untitled'), fn: () => openBoard(x.id) }))) }, '…')); } return; }
+    if (i) c.append(sep(i));
+    c.append(crumb(b, i));
+  });
+  if (subBoards(path[last].id).length) c.append(h('button', { class: 'crumb-sep cs-btn cs-end', title: 'Open a board inside this one', 'aria-label': 'Open a board inside this one', onclick: e => { e.stopPropagation(); crumbBoardMenu(e.currentTarget, path[last].id, null); } }, h('span', { class: 'cs-d show' }, '▾')));
+  c.scrollLeft = c.scrollWidth;
+}
+{ const _rc = renderCrumbs; renderCrumbs = function () { _rc.apply(this, arguments); try { crumbsV60(); barStarUpdate(); } catch (e) { console.warn(e); } }; }
+{ const _tf = toggleFav; toggleFav = function () { const r = _tf.apply(this, arguments); try { barStarUpdate(); } catch (_) { } return r; }; }
+try { crumbsV60(); barStarUpdate(); } catch (_) { }
 
 init();
 </script>
