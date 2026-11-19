@@ -3249,6 +3249,64 @@ body.rd-active,body.rd-active *{user-select:none!important;-webkit-user-select:n
 .ac-warn{margin-top:8px;font-size:12.5px;color:#d97706}
 .bc .aichip,.bblock .aichip{margin:6px 0}
 @media (prefers-reduced-motion:reduce){.aichip .ac-glow i,.aichip .ac-dots i{animation:none}}
+
+/* ===== v5.9 database UI ===== */
+.dbt td.has-sel,.dbt th.has-sel .dbt-h{padding-left:58px}
+.dbt-sel{position:absolute;left:11px;top:0;bottom:0;display:flex;align-items:center;gap:6px;opacity:0;transition:opacity .12s;z-index:1}
+.dbt tr:hover .dbt-sel,.dbv.has-rowsel .dbt-sel,.dbt tr.rsel .dbt-sel{opacity:1}
+@media (hover:none){.dbt-sel{opacity:1}}
+.dbt-grip{display:grid;grid-template-columns:repeat(2,3px);gap:2px;padding:5px 4px;cursor:grab;touch-action:none;border-radius:4px;color:var(--muted)}
+.dbt-grip i{width:3px;height:3px;border-radius:50%;background:currentColor;display:block}
+.dbt-grip:hover{background:var(--hover);color:var(--text)}
+.dbt-grip:active{cursor:grabbing}
+.rsck{cursor:pointer;flex:none}
+.rsck-all{position:absolute;left:33px;top:8px;cursor:pointer;opacity:.45;font-size:11px;line-height:1;font-weight:700}
+.dbt th:hover .rsck-all,.dbv.has-rowsel .rsck-all{opacity:1}
+.dbck.part{background:var(--sel);border-color:var(--sel)}
+.dbt tr.rsel td{background:color-mix(in srgb,var(--sel) 11%,transparent)}
+.dbt-c.kbsel{box-shadow:inset 0 0 0 2px var(--sel)}
+.kb-fill{position:absolute;right:0;bottom:0;width:9px;height:9px;background:var(--sel);cursor:crosshair;border:1.5px solid var(--card);z-index:3;touch-action:none}
+.kb-fillrow{background:color-mix(in srgb,var(--sel) 16%,transparent)!important;outline:1px dashed var(--sel);outline-offset:-1px}
+.dbt.frz thead th:first-child{left:0;z-index:4}
+.dbt.frz td.t-title{position:sticky;left:0;z-index:1;background:var(--card);box-shadow:1px 0 0 var(--line)}
+.dbt.frz tr.rsel td.t-title{background:color-mix(in srgb,var(--sel) 11%,var(--card))}
+.dbt th[data-col] .dbt-h{cursor:grab}
+.dbt th{user-select:none;-webkit-user-select:none}
+#rsbar{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:26000;display:flex;align-items:center;gap:2px;background:var(--bar);color:var(--bar-text);border:1px solid var(--line);box-shadow:0 10px 40px rgba(0,0,0,.28);border-radius:12px;padding:6px 8px;max-width:calc(100vw - 24px);overflow-x:auto}
+.rs-n{font-weight:600;font-size:13px;padding:0 10px 0 6px;white-space:nowrap}
+.rsb{padding:6px 10px;border-radius:8px;font-size:13px;white-space:nowrap;color:inherit}
+.rsb:hover{background:var(--hover)}
+.rsb.danger{color:#d64545}
+.rsb.x{color:var(--muted)}
+.rate{display:inline-flex;gap:1px;font-size:15px;line-height:1;vertical-align:middle}
+.rs{color:var(--line);cursor:pointer}
+.rs.on{color:#f5b301}
+.rs:hover{color:#f5b301}
+.pp-val-rate .rate{font-size:18px;padding:4px 0}
+.fl-cell{display:inline-flex;gap:4px;align-items:center}
+.fl-th{width:22px;height:22px;object-fit:cover;border-radius:4px}
+.fl-chip{font-size:12px;background:var(--hover);border-radius:4px;padding:1px 6px}
+.fl-more{font-size:11px;color:var(--muted)}
+.fl-pop{padding:8px;min-width:280px;max-width:360px}
+.fl-row{display:flex;align-items:center;gap:4px}
+.fl-open{display:flex;align-items:center;gap:8px;flex:1;min-width:0;text-align:left;padding:4px;border-radius:6px}
+.fl-open:hover{background:var(--hover)}
+.fl-open img{width:32px;height:32px;object-fit:cover;border-radius:4px}
+.fl-ic{font-size:20px;width:32px;text-align:center}
+.fl-n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fl-s{color:var(--muted);font-size:11px}
+.fl-x{width:24px;height:24px;border-radius:6px;color:var(--muted);font-size:16px}
+.fl-x:hover{background:var(--hover);color:var(--text)}
+.fl-up{margin-top:8px;width:100%}
+.splitl{border-top-right-radius:0;border-bottom-right-radius:0}
+.tplb{border-top-left-radius:0;border-bottom-left-radius:0;margin-left:-8px;padding:0 7px;border-left:1px solid rgba(255,255,255,.35)}
+.pv-rownav{display:inline-flex;align-items:center;gap:2px;margin-right:6px}
+.pv-rownav .ib{font-size:18px;line-height:1}
+.pv-rownav .ib[disabled]{opacity:.35;pointer-events:none}
+.pv-rn{font-size:12px;color:var(--muted);min-width:42px;text-align:center}
+.dbpop .dbp-row{position:relative;padding-left:20px;cursor:grab}
+.dbpop .dbp-row::before{content:'⋮⋮';position:absolute;left:5px;top:50%;transform:translateY(-50%);color:var(--muted);letter-spacing:-2px;font-size:12px}
+.dbpop .dbp-row.dragging{opacity:.4}
 </style>
 </head>
 <body class="app-root">
@@ -8762,7 +8820,7 @@ function rowDragInit(el, ctx) {
       const go = clr => { checkpoint(); rdApply(row, t, clr); save(); refreshDb(); };
       if (sorted) rdConfirmSort(() => go(true)); else go(false);
     };
-    if (touch) timer = setTimeout(() => { if (RD.pending) begin(); }, 320);
+    if (touch) timer = setTimeout(() => { if (RD.pending) begin(); }, e.target.closest && e.target.closest('.dbt-grip') ? 0 : 320);
     addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', cancel);
   });
 }
@@ -13230,6 +13288,423 @@ async function init() {
   if (!DB.ok) toast('Browser storage is unavailable here — use Settings → Export backup to keep your work', 6000);
   try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch { }
 }
+/* ========== v5.9: database UI — row grip/checkbox/bulk actions, header drag, keyboard, paste, fill, files, rating, templates ========== */
+{ const a = PROP_TYPES.find(x => x[0] === 'created'), b = PROP_TYPES.find(x => x[0] === 'edited'); if (a) a[1] = 'Date created'; if (b) b[1] = 'Last modified'; }
+DB_TYPES.push(['files', 'Files & media', '📎']);
+EXT_TYPES.add('files');
+const DB_LOCKED = new Set(['title', 'formula', 'rollup', 'relation', 'created', 'edited', 'approval', 'timer', 'blocked', 'files']);
+const isStars = pr => !!pr && pr.type === 'number' && pr.fmt === 'stars';
+const rowFiles = (row, pr) => (row.values && Array.isArray(row.values[pr.id]) ? row.values[pr.id] : []).filter(f => f && f.blobId);
+const isImgFile = f => /^image\//.test(f.mime || '');
+{
+  const _f = fmtNum; fmtNum = function (pr, v) { if (pr && pr.fmt === 'stars') { if (v === '' || v == null || isNaN(+v)) return ''; const n = Math.max(0, Math.min(5, Math.round(+v))); return '★'.repeat(n) + '☆'.repeat(5 - n); } return _f.apply(this, arguments); };
+  const _pt = propText; propText = function (pr, v) { if (pr.type === 'files') return (Array.isArray(v) ? v : []).map(f => f.name).filter(Boolean).join(', '); return _pt.apply(this, arguments); };
+  const _rv = rawVal; rawVal = function (db, row, pr) { if (pr.type === 'files') return rowFiles(row, pr).map(f => f.name); return _rv.apply(this, arguments); };
+  const _ct = cellText; cellText = function (db, row, pr) { if ((pr.type === 'created' || pr.type === 'edited') && pr.rel) return timeAgo(pr.type === 'created' ? row.createdAt : row.updatedAt); return _ct.apply(this, arguments); };
+  const _bi = blobIdsOfPage; blobIdsOfPage = function (p) { const out = _bi.apply(this, arguments); for (const v of Object.values(p.values || {})) if (Array.isArray(v)) for (const f of v) if (f && f.blobId) out.push(f.blobId); return out; };
+}
+/* ---- star rating + files cells ---- */
+function starsEl(pr, v, set) {
+  const n = Math.max(0, Math.min(5, Math.round(+v || 0))), w = h('span', { class: 'rate', title: 'Click a star to rate' });
+  for (let i = 1; i <= 5; i++) { const s = h('span', { class: 'rs' + (i <= n ? ' on' : ''), 'data-n': i }, '★'); s.addEventListener('click', e => { e.stopPropagation(); set(i === n ? 0 : i); }); w.append(s); }
+  return w;
+}
+function filesCell(row, pr) {
+  const fs = rowFiles(row, pr); if (!fs.length) return null;
+  return h('span', { class: 'fl-cell' }, fs.slice(0, 3).map(f => isImgFile(f) && Blobs.url(f.blobId) ? h('img', { class: 'fl-th', src: Blobs.url(f.blobId), alt: '', title: f.name }) : h('span', { class: 'fl-chip', title: f.name }, '📄 ' + (f.name.length > 18 ? f.name.slice(0, 18) + '…' : f.name))), fs.length > 3 ? h('span', { class: 'fl-more' }, '+' + (fs.length - 3)) : null);
+}
+function filesPop(anchor, row, pr, commit) {
+  closeTransient(); const box = h('div', { class: 'pop fl-pop' }); document.body.append(box);
+  const draw = () => {
+    box.innerHTML = ''; const fs = rowFiles(row, pr);
+    if (!fs.length) box.append(h('div', { class: 'dd-sub' }, 'No files yet.'));
+    for (const f of fs) {
+      const open = h('button', { class: 'fl-open', title: 'Open', onclick: () => { const b = Blobs.mem[f.blobId]; if (b && isImgFile(f)) window.open(Blobs.url(f.blobId), '_blank'); else if (b) download(b, f.name); } }, isImgFile(f) && Blobs.url(f.blobId) ? h('img', { src: Blobs.url(f.blobId), alt: '' }) : h('span', { class: 'fl-ic' }, '📄'), h('span', { class: 'fl-n' }, f.name), h('span', { class: 'fl-s' }, fmtSize(f.size)));
+      box.append(h('div', { class: 'fl-row' }, open, h('button', { class: 'fl-x', title: 'Remove', onclick: () => { commit(() => { row.values[pr.id] = rowFiles(row, pr).filter(x => x.id !== f.id); }); draw(); } }, '×')));
+    }
+    box.append(h('button', { class: 'btn primary fl-up', onclick: () => pickFiles('', async files => { const add = []; for (const f of files) add.push({ id: uid(), blobId: await Blobs.put(f), name: f.name || 'file', size: f.size || 0, mime: f.type || '' }); commit(() => { row.values[pr.id] = [...rowFiles(row, pr), ...add]; }); draw(); }) }, 'Upload files…'));
+    const r = anchor.getBoundingClientRect(); placeEl(box, r.left, r.bottom + 4);
+  };
+  draw();
+}
+{
+  const _ce = cellEl; cellEl = function (db, row, pr) {
+    if (pr.type === 'files') return filesCell(row, pr);
+    if (isStars(pr)) return starsEl(pr, row.values[pr.id], n => commitDb(db, () => { if (n) row.values[pr.id] = n; else delete row.values[pr.id]; }, row));
+    return _ce.apply(this, arguments);
+  };
+  const _ec = editCell; editCell = function (td, ctx, row, pr) {
+    if (td && td.dataset && ctx && ctx.loc) kbSet(locKey(ctx.loc), row.id, pr.id, true, !!td.closest('.dbfull,.pv-wrap'));
+    if (pr.type === 'files') return filesPop(td, row, pr, fn => commitDb(ctx.db, fn, row));
+    if (isStars(pr)) return commitDb(ctx.db, () => { const n = ((+row.values[pr.id] || 0) + 1) % 6; if (n) row.values[pr.id] = n; else delete row.values[pr.id]; }, row);
+    return _ec.apply(this, arguments);
+  };
+  const _pe = propEditor; propEditor = function (page, pr, commit) {
+    if (pr.type === 'files') { const el = filesCell(page, pr), b = h('button', { class: 'pp-opts' }, el || h('span', { class: 'pp-empty' }, 'Empty')); b.onclick = () => filesPop(b, page, pr, commit); return b; }
+    if (isStars(pr)) return h('div', { class: 'pp-val-rate' }, starsEl(pr, page.values[pr.id], n => commit(() => { if (n) page.values[pr.id] = n; else delete page.values[pr.id]; })));
+    return _pe.apply(this, arguments);
+  };
+  const _gal = DB_VIEWS.gallery; DB_VIEWS.gallery = function (ctx) {
+    const wrap = _gal(ctx), fps = ctx.db.schema.filter(p => p.type === 'files');
+    if (fps.length) for (const cd of wrap.querySelectorAll('.dbg-card[data-row]')) {
+      const cov = cd.querySelector('.dbg-cover.none'), row = ST.pages[cd.dataset.row]; if (!cov || !row) continue;
+      for (const pr of fps) { const f = rowFiles(row, pr).find(x => isImgFile(x) && Blobs.url(x.blobId)); if (f) { Object.assign(cov.style, { backgroundImage: `url("${Blobs.url(f.blobId)}")`, backgroundSize: 'cover', backgroundPosition: 'center' }); cov.classList.remove('none'); cov.textContent = ''; break; } }
+    }
+    return wrap;
+  };
+}
+/* add-property menu: Rating, Priority, Files */
+{
+  const _a = dbAddProp; dbAddProp = function (anchor, db, ctx) {
+    const _s = showMenuAt, uniq = base => { let n = base, i = 2; while (db.schema.some(p => p.name === n) || (db.titleName || 'Name') === n) n = base + ' ' + i++; return n; };
+    showMenuAt = function (a, items) {
+      showMenuAt = _s;
+      const mk = (ic, label, fn) => ({ label: h('span', { class: 'pt-row' }, h('span', { class: 'pp-ic' }, ic), label), fn: () => commitDb(db, () => db.schema.push(fn())) });
+      items = [...items, '-',
+        mk('★', 'Rating', () => Object.assign(newProp('number', uniq('Rating')), { fmt: 'stars' })),
+        mk('⚑', 'Priority', () => { const p = newProp('select', uniq('Priority')); p.options = [['Low', 'green'], ['Medium', 'yellow'], ['High', 'orange'], ['Urgent', 'red']].map(([name, color]) => ({ id: uid(), name, color })); return p; }),
+        mk('📎', 'Files & media', () => newProp('files', uniq('Files')))];
+      return _s(a, items);
+    };
+    try { return _a.apply(this, arguments); } finally { showMenuAt = _s; }
+  };
+  const _dpm = dbPropMenu; dbPropMenu = function (anchor, db, pr, ctx) {
+    _dpm.apply(this, arguments); const p = $('.pop.pmenu'); if (!p) return;
+    const add = (label, fn) => { const d = h('div', { class: 'dd-item', onclick: () => { p.remove(); fn(); } }, label); const dz = p.querySelector('.dd-item.danger'); dz ? p.insertBefore(d, dz) : p.append(d); };
+    if (pr.type === 'created' || pr.type === 'edited') add((pr.rel ? '✓ ' : '') + 'Show as relative time (“2 days ago”)', () => commitDb(db, () => { pr.rel = !pr.rel; }));
+    if (pr.type === 'number') add((pr.fmt === 'stars' ? '✓ ' : '') + 'Format: star rating (0–5)', () => commitDb(db, () => { pr.fmt = pr.fmt === 'stars' ? 'plain' : 'stars'; }));
+  };
+}
+
+/* ---- row selection (checkbox) + bulk actions ---- */
+const RS = { key: '', ids: new Set(), last: '' };
+const rsClear = () => { RS.key = ''; RS.ids = new Set(); RS.last = ''; rsRefresh(); };
+const rsRows = () => [...RS.ids].map(id => ST.pages[id]).filter(p => p && !p.trashed);
+function rsDv() { return RS.key ? $$('.dbv').find(e => e._loc && locKey(e._loc) === RS.key && e._ctx) : null; }
+function rsRefresh() {
+  if (RS.ids.size) { RS.ids = new Set([...RS.ids].filter(id => ST.pages[id] && !ST.pages[id].trashed)); if (!RS.ids.size) RS.key = ''; }
+  for (const dv of $$('.dbv')) {
+    const mine = RS.key && dv._loc && locKey(dv._loc) === RS.key;
+    dv.classList.toggle('has-rowsel', !!(mine && RS.ids.size));
+    for (const tr of dv.querySelectorAll('tr[data-row]')) {
+      const on = !!(mine && RS.ids.has(tr.dataset.row)); tr.classList.toggle('rsel', on);
+      const ck = tr.querySelector('.rsck'); if (ck) { ck.classList.toggle('on', on); ck.innerHTML = on ? ICON.check : ''; }
+    }
+    const hc = dv.querySelector('.rsck-all'); if (hc) { const vis = [...dv.querySelectorAll('tbody tr[data-row]')].map(t => t.dataset.row), n = mine ? vis.filter(id => RS.ids.has(id)).length : 0; hc.classList.toggle('on', n > 0 && n === vis.length); hc.classList.toggle('part', n > 0 && n < vis.length); hc.innerHTML = n > 0 ? (n === vis.length ? ICON.check : '–') : ''; }
+  }
+  rsBar();
+}
+function rsToggle(dv, id, shift) {
+  const key = locKey(dv._loc); if (RS.key !== key) { RS.key = key; RS.ids = new Set(); RS.last = ''; }
+  const vis = [...dv.querySelectorAll('tbody tr[data-row]')].map(t => t.dataset.row);
+  if (shift && RS.last && vis.includes(RS.last)) { const a = vis.indexOf(RS.last), b = vis.indexOf(id); for (let i = Math.min(a, b); i <= Math.max(a, b); i++) RS.ids.add(vis[i]); }
+  else if (RS.ids.has(id)) RS.ids.delete(id); else RS.ids.add(id);
+  RS.last = id; if (!RS.ids.size) RS.key = ''; rsRefresh();
+}
+function rsAll(dv) {
+  const key = locKey(dv._loc), vis = [...dv.querySelectorAll('tbody tr[data-row]')].map(t => t.dataset.row);
+  if (RS.key === key && vis.length && vis.every(id => RS.ids.has(id))) { RS.key = ''; RS.ids = new Set(); } else { RS.key = key; RS.ids = new Set(vis); }
+  rsRefresh();
+}
+function rsBar() {
+  let bar = $('#rsbar'); const n = RS.ids.size;
+  if (!n) { if (bar) bar.remove(); return; }
+  if (!bar) { bar = h('div', { id: 'rsbar', 'data-nodrag': '1' }); document.body.append(bar); }
+  bar.innerHTML = '';
+  const b = (label, fn, cls) => { const x = h('button', { class: 'rsb ' + (cls || '') }, label); x.onclick = () => fn(x); return x; };
+  bar.append(...[h('span', { class: 'rs-n' }, n + ' selected'),
+    b('Move to board', x => rsMoveBoard(x)), b('Set property', x => rsSetProp(x)), b('Move to database', x => rsMoveDb(x)), b('Duplicate', rsDup),
+    n === 1 ? b('Save as template', x => rsTpl(x)) : null, b('Delete', rsDel, 'danger'), h('button', { class: 'rsb x', title: 'Clear selection (Esc)', onclick: rsClear }, '✕')].filter(Boolean));
+}
+function rsCtx() { const dv = rsDv(); return dv ? dv._ctx : null; }
+function rowsToBoard(rows, bid, pt) {
+  if (!rows.length) return; if ($('.dbfull')) closeDbFull();
+  checkpoint(); const cur = bid === S.boardId, cw = (DEF.page.w || 300), ch = 110, gap = 26; let x0, y0;
+  if (pt) { const w = toWorld(pt.x, pt.y); x0 = w.x - 60; y0 = w.y - 14; }
+  else if (cur) { const w = toWorld(innerWidth / 2, innerHeight / 2); x0 = w.x - cw / 2; y0 = w.y - ch; }
+  else { const cs = cardsOf(bid, true).filter(c => !c.trashed); x0 = 60; y0 = cs.length ? Math.max(...cs.map(c => c.y + (c.h || 120))) + 60 : 60; }
+  const cols = Math.min(3, rows.length), ids = [];
+  rows.forEach((row, i) => {
+    const odb = row.parent && row.parent.t === 'db' && ST.dbs[row.parent.id]; if (!odb) return;
+    const c = newCard('page', x0 + (i % cols) * (cw + gap), y0 + Math.floor(i / cols) * (ch + gap), { pageId: row.id });
+    if (!cur) { c.boardId = bid; c.z = maxZ(bid) + 1; }
+    row.parent = { t: 'card', id: c.id }; row.fromDb = odb.id; row.updatedAt = now(); odb.rows = odb.rows.filter(x => x !== row.id); odb.updatedAt = now(); snapCard(c); ids.push(c.id);
+  });
+  if (cur) S.sel = new Set(ids); RS.key = ''; RS.ids = new Set(); save(); renderBoard(); refreshDb(); rsRefresh();
+  toast(`${ids.length} row${ids.length === 1 ? '' : 's'} moved to ${cur ? 'this board' : '“' + ((ST.boards[bid] || {}).title || 'board') + '”'} as page cards`);
+}
+{ const _r2c = rowToCard; rowToCard = function (row, x, y) { if (RS.ids.has(row.id) && RS.ids.size > 1) return rowsToBoard(rsRows(), S.boardId, { x, y }); return _r2c.apply(this, arguments); }; }
+function rsMoveBoard(anchor) {
+  const bs = liveBoards().slice().sort((a, b) => (a.id === S.boardId ? -1 : b.id === S.boardId ? 1 : (a.title || '').localeCompare(b.title || '')));
+  showMenuAt(anchor, bs.map(b => ({ label: (b.id === S.boardId ? '● ' : '') + (b.title || 'Untitled board') + (b.id === S.boardId ? ' (this board)' : ''), fn: () => rowsToBoard(rsRows(), b.id) })));
+}
+function rsSetProp(anchor) {
+  const ctx = rsCtx(); if (!ctx) return; const db = ctx.db;
+  const props = db.schema.filter(p => !DB_LOCKED.has(p.type));
+  if (!props.length) return toast('No editable properties to set');
+  showMenuAt(anchor, props.map(pr => ({ label: h('span', { class: 'pt-row' }, h('span', { class: 'pp-ic' }, dbPropIcon(pr.type)), pr.name), fn: () => rsSetValue(anchor, db, pr) })));
+}
+function rsSetValue(anchor, db, pr) {
+  const rows = rsRows(), n = rows.length, done = () => toast(`Updated ${n} row${n === 1 ? '' : 's'}`);
+  const apply = fn => { commitDb(db, () => rows.forEach(r => { r.values = r.values || {}; fn(r); r.updatedAt = now(); })); done(); };
+  const clr = { label: 'Clear value', fn: () => apply(r => { delete r.values[pr.id]; }) };
+  if (pr.type === 'select' || pr.type === 'status') return showMenuAt(anchor, [...pr.options.map(o => ({ label: optPill(o), fn: () => apply(r => { r.values[pr.id] = o.id; }) })), '-', clr]);
+  if (pr.type === 'multi') return showMenuAt(anchor, [...pr.options.map(o => ({ label: h('span', null, 'Add ', optPill(o)), fn: () => apply(r => { const a = r.values[pr.id] || []; if (!a.includes(o.id)) r.values[pr.id] = [...a, o.id]; }) })), '-', clr]);
+  if (pr.type === 'checkbox') return showMenuAt(anchor, [{ label: 'Checked', fn: () => apply(r => { r.values[pr.id] = true; }) }, { label: 'Unchecked', fn: () => apply(r => { r.values[pr.id] = false; }) }]);
+  if (pr.type === 'person') return peoplePop(anchor, [], ids => apply(r => { r.values[pr.id] = ids; }));
+  if (isStars(pr)) return showMenuAt(anchor, [5, 4, 3, 2, 1].map(k => ({ label: '★'.repeat(k) + '☆'.repeat(5 - k), fn: () => apply(r => { r.values[pr.id] = k; }) })).concat(['-', clr]));
+  if (pr.type === 'date') {
+    closeTransient(); const inp = h('input', { type: 'date', class: 'tm-input' }), ok = () => { const v = inp.value; closeTransient(); if (v) apply(r => { r.values[pr.id] = { start: v }; }); };
+    const p = h('div', { class: 'pop' }, h('div', { class: 'dd-h' }, pr.name), inp, h('div', { class: 'row', style: { display: 'flex', gap: '6px', marginTop: '8px' } }, h('button', { class: 'btn primary', onclick: ok }, 'Apply'), h('button', { class: 'btn', onclick: () => { closeTransient(); apply(r => { delete r.values[pr.id]; }); } }, 'Clear')));
+    document.body.append(p); const r = anchor.getBoundingClientRect(); placeEl(p, r.left, Math.max(8, r.top - 120)); return;
+  }
+  askText(anchor, 'Set ' + pr.name + ' on ' + n + ' row' + (n === 1 ? '' : 's'), '', v => {
+    v = v.trim(); if (pr.type === 'number') { const x = v === '' ? '' : +v.replace(/[$,%\s]/g, ''); if (v !== '' && isNaN(x)) return toast('Enter a number'); return apply(r => { if (x === '') delete r.values[pr.id]; else r.values[pr.id] = x; }); }
+    apply(r => { if (v) r.values[pr.id] = v; else delete r.values[pr.id]; });
+  });
+}
+function rsDup() {
+  const ctx = rsCtx(); if (!ctx) return; const db = ctx.db, rows = rsRows(), n = rows.length;
+  commitDb(db, () => { for (const row of rows) { const id = clonePageTree(collectPageTree(row.id), row.id, { t: 'db', id: db.id }); db.rows.splice(db.rows.indexOf(row.id) + 1, 0, id); } });
+  toast(`Duplicated ${n} row${n === 1 ? '' : 's'}`);
+}
+function rsDel() {
+  const ctx = rsCtx(); if (!ctx) return; const db = ctx.db, rows = rsRows(), n = rows.length, ids = new Set(rows.map(r => r.id));
+  commitDb(db, () => { rows.forEach(r => { r.trashed = true; r.trashedAt = now(); }); db.rows = db.rows.filter(x => !ids.has(x)); });
+  RS.key = ''; RS.ids = new Set(); rsRefresh(); toast(`${n} row${n === 1 ? '' : 's'} moved to Trash`);
+}
+function rsMoveDb(anchor) {
+  const ctx = rsCtx(); if (!ctx) return; const db = ctx.db;
+  pickDb(anchor, t => {
+    const rows = rsRows(), n = rows.length; checkpoint();
+    for (const row of rows) { db.rows = db.rows.filter(x => x !== row.id); if (!t.rows.includes(row.id)) t.rows.push(row.id); adoptRow(row, t); row.updatedAt = now(); }
+    db.updatedAt = t.updatedAt = now(); RS.key = ''; RS.ids = new Set(); save(); refreshDb(); rsRefresh();
+    toast(`${n} row${n === 1 ? '' : 's'} moved to “${t.title || 'Untitled database'}”. Matching properties were carried over.`);
+  }, 'Move to which database?', db.id);
+}
+function rsTpl(anchor) { const ctx = rsCtx(), r = rsRows()[0]; if (ctx && r) saveRowTemplate(anchor, ctx.db, r); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && RS.ids.size && !isTypingTarget(e.target) && !$('.modal-bg,.pop,.menu,.pv-wrap')) { rsClear(); } });
+
+/* ---- row templates + quick add ---- */
+function saveRowTemplate(anchor, db, row) {
+  askText(anchor, 'Row template name', row.title || 'Template', v => { flushBlocks(); checkpoint(); (db.rowTpls = db.rowTpls || []).push({ id: uid(), name: v.trim() || row.title || 'Template', icon: row.icon || '', root: row.id, pages: collectPageTree(row.id) }); db.updatedAt = now(); save(); refreshDb(); toast('Saved row template'); });
+}
+function addRowFromTemplate(ctx, t) {
+  const { db, view } = ctx; let id;
+  commitDb(db, () => { id = clonePageTree(JSON.parse(JSON.stringify(t.pages)), t.root, { t: 'db', id: db.id }); db.rows.push(id); const r = ST.pages[id]; r.values = Object.assign({}, r.values, initFromFilters(db, view, r.values)); db.updatedAt = now(); });
+  openPage(id);
+}
+function tplMenu(anchor, ctx) {
+  const { db } = ctx, tpls = db.rowTpls || [], rows = dbRows(db).slice(0, 15);
+  showMenuAt(anchor, [
+    ...tpls.map(t => ({ label: (t.icon ? t.icon + ' ' : '') + t.name, fn: () => addRowFromTemplate(ctx, t) })),
+    tpls.length ? '-' : null,
+    { label: 'Empty row', fn: () => addRow(ctx) },
+    rows.length ? { label: 'Create template from a row…', sub: rows.map(r => ({ label: (r.icon ? r.icon + ' ' : '') + (r.title || 'Untitled'), fn: () => saveRowTemplate(anchor, db, r) })) } : null,
+    tpls.length ? { label: 'Delete a template…', sub: tpls.map(t => ({ label: t.name, danger: true, fn: () => commitDb(db, () => { db.rowTpls = db.rowTpls.filter(x => x.id !== t.id); }) })) } : null].filter(Boolean));
+}
+{
+  const _db = dbBar; dbBar = function (ctx) {
+    const bar = _db.apply(this, arguments), nw = bar.querySelector('.dbv-btn.primary'); if (!nw) return bar;
+    const caret = h('button', { class: 'dbv-btn primary tplb', title: 'New from a template' }, '▾'); caret.onclick = e => { e.stopPropagation(); tplMenu(caret, ctx); };
+    nw.after(caret); nw.classList.add('splitl'); return bar;
+  };
+  const _rm = rowMenu; rowMenu = function (x, y, ctx, row) {
+    const _s = showMenu; showMenu = function (a, b, items) { showMenu = _s; if (row) items = [...items.slice(0, -2), { label: 'Save as row template…', fn: () => saveRowTemplate({ getBoundingClientRect: () => ({ left: a, bottom: b, top: b, right: a, width: 0, height: 0 }) }, ctx.db, row) }, ...items.slice(-2)]; return _s(a, b, items); };
+    try { return _rm.apply(this, arguments); } finally { showMenu = _s; }
+  };
+  const _mm = dbMoreMenu; dbMoreMenu = function (anchor, ctx) {
+    const _s = showMenuAt; showMenuAt = function (a, items) { showMenuAt = _s; const { loc, view } = ctx; if (view.type === 'table') items = [...items, '-', { label: (view.freeze ? '✓ ' : '') + 'Freeze title column', fn: () => commitView(loc, (p, v) => { v.freeze = !v.freeze; }) }]; return _s(a, items); };
+    try { return _mm.apply(this, arguments); } finally { showMenuAt = _s; }
+  };
+}
+
+/* ---- keyboard navigation, copy / paste, fill ---- */
+const KB = { key: '', row: '', prop: '', over: false };
+function kbSet(key, row, prop, quiet, over) { KB.key = key; KB.row = row; KB.prop = prop; if (over !== undefined) KB.over = !!over; if (!quiet) kbPaint(); }
+function kbDv() { if (!KB.key) return null; const all = $$('.dbv').filter(e => e._loc && locKey(e._loc) === KB.key && e._ctx); return all.find(e => !!e.closest('.dbfull,.pv-wrap') === KB.over) || all[0] || null; }
+function kbTd() { const dv = kbDv(); if (!dv || !KB.row) return null; return dv.querySelector(`tr[data-row="${KB.row}"] td[data-prop="${KB.prop}"]`); }
+function kbPaint() {
+  for (const x of $$('.dbt-c.kbsel')) { x.classList.remove('kbsel'); const f = x.querySelector('.kb-fill'); if (f) f.remove(); }
+  const td = kbTd(); if (!td) return; td.classList.add('kbsel');
+  const f = h('i', { class: 'kb-fill', title: 'Drag down to fill' }); f.addEventListener('pointerdown', fillStart); td.append(f);
+}
+function kbCols(dv) { const c = dv._ctx; return [dbProp(c.db, TITLE), ...viewCols(c.db, c.view)]; }
+function kbRowIds(dv) { return [...dv.querySelectorAll('tbody tr[data-row]')].map(t => t.dataset.row); }
+function cellCopyVal(db, src, dst, pr) {
+  if (pr.type === 'title') { dst.title = src.title; return; }
+  if (DB_LOCKED.has(pr.type) && pr.type !== 'files') return;
+  const v = src.values && src.values[pr.id]; dst.values = dst.values || {};
+  if (v === undefined || v === '') delete dst.values[pr.id]; else dst.values[pr.id] = JSON.parse(JSON.stringify(v));
+}
+function fillStart(e) {
+  e.preventDefault(); e.stopPropagation(); const dv = kbDv(), td = kbTd(); if (!dv || !td) return;
+  const ctx = dv._ctx, src = ST.pages[KB.row], pr = kbCols(dv).find(c => c.id === KB.prop); if (!src || !pr) return;
+  let tgt = KB.row; const mark = () => { const ids = kbRowIds(dv), a = ids.indexOf(KB.row), b = ids.indexOf(tgt), lo = Math.min(a, b), hi = Math.max(a, b); dv.querySelectorAll('.kb-fillrow').forEach(x => x.classList.remove('kb-fillrow')); if (a !== b) for (let i = lo; i <= hi; i++) { const c = dv.querySelector(`tr[data-row="${ids[i]}"] td[data-prop="${KB.prop}"]`); if (c) c.classList.add('kb-fillrow'); } };
+  RD.on = true;
+  const mv = ev => { const u = document.elementFromPoint(ev.clientX, ev.clientY), tr = u && u.closest('tbody tr[data-row]'); if (tr && dv.contains(tr)) { tgt = tr.dataset.row; mark(); } const sc = dv.querySelector('.dbv-scroll'); if (sc) { const r = sc.getBoundingClientRect(); if (ev.clientY > r.bottom - 30) sc.scrollTop += 16; else if (ev.clientY < r.top + 30) sc.scrollTop -= 16; } };
+  const up = () => {
+    removeEventListener('pointermove', mv); removeEventListener('pointerup', up); RD.on = false; dv.querySelectorAll('.kb-fillrow').forEach(x => x.classList.remove('kb-fillrow'));
+    const ids = kbRowIds(dv), a = ids.indexOf(KB.row), b = ids.indexOf(tgt); if (a < 0 || b < 0 || a === b) return;
+    const lo = Math.min(a, b), hi = Math.max(a, b), targets = ids.slice(lo, hi + 1).filter(id => id !== KB.row).map(id => ST.pages[id]).filter(Boolean);
+    commitDb(ctx.db, () => targets.forEach(r => { cellCopyVal(ctx.db, src, r, pr); r.updatedAt = now(); })); toast(`Filled ${targets.length} row${targets.length === 1 ? '' : 's'}`);
+  };
+  addEventListener('pointermove', mv); addEventListener('pointerup', up);
+}
+function fillDown() {
+  const dv = kbDv(); if (!dv) return; const ids = kbRowIds(dv), i = ids.indexOf(KB.row); if (i < 1) return;
+  const pr = kbCols(dv).find(c => c.id === KB.prop), src = ST.pages[ids[i - 1]], dst = ST.pages[KB.row]; if (!pr || !src || !dst) return;
+  commitDb(dv._ctx.db, () => { cellCopyVal(dv._ctx.db, src, dst, pr); dst.updatedAt = now(); });
+}
+function setFromText(db, row, pr, s) {
+  s = String(s == null ? '' : s).trim(); row.values = row.values || {};
+  if (pr.type === 'title') { row.title = s; return true; }
+  if (DB_LOCKED.has(pr.type) || pr.type === 'person') return false;
+  if (s === '') { delete row.values[pr.id]; return true; }
+  const opt = name => { let o = pr.options.find(x => x.name.toLowerCase() === name.toLowerCase()); if (!o) { o = { id: uid(), name, color: OPT_COLORS[pr.options.length % OPT_COLORS.length] }; if (pr.type === 'status') o.group = 'todo'; pr.options.push(o); } return o.id; };
+  switch (pr.type) {
+    case 'number': { const m = s.match(/^[★☆]+$/); const x = m ? (s.match(/★/g) || []).length : +s.replace(/[$,%\s]/g, ''); if (isNaN(x)) return false; row.values[pr.id] = isStars(pr) ? Math.max(0, Math.min(5, x)) : x; return true; }
+    case 'checkbox': row.values[pr.id] = /^(true|yes|y|1|x|✓|checked)$/i.test(s); return true;
+    case 'select': case 'status': row.values[pr.id] = opt(s); return true;
+    case 'multi': row.values[pr.id] = s.split(/[,;]/).map(x => x.trim()).filter(Boolean).map(opt); return true;
+    case 'date': { const [a, b] = s.split(/\s*(?:→|->)\s*/), st = csvDate(a); if (!st) return false; row.values[pr.id] = { start: st, end: b ? csvDate(b) : null }; return true; }
+    default: row.values[pr.id] = s; return true;
+  }
+}
+function pasteGrid(dv, grid) {
+  const ctx = dv._ctx, db = ctx.db, cols = kbCols(dv), ids = kbRowIds(dv), r0 = ids.indexOf(KB.row), c0 = cols.findIndex(c => c.id === KB.prop); if (r0 < 0 || c0 < 0) return;
+  let made = 0; commitDb(db, () => {
+    grid.forEach((line, ri) => {
+      let row = ST.pages[ids[r0 + ri]]; if (!row) { row = newRow(db, { values: initFromFilters(db, ctx.view, {}) }); made++; }
+      line.forEach((txt, ci) => { const pr = cols[c0 + ci]; if (pr) setFromText(db, row, pr, txt); }); row.updatedAt = now();
+    });
+  });
+  toast(`Pasted ${grid.length} row${grid.length === 1 ? '' : 's'}${made ? ` (${made} new)` : ''}`);
+}
+document.addEventListener('keydown', e => {
+  if (!KB.row || e.defaultPrevented) return; if (isTypingTarget(e.target) || $('.modal-bg,.pop,.menu,.docedit')) return;
+  const dv = kbDv(), td = kbTd(); if (!dv || !td) { KB.row = ''; return; }
+  const stop = () => { e.preventDefault(); e.stopPropagation(); };
+  const mod = e.ctrlKey || e.metaKey, ids = kbRowIds(dv), cols = kbCols(dv), ri = ids.indexOf(KB.row), ci = cols.findIndex(c => c.id === KB.prop), pr = cols[ci], row = ST.pages[KB.row], db = dv._ctx.db;
+  const go = (r, c) => { r = Math.max(0, Math.min(ids.length - 1, r)); c = Math.max(0, Math.min(cols.length - 1, c)); kbSet(KB.key, ids[r], cols[c].id); const t = kbTd(); if (t) t.scrollIntoView({ block: 'nearest', inline: 'nearest' }); };
+  if (e.key === 'ArrowDown') { stop(); go(ri + 1, ci); } else if (e.key === 'ArrowUp') { stop(); go(ri - 1, ci); } else if (e.key === 'ArrowRight') { stop(); go(ri, ci + 1); } else if (e.key === 'ArrowLeft') { stop(); go(ri, ci - 1); }
+  else if (e.key === 'Tab') { stop(); go(ri, ci + (e.shiftKey ? -1 : 1)); }
+  else if (e.key === 'Enter' || e.key === 'F2') { stop(); if (td._edit) td._edit(); }
+  else if (e.key === ' ' && pr && (pr.type === 'checkbox' || isStars(pr))) { stop(); td._edit(); }
+  else if (e.key === 'Escape') { stop(); KB.row = ''; kbPaint(); }
+  else if ((e.key === 'Delete' || e.key === 'Backspace') && pr && row) { stop(); commitDb(db, () => { if (pr.type === 'title') row.title = ''; else if (!DB_LOCKED.has(pr.type)) delete row.values[pr.id]; row.updatedAt = now(); }); }
+  else if (mod && (e.key === 'd' || e.key === 'D')) { stop(); fillDown(); }
+  else if (!mod && !e.altKey && e.key.length === 1 && pr && TEXT_EDIT.has(pr.type)) { stop(); td._edit(); const inp = td.querySelector('input'); if (inp) { inp.value = e.key; inp.setSelectionRange(1, 1); } }
+}, true);
+document.addEventListener('copy', e => {
+  if (!KB.row || isTypingTarget(e.target) || (getSelection() && String(getSelection()).length)) return; const dv = kbDv(), td = kbTd(); if (!dv || !td) return;
+  const pr = kbCols(dv).find(c => c.id === KB.prop), row = ST.pages[KB.row]; if (!pr || !row) return;
+  e.clipboardData.setData('text/plain', cellText(dv._ctx.db, row, pr)); e.preventDefault(); e.stopImmediatePropagation();
+}, true);
+document.addEventListener('paste', e => {
+  if (!KB.row || isTypingTarget(e.target) || $('.modal-bg,.docedit')) return; const dv = kbDv(); if (!dv || !kbTd()) return;
+  const txt = e.clipboardData && e.clipboardData.getData('text/plain'); if (!txt || !txt.trim()) return;
+  e.preventDefault(); e.stopImmediatePropagation();
+  pasteGrid(dv, txt.replace(/\r/g, '').replace(/\n+$/, '').split('\n').map(l => l.split('\t')));
+}, true);
+
+/* ---- table post-processing: grip + checkbox, select-all, header drag, freeze, cell select ---- */
+function colDragInit(tbl, ctx, cols) {
+  const ths = [...tbl.querySelectorAll('thead th')];
+  cols.forEach((c, i) => {
+    const th = ths[i]; if (!th || c.id === TITLE) return; th.dataset.col = c.id; const btn = th.querySelector('.dbt-h'); if (!btn) return;
+    btn.addEventListener('pointerdown', e => {
+      if (e.button || RD.on || RD.pending) return; const touch = e.pointerType === 'touch', sx = e.clientX, sy = e.clientY; let started = false, ghost = null, tgt = null, timer = null;
+      const line = h('div', { class: 'rd-line' });
+      const begin = () => { started = true; RD.on = true; document.body.classList.add('rd-active'); ghost = h('div', { class: 'blk-ghost' }, c.name); document.body.append(ghost, line); };
+      const place = ev => {
+        ghost.style.left = ev.clientX + 12 + 'px'; ghost.style.top = ev.clientY + 8 + 'px'; tgt = null;
+        for (const t of tbl.querySelectorAll('thead th[data-col]')) { const r = t.getBoundingClientRect(); if (ev.clientX >= r.left && ev.clientX <= r.right) { tgt = { id: t.dataset.col, after: ev.clientX > r.left + r.width / 2, r }; break; } }
+        if (tgt && tgt.id !== c.id) Object.assign(line.style, { display: 'block', left: (tgt.after ? tgt.r.right - 1 : tgt.r.left - 1) + 'px', top: tgt.r.top + 'px', width: '3px', height: tbl.getBoundingClientRect().height + 'px' }); else line.style.display = 'none';
+        const sc = tbl.closest('.dbv-scroll'); if (sc) { const sr = sc.getBoundingClientRect(); if (ev.clientX > sr.right - 40) sc.scrollLeft += 18; else if (ev.clientX < sr.left + 40) sc.scrollLeft -= 18; }
+      };
+      const stop = () => { clearTimeout(timer); removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', stop); RD.on = false; document.body.classList.remove('rd-active'); ghost && ghost.remove(); line.remove(); };
+      const mv = ev => { if (!started) { const d = Math.hypot(ev.clientX - sx, ev.clientY - sy); if (touch) { if (d > 8) stop(); return; } if (d < 6) return; begin(); } place(ev); };
+      const up = () => {
+        const t = tgt, was = started; stop(); if (!was) return;
+        const sup = x => { x.stopPropagation(); x.preventDefault(); }; window.addEventListener('click', sup, true); setTimeout(() => window.removeEventListener('click', sup, true), 0);
+        if (!t || t.id === c.id) return;
+        commitView(ctx.loc, (pl, v) => { const all = viewCols(ctx.db, v, true).map(x => x.id).filter(id => id !== c.id), k = all.indexOf(t.id); if (k < 0) return; all.splice(k + (t.after ? 1 : 0), 0, c.id); v.order = all; });
+      };
+      if (touch) timer = setTimeout(() => { if (!started && !RD.on) begin(); }, 320);
+      addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', stop);
+    });
+  });
+}
+function v59Table(tbl, ctx) {
+  const cols = [dbProp(ctx.db, TITLE), ...viewCols(ctx.db, ctx.view)], dvOf = el => el.closest('.dbv');
+  if (ctx.view.freeze) tbl.classList.add('frz');
+  const th0 = tbl.querySelector('thead th'); if (th0) { th0.classList.add('has-sel'); const all = h('span', { class: 'dbck rsck-all', title: 'Select all rows' }); all.addEventListener('click', e => { e.stopPropagation(); const dv = dvOf(tbl); if (dv) rsAll(dv); }); all.addEventListener('pointerdown', e => e.stopPropagation()); th0.append(all); }
+  for (const tr of tbl.querySelectorAll('tbody tr[data-row]')) {
+    const td = tr.querySelector('td[data-prop="' + TITLE + '"]'); if (!td) continue; td.classList.add('has-sel');
+    const grip = h('span', { class: 'dbt-grip', title: 'Drag to move or reorder this row' }, h('i'), h('i'), h('i'), h('i'), h('i'), h('i'));
+    const ck = h('span', { class: 'dbck rsck', title: 'Select row (Shift-click for a range)' });
+    ck.addEventListener('click', e => { e.stopPropagation(); const dv = dvOf(tbl); if (dv) rsToggle(dv, tr.dataset.row, e.shiftKey); });
+    const wrap = h('span', { class: 'dbt-sel' }, grip, ck); wrap.addEventListener('click', e => e.stopPropagation());
+    td.prepend(wrap);
+  }
+  tbl.addEventListener('pointerdown', e => { tbl._pt = e.pointerType; }, true);
+  tbl.addEventListener('click', e => {
+    const td = e.target.closest('td.dbt-c'); if (!td || e.target.closest('.dbt-sel,.kb-fill,.rate')) return;
+    const tr = td.parentElement, dv = dvOf(tbl); if (!dv || !dv._loc || !tr.dataset.row) return;
+    const was = KB.key === locKey(dv._loc) && KB.row === tr.dataset.row && KB.prop === td.dataset.prop, pr = cols.find(c => c.id === td.dataset.prop);
+    kbSet(locKey(dv._loc), tr.dataset.row, td.dataset.prop, false, !!dv.closest('.dbfull,.pv-wrap'));
+    if (pr && TEXT_EDIT.has(pr.type) && !was && tbl._pt !== 'touch' && !e.target.closest('a,.relpill,input,.dbt-open')) e.stopPropagation();
+  }, true);
+  colDragInit(tbl, ctx, cols);
+}
+{
+  const _t = DB_VIEWS.table; DB_VIEWS.table = function (ctx) { const tbl = _t(ctx); v59Table(tbl, ctx); return tbl; };
+  /* paint selection state after any (re)render */
+  const _rd = refreshDb; refreshDb = function () { const r = _rd.apply(this, arguments); setTimeout(() => { rsRefresh(); kbPaint(); }, 0); return r; };
+  const _pdv = dbPlaceEl; dbPlaceEl = function () { const el = _pdv.apply(this, arguments); setTimeout(() => { if (el.isConnected) { rsRefresh(); kbPaint(); } }, 0); return el; };
+}
+/* properties panel: drag to reorder */
+{
+  const _pp = propsPop; propsPop = function (anchor, ctx) {
+    _pp.apply(this, arguments); const p = $('.pop.dbpop'); if (!p || p._dnd) return; p._dnd = true; const ra = rectAnchor(anchor);
+    p.addEventListener('pointerdown', e => {
+      const row = e.target.closest('.dbp-row'); if (!row || e.target.closest('.toggle,button,input') || e.button) return;
+      const sy = e.clientY; let started = false, line = null, tgt = null; e.preventDefault();
+      const rows = () => [...p.querySelectorAll('.dbp-row')], idx = rows().indexOf(row);
+      const mv = ev => {
+        if (!started) { if (Math.abs(ev.clientY - sy) < 5) return; started = true; row.classList.add('dragging'); line = h('div', { class: 'rd-line' }); document.body.append(line); }
+        tgt = null; for (const r of rows()) { const b = r.getBoundingClientRect(); if (ev.clientY >= b.top && ev.clientY <= b.bottom) { tgt = { r, after: ev.clientY > b.top + b.height / 2, b }; break; } }
+        if (tgt && tgt.r !== row) Object.assign(line.style, { display: 'block', left: tgt.b.left + 'px', width: tgt.b.width + 'px', height: '3px', top: (tgt.after ? tgt.b.bottom - 1 : tgt.b.top - 1) + 'px' }); else line.style.display = 'none';
+      };
+      const up = () => {
+        removeEventListener('pointermove', mv); removeEventListener('pointerup', up); row.classList.remove('dragging'); line && line.remove(); if (!started) return;
+        if (!tgt || tgt.r === row) return; const all = rows(), from = idx, to = all.indexOf(tgt.r);
+        commitView(ctx.loc, (pl, v) => { const ids = viewCols(ctx.db, v, true).map(x => x.id), [m] = ids.splice(from, 1); let k = ids.indexOf(viewCols(ctx.db, v, true)[to].id); if (k < 0) k = ids.length; ids.splice(k + (tgt.after ? 1 : 0), 0, m); v.order = ids; });
+        closeTransient(); setTimeout(() => propsPop(ra, ctx), 0);
+      };
+      addEventListener('pointermove', mv); addEventListener('pointerup', up);
+    });
+  };
+}
+/* page popup: previous / next row */
+{
+  const _top = renderPvTop; renderPvTop = function () {
+    _top.apply(this, arguments); const w = $('.pv-wrap'), p = w && ST.pages[S.pageId], acts = w && w.querySelector('.pv-acts'); if (!p || !acts || !isRow(p)) return;
+    const db = rowDb(p); if (!db) return; const dv = $$('.dbv').find(e => e._ctx && e._ctx.db === db && !e.closest('.pv-wrap')), ids = (dv ? dv._ctx.rows : dbRows(db)).map(r => r.id), i = ids.indexOf(p.id);
+    if (i < 0 || ids.length < 2) return;
+    const nav = id => { if (!id) return; const m = w.classList.contains('full') ? 'full' : w.classList.contains('rside') ? 'rside' : 'peek'; openPage(id, { mode: m }); };
+    acts.prepend(h('span', { class: 'pv-rownav' }, h('button', { class: 'ib', title: 'Previous row (Alt+↑)', disabled: i === 0 ? '' : null, onclick: () => nav(ids[i - 1]) }, '‹'), h('span', { class: 'pv-rn' }, (i + 1) + ' / ' + ids.length), h('button', { class: 'ib', title: 'Next row (Alt+↓)', disabled: i === ids.length - 1 ? '' : null, onclick: () => nav(ids[i + 1]) }, '›')));
+  };
+  document.addEventListener('keydown', e => {
+    if (!e.altKey || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') || !$('.pv-wrap')) return; const b = $('.pv-rownav'); if (!b) return;
+    const btn = b.querySelectorAll('button')[e.key === 'ArrowUp' ? 0 : 1]; if (btn && !btn.disabled) { e.preventDefault(); e.stopPropagation(); btn.click(); }
+  }, true);
+}
+
+/* clicking anywhere outside a table clears the selected cell so typing never edits it by accident */
+document.addEventListener('pointerdown', e => { if (KB.row && !e.target.closest('.dbt,.pop,.menu,.fl-pop')) { KB.row = ''; kbPaint(); } }, true);
+
 init();
 </script>
 </body>
