@@ -14455,6 +14455,51 @@ document.addEventListener('focusin', () => { clearTimeout(kbT); kbT = setTimeout
 document.addEventListener('focusout', () => { clearTimeout(kbT); kbT = setTimeout(kbUpdate, 160); });
 if (window.visualViewport) visualViewport.addEventListener('resize', () => { clearTimeout(kbT); kbT = setTimeout(kbUpdate, 60); });
 
+
+/* ===== v6.1.1: sturdier backups (stream to a Blob, real error messages, skip unreadable files) ===== */
+blobToDataURL = function (b) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(r.error || new Error('Could not read a stored file')); r.readAsDataURL(b); }); };
+async function bkParts() {
+  const used = new Set([...Object.values(ST.cards).flatMap(cardBlobIds), ...Object.values(ST.pages || {}).flatMap(blobIdsOfPage)]);
+  const st = JSON.parse(JSON.stringify(ST)); if (st.settings && st.settings.autoBackup) { st.settings.autoBackup.lastAt = 0; st.settings.autoBackup.lastHash = 0; }
+  const stJson = JSON.stringify(st), parts = ['{"app":"corkboard","version":1,"exportedAt":' + JSON.stringify(new Date().toISOString()) + ',"state":', stJson, ',"blobs":{'];
+  let skipped = 0, n = 0;
+  for (const id of used) {
+    const b = Blobs.get(id); if (!b) continue; let d = null;
+    try { d = await blobToDataURL(b); }
+    catch (e) { try { const fresh = await DB.get('blobs', id); if (fresh) d = await blobToDataURL(fresh); } catch (_) { } }
+    if (d == null) { skipped++; continue; }
+    parts.push((n++ ? ',' : '') + JSON.stringify(id) + ':', JSON.stringify(d)); d = null;
+  }
+  parts.push('}}');
+  return { blob: new Blob(parts, { type: 'application/json' }), hash: abHash(stJson), skipped };
+}
+exportBackup = async function () {
+  const t = toast('Preparing backup…', 60000);
+  try {
+    const p = await bkParts();
+    download(p.blob, `corkboard-backup-${new Date().toISOString().slice(0, 10)}.json`);
+    if (t && t.dismiss) t.dismiss();
+    toast(p.skipped ? `Backup exported — ${p.skipped} unreadable file${p.skipped === 1 ? '' : 's'} skipped` : 'Backup exported', null, { type: p.skipped ? 'info' : 'ok' });
+  } catch (e) { if (t && t.dismiss) t.dismiss(); console.warn(e); toast('Backup failed: ' + ((e && (e.message || e.name)) || String(e)), 6000, { type: 'err' }); }
+};
+abRun = async function (force, ask) {
+  const a = abSet(); if (AB.busy || (!a.on && !force)) return false; AB.busy = true;
+  try {
+    const p = await bkParts();
+    if (!force && p.hash === a.lastHash) { a.lastAt = Date.now(); save(); AB.state = 'ok'; AB.err = ''; abUi(); return true; }
+    if (AB_CAN_DIR) await abWriteFolder(p.blob, ask);
+    else {
+      const f = new File([p.blob], abName(), { type: 'application/json' }); let shared = false;
+      if (ask === 'share' && navigator.canShare && navigator.canShare({ files: [f] })) { try { await navigator.share({ files: [f], title: 'Corkboard backup' }); shared = true; } catch (e) { if (e && e.name === 'AbortError') { AB.busy = false; return false; } } }
+      if (!shared) download(p.blob, abName());
+    }
+    a.lastAt = Date.now(); a.lastHash = p.hash; save(); AB.state = 'ok'; AB.err = ''; abUi();
+    if (p.skipped) toast(`Backup saved — ${p.skipped} unreadable file${p.skipped === 1 ? '' : 's'} skipped`, null, { type: 'info' });
+    return true;
+  } catch (e) { console.warn('auto-backup', e); AB.state = e && e.perm ? 'perm' : 'err'; AB.err = e && e.perm ? 'Folder access needs to be allowed again' : ((e && (e.message || e.name)) || String(e) || 'Backup failed'); abUi(); return false; }
+  finally { AB.busy = false; }
+};
+
 init();
 </script>
 </body>
