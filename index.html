@@ -3523,6 +3523,74 @@ body.sel-one .card.selected>.hp-col .hp-color{display:block}
 .arc-sw.none{background:linear-gradient(135deg,transparent 45%,#e0524d 45% 55%,transparent 55%),var(--card)}
 .arc-sw.cur{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--sel)}
 @keyframes arcIn{from{opacity:0;transform:scale(.5)}to{opacity:1}}
+
+/* ===== v6.5: Frame Review ===== */
+.b-framereview .bc{display:block}
+.fr{container-type:inline-size;background:#0e0f11;color:#ececee;border:1px solid #24262b;border-radius:14px;padding:14px;margin:6px 0;font-size:13px;line-height:1.45;position:relative;user-select:text}
+.fr *{box-sizing:border-box}
+.fr button{font:inherit;color:inherit;cursor:pointer}
+.fr .fr-btn{background:#1b1d21;border:1px solid #2c2f35;border-radius:8px;padding:6px 12px;color:#ececee;font-size:12.5px}
+.fr .fr-btn:hover{background:#24262b}.fr .fr-btn:disabled{opacity:.5;cursor:default}
+.fr .fr-btn.primary{background:#22c55e;border-color:#22c55e;color:#06210f;font-weight:600}.fr .fr-btn.primary:hover{background:#34d36f}
+.fr .fr-btn.ghost{background:rgba(0,0,0,.5);border-color:rgba(255,255,255,.28);color:#fff}
+.fr-lab{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#9a9ca3}
+.fr-drop{border:1.5px dashed #3a3d44;border-radius:12px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#9a9ca3;text-align:center;padding:20px;outline:none}
+.fr-drop:focus,.fr-drop.over{border-color:#22c55e;background:#11161300;background:rgba(34,197,94,.06)}
+.fr-drop .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.fr-prev{position:relative;border-radius:12px;overflow:hidden;border:1px solid #24262b;background:#000}
+.fr-prev img{display:block;width:100%;max-height:360px;object-fit:contain;background:#000}
+.fr-prev .fr-pt{position:absolute;right:10px;top:10px;display:flex;gap:6px}
+.fr-ta{width:100%;min-height:78px;resize:vertical;background:#151619;border:1px solid #2c2f35;border-radius:10px;padding:10px 12px;color:#ececee;font:inherit;outline:none}
+.fr-ta:focus,.fr-in:focus{border-color:#22c55e}
+.fr-in{width:100%;background:#151619;border:1px solid #2c2f35;border-radius:8px;padding:7px 10px;color:#ececee;font:inherit;outline:none}
+.fr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fr-grid label{display:flex;flex-direction:column;gap:4px;font-size:11px;color:#9a9ca3}
+.fr-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fr-err{color:#ff8a7a;font-size:12.5px}
+.fr-stack{display:flex;flex-direction:column;gap:12px}
+.fr-hero{position:relative;border-radius:12px;overflow:hidden;border:1px solid #24262b;background:#000;min-height:220px}
+.fr-hero>img{display:block;width:100%;height:auto;max-height:420px;min-height:220px;object-fit:cover;object-position:50% 40%}
+.fr-hero .fr-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.84) 100%);pointer-events:none}
+.fr-hero .fr-ov{position:absolute;left:20px;right:20px;bottom:16px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
+.fr-hero .fr-top{position:absolute;right:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;opacity:.0;transition:opacity .15s}
+.fr-hero:hover .fr-top,.fr-hero:focus-within .fr-top,.fr.touch .fr-hero .fr-top{opacity:1}
+@media (hover:none){.fr-hero .fr-top{opacity:1}}
+.fr-meta{font-size:12px;color:#d7d8dc}
+.fr-ttl{font-size:24px;font-weight:600;margin:3px 0;line-height:1.2}
+.fr-sub{font-size:12.5px;color:#b9bbc2}
+.fr-score{text-align:right;flex:none}.fr-score b{display:block;font-size:56px;line-height:1;font-weight:700}.fr-score span{font-size:10.5px;letter-spacing:.1em;color:#d7d8dc}
+.fr-ed{outline:none;border-radius:4px;min-width:20px;display:inline-block;max-width:100%}
+.fr-ed:focus{background:rgba(255,255,255,.08);box-shadow:0 0 0 2px rgba(34,197,94,.5)}
+.fr-ed:empty::before{content:attr(data-ph);color:#6e7078}
+.fr-strip{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:#151619;border:1px solid #24262b;border-radius:10px;padding:12px 16px}
+.fr-chips{display:flex;gap:6px;flex-wrap:wrap}.fr-chip{font-size:12px;background:#24262b;padding:3px 8px;border-radius:4px}
+.fr-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fr-card{background:#151619;border:1px solid #24262b;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:9px}
+.fr-ch{display:flex;justify-content:space-between;align-items:baseline}.fr-ch b{font-size:26px}
+.fr-bar{display:grid;grid-template-columns:minmax(80px,38%) 1fr 28px;gap:8px;align-items:center;font-size:12px;cursor:pointer;border-radius:6px;padding:1px 0}
+.fr-bar:hover{background:rgba(255,255,255,.04)}
+.fr-bar .nm{color:#9a9ca3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fr-bar .tr{height:8px;background:#1d1f23;border-radius:4px}.fr-bar .tr i{display:block;height:100%;border-radius:4px}
+.fr-bar .v{text-align:right}
+.fr-why{grid-column:1/-1;background:#1b1d21;border-radius:8px;padding:8px 10px;display:flex;gap:10px;align-items:flex-start;cursor:default}
+.fr-why .fr-ed{flex:1;color:#c4c6cc}.fr-why input{width:56px;background:#0e0f11;border:1px solid #2c2f35;border-radius:6px;color:#ececee;padding:3px 6px;font:inherit}
+.fr-calls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.fr-call{background:#151619;border:1px solid #24262b;border-left-width:3px;border-radius:10px;padding:12px 14px}
+.fr-call .fr-lab{margin-bottom:5px}
+.fr-low{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fr-box{background:#151619;border:1px solid #24262b;border-radius:10px;padding:12px 16px;color:#c4c6cc;line-height:1.6}
+.fr-box .fr-lab{margin-bottom:6px}
+.fr-gear{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px}
+.fr-gear div span{color:#9a9ca3;font-size:11.5px}
+.fr em.est{font-style:normal;font-size:10px;letter-spacing:.06em;color:#f0b429;border:1px solid #f0b42966;border-radius:3px;padding:0 4px;margin-left:5px;vertical-align:1px}
+.fr-run{position:absolute;inset:0;background:rgba(14,15,17,.78);display:flex;align-items:center;justify-content:center;gap:10px;border-radius:14px;z-index:5}
+.fr-dots i{display:inline-block;width:6px;height:6px;margin-right:4px;border-radius:50%;background:#22c55e;animation:acdot 1s infinite}.fr-dots i:nth-child(2){animation-delay:.15s}.fr-dots i:nth-child(3){animation-delay:.3s}
+.fr-stamp{font-size:11px;color:#6e7078;text-align:right}
+@container (max-width:640px){.fr-cards,.fr-calls,.fr-low,.fr-grid{grid-template-columns:minmax(0,1fr)}.fr-ttl{font-size:19px}.fr-score b{font-size:42px}.fr-hero .fr-ov{left:14px;right:14px}}
+.frm{display:flex;flex-direction:column;gap:10px;min-width:min(520px,80vw)}
+.frm video{width:100%;max-height:50vh;background:#000;border-radius:8px}
+.frm .fr-rr{display:grid;grid-template-columns:1fr 150px 32px;gap:8px;align-items:center}
+.frm input[type=text],.frm select{background:var(--card,#fff);color:inherit;border:1px solid var(--line,#ccc);border-radius:6px;padding:6px 8px;font:inherit}
 </style>
 </head>
 <body class="app-root">
@@ -15277,6 +15345,281 @@ function hpCanColor() {
     const cur = hpCur(c) || null;
     el.append(h('div', { class: 'hp-col' }, c.type === 'column' ? null : h('button', { class: 'hp-plus', title: 'Add linked item', 'aria-label': 'Add linked item' }, '+'),
       h('button', { class: 'hp-color' + (cur ? '' : ' none'), title: 'Color', 'aria-label': 'Color', style: cur ? { background: cur } : {} })));
+    return el;
+  };
+}
+
+
+/* ===== v6.5: Frame Review block ===== */
+const FR_GROUPS = ['Light', 'Image quality', 'Frame', 'Story'];
+const FR_DEFAULT = [['Narrative Clarity', 'Story'], ['Focal Length Feel', 'Story'], ['Viewer Access', 'Story'], ['Framing Behavior', 'Frame'], ['Composition', 'Frame'], ['Edge Behavior', 'Frame'], ['Lighting Direction', 'Light'], ['Falloff', 'Light'], ['Highlight Control', 'Light'], ['Texture & Skin', 'Image quality'], ['Contrast Shape', 'Light'], ['Color Separation', 'Image quality'], ['Depth Layering', 'Image quality'], ['Background Discipline', 'Frame'], ['Realism Cues', 'Image quality'], ['Visual Authorship', 'Story']];
+const FR_GEAR = [['camera', 'Camera'], ['lens', 'Lens'], ['focal', 'Focal length'], ['support', 'Support'], ['lighting', 'Lighting'], ['location', 'Location']];
+const frDefaultRubric = () => FR_DEFAULT.map(([name, group], i) => ({ id: 'r' + i, name, group }));
+const frBand = s => s >= 85 ? '#22c55e' : s >= 70 ? '#f0b429' : '#ef5b5b';
+const frUI = new WeakMap();
+TYPE_NAME.framereview = 'Frame Review';
+SLASH.push(['framereview', 'Frame Review', 'AI review and score of a still frame', '▣']);
+
+function frInit(b) {
+  if (!Array.isArray(b.rubric) || !b.rubric.length) b.rubric = frDefaultRubric();
+  if (!b.gear) b.gear = {};
+  if (b.desc == null) b.desc = '';
+  if (!b.view) b.view = b.result ? 'result' : 'input';
+  return b;
+}
+function frScores(b) { const r = b.result; const out = []; if (!r) return out; for (const c of b.rubric) { const s = r.scores && r.scores[c.id]; out.push({ c, s: s && typeof s.s === 'number' ? s.s : null, why: s ? s.why || '' : '' }); } return out; }
+function frOverall(b) { const v = frScores(b).filter(x => x.s != null).map(x => x.s); return v.length ? Math.round(v.reduce((a, c) => a + c, 0) / v.length) : null; }
+function frGroups(b) {
+  const names = [...FR_GROUPS]; for (const c of b.rubric) if (c.group && !names.includes(c.group)) names.push(c.group);
+  const sc = frScores(b);
+  return names.map(n => { const rows = sc.filter(x => (x.c.group || 'Other') === n); const v = rows.filter(x => x.s != null).map(x => x.s); return { n, rows, v: v.length ? Math.round(v.reduce((a, c) => a + c, 0) / v.length) : null }; }).filter(g => g.rows.length);
+}
+function frVal(b, k) { return (b.gear[k] || '').trim() ? { v: b.gear[k].trim(), est: false } : ((b.result && b.result.gear && (b.result.gear[k] || '').trim()) ? { v: b.result.gear[k].trim(), est: true } : { v: '', est: false }); }
+function frTitle(b) { return (b.title || '').trim() || (b.result && b.result.title) || ''; }
+function frProject(b) { return (b.project || '').trim() || (b.result && b.result.project) || ''; }
+
+async function frPrep(blob, max) {
+  const bm = await createImageBitmap(blob), k = Math.min(1, max / Math.max(bm.width, bm.height)), cv = document.createElement('canvas');
+  cv.width = Math.max(1, Math.round(bm.width * k)); cv.height = Math.max(1, Math.round(bm.height * k)); cv.getContext('2d').drawImage(bm, 0, 0, cv.width, cv.height); if (bm.close) bm.close();
+  return cv.toDataURL('image/jpeg', 0.86).split(',')[1];
+}
+const FR_SYS = `You are a senior cinematographer and colorist reviewing a single still frame captured from a video. You score the frame honestly against a rubric and give specific, useful critique. Judge only what is visible in the image plus the short description the user gave for context. Do not inflate scores: 90+ is exceptional reference-quality work, 80-89 is strong, 70-79 is competent with clear room to improve, 50-69 has noticeable problems, below 50 has serious problems. Use the full range and make the scores differ between criteria where the frame differs. If the description and image disagree, trust the image. If a criterion cannot be judged well from a still, score it from the image and description and say so in its reason.
+Return ONLY one JSON object, with no text before or after it, in exactly this shape:
+{"title":"","project":"","verdict":"one sentence","strongest":"one specific choice that works","weakest":"one specific weakness","fastest":"the single quickest change that would improve the frame","priorities":["2 to 3 short study topics"],"notes":"2 to 4 sentences of overall critique","gear":{"camera":"","lens":"","focal":"","support":"","lighting":"","location":""},"scores":{"<criterion id>":{"score":0,"why":"one short sentence"}}}
+Rules: "scores" must contain every criterion id given, each with an integer score from 0 to 100. For title, project and each gear field: if the user supplied a value, return it unchanged; if the user left it empty, return your best inference only when the image or description gives clear evidence, otherwise return an empty string. Never invent specifics.`;
+function frParse(text, rubric) {
+  const a = text.indexOf('{'), z = text.lastIndexOf('}'); if (a < 0 || z <= a) throw new Error('The AI reply was not in the expected format. Try again.');
+  let j; try { j = JSON.parse(text.slice(a, z + 1)); } catch (e) { throw new Error('The AI reply could not be read. Try again.'); }
+  const scores = {}; let n = 0;
+  for (const c of rubric) { const s = j.scores && j.scores[c.id]; const v = s && Number(s.score); if (s && isFinite(v)) { scores[c.id] = { s: Math.max(0, Math.min(100, Math.round(v))), why: String(s.why || '').slice(0, 300) }; n++; } }
+  if (!n) throw new Error('The AI reply had no scores. Try again.');
+  const str = x => String(x == null ? '' : x).slice(0, 600);
+  return { at: Date.now(), model: aiModel(), scores, verdict: str(j.verdict), strongest: str(j.strongest), weakest: str(j.weakest), fastest: str(j.fastest), priorities: (Array.isArray(j.priorities) ? j.priorities : []).map(str).filter(Boolean).slice(0, 5), notes: str(j.notes), title: str(j.title), project: str(j.project), gear: Object.fromEntries(FR_GEAR.map(([k]) => [k, str(j.gear && j.gear[k])])), edited: false };
+}
+async function frReview(b, persist, redraw) {
+  const ui = frUI.get(b) || {}; if (ui.running) return;
+  const key = aiGet(AI_KEY); if (!key) { b.err = 'nokey'; persist(); redraw(); return; }
+  const blob = Blobs.mem[b.blobId]; if (!blob) { b.err = 'The frame image is not available. Add it again.'; persist(); redraw(); return; }
+  ui.running = true; frUI.set(b, ui); b.err = ''; redraw();
+  try {
+    const data = await frPrep(blob, 1600);
+    const typed = [['Title', b.title], ['Project / format', b.project], ['Shot by', b.shotBy], ['Date', b.date], ...FR_GEAR.map(([k, l]) => [l, b.gear[k]])].filter(x => (x[1] || '').trim()).map(x => `${x[0]}: ${x[1].trim()}`).join('\n');
+    const txt = `Context from the user:\n${(b.desc || '').trim() || '(none given)'}\n\nDetails the user supplied:\n${typed || '(none)'}\n\nCriteria to score (id | name | group):\n${b.rubric.map(c => `${c.id} | ${c.name} | ${c.group || 'Other'}`).join('\n')}`;
+    const j = await aiCall({ model: aiModel(), max_tokens: 3000, system: FR_SYS, messages: [{ role: 'user', content: [{ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data } }, { type: 'text', text: txt }] }] }, key);
+    const text = (j.content || []).filter(x => x.type === 'text').map(x => x.text).join('');
+    const r = frParse(text, b.rubric);
+    checkpoint(); b.result = r; b.view = 'result'; b.err = '';
+  } catch (e) { b.err = e && e.message ? e.message : 'Review failed'; }
+  ui.running = false; persist(); redraw();
+}
+
+/* ---- image / video frame ---- */
+async function frSetFrame(b, blob, persist, redraw) {
+  try {
+    let bl = blob; if (/^image\//.test(blob.type)) bl = await resizeImage(blob, 2000);
+    const id = await Blobs.put(bl); checkpoint(); b.blobId = id; b.err = ''; persist(); redraw();
+  } catch (e) { b.err = 'Could not load that image.'; redraw(); }
+}
+function frVideoModal(b, persist, redraw) {
+  const vid = h('video', { controls: false, playsinline: true, muted: true }); let url = null, bg;
+  const rng = h('input', { type: 'range', min: 0, max: 1000, value: 0, step: 1, style: { width: '100%' }, disabled: true }); const lab = h('span', { class: 'muted' }, 'Choose a video file');
+  const file = h('input', { type: 'file', accept: 'video/*', onchange: () => { const f = file.files[0]; if (!f) return; if (url) URL.revokeObjectURL(url); url = URL.createObjectURL(f); vid.src = url; vid.onloadedmetadata = () => { rng.disabled = false; rng.value = 0; vid.currentTime = 0; upd(); }; } });
+  const upd = () => { lab.textContent = vid.duration ? vid.currentTime.toFixed(2) + ' s / ' + vid.duration.toFixed(2) + ' s' : ''; };
+  rng.oninput = () => { if (vid.duration) { vid.currentTime = vid.duration * rng.value / 1000; } }; vid.onseeked = upd;
+  const step = d => { if (!vid.duration) return; vid.pause(); vid.currentTime = Math.max(0, Math.min(vid.duration, vid.currentTime + d / 30)); rng.value = vid.currentTime / vid.duration * 1000; };
+  const use = h('button', { class: 'btn primary', disabled: true, onclick: async () => {
+    if (!vid.videoWidth) return; const cv = document.createElement('canvas'), k = Math.min(1, 2000 / Math.max(vid.videoWidth, vid.videoHeight)); cv.width = Math.round(vid.videoWidth * k); cv.height = Math.round(vid.videoHeight * k);
+    try { cv.getContext('2d').drawImage(vid, 0, 0, cv.width, cv.height); cv.toDataURL('image/jpeg', 0.5); } catch (e) { toast('This browser blocked reading that video frame'); return; }
+    const bl = await new Promise(r => cv.toBlob(r, 'image/jpeg', 0.92)); close(); frSetFrame(b, bl, persist, redraw);
+  } }, 'Use this frame');
+  vid.addEventListener('loadeddata', () => { use.disabled = false; });
+  const close = () => { if (url) URL.revokeObjectURL(url); bg.remove(); };
+  bg = modal([h('h3', null, 'Pick a frame from a video'), h('div', { class: 'frm' }, file, vid, rng, h('div', { class: 'fr-row' }, h('button', { class: 'btn', onclick: () => step(-1) }, '−1 frame'), h('button', { class: 'btn', onclick: () => step(1) }, '+1 frame'), lab), h('div', { class: 'muted', style: { fontSize: '12px' } }, 'The video stays on your device. Only the frame you pick is saved. Frame steps assume 30 fps.'), h('div', { class: 'wse-btns' }, h('button', { class: 'btn', onclick: close }, 'Cancel'), use))]);
+  bg.closeOverlay = close;
+}
+
+/* ---- rubric editor ---- */
+function frRubricModal(b, persist, redraw) {
+  let bg; const list = h('div', { class: 'frm' });
+  const draw = () => {
+    list.innerHTML = '';
+    b.rubric.forEach((c, i) => {
+      const nm = h('input', { type: 'text', value: c.name, 'aria-label': 'Criterion name', onchange: () => { c.name = nm.value.trim() || c.name; persist(); } });
+      const gs = [...new Set([...FR_GROUPS, ...b.rubric.map(x => x.group).filter(Boolean), 'Other'])];
+      const sel = h('select', { 'aria-label': 'Group', onchange: () => { c.group = sel.value; persist(); } }, gs.map(g => h('option', { value: g, selected: (c.group || 'Other') === g ? true : null }, g)));
+      list.append(h('div', { class: 'fr-rr' }, nm, sel, h('button', { class: 'btn', title: 'Remove', 'aria-label': 'Remove criterion', onclick: () => { if (b.rubric.length <= 4) { toast('Keep at least 4 criteria'); return; } b.rubric.splice(i, 1); persist(); draw(); } }, '×')));
+    });
+  };
+  draw();
+  const add = h('button', { class: 'btn', onclick: () => { checkpoint(); b.rubric.push({ id: 'r' + uid(), name: 'New criterion', group: 'Other' }); persist(); draw(); } }, 'Add criterion');
+  const reset = h('button', { class: 'btn', onclick: () => { checkpoint(); b.rubric = frDefaultRubric(); b.result = null; b.view = 'input'; persist(); draw(); toast('Rubric reset. Review again to score it.'); } }, 'Reset to default');
+  const done = () => { bg.remove(); redraw(); };
+  bg = modal([h('h3', null, 'Scoring criteria'), h('div', { class: 'muted', style: { fontSize: '12px', marginBottom: '8px' } }, 'The AI scores whatever is listed here. New or renamed criteria are scored the next time you review the frame.'), list, h('div', { class: 'wse-btns' }, reset, add, h('button', { class: 'btn primary', onclick: done }, 'Done'))]);
+  bg.closeOverlay = done;
+}
+
+/* ---- export: draw the review to a canvas ---- */
+function frWrap(g, text, w) { const out = []; for (const para of String(text || '').split('\n')) { let line = ''; for (const wd of para.split(/\s+/)) { const t = line ? line + ' ' + wd : wd; if (g.measureText(t).width > w && line) { out.push(line); line = wd; } else line = t; } out.push(line); } return out; }
+async function frCanvas(b, scale) {
+  const W = 1200, P = 28, FONT = 'system-ui,-apple-system,Segoe UI,Roboto,sans-serif';
+  const img = b.blobId && Blobs.mem[b.blobId] ? await createImageBitmap(Blobs.mem[b.blobId]) : null;
+  const paint = (g, draw) => {
+    const rr = (x, y, w, h2, r, fill, stroke) => { g.beginPath(); g.roundRect(x, y, w, h2, r); if (fill) { g.fillStyle = fill; g.fill(); } if (stroke) { g.strokeStyle = stroke; g.lineWidth = 1; g.stroke(); } };
+    const T = (s, x, y, size, col, wt, al) => { g.font = `${wt || 400} ${size}px ${FONT}`; g.fillStyle = col; g.textAlign = al || 'left'; g.textBaseline = 'alphabetic'; if (draw) g.fillText(s, x, y); };
+    const inner = W - P * 2; let y = P; const overall = frOverall(b);
+    if (draw) { g.fillStyle = '#0e0f11'; g.fillRect(0, 0, W, 4000); }
+    const hh = 380;
+    if (draw) {
+      g.save(); g.beginPath(); g.roundRect(P, y, inner, hh, 12); g.clip(); g.fillStyle = '#000'; g.fillRect(P, y, inner, hh);
+      if (img) { const k = Math.max(inner / img.width, hh / img.height), dw = img.width * k, dh = img.height * k; g.drawImage(img, P + (inner - dw) / 2, y + (hh - dh) * 0.4, dw, dh); }
+      const gr = g.createLinearGradient(0, y + hh * 0.45, 0, y + hh); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.85)'); g.fillStyle = gr; g.fillRect(P, y, inner, hh); g.restore();
+    }
+    T(frProject(b), P + 24, y + hh - 76, 13, '#d7d8dc'); T(frTitle(b) || 'Untitled frame', P + 24, y + hh - 44, 30, '#fff', 600); T([b.shotBy, b.date].filter(Boolean).join(' · '), P + 24, y + hh - 20, 13, '#b9bbc2');
+    if (overall != null) { T('OVERALL', P + inner - 24, y + hh - 84, 11, '#d7d8dc', 400, 'right'); T(String(overall), P + inner - 24, y + hh - 24, 64, frBand(overall), 700, 'right'); }
+    y += hh + 20; const r = b.result || {};
+    g.font = `400 16px ${FONT}`; const vl = frWrap(g, r.verdict, inner - 40), vh = 24 + vl.length * 22;
+    if (draw) rr(P, y, inner, vh, 10, '#151619', '#24262b'); vl.forEach((l, i) => T(l, P + 20, y + 28 + i * 22, 16, '#ececee')); y += vh + 16;
+    const gs = frGroups(b), cw = (inner - 16) / 2;
+    for (let i = 0; i < gs.length; i += 2) {
+      const pair = gs.slice(i, i + 2), ch = 62 + Math.max(...pair.map(x => x.rows.length)) * 26;
+      pair.forEach((gp, k) => {
+        const x = P + k * (cw + 16); if (draw) rr(x, y, cw, ch, 12, '#151619', '#24262b');
+        T(gp.n.toUpperCase(), x + 16, y + 28, 11, '#9a9ca3'); if (gp.v != null) T(String(gp.v), x + cw - 16, y + 34, 28, frBand(gp.v), 700, 'right');
+        gp.rows.forEach((rw, j) => { const by = y + 58 + j * 26; T(rw.c.name, x + 16, by + 8, 12, '#9a9ca3'); if (draw) { rr(x + 170, by, cw - 170 - 56, 8, 4, '#1d1f23'); if (rw.s != null) rr(x + 170, by, (cw - 226) * rw.s / 100, 8, 4, frBand(rw.s)); } T(rw.s == null ? '—' : String(rw.s), x + cw - 16, by + 8, 12, '#ececee', 400, 'right'); });
+      }); y += ch + 12;
+    }
+    y += 4; const cws = (inner - 32) / 3;
+    const calls = [['STRONGEST CHOICE', r.strongest, '#22c55e'], ['BIGGEST WEAKNESS', r.weakest, '#ef5b5b'], ['FASTEST IMPROVEMENT', r.fastest, '#7aa2ff']];
+    g.font = `400 14px ${FONT}`; const cl = calls.map(c => frWrap(g, c[1], cws - 32)), cH = 40 + Math.max(...cl.map(l => l.length)) * 19;
+    calls.forEach((c, i) => { const x = P + i * (cws + 16); if (draw) { rr(x, y, cws, cH, 10, '#151619', '#24262b'); rr(x, y + 6, 3, cH - 12, 2, c[2]); } T(c[0], x + 16, y + 24, 11, c[2]); cl[i].forEach((l, j) => T(l, x + 16, y + 46 + j * 19, 14, '#ececee')); });
+    y += cH + 16;
+    const gear = FR_GEAR.map(([k, l]) => [l, frVal(b, k).v]).filter(x => x[1]).map(x => x[0] + ': ' + x[1]).join('  ·  ');
+    g.font = `400 13px ${FONT}`; const gl = frWrap(g, gear || '—', (inner - 16) / 2 - 32), nl = frWrap(g, r.notes || '—', (inner - 16) / 2 - 32), bH = 48 + Math.max(gl.length, nl.length) * 21;
+    [['GEAR', gl], ['NOTES', nl]].forEach(([t, ls], i) => { const x = P + i * (cw + 16); if (draw) rr(x, y, cw, bH, 10, '#151619', '#24262b'); T(t, x + 16, y + 26, 11, '#9a9ca3'); ls.forEach((l, j) => T(l, x + 16, y + 50 + j * 21, 13, '#c4c6cc')); });
+    y += bH + P; return y;
+  };
+  const m = document.createElement('canvas').getContext('2d'); const H = Math.ceil(paint(m, false));
+  const cv = document.createElement('canvas'); cv.width = W * scale; cv.height = H * scale; const g = cv.getContext('2d'); g.scale(scale, scale); paint(g, true); if (img && img.close) img.close();
+  return { canvas: cv, W, H };
+}
+async function frExport(b, kind) {
+  if (!b.result) return; toast('Rendering…'); const nm = safeName(frTitle(b) || 'Frame review');
+  try {
+    if (kind === 'png') { const r = await frCanvas(b, 2); r.canvas.toBlob(bl => download(bl, nm + '.png'), 'image/png'); }
+    else { const r = await frCanvas(b, 2); const jpg = new Uint8Array(await (await new Promise(res => r.canvas.toBlob(res, 'image/jpeg', 0.92))).arrayBuffer()); download(makePdf(jpg, r.canvas.width, r.canvas.height, r.W, r.H), nm + '.pdf'); }
+  } catch (e) { console.warn(e); toast('Could not render the export'); }
+}
+
+/* ---- save to a "Frame Reviews" database ---- */
+function frSaveDb(b, persist, redraw) {
+  const r = b.result; if (!r) return; checkpoint();
+  const pg = PE.page; let db = Object.values(ST.dbs).find(d => d && !d.trashed && d.title === 'Frame Reviews'), created = false;
+  if (!db) { db = newDb({ t: 'page', id: pg.id }, { title: 'Frame Reviews' }); created = true; }
+  const prop = (name, type) => { let p = db.schema.find(x => x.name === name && x.type === type); if (!p) { p = newProp(type, name); db.schema.push(p); } return p; };
+  const pDate = prop('Date', 'date'), pOv = prop('Overall', 'number'), pProj = prop('Project', 'text'), pStr = prop('Strongest', 'text'), pWk = prop('Weakest', 'text');
+  let row = b.rowId && ST.pages[b.rowId] && !ST.pages[b.rowId].trashed && db.rows.includes(b.rowId) ? ST.pages[b.rowId] : null, isNew = !row;
+  if (!row) { row = newRow(db, { title: frTitle(b) || 'Frame review' }); b.rowId = row.id; }
+  row.title = frTitle(b) || 'Frame review'; row.values = row.values || {};
+  const d = (b.date || '').match(/^\d{4}-\d{2}-\d{2}$/) ? b.date : todayStr();
+  row.values[pDate.id] = { start: d }; row.values[pOv.id] = frOverall(b); row.values[pProj.id] = frProject(b); row.values[pStr.id] = r.strongest || ''; row.values[pWk.id] = r.weakest || '';
+  for (const s of frScores(b)) { const p = prop(s.c.name, 'number'); row.values[p.id] = s.s; }
+  if (isNew) {
+    row.blocks = [];
+    if (b.blobId) row.blocks.push(nb('image', '', { blobId: b.blobId, width: 'full', caption: '' }));
+    row.blocks.push(nb('text', r.verdict ? esc(r.verdict) : ''), nb('text', `<a class="ilink mention" data-ref="p:${pg.id}" contenteditable="false">${esc(pg.title || 'Review page')}</a>`));
+  }
+  row.updatedAt = now(); db.updatedAt = now();
+  if (created) { const f = findBlock(b.id); if (f) { const n2 = nb('db', '', { dbId: db.id, linked: false, views: [], cur: null }); f.arr.splice(f.i + 1, 0, n2); } }
+  pg.updatedAt = now(); save(); if (created) renderBody(); else redraw();
+  toast(created ? 'Saved to a new “Frame Reviews” database below this block' : (isNew ? 'Added to “Frame Reviews”' : 'Updated in “Frame Reviews”'));
+}
+
+/* ---- UI ---- */
+function frEd(get, set, ph, multi, cls) {
+  const el = h('span', { class: 'fr-ed' + (cls ? ' ' + cls : ''), 'data-ph': ph || '', spellcheck: 'false' }); el.textContent = get() || '';
+  el.contentEditable = el.contentEditable === 'plaintext-only' ? 'plaintext-only' : 'true'; try { el.contentEditable = 'plaintext-only'; } catch (e) { } if (el.contentEditable !== 'plaintext-only') el.contentEditable = 'true';
+  el.addEventListener('keydown', e => { if (e.key === 'Escape' || (e.key === 'Enter' && !multi)) { e.preventDefault(); el.blur(); } });
+  el.addEventListener('paste', e => { e.preventDefault(); const t = (e.clipboardData || window.clipboardData).getData('text/plain'); document.execCommand('insertText', false, multi ? t : t.replace(/\s+/g, ' ')); });
+  el.addEventListener('blur', () => { const v = el.textContent.trim(); if (v !== (get() || '')) set(v); });
+  return el;
+}
+function frEl(b, persist) {
+  frInit(b); const root = h('div', { class: 'fr' });
+  const redraw = () => draw(); const ui = () => { let u = frUI.get(b); if (!u) { u = {}; frUI.set(b, u); } return u; };
+  const save2 = () => { persist(); };
+  const field = (lab, get, set, ph) => { const i = h('input', { class: 'fr-in', type: 'text', value: get() || '', placeholder: ph || '', onchange: () => { set(i.value); save2(); } }); return h('label', null, lab, i); };
+  const errBox = () => b.err === 'nokey' ? h('div', { class: 'fr-err' }, 'Add your Anthropic API key to run a review. ', h('button', { class: 'fr-btn', onclick: () => openSettings() }, 'Open Settings')) : b.err ? h('div', { class: 'fr-err' }, b.err) : null;
+  const confirmRun = () => { if (b.result && b.result.edited) { let bg; bg = modal([h('h3', null, 'Replace your edits?'), h('p', { class: 'muted' }, 'You edited this review. Reviewing again replaces it.'), h('div', { class: 'wse-btns' }, h('button', { class: 'btn', onclick: () => bg.remove() }, 'Cancel'), h('button', { class: 'btn primary', onclick: () => { bg.remove(); frReview(b, save2, redraw); } }, 'Review again'))]); } else frReview(b, save2, redraw); };
+
+  const drawInput = () => {
+    const wrap = h('div', { class: 'fr-stack' });
+    if (b.blobId) {
+      wrap.append(h('div', { class: 'fr-prev' }, h('img', { src: Blobs.url(b.blobId), alt: 'Frame to review' }), h('div', { class: 'fr-pt' }, h('button', { class: 'fr-btn ghost', onclick: () => pickFiles('image/*', f => frSetFrame(b, f[0], save2, redraw)) }, 'Replace'), h('button', { class: 'fr-btn ghost', onclick: () => frVideoModal(b, save2, redraw) }, 'From video'), h('button', { class: 'fr-btn ghost', onclick: () => { checkpoint(); b.blobId = null; save2(); redraw(); } }, 'Remove'))));
+    } else {
+      const dz = h('div', { class: 'fr-drop', tabindex: '0', role: 'group', 'aria-label': 'Frame drop zone' }, h('div', { style: { fontSize: '14px', color: '#ececee' } }, 'Add a still frame to review'), h('div', null, 'Drop an image here, or paste one while this box is selected'), h('div', { class: 'row' }, h('button', { class: 'fr-btn primary', onclick: () => pickFiles('image/*', f => frSetFrame(b, f[0], save2, redraw)) }, 'Choose image'), h('button', { class: 'fr-btn', onclick: () => frVideoModal(b, save2, redraw) }, 'Pick a frame from a video')));
+      dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); }); dz.addEventListener('dragleave', () => dz.classList.remove('over'));
+      dz.addEventListener('drop', e => { e.preventDefault(); e.stopPropagation(); dz.classList.remove('over'); const f = [...(e.dataTransfer.files || [])].find(x => /^image\//.test(x.type)); if (f) frSetFrame(b, f, save2, redraw); else toast('Drop an image file'); });
+      dz.addEventListener('paste', e => { const f = [...(e.clipboardData ? e.clipboardData.files : [])].find(x => /^image\//.test(x.type)); if (f) { e.preventDefault(); frSetFrame(b, f, save2, redraw); } });
+      wrap.append(dz);
+    }
+    const ta = h('textarea', { class: 'fr-ta', placeholder: 'Describe the shot: the scene, your intent, anything the AI should know (optional but it helps).', onchange: () => { b.desc = ta.value; save2(); } }); ta.value = b.desc || '';
+    wrap.append(h('div', null, h('div', { class: 'fr-lab', style: { marginBottom: '6px' } }, 'Context'), ta));
+    const u = ui(), det = h('div', { class: 'fr-stack' });
+    if (u.det) det.append(h('div', { class: 'fr-grid' }, field('Title', () => b.title, v => { b.title = v; }), field('Project / format', () => b.project, v => { b.project = v; }, 'e.g. Meridian · Feature Film'), field('Shot by', () => b.shotBy, v => { b.shotBy = v; }), field('Date', () => b.date, v => { b.date = v; }, 'YYYY-MM-DD'), FR_GEAR.map(([k, l]) => field(l, () => b.gear[k], v => { b.gear[k] = v; }))), h('div', { class: 'fr-sub' }, 'Anything you leave empty, the AI fills in only when the image gives clear evidence, and marks it “est.”.'));
+    const bar = h('div', { class: 'fr-row' }, h('button', { class: 'fr-btn primary', disabled: !b.blobId || u.running ? true : null, onclick: confirmRun }, b.result ? 'Review again' : 'Review frame'), h('button', { class: 'fr-btn', onclick: () => { u.det = !u.det; redraw(); } }, u.det ? 'Hide details' : 'Details (title, gear…)'), h('button', { class: 'fr-btn', onclick: () => frRubricModal(b, save2, redraw) }, 'Criteria'), b.result ? h('button', { class: 'fr-btn', onclick: () => { b.view = 'result'; save2(); redraw(); } }, 'Back to review') : null);
+    wrap.append(det, bar, errBox());
+    return wrap;
+  };
+
+  const drawResult = () => {
+    const r = b.result, wrap = h('div', { class: 'fr-stack' }), ov = frOverall(b), u = ui();
+    const mk = (t, fn) => h('button', { class: 'fr-btn ghost', onclick: fn }, t);
+    const top = h('div', { class: 'fr-top' }, mk('Edit', () => { b.view = 'input'; save2(); redraw(); }), mk('Re-review', confirmRun), mk('Criteria', () => frRubricModal(b, save2, redraw)), mk('Export', e => popAt(e.currentTarget, h('div', { style: { display: 'flex', flexDirection: 'column', gap: '4px', minWidth: '130px' } }, h('button', { class: 'btn', onclick: () => { closeTransient(); frExport(b, 'png'); } }, 'Image (PNG)'), h('button', { class: 'btn', onclick: () => { closeTransient(); frExport(b, 'pdf'); } }, 'PDF')))), mk(b.rowId ? 'Update database' : 'Save to database', () => frSaveDb(b, save2, redraw)));
+    const touch = () => { r.edited = true; save2(); };
+    const hero = h('div', { class: 'fr-hero' }, b.blobId ? h('img', { src: Blobs.url(b.blobId), alt: frTitle(b) || 'Reviewed frame' }) : null, h('div', { class: 'fr-shade' }), top,
+      h('div', { class: 'fr-ov' }, h('div', { style: { minWidth: 0 } },
+        h('div', { class: 'fr-meta' }, frEd(() => frProject(b), v => { b.project = v; save2(); }, 'Project · format'), (!(b.project || '').trim() && r.project) ? h('em', { class: 'est' }, 'EST.') : null),
+        h('div', { class: 'fr-ttl' }, frEd(() => frTitle(b), v => { b.title = v; save2(); }, 'Untitled frame'), (!(b.title || '').trim() && r.title) ? h('em', { class: 'est' }, 'EST.') : null),
+        h('div', { class: 'fr-sub' }, frEd(() => b.shotBy, v => { b.shotBy = v; save2(); }, 'Shot by'), ' · ', frEd(() => b.date, v => { b.date = v; save2(); }, 'Date'))),
+        h('div', { class: 'fr-score' }, h('span', null, 'OVERALL'), h('b', { style: { color: ov == null ? '#9a9ca3' : frBand(ov) } }, ov == null ? '—' : String(ov)))));
+    wrap.append(hero);
+    wrap.append(h('div', { class: 'fr-strip' }, h('div', { style: { fontSize: '15px', flex: '1 1 280px' } }, frEd(() => r.verdict, v => { r.verdict = v; touch(); }, 'Opening verdict', true)), h('div', { class: 'fr-chips' }, (r.priorities || []).map((p, i) => h('span', { class: 'fr-chip' }, frEd(() => p, v => { if (v) r.priorities[i] = v; else r.priorities.splice(i, 1); touch(); redraw(); }, 'Priority'))))));
+    const cards = h('div', { class: 'fr-cards' });
+    for (const g of frGroups(b)) {
+      const card = h('div', { class: 'fr-card' }, h('div', { class: 'fr-ch' }, h('span', { class: 'fr-lab' }, g.n), h('b', { style: { color: g.v == null ? '#9a9ca3' : frBand(g.v) } }, g.v == null ? '—' : String(g.v))));
+      for (const rw of g.rows) {
+        const open = u.open === rw.c.id;
+        card.append(h('div', { class: 'fr-bar', role: 'button', tabindex: '0', title: rw.why || 'Click for details', onclick: e => { if (e.target.closest('.fr-why')) return; u.open = open ? null : rw.c.id; redraw(); }, onkeydown: e => { if (e.key === 'Enter' && !e.target.closest('.fr-why')) { u.open = open ? null : rw.c.id; redraw(); } } },
+          h('span', { class: 'nm' }, rw.c.name), h('span', { class: 'tr' }, h('i', { style: { width: (rw.s == null ? 0 : rw.s) + '%', background: rw.s == null ? '#2c2f35' : frBand(rw.s) } })), h('span', { class: 'v' }, rw.s == null ? '—' : String(rw.s)),
+          open ? h('div', { class: 'fr-why' }, frEd(() => rw.why, v => { (r.scores[rw.c.id] = r.scores[rw.c.id] || { s: 0, why: '' }).why = v; touch(); }, rw.s == null ? 'Not scored yet. Review again to score this criterion.' : 'Reason', true), h('input', { type: 'number', min: 0, max: 100, value: rw.s == null ? '' : rw.s, 'aria-label': 'Score', onchange: function () { const n = Math.max(0, Math.min(100, Math.round(Number(this.value)))); if (!isFinite(n) || this.value === '') return; (r.scores[rw.c.id] = r.scores[rw.c.id] || { s: 0, why: '' }).s = n; touch(); redraw(); } })) : null));
+      }
+      cards.append(card);
+    }
+    wrap.append(cards);
+    const call = (lab, key, col) => h('div', { class: 'fr-call', style: { borderLeftColor: col } }, h('div', { class: 'fr-lab', style: { color: col } }, lab), frEd(() => r[key], v => { r[key] = v; touch(); }, '—', true));
+    wrap.append(h('div', { class: 'fr-calls' }, call('Strongest choice', 'strongest', '#22c55e'), call('Biggest weakness', 'weakest', '#ef5b5b'), call('Fastest improvement', 'fastest', '#7aa2ff')));
+    const gear = h('div', { class: 'fr-gear' }); for (const [k, l] of FR_GEAR) { const g = frVal(b, k); gear.append(h('div', null, h('span', null, l), h('br'), frEd(() => frVal(b, k).v, v => { b.gear[k] = v; save2(); }, '—'), g.est ? h('em', { class: 'est' }, 'EST.') : null)); }
+    wrap.append(h('div', { class: 'fr-low' }, h('div', { class: 'fr-box' }, h('div', { class: 'fr-lab' }, 'Gear'), gear), h('div', { class: 'fr-box' }, h('div', { class: 'fr-lab' }, 'Notes'), frEd(() => r.notes, v => { r.notes = v; touch(); }, 'Notes', true))));
+    wrap.append(h('div', { class: 'fr-stamp' }, 'Reviewed ' + timeAgo(r.at) + (r.edited ? ' · edited' : ''), errBox()));
+    return wrap;
+  };
+
+  function draw() {
+    root.innerHTML = '';
+    const ae = document.activeElement; if (ae && root.contains(ae) && (ae.isContentEditable || ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA')) { /* keep typing state */ }
+    root.append(b.view === 'result' && b.result ? drawResult() : drawInput());
+    if (frUI.get(b) && frUI.get(b).running) root.append(h('div', { class: 'fr-run', role: 'status' }, h('span', { class: 'fr-dots' }, h('i'), h('i'), h('i')), 'Reviewing the frame…'));
+  }
+  for (const ev of ['keydown', 'keyup', 'input', 'beforeinput', 'cut', 'copy', 'dblclick']) root.addEventListener(ev, e => e.stopPropagation());
+  root.addEventListener('paste', e => { if (!e.target.closest('.fr-drop')) e.stopPropagation(); });
+  root.addEventListener('pointerdown', e => { if (e.target.closest('input,textarea,select,[contenteditable],button,.fr-drop,.fr-bar')) e.stopPropagation(); });
+  root._draw = draw; draw(); return root;
+}
+{
+  const _be = blockEl;
+  blockEl = function (b, n) {
+    const el = _be.apply(this, arguments);
+    if (b.type === 'framereview') { const bc = el.querySelector('.bc'); if (bc) { bc.innerHTML = ''; bc.append(frEl(b, () => { if (PE.page) { PE.page.updatedAt = now(); save(); } })); } }
     return el;
   };
 }
