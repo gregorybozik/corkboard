@@ -3591,6 +3591,87 @@ body.sel-one .card.selected>.hp-col .hp-color{display:block}
 .frm video{width:100%;max-height:50vh;background:#000;border-radius:8px}
 .frm .fr-rr{display:grid;grid-template-columns:1fr 150px 32px;gap:8px;align-items:center}
 .frm input[type=text],.frm select{background:var(--card,#fff);color:inherit;border:1px solid var(--line,#ccc);border-radius:6px;padding:6px 8px;font:inherit}
+
+/* ===== v6.6: Set Report blocks ===== */
+.b-srhead .bc,.b-srframes .bc,.b-srexp .bc,.b-srcam .bc,.b-srset .bc,.b-srsrc .bc,.b-srlight .bc,.b-srdiag .bc,.b-srnotes .bc{display:block}
+.sr{container-type:inline-size;color:#ececee;font-size:13px;line-height:1.45;margin:6px 0;user-select:text}
+.sr *{box-sizing:border-box}
+.sr button{font:inherit;color:inherit;cursor:pointer}
+.sr-card{background:#151619;border:1px solid #24262b;border-radius:12px;padding:16px 18px}
+.sr-lab{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#9a9ca3;margin-bottom:10px;display:block}
+.sr-in,.sr-sel,.sr-ta{width:100%;min-width:0;background:transparent;border:1px solid transparent;border-radius:6px;color:#ececee;font:inherit;padding:4px 6px;margin:0 -6px;outline:none}
+.sr-in:hover,.sr-sel:hover,.sr-ta:hover{border-color:#2c2f35}
+.sr-in:focus,.sr-sel:focus,.sr-ta:focus{border-color:#f58a3c;background:#0e0f11}
+.sr-in::placeholder,.sr-ta::placeholder{color:#6e7078}
+.sr-sel{background:#151619;width:auto;margin:0}
+.sr-ta{min-height:88px;resize:vertical;font-size:14px;line-height:1.6;margin:0;padding:8px 10px;border-color:#2c2f35}
+.sr-btn{background:#1b1d21;border:1px solid #2c2f35;border-radius:8px;padding:7px 12px;font-size:12.5px;min-height:34px}
+.sr-btn:hover{background:#24262b}.sr-btn.on{background:#f58a3c;border-color:#f58a3c;color:#1a0d02;font-weight:700}
+.sr-btn.ghost{background:rgba(0,0,0,.35)}
+.sr-btn.danger:hover{background:#3a1d1d;border-color:#6b2c2c}
+.sr-x{background:transparent;border:0;color:#9a9ca3;font-size:18px;line-height:1;width:30px;height:30px;border-radius:6px}.sr-x:hover{background:#24262b;color:#fff}
+.sr-grid6{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px 22px}
+.sr-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 22px}
+.sr-f{display:flex;flex-direction:column;gap:2px;min-width:0}
+.sr-f>span{font-size:12px;color:#9a9ca3}
+.sr-f .sr-in{font-size:15px}
+.sr-proj{font-size:12.5px;color:#9a9ca3}
+.sr-title{font-size:28px;font-weight:700;margin:2px 0 14px}.sr-title.sr-in{font-size:28px;font-weight:700;padding:2px 6px}
+.sr-tiles{display:flex;gap:14px}
+.sr-tile{flex:1;min-width:0}
+.sr-tile .sr-big{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:40px;font-weight:700;line-height:1.1;padding:2px 6px}
+.sr-tile .sr-sub{font-size:12px;color:#9a9ca3;margin-top:4px;min-height:17px}
+.sr-tile .sr-mode{float:right;display:inline-flex;gap:2px;margin-top:-4px}
+.sr-tile .sr-mode button{border:0;background:#1b1d21;font-size:11px;padding:4px 8px;border-radius:5px;color:#9a9ca3;min-height:26px}
+.sr-tile .sr-mode button.on{background:#f58a3c;color:#1a0d02;font-weight:700}
+.sr-row2{display:flex;gap:14px}.sr-row2>.sr-card{flex:1;min-width:0}
+.sr-bigin.sr-in{font-size:20px;font-weight:600;padding:3px 6px}
+.sr-two{display:flex;gap:12px;margin-top:6px}.sr-two .sr-in{font-size:13px;color:#c4c6cc}
+.sr-list{display:flex;flex-direction:column}
+.sr-li{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid #24262b}
+.sr-li .sr-in{flex:1}
+.sr-li .sr-sel{width:96px;flex:none;color:#f58a3c;font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-color:#2c2f35;padding:6px}
+.sr-num{width:34px;flex:none;text-align:center;font-weight:700;color:#f58a3c;background:rgba(245,138,60,.14);border-radius:17px;margin:0;padding:6px 2px}
+.sr-li .sr-kind{width:96px;flex:none;font-weight:600}
+.sr-li .sr-temp{width:84px;flex:none;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#9a9ca3}
+.sr-empty{color:#6e7078;padding:6px 0}
+.sr-fbar{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sr-seg{display:inline-flex;gap:2px;padding:3px;border-radius:10px;background:#0e0f11;border:1px solid #2c2f35}
+.sr-seg button{border:0;background:transparent;border-radius:7px;padding:8px 14px;font-size:12.5px;font-weight:600;min-height:38px;color:#ececee;position:relative}
+.sr-seg button.on{background:#f58a3c;color:#1a0d02}
+.sr-seg button i{display:inline-block;width:6px;height:6px;border-radius:3px;background:#22c55e;margin-left:7px;vertical-align:middle}
+.sr-acts{display:flex;gap:6px;flex-wrap:wrap}
+.sr-hero{position:relative;aspect-ratio:16/9;background:#000;border:1px solid #24262b;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.sr-hero.over{border-color:#f58a3c}
+.sr-hero img{display:block;width:100%;height:100%;object-fit:contain}
+.sr-pill{position:absolute;left:12px;bottom:12px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#f3e3cf;background:rgba(0,0,0,.6);padding:5px 9px;border-radius:6px}
+.sr-drop{display:flex;flex-direction:column;align-items:center;gap:10px;color:#9a9ca3;text-align:center;padding:16px}
+.sr-drop .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.sr-cap{margin-top:10px}.sr-cap .sr-in{margin:0;border-color:#2c2f35;padding:8px 10px;font-size:13px}
+.sr-err{color:#ff8a7a;font-size:12.5px;margin-top:6px}
+.sr-dtool{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center}
+.sr-dtool .sr-btn{padding:6px 10px;min-height:34px;display:inline-flex;align-items:center;gap:6px}
+.sr-dtool .dot{width:9px;height:9px;border-radius:2px;display:inline-block}
+.sr-dtool .sp{flex:1}
+.sr-dtool label{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#9a9ca3;min-height:34px;padding:0 6px}
+.sr-dg{border:1px solid #24262b;border-radius:8px;overflow:hidden;background:#151619;touch-action:none;outline:none;position:relative}
+.sr-dg svg{display:block;width:100%;height:auto;aspect-ratio:800/460;user-select:none;-webkit-user-select:none}
+.sr-insp{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px;padding:10px;background:#0e0f11;border:1px solid #24262b;border-radius:10px}
+.sr-insp label{display:flex;align-items:center;gap:6px;font-size:12px;color:#9a9ca3}
+.sr-insp .sr-in{margin:0;border-color:#2c2f35;width:120px;padding:6px 8px}
+.sr-insp .sr-in.s{width:64px}
+.sr-insp .sr-sel{border-color:#2c2f35;padding:6px}
+.sr-hint{font-size:12px;color:#6e7078;margin-top:8px}
+.sr-leg{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:#9a9ca3}
+.sr-leg span{display:inline-flex;align-items:center;gap:6px}.sr-leg i{width:10px;height:10px;border-radius:2px;display:inline-block}
+@container (max-width:640px){
+ .sr-grid6{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .sr-grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .sr-tiles,.sr-row2{flex-direction:column}
+ .sr-tile .sr-big{font-size:34px}
+ .sr-li{flex-wrap:wrap}
+ .sr-title.sr-in{font-size:24px}
+}
 </style>
 </head>
 <body class="app-root">
@@ -15420,7 +15501,7 @@ async function frSetFrame(b, blob, persist, redraw) {
     const id = await Blobs.put(bl); checkpoint(); b.blobId = id; b.err = ''; persist(); redraw();
   } catch (e) { b.err = 'Could not load that image.'; redraw(); }
 }
-function frVideoModal(b, persist, redraw) {
+function frVideoModal(b, persist, redraw, pick) {
   const vid = h('video', { controls: false, playsinline: true, muted: true }); let url = null, bg;
   const rng = h('input', { type: 'range', min: 0, max: 1000, value: 0, step: 1, style: { width: '100%' }, disabled: true }); const lab = h('span', { class: 'muted' }, 'Choose a video file');
   const file = h('input', { type: 'file', accept: 'video/*', onchange: () => { const f = file.files[0]; if (!f) return; if (url) URL.revokeObjectURL(url); url = URL.createObjectURL(f); vid.src = url; vid.onloadedmetadata = () => { rng.disabled = false; rng.value = 0; vid.currentTime = 0; upd(); }; } });
@@ -15430,7 +15511,7 @@ function frVideoModal(b, persist, redraw) {
   const use = h('button', { class: 'btn primary', disabled: true, onclick: async () => {
     if (!vid.videoWidth) return; const cv = document.createElement('canvas'), k = Math.min(1, 2000 / Math.max(vid.videoWidth, vid.videoHeight)); cv.width = Math.round(vid.videoWidth * k); cv.height = Math.round(vid.videoHeight * k);
     try { cv.getContext('2d').drawImage(vid, 0, 0, cv.width, cv.height); cv.toDataURL('image/jpeg', 0.5); } catch (e) { toast('This browser blocked reading that video frame'); return; }
-    const bl = await new Promise(r => cv.toBlob(r, 'image/jpeg', 0.92)); close(); frSetFrame(b, bl, persist, redraw);
+    const bl = await new Promise(r => cv.toBlob(r, 'image/jpeg', 0.92)); close(); if (pick) pick(bl); else frSetFrame(b, bl, persist, redraw);
   } }, 'Use this frame');
   vid.addEventListener('loadeddata', () => { use.disabled = false; });
   const close = () => { if (url) URL.revokeObjectURL(url); bg.remove(); };
@@ -15621,6 +15702,267 @@ function frEl(b, persist) {
     const el = _be.apply(this, arguments);
     if (b.type === 'framereview') { const bc = el.querySelector('.bc'); if (bc) { bc.innerHTML = ''; bc.append(frEl(b, () => { if (PE.page) { PE.page.updatedAt = now(); save(); } })); } }
     return el;
+  };
+}
+
+
+/* ===== v6.6: Set Report blocks (header, frames, exposure, camera, settings, sources, lighting, diagram, notes) ===== */
+const SR_META = [['srhead', 'Set Report: Header', 'Scene, shot, take, date, location, DP', '▤'], ['srframes', 'Set Report: Frames', 'Camera original, LUT and false color frames', '▣'], ['srexp', 'Set Report: Exposure', 'ISO, shutter and fps', '◐'], ['srcam', 'Set Report: Camera & Lens', 'Camera and lens combination', '◉'], ['srset', 'Set Report: Camera Settings', 'White balance, codec, ND, LUT', '☰'], ['srsrc', 'Set Report: Other Sources', 'Sound, monitors, devices, VFX', '♫'], ['srlight', 'Set Report: Lighting List', 'Fixtures, gels and color temp', '☀'], ['srdiag', 'Set Report: Diagram', 'Top-down set diagram', '⌖'], ['srnotes', 'Set Report: Notes', 'Problems, fixes, continuity', '✎']];
+for (const m of SR_META) { TYPE_NAME[m[0]] = m[1]; SLASH.push(m); }
+const SR_TYPES = SR_META.map(m => m[0]);
+
+function srIso(root) {
+  for (const ev of ['keyup', 'input', 'beforeinput', 'cut', 'copy', 'paste', 'dblclick']) root.addEventListener(ev, e => e.stopPropagation());
+  root.addEventListener('keydown', e => { if (!e.target.closest('input,textarea,select') && (e.ctrlKey || e.metaKey)) return; e.stopPropagation(); });
+  root.addEventListener('pointerdown', e => { if (e.target.closest('input,textarea,select,button,.sr-dg,.sr-hero')) e.stopPropagation(); });
+}
+const srIn = (get, set, ph, cls, p) => { const i = h('input', { class: 'sr-in ' + (cls || ''), type: 'text', value: get() || '', placeholder: ph || '' }); i.addEventListener('change', () => { set(i.value); p(); }); return i; };
+const srField = (lab, get, set, ph, p) => h('label', { class: 'sr-f' }, h('span', null, lab), srIn(get, set, ph, '', p));
+const srLab = t => h('span', { class: 'sr-lab' }, t);
+
+function srHead(b, p) {
+  const d = b.d = b.d || {}; if (d.date == null) d.date = todayStr();
+  const F = (k, l, ph) => srField(l, () => d[k], v => { d[k] = v; }, ph, p);
+  return h('div', { class: 'sr-card' }, srIn(() => d.project, v => { d.project = v; }, 'Project · format', 'sr-proj', p), srIn(() => d.title == null ? 'Set Report' : d.title, v => { d.title = v; }, 'Set Report', 'sr-title', p),
+    h('div', { class: 'sr-grid6' }, F('scene', 'Scene', '24A'), F('shot', 'Shot', '3'), F('take', 'Take', '5'), F('date', 'Date', 'YYYY-MM-DD'), F('location', 'Location', 'Place, INT/EXT'), F('dp', 'DP', 'Name')));
+}
+
+function srExp(b, p) {
+  const d = b.d = b.d || {}; if (!d.smode) d.smode = 'angle';
+  const sub = h('div', { class: 'sr-sub' });
+  const calc = () => {
+    const f = parseFloat(d.fps), v = (d.shutter || '').trim(); let t = '';
+    if (v && f > 0) {
+      if (d.smode === 'angle') { const a = parseFloat(v); if (a > 0) t = '1/' + (Math.round(360 * f / a * 10) / 10) + ' s'; }
+      else { const m = v.match(/^(?:1\s*\/\s*)?(\d+(?:\.\d+)?)$/); if (m) t = (Math.round(360 * f / parseFloat(m[1]) * 10) / 10) + '°'; }
+    }
+    sub.textContent = t;
+  };
+  const big = (k, ph, after) => srIn(() => d[k], v => { d[k] = v; calc(); }, ph, 'sr-big', p);
+  const mk = (txt, m) => { const bt = h('button', { class: d.smode === m ? 'on' : '', type: 'button', title: m === 'angle' ? 'Shutter angle' : 'Shutter speed' }, txt); bt.onclick = () => { if (d.smode === m) return; d.smode = m; d.shutter = ''; p(); const root = bt.closest('.sr'); if (root && root._re) root._re(); }; return bt; };
+  const tile = (lab, inner, extra) => h('div', { class: 'sr-card sr-tile' }, extra || null, srLab(lab), inner);
+  const el = h('div', { class: 'sr-tiles' },
+    tile('ISO', big('iso', '800')),
+    tile('Shutter', h('div', null, big('shutter', d.smode === 'angle' ? '180' : '1/48'), sub), h('span', { class: 'sr-mode' }, mk('Angle', 'angle'), mk('Speed', 'speed'))),
+    tile('FPS', big('fps', '24')));
+  calc(); return el;
+}
+
+function srCam(b, p) {
+  const d = b.d = b.d || {};
+  const S = (k, ph) => srIn(() => d[k], v => { d[k] = v; }, ph, '', p);
+  return h('div', { class: 'sr-row2' },
+    h('div', { class: 'sr-card' }, srLab('Camera'), srIn(() => d.camera, v => { d.camera = v; }, 'Camera body', 'sr-bigin', p), h('div', { class: 'sr-two' }, S('support', 'Support (tripod, gimbal…)'))),
+    h('div', { class: 'sr-card' }, srLab('Lens'), srIn(() => d.lens, v => { d.lens = v; }, 'Lens', 'sr-bigin', p), h('div', { class: 'sr-two' }, S('focal', 'Focal length'), S('tstop', 'T-stop'))));
+}
+
+function srSet(b, p) {
+  const d = b.d = b.d || {};
+  const F = (k, l, ph) => srField(l, () => d[k], v => { d[k] = v; }, ph, p);
+  return h('div', { class: 'sr-card' }, srLab('Camera settings'), h('div', { class: 'sr-grid3' }, F('wb', 'White balance', '3200 K'), F('tint', 'Tint', '+0'), F('res', 'Resolution', '4.5K Open Gate'), F('codec', 'Codec', 'ARRIRAW'), F('nd', 'ND filter', '0.6'), F('lut', 'LUT', 'Show LUT name')));
+}
+
+function srSrc(b, p, re) {
+  const L = b.list = b.list || [];
+  const rows = L.map((r, i) => {
+    const sel = h('select', { class: 'sr-sel', 'aria-label': 'Source type' }, ['Sound', 'Monitor', 'Device', 'VFX', 'Other'].map(t => h('option', { value: t, selected: r.t === t ? true : null }, t))); sel.onchange = () => { r.t = sel.value; p(); };
+    const x = h('button', { class: 'sr-x', type: 'button', title: 'Remove', 'aria-label': 'Remove source' }, '×'); x.onclick = () => { checkpoint(); L.splice(i, 1); p(); re(); };
+    return h('div', { class: 'sr-li' }, sel, srIn(() => r.n, v => { r.n = v; }, 'Device or source', '', p), srIn(() => r.o, v => { r.o = v; }, 'Notes', '', p), x);
+  });
+  const add = h('button', { class: 'sr-btn', type: 'button' }, '+ Add source'); add.onclick = () => { checkpoint(); L.push({ t: 'Sound', n: '', o: '' }); p(); re(); };
+  return h('div', { class: 'sr-card' }, srLab('Other sources captured'), h('div', { class: 'sr-list' }, rows.length ? rows : h('div', { class: 'sr-empty' }, 'No sources yet. Add sound, monitors, devices or VFX.')), h('div', { style: { marginTop: '10px' } }, add));
+}
+
+function srLight(b, p, re) {
+  const L = b.list = b.list || [];
+  const rows = L.map((r, i) => {
+    const x = h('button', { class: 'sr-x', type: 'button', title: 'Remove', 'aria-label': 'Remove light' }, '×'); x.onclick = () => { checkpoint(); L.splice(i, 1); p(); re(); };
+    return h('div', { class: 'sr-li' }, srIn(() => r.n, v => { r.n = v; }, '#', 'sr-num', p), srIn(() => r.k, v => { r.k = v; }, 'Key', 'sr-kind', p), srIn(() => r.u, v => { r.u = v; }, 'Fixture · gel · diffusion', '', p), srIn(() => r.t, v => { r.t = v; }, '5600 K', 'sr-temp', p), x);
+  });
+  const add = h('button', { class: 'sr-btn', type: 'button' }, '+ Add light'); add.onclick = () => { checkpoint(); L.push({ n: String(L.length + 1), k: '', u: '', t: '' }); p(); re(); };
+  return h('div', { class: 'sr-card' }, srLab('Lighting list'), h('div', { class: 'sr-list' }, rows.length ? rows : h('div', { class: 'sr-empty' }, 'No lights yet. Match the number to the badge on the diagram.')), h('div', { style: { marginTop: '10px' } }, add));
+}
+
+function srNotes(b, p) {
+  const ta = h('textarea', { class: 'sr-ta', placeholder: 'Problems, fixes, continuity, wrap summary…', rows: 4 }); ta.value = b.text || '';
+  const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.max(88, ta.scrollHeight + 2) + 'px'; };
+  ta.addEventListener('input', grow); ta.addEventListener('change', () => { b.text = ta.value; p(); }); setTimeout(grow, 0);
+  return h('div', { class: 'sr-card' }, srLab('Notes'), ta);
+}
+
+/* ---- frame triple ---- */
+const SR_SLOTS = [['orig', 'Camera original'], ['lut', 'LUT'], ['fc', 'False color']];
+function srFrames(b, p, re) {
+  b.fr = b.fr || {}; if (!b.cur) b.cur = 'orig';
+  const cur = b.cur, slot = b.fr[cur], name = SR_SLOTS.find(s => s[0] === cur)[1];
+  const setBlob = async blob => { try { let bl = blob; if (/^image\//.test(blob.type)) bl = await resizeImage(blob, 2000); const id = await Blobs.put(bl); checkpoint(); b.fr[cur] = { blobId: id }; b.err = ''; p(); re(); } catch (e) { b.err = 'Could not load that image.'; re(); } };
+  const seg = h('div', { class: 'sr-seg', role: 'tablist' }, SR_SLOTS.map(([k, l]) => { const bt = h('button', { type: 'button', role: 'tab', class: k === cur ? 'on' : '', 'aria-selected': k === cur ? 'true' : 'false' }, l, b.fr[k] ? h('i') : null); bt.onclick = () => { b.cur = k; p(); re(); }; return bt; }));
+  const btn = (t, fn, cls) => { const x = h('button', { class: 'sr-btn ' + (cls || ''), type: 'button' }, t); x.onclick = fn; return x; };
+  const acts = h('div', { class: 'sr-acts' });
+  if (slot) acts.append(
+    btn('Replace', () => pickFiles('image/*', f => setBlob(f[0]))), btn('From video', () => frVideoModal(b, p, re, setBlob)),
+    btn('Frame Review', () => { const f = findBlock(b.id); if (!f) return toast('Block not found'); checkpoint(); const n = nb('framereview', '', { blobId: slot.blobId, desc: b.cap || '', view: 'input' }); f.arr.splice(f.i + 1, 0, n); PE.page.updatedAt = now(); save(); renderBody(); toast('Sent to a new Frame Review block below'); }),
+    btn('Remove', () => { checkpoint(); b.fr[cur] = null; p(); re(); }, 'danger'));
+  const hero = h('div', { class: 'sr-hero', tabindex: '0', 'aria-label': name + ' frame' });
+  if (slot && Blobs.url(slot.blobId)) hero.append(h('img', { src: Blobs.url(slot.blobId), alt: name + ' frame' }), h('div', { class: 'sr-pill' }, name));
+  else hero.append(h('div', { class: 'sr-drop' }, h('div', { style: { color: '#ececee', fontSize: '14px' } }, 'Add the ' + name.toLowerCase() + ' frame'), h('div', null, 'Drop or paste an image'), h('div', { class: 'row' }, btn('Choose image', () => pickFiles('image/*', f => setBlob(f[0])), 'on'), btn('Pick from video', () => frVideoModal(b, p, re, setBlob)))));
+  hero.addEventListener('dragover', e => { e.preventDefault(); hero.classList.add('over'); }); hero.addEventListener('dragleave', () => hero.classList.remove('over'));
+  hero.addEventListener('drop', e => { e.preventDefault(); e.stopPropagation(); hero.classList.remove('over'); const f = [...(e.dataTransfer.files || [])].find(x => /^image\//.test(x.type)); if (f) setBlob(f); else toast('Drop an image file'); });
+  hero.addEventListener('paste', e => { const f = [...(e.clipboardData ? e.clipboardData.files : [])].find(x => /^image\//.test(x.type)); if (f) { e.preventDefault(); setBlob(f); } });
+  const cap = h('div', { class: 'sr-cap' }, srIn(() => b.cap, v => { b.cap = v; }, 'Caption or timecode, e.g. Scene 24A · Shot 3 · Take 5 · TC 14:22:08:11', '', p));
+  return h('div', { class: 'sr-card' }, h('div', { class: 'sr-fbar' }, seg, acts), hero, cap, b.err ? h('div', { class: 'sr-err' }, b.err) : null);
+}
+
+/* ---- set diagram ---- */
+const SRD = { tx: '#ececee', mut: '#9a9ca3', acc: '#f58a3c', lamp: '#f0b429', blue: '#7aa2ff', wall: '#c9ccd3', card: '#151619', line: '#24262b' };
+const SRD_KINDS = [['camera', 'Camera', SRD.acc], ['light', 'Light', SRD.lamp], ['mic', 'Mic boom', SRD.mut], ['wall', 'Wall', SRD.wall], ['window', 'Window', SRD.blue], ['door', 'Door', SRD.mut], ['bounce', 'Bounce', SRD.tx], ['flag', 'Flag', '#6b6f78'], ['sun', 'Sun', SRD.lamp], ['subject', 'Subject', SRD.blue], ['table', 'Table', '#7a7d85']];
+const SRD_DEF = { camera: { x: 140, y: 230, r: 0, len: 260, focal: 75, sensor: 's35', label: 'A-cam' }, light: { x: 260, y: 120, r: 35, len: 150, spread: 40, label: 'Light' }, mic: { x: 230, y: 330, r: -40, w: 120, label: 'Boom' }, wall: { x: 400, y: 230, r: 0, w: 200, label: '' }, window: { x: 500, y: 60, r: 0, w: 110, label: 'Window' }, door: { x: 60, y: 335, r: 90, w: 70, label: '' }, bounce: { x: 650, y: 230, r: 90, w: 80, label: 'Bounce' }, flag: { x: 600, y: 160, r: 90, w: 70, label: 'Flag' }, sun: { x: 650, y: 24, r: 150, len: 140, label: 'Sun' }, subject: { x: 410, y: 248, r: 0, label: 'Subject' }, table: { x: 570, y: 320, r: 0, w: 110, h: 50, label: '' } };
+const SRD_SENSOR = { s35: 24.9, lf: 36.7, ff: 36 };
+const srdSym = k => ['wall', 'window', 'door', 'bounce', 'flag'].includes(k);
+const srdLenKey = k => (k === 'mic' ? 'w' : 'len');
+const rad = d => d * Math.PI / 180;
+function srdNew(k, n) { const o = Object.assign({ id: uid(), k, num: '' }, JSON.parse(JSON.stringify(SRD_DEF[k]))); if (n && ['light', 'subject', 'table', 'wall', 'flag'].includes(k)) { o.x += (n % 5) * 14; o.y += (n % 5) * 14; } return o; }
+function srdRoom() { return [{ x: 400, y: 60, r: 0, w: 684 }, { x: 400, y: 420, r: 0, w: 684 }, { x: 60, y: 240, r: 90, w: 364 }, { x: 740, y: 240, r: 90, w: 364 }].map(o => Object.assign({ id: uid(), k: 'wall', num: '', label: '' }, o)); }
+function srdExample() {
+  const n = (k, o) => Object.assign(srdNew(k), o);
+  return [...srdRoom(), n('window', { x: 505, y: 60, w: 130, num: '4', label: 'Window' }), n('door', { x: 63, y: 335, r: 90, w: 70 }), n('sun', { x: 640, y: 24, r: 164, len: 130 }), n('camera', { x: 125, y: 235, r: 0, focal: 75, len: 260, label: 'A-cam' }), n('subject', { x: 410, y: 248 }), n('light', { x: 265, y: 112, r: 43, len: 190, spread: 30, num: '1', label: 'Key' }), n('bounce', { x: 645, y: 227, r: 90, w: 74, num: '2', label: 'Bounce' }), n('table', { x: 575, y: 323, w: 110, h: 46 }), n('light', { x: 552, y: 323, r: -90, len: 40, spread: 120, num: '3', label: 'Lamp' }), n('mic', { x: 240, y: 338, r: -32, w: 164, label: 'Boom' })];
+}
+function srdBody(s) {
+  const C = SRD, k = s.k;
+  if (k === 'camera') { const hf = Math.atan((SRD_SENSOR[s.sensor] || 24.9) / (2 * (s.focal || 50))), L = s.len || 260, dx = (L * Math.cos(hf)).toFixed(1), dy = (L * Math.sin(hf)).toFixed(1); return `<polygon points="0,0 ${dx},${-dy} ${dx},${dy}" fill="${C.acc}" opacity=".16" pointer-events="none"/><line x1="0" y1="0" x2="${dx}" y2="${-dy}" stroke="${C.acc}" stroke-width="1.2" stroke-dasharray="5 4" pointer-events="none"/><line x1="0" y1="0" x2="${dx}" y2="${dy}" stroke="${C.acc}" stroke-width="1.2" stroke-dasharray="5 4" pointer-events="none"/><rect x="-22" y="-13" width="26" height="26" rx="3" fill="${C.tx}"/><polygon points="4,-9 18,-17 18,17 4,9" fill="${C.tx}"/>`; }
+  if (k === 'light') { const L = s.len || 150, t = Math.tan(rad(Math.min(170, s.spread || 40) / 2)), w = (L * t).toFixed(1); return `<polygon points="0,0 ${L},${-w} ${L},${w}" fill="${C.lamp}" opacity=".22" pointer-events="none"/><rect x="-10" y="-9" width="20" height="18" rx="2" fill="${C.lamp}"/>`; }
+  if (k === 'mic') return `<line x1="0" y1="0" x2="${s.w}" y2="0" stroke="${C.mut}" stroke-width="3"/><circle cx="0" cy="0" r="4" fill="${C.mut}"/><circle cx="${s.w}" cy="0" r="6" fill="${C.mut}"/>`;
+  if (k === 'wall') return `<rect x="${-s.w / 2}" y="-4" width="${s.w}" height="8" fill="${C.wall}"/>`;
+  if (k === 'window') return `<rect x="${-s.w / 2}" y="-5" width="${s.w}" height="10" fill="${C.card}" stroke="${C.blue}" stroke-width="2"/><line x1="${-s.w / 2}" y1="0" x2="${s.w / 2}" y2="0" stroke="${C.blue}" stroke-width="1.5"/>`;
+  if (k === 'door') return `<rect x="${-s.w / 2}" y="-4" width="${s.w}" height="8" fill="${C.card}" stroke="${C.mut}"/><line x1="${-s.w / 2}" y1="0" x2="${-s.w / 2}" y2="${-s.w}" stroke="${C.mut}" stroke-width="2" pointer-events="none"/><path d="M ${s.w / 2} 0 A ${s.w} ${s.w} 0 0 0 ${-s.w / 2} ${-s.w}" fill="none" stroke="${C.mut}" stroke-width="1.5" stroke-dasharray="4 3" pointer-events="none"/>`;
+  if (k === 'bounce') return `<rect x="${-s.w / 2}" y="-3" width="${s.w}" height="6" fill="${C.tx}"/>`;
+  if (k === 'flag') return `<rect x="${-s.w / 2}" y="-3" width="${s.w}" height="6" fill="#6b6f78" stroke="${C.tx}"/>`;
+  if (k === 'sun') { const L = s.len || 140; return `<circle r="11" fill="${C.lamp}"/><line x1="14" y1="0" x2="${L}" y2="0" stroke="${C.lamp}" stroke-width="2.5" stroke-dasharray="6 4" pointer-events="none"/><polygon points="${L + 4},0 ${L - 8},-6 ${L - 8},6" fill="${C.lamp}" pointer-events="none"/>`; }
+  if (k === 'subject') return `<circle r="16" fill="${C.blue}"/><text y="4" text-anchor="middle" font-size="12" font-weight="700" fill="#0e0f11" font-family="Inter,sans-serif">S</text>`;
+  if (k === 'table') return `<rect x="${-s.w / 2}" y="${-s.h / 2}" width="${s.w}" height="${s.h}" rx="3" fill="none" stroke="${C.mut}" stroke-width="1.5"/>`;
+  return '';
+}
+function srdBox(s) {
+  const k = s.k;
+  if (k === 'camera') return [-24, -18, 32, 36]; if (k === 'light') return [-12, -12, 24, 24]; if (k === 'sun') return [-14, -14, 28, 28];
+  if (k === 'mic') return [-8, -10, s.w + 16, 20]; if (srdSym(k)) return k === 'door' ? [-s.w / 2, -s.w, s.w, s.w + 8] : [-s.w / 2, -10, s.w, 20];
+  if (k === 'subject') return [-18, -18, 36, 36]; if (k === 'table') return [-s.w / 2, -s.h / 2, s.w, s.h]; return [-10, -10, 20, 20];
+}
+function srdTip(s) {
+  const k = s.k; let l = null;
+  if (k === 'camera' || k === 'light' || k === 'sun') l = [s.len, 0]; else if (k === 'mic') l = [s.w, 0]; else if (srdSym(k)) l = [s.w / 2, 0]; else if (k === 'table') l = [s.w / 2, s.h / 2];
+  if (!l) return null; const c = Math.cos(rad(s.r || 0)), n = Math.sin(rad(s.r || 0)); return { x: s.x + l[0] * c - l[1] * n, y: s.y + l[0] * n + l[1] * c };
+}
+const srdEsc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function srdSvg(b, selId, exp) {
+  const C = SRD, sh = b.shapes || []; let g = '';
+  for (let x = 40; x < 800; x += 40) g += `<line x1="${x}" y1="0" x2="${x}" y2="460" stroke="${C.line}" stroke-width="1" opacity=".7"/>`;
+  for (let y = 40; y < 460; y += 40) g += `<line x1="0" y1="${y}" x2="800" y2="${y}" stroke="${C.line}" stroke-width="1" opacity=".7"/>`;
+  let body = '', over = '';
+  for (const s of sh) {
+    const sel = s.id === selId, bx = srdBox(s);
+    body += `<g data-sid="${s.id}" transform="translate(${s.x} ${s.y}) rotate(${s.r || 0})" style="cursor:${exp ? 'default' : 'move'}">${exp ? '' : `<rect x="${bx[0]}" y="${bx[1]}" width="${bx[2]}" height="${bx[3]}" fill="transparent"/>`}${srdBody(s)}${sel && !exp ? `<rect x="${bx[0] - 3}" y="${bx[1] - 3}" width="${bx[2] + 6}" height="${bx[3] + 6}" fill="none" stroke="${C.acc}" stroke-width="1.5" stroke-dasharray="3 3" pointer-events="none"/>` : ''}</g>`;
+    const off = s.k === 'camera' ? 34 : s.k === 'table' ? s.h / 2 + 16 : s.k === 'subject' ? 30 : 24;
+    const lab = (s.label || '') + (s.k === 'camera' && s.focal ? ' · ' + s.focal + ' mm' : '');
+    if (lab) over += `<text x="${s.x}" y="${s.y + off}" text-anchor="middle" font-size="11" fill="${C.mut}" font-family="Inter,system-ui,sans-serif" pointer-events="none">${srdEsc(lab)}</text>`;
+    if (s.num) over += `<g pointer-events="none"><circle cx="${s.x + 18}" cy="${s.y - 18}" r="10" fill="${C.acc}"/><text x="${s.x + 18}" y="${s.y - 14}" text-anchor="middle" font-size="11" font-weight="700" fill="#1a0d02" font-family="Inter,system-ui,sans-serif">${srdEsc(s.num)}</text></g>`;
+    if (sel && !exp) { const t = srdTip(s); if (t) over += `<circle data-h="tip" data-sid="${s.id}" cx="${t.x.toFixed(1)}" cy="${t.y.toFixed(1)}" r="8" fill="${C.acc}" stroke="#fff" stroke-width="2" style="cursor:grab"/>`; }
+  }
+  const north = `<g transform="translate(772 440)" pointer-events="none"><line x1="0" y1="0" x2="0" y2="-24" stroke="${C.mut}" stroke-width="2"/><polygon points="0,-32 -5,-22 5,-22" fill="${C.mut}"/><text x="-4" y="14" font-size="11" fill="${C.mut}" font-family="Inter,sans-serif">N</text></g><text x="12" y="452" font-size="11" fill="${C.mut}" font-family="Inter,sans-serif" pointer-events="none">Grid = 1 m</text>`;
+  const size = exp ? ' width="1600" height="920"' : '';
+  return `<svg xmlns="http://www.w3.org/2000/svg"${size} viewBox="0 0 800 460" role="img" aria-label="Top-down set diagram"><rect width="800" height="460" fill="${C.card}"/>${g}${body}${over}${north}</svg>`;
+}
+async function srdExport(b) {
+  try {
+    const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(srdSvg(b, null, true)); await img.decode();
+    const cv = document.createElement('canvas'); cv.width = 1600; cv.height = 920; cv.getContext('2d').drawImage(img, 0, 0, 1600, 920);
+    cv.toBlob(bl => download(bl, safeName('Set diagram') + '.png'), 'image/png');
+  } catch (e) { console.warn(e); toast('Could not render the diagram'); }
+}
+function srDiag(b, p, re) {
+  const sh = b.shapes = b.shapes || []; const ui = { sel: null, snap: true }; let drag = null;
+  const wrap = h('div', { class: 'sr-dg', tabindex: '0', 'aria-label': 'Set diagram canvas' });
+  const draw = () => { wrap.innerHTML = srdSvg(b, ui.sel, false); };
+  const insp = h('div');
+  const find = id => sh.find(s => s.id === id);
+  const snapV = (v, st) => ui.snap ? Math.round(v / st) * st : v;
+  const pos = e => { const r = wrap.querySelector('svg').getBoundingClientRect(); return { x: (e.clientX - r.left) * 800 / r.width, y: (e.clientY - r.top) * 460 / r.height }; };
+  const select = id => { if (ui.sel === id) return; ui.sel = id; drawInsp(); };
+  const del = () => { if (!ui.sel) return; checkpoint(); const i = sh.findIndex(s => s.id === ui.sel); if (i >= 0) sh.splice(i, 1); ui.sel = null; p(); draw(); drawInsp(); };
+  const add = k => { checkpoint(); const s = srdNew(k, sh.filter(x => x.k === k).length); sh.push(s); ui.sel = s.id; p(); draw(); drawInsp(); };
+  wrap.addEventListener('touchstart', e => { if (e.target.closest && e.target.closest('[data-sid],[data-h]')) e.preventDefault(); }, { passive: false });
+  wrap.addEventListener('pointerdown', e => {
+    const hd = e.target.closest && e.target.closest('[data-h]'), g = e.target.closest && e.target.closest('[data-sid]'); const pt = pos(e);
+    if (hd) { drag = { mode: 'tip', id: hd.getAttribute('data-sid'), moved: false, x0: e.clientX, y0: e.clientY }; }
+    else if (g) { const s = find(g.getAttribute('data-sid')); if (s) { drag = { mode: 'move', id: s.id, ox: pt.x - s.x, oy: pt.y - s.y, moved: false, x0: e.clientX, y0: e.clientY }; select(s.id); } }
+    else { select(null); drag = null; }
+    draw(); if (drag) { try { wrap.setPointerCapture(e.pointerId); } catch (x) { } } e.preventDefault(); wrap.focus({ preventScroll: true });
+  });
+  wrap.addEventListener('pointermove', e => {
+    if (!drag) return; if (!drag.moved) { if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 3) return; checkpoint(); drag.moved = true; }
+    const s = find(drag.id); if (!s) return; const pt = pos(e);
+    if (drag.mode === 'move') { s.x = Math.max(0, Math.min(800, snapV(pt.x - drag.ox, 10))); s.y = Math.max(0, Math.min(460, snapV(pt.y - drag.oy, 10))); }
+    else {
+      const dx = pt.x - s.x, dy = pt.y - s.y, d = Math.hypot(dx, dy), k = s.k;
+      if (k === 'table') { const c = Math.cos(rad(s.r || 0)), n = Math.sin(rad(s.r || 0)); s.w = Math.max(20, snapV(2 * Math.abs(dx * c + dy * n), 5)); s.h = Math.max(20, snapV(2 * Math.abs(-dx * n + dy * c), 5)); }
+      else { s.r = Math.round(snapV(Math.atan2(dy, dx) * 180 / Math.PI, 5)); if (srdSym(k)) s.w = Math.max(20, snapV(2 * d, 5)); else s[srdLenKey(k)] = Math.max(30, snapV(d, 5)); }
+    }
+    draw();
+  });
+  const end = e => { if (drag && drag.moved) { p(); drawInsp(); } drag = null; try { wrap.releasePointerCapture(e.pointerId); } catch (x) { } };
+  wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', end);
+  wrap.addEventListener('keydown', e => {
+    if (e.target !== wrap || !ui.sel) return; const s = find(ui.sel); if (!s) return;
+    if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); del(); return; }
+    const st = e.shiftKey ? 1 : 10, mv = { ArrowLeft: [-st, 0], ArrowRight: [st, 0], ArrowUp: [0, -st], ArrowDown: [0, st] }[e.key];
+    if (mv) { e.preventDefault(); checkpoint(); s.x = Math.max(0, Math.min(800, s.x + mv[0])); s.y = Math.max(0, Math.min(460, s.y + mv[1])); p(); draw(); }
+  });
+  function drawInsp() {
+    insp.innerHTML = ''; const s = find(ui.sel); if (!s) { insp.append(h('div', { class: 'sr-hint' }, sh.length ? 'Click a shape to edit it. Drag to move. Drag the orange handle to rotate and resize.' : 'Add shapes from the toolbar, or start with a room or the example.')); return; }
+    const box = h('div', { class: 'sr-insp' });
+    const num = (lab, get, set, cls) => { const i = h('input', { class: 'sr-in s', type: 'number', value: get() }); i.addEventListener('input', () => { const v = parseFloat(i.value); if (isFinite(v)) { set(v); draw(); } }); i.addEventListener('change', () => p()); return h('label', null, lab, i); };
+    const txt = (lab, get, set, ph, cls) => { const i = h('input', { class: 'sr-in ' + (cls || ''), type: 'text', value: get() || '', placeholder: ph || '' }); i.addEventListener('input', () => { set(i.value); draw(); }); i.addEventListener('change', () => p()); return h('label', null, lab, i); };
+    const btn = (t, fn, cls) => { const x = h('button', { class: 'sr-btn ' + (cls || ''), type: 'button' }, t); x.onclick = fn; return x; };
+    box.append(txt('Label', () => s.label, v => { s.label = v; }, 'Label'), txt('No.', () => s.num, v => { s.num = v; }, '1', 's'));
+    if (s.k === 'camera') { box.append(num('Focal mm', () => s.focal, v => { s.focal = Math.max(8, v); })); const sel = h('select', { class: 'sr-sel', 'aria-label': 'Sensor size' }, [['s35', 'Super 35'], ['lf', 'Large format'], ['ff', 'Full frame']].map(([v, l]) => h('option', { value: v, selected: s.sensor === v ? true : null }, l))); sel.onchange = () => { s.sensor = sel.value; p(); draw(); }; box.append(h('label', null, 'Sensor', sel)); }
+    if (s.k === 'light') box.append(num('Spread °', () => s.spread, v => { s.spread = Math.max(5, Math.min(170, v)); }));
+    if (s.k !== 'subject') box.append(num('Rotation °', () => Math.round(s.r || 0), v => { s.r = v; }), btn('−15°', () => { checkpoint(); s.r = (s.r || 0) - 15; p(); draw(); drawInsp(); }), btn('+15°', () => { checkpoint(); s.r = (s.r || 0) + 15; p(); draw(); drawInsp(); }));
+    box.append(btn('Duplicate', () => { checkpoint(); const c = JSON.parse(JSON.stringify(s)); c.id = uid(); c.x = Math.min(790, c.x + 20); c.y = Math.min(450, c.y + 20); sh.push(c); ui.sel = c.id; p(); draw(); drawInsp(); }), btn('Delete', del, 'danger'));
+    insp.append(box);
+  }
+  const bar = h('div', { class: 'sr-dtool' });
+  for (const [k, l, c] of SRD_KINDS) { const x = h('button', { class: 'sr-btn', type: 'button', title: 'Add ' + l.toLowerCase() }, h('i', { class: 'dot', style: { background: c } }), l); x.onclick = () => add(k); bar.append(x); }
+  const tb = (t, fn, cls) => { const x = h('button', { class: 'sr-btn ' + (cls || ''), type: 'button' }, t); x.onclick = fn; return x; };
+  const row2 = h('div', { class: 'sr-dtool' },
+    tb('Room (4 walls)', () => { checkpoint(); sh.push(...srdRoom()); p(); draw(); drawInsp(); }), tb('Load example', () => { if (sh.length && !confirm('Replace the current diagram with the example?')) return; checkpoint(); sh.length = 0; sh.push(...srdExample()); ui.sel = null; p(); draw(); drawInsp(); }),
+    h('span', { class: 'sp' }),
+    (() => { const c = h('input', { type: 'checkbox', checked: true }); c.addEventListener('change', () => { ui.snap = c.checked; }); return h('label', null, c, 'Snap'); })(),
+    tb('Undo', () => undo()), tb('Clear', () => { if (!sh.length) return; checkpoint(); sh.length = 0; ui.sel = null; p(); draw(); drawInsp(); }, 'danger'), tb('Export PNG', () => srdExport(b)));
+  draw(); drawInsp();
+  const leg = h('div', { class: 'sr-leg' }, [['Camera + field of view', SRD.acc], ['Light + beam', SRD.lamp], ['Window', SRD.blue], ['Bounce', SRD.tx], ['Sun', SRD.lamp], ['Mic boom', SRD.mut]].map(([n, c]) => h('span', null, h('i', { style: { background: c } }), n)));
+  return h('div', { class: 'sr-card' }, srLab('Set diagram (top down)'), bar, row2, wrap, insp, leg);
+}
+
+const SR_R = { srhead: srHead, srframes: srFrames, srexp: srExp, srcam: srCam, srset: srSet, srsrc: srSrc, srlight: srLight, srdiag: srDiag, srnotes: srNotes };
+function srWrap(b, R) {
+  const root = h('div', { class: 'sr' });
+  const p = () => { if (PE.page) { PE.page.updatedAt = now(); save(); } };
+  const re = () => { root.innerHTML = ''; root.append(R(b, p, re)); };
+  root._re = re; re(); srIso(root); return root;
+}
+{
+  const _be = blockEl;
+  blockEl = function (b, n) {
+    const el = _be.apply(this, arguments); const R = SR_R[b.type];
+    if (R) { const bc = el.querySelector('.bc'); if (bc) { bc.innerHTML = ''; bc.append(srWrap(b, R)); } }
+    return el;
+  };
+  const _bi = blobIdsOfPage; blobIdsOfPage = function (pg) { const out = _bi.apply(this, arguments); eachBlock(pg.blocks, b => { if (b.fr) for (const v of Object.values(b.fr)) if (v && v.blobId) out.push(v.blobId); }); return out; };
+  const _nz = normalizeBlocks; normalizeBlocks = function (pg) { _nz.apply(this, arguments); const last = pg.blocks[pg.blocks.length - 1]; if (last && SR_TYPES.includes(last.type)) pg.blocks.push(nb('text')); };
+  const _pt = pageText; pageText = function (pg) {
+    let t = _pt.apply(this, arguments); const parts = [];
+    eachBlock(pg.blocks, b => { if (!SR_TYPES.includes(b.type)) return; if (b.d) parts.push(...Object.values(b.d).filter(v => typeof v === 'string')); if (b.text) parts.push(b.text); if (b.cap) parts.push(b.cap); for (const r of b.list || []) parts.push(...Object.values(r).filter(v => typeof v === 'string')); for (const s of b.shapes || []) if (s.label) parts.push(s.label); });
+    return parts.length ? t + '\n' + parts.filter(Boolean).join('\n') : t;
   };
 }
 
