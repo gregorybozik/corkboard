@@ -3493,6 +3493,36 @@ body.kbbar-on #mhFab{display:none!important}
 #ttChip .tt-ct{font-variant-numeric:tabular-nums;font-weight:700}#ttChip .tt-cl{opacity:.75;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:36vw}
 #ttChip .tt-cs{border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:10px}
 @media(max-width:700px){.ft-tab{padding:6px 9px;font-size:12px}.ft-tabs{flex-wrap:nowrap;gap:6px}.ft-tiles{grid-template-columns:1fr 1fr}.ft-gr{grid-template-columns:minmax(0,1fr) 70px 70px}.ft-gb{display:none}.ft-pv .ft-gr{grid-template-columns:minmax(0,1fr) 56px 66px}.ft-pv .ft-gr>span:nth-child(4){display:none}.ft-body{padding:12px 12px 90px}.ft-tabs{padding:0 12px 10px}}
+
+/* ===== v6.4: column multi-drop, hover plus, color arc, unique fixed-width tabs ===== */
+/* fixed tab width */
+#tabbar{--tabw:180px}
+@media(max-width:700px){#tabbar{--tabw:140px}}
+#tabbar .tab:not(.pinned),#tabbar .tab-grp .tab:not(.pinned){flex:0 0 var(--tabw);width:var(--tabw);min-width:var(--tabw);max-width:var(--tabw);box-sizing:border-box}
+#tabbar .tab:not(.pinned) .tab-t,#tabbar .tab:not(.pinned):hover .tab-t,#tabbar .tab.cur:not(.pinned) .tab-t{padding-right:14px}
+#tabbar .tab .tab-t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* hover plus + color dot */
+.hp-col{position:absolute;left:100%;top:50%;margin-top:-11px;padding-left:22px;display:flex;flex-direction:column;gap:6px;z-index:3;opacity:0;pointer-events:none;transition:opacity .12s;transform-origin:0 11px;transform:scale(calc(1/var(--sc,1)))}
+.card:hover>.hp-col,.card.selected>.hp-col{opacity:1;pointer-events:auto}
+body.ptr-busy .hp-col,.card.dragging>.hp-col,.card.theater>.hp-col{opacity:0!important;pointer-events:none!important}
+.hp-plus,.hp-color{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);display:grid;place-items:center;padding:0;cursor:pointer;font:500 16px/1 system-ui,sans-serif;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.hp-plus:hover{background:var(--selh);color:#fff;border-color:var(--selh)}
+.hp-color{display:none;width:18px;height:18px;margin-left:2px}
+body.sel-one .card.selected>.hp-col .hp-color{display:block}
+.hp-color:hover{border-color:var(--selh)}
+.hp-color.none{background:linear-gradient(135deg,transparent 46%,#e0524d 46% 54%,transparent 54%),var(--card)}
+.coarse .hp-plus{width:30px;height:30px;font-size:20px}.coarse .hp-color{width:26px;height:26px}
+@media (hover:none){.card:not(.selected)>.hp-col{opacity:0;pointer-events:none}}
+@media(max-width:700px){.hp-col{left:auto;right:0;top:100%;margin-top:0;padding:20px 0 0 0;flex-direction:row;align-items:center;gap:10px;transform-origin:100% 0}.hp-color{margin-left:0}}
+/* color arc */
+.arc-pop{position:fixed;inset:0;z-index:30000;pointer-events:none}
+.arc-pop svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 4px 12px rgba(0,0,0,.2))}
+.arc-pop svg path{fill:none;stroke:var(--card);stroke-width:34;stroke-linecap:round}
+.arc-sw{position:absolute;width:21px;height:21px;margin:-10.5px 0 0 -10.5px;border-radius:50%;border:1px solid rgba(0,0,0,.18);padding:0;cursor:pointer;pointer-events:auto;transition:transform .12s;animation:arcIn .14s ease both}
+.arc-sw:hover{transform:scale(1.22)}
+.arc-sw.none{background:linear-gradient(135deg,transparent 45%,#e0524d 45% 55%,transparent 55%),var(--card)}
+.arc-sw.cur{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--sel)}
+@keyframes arcIn{from{opacity:0;transform:scale(.5)}to{opacity:1}}
 </style>
 </head>
 <body class="app-root">
@@ -4447,7 +4477,7 @@ function moveDrag(e, w) {
   P.dx = dx; P.dy = dy;
   if (P.dropCol || P.hadDrop) { $$('.card.drop-target').forEach(x => x.classList.remove('drop-target')); $$('.col-drop').forEach(x => x.remove()); P.hadDrop = false; }
   P.dropCol = null;
-  if (P.items.length === 1 && prim.c.type !== 'column') {
+  if (P.items.length === 1 ? prim.c.type !== 'column' : P.items.every(i => i.c.type !== 'column' && i.c.type !== 'frame')) {
     let best = null;
     if (!P.cols) P.cols = $$('#cards > .t-column').map(el => ({ el, r: el.getBoundingClientRect() }));
     for (const { el: colEl, r } of P.cols) {
@@ -4483,7 +4513,15 @@ function endDrag(p, e) {
   if (p.dropDb && p.items.length === 1 && ST.cards[p.items[0].id]) { const t = p.dropDb; p.dropDb = null; pageToRow(p.items[0].c, t); return; }
   let z = maxZ(S.boardId);
   for (const it of p.items) { it.c.x = Math.round(it.x0 + (p.dx || 0)); it.c.y = Math.round(it.y0 + (p.dy || 0)); it.c.updatedAt = now(); if (it.c.type !== 'frame') it.c.z = ++z; }
-  if (p.dropCol) { const col = ST.cards[p.dropCol.id], c = p.items[0].c; c.columnId = col.id; col.data.childIds = col.data.childIds.filter(x => x !== c.id); col.data.childIds.splice(p.dropCol.index, 0, c.id); }
+  if (p.dropCol) {
+    const col = ST.cards[p.dropCol.id];
+    const mv = p.items.slice().sort((a, b) => (a.y0 - b.y0) || (a.x0 - b.x0)).map(i => i.c).filter(c => c.type !== 'column');
+    const ids = new Set(mv.map(c => c.id));
+    const before = col.data.childIds.slice(0, p.dropCol.index).filter(x => !ids.has(x)), after = col.data.childIds.slice(p.dropCol.index).filter(x => !ids.has(x));
+    for (const c of mv) c.columnId = col.id;
+    col.data.childIds = [...before, ...mv.map(c => c.id), ...after];
+    const lk = [...S.sel].filter(id => ST.cards[id] && ST.cards[id].locked).length; if (lk) toast(lk + ' locked item' + (lk > 1 ? 's' : '') + ' skipped');
+  }
   save(); renderBoard();
 }
 function handleCardClick(p, e) {
@@ -5650,7 +5688,7 @@ async function renderBoardImage(scale) {
     const oV = $$('#world video'); $$('video', clone).forEach((v, i) => { let rep; try { const ov = oV[i], cv = document.createElement('canvas'); cv.width = ov.videoWidth || 320; cv.height = ov.videoHeight || 180; cv.getContext('2d').drawImage(ov, 0, 0, cv.width, cv.height); rep = h('img', { src: cv.toDataURL('image/jpeg', .85), style: { width: '100%', display: 'block' } }); } catch { rep = h('div', { style: { height: '200px', background: '#111' } }); } v.replaceWith(rep); });
     $$('audio', clone).forEach(a => a.replaceWith(h('div', { style: { height: '32px', background: '#eceef0', borderRadius: '16px' } })));
     $$('input', clone).forEach(i => i.setAttribute('value', i.value || ''));
-    $$('.resize,.sc-h,.cn-dot,.cmt-badge,.lock-ind', clone).forEach(x => x.remove());
+    $$('.resize,.sc-h,.cn-dot,.hp-col,.cmt-badge,.lock-ind', clone).forEach(x => x.remove());
     const bg = getComputedStyle($('#viewport')).backgroundColor;
     const wrap = h('div', { class: document.body.className, style: { width: W + 'px', height: H + 'px', position: 'relative', overflow: 'hidden', background: bg } });
     wrap.append(h('style', null, $('#appstyle').textContent), clone);
@@ -9876,7 +9914,7 @@ function boardEmbedEl(b) {
   const cards = cardsOf(b.boardId).filter(c => !c.columnId);
   for (const c of cards.sort((x, y) => x.z - y.z)) {
     const el = renderCard(c, false); el.removeAttribute('data-id'); el.classList.remove('selected', 'editing');
-    el.querySelectorAll('.sc-h,.cn-dot,.resize,.cmt-badge,.lock-ind,.upload-prompt').forEach(x => x.remove());
+    el.querySelectorAll('.sc-h,.cn-dot,.hp-col,.resize,.cmt-badge,.lock-ind,.upload-prompt').forEach(x => x.remove());
     el.querySelectorAll('iframe,video,audio').forEach(x => x.replaceWith(h('div', { class: 'bemb-media' }, 'Media')));
     el.querySelectorAll('[contenteditable]').forEach(x => x.removeAttribute('contenteditable'));
     world.append(el); c._el = el;
@@ -11128,7 +11166,6 @@ function tabMenu(e, i) {
     for (const g of gs) if (g.id !== t.g) items.push({ label: 'Add to “' + g.name + '”', fn: () => tabSetGroup(i, g.id) });
     if (t.g) items.push({ label: 'Remove from group', fn: () => tabSetGroup(i, null) });
   }
-  items.push('-', { label: 'Duplicate tab', fn: () => { const c = { ...t }; delete c.pin; tabs.splice(i + 1, 0, c); save(); renderTabs(); } });
   if (!t.pin && tabs.length > 1) items.push({ label: 'Close tab', danger: true, fn: () => closeTab(i) });
   showMenu(e.clientX, e.clientY, items);
 }
@@ -15117,6 +15154,132 @@ function ttTaskInfo() {
   };
 }
 { const oi2 = init; init = async function () { const r = await oi2.apply(this, arguments); try { ttChip(); } catch (e) { console.warn('chip', e); } return r; }; }
+
+
+/* ===== v6.4: column multi-drop, hover plus, color arc, unique fixed-width tabs ===== */
+/* --- one tab per board/page --- */
+function tabKey(t) { return t.o || ('b:' + t.b); }
+function tabDedupe() {
+  const tabs = tabList(); let cur = tabs[ST.settings.tabCur], ch = false; const seen = new Map();
+  for (let i = 0; i < tabs.length; i++) {
+    const t = tabs[i], k = tabKey(t), f = seen.get(k);
+    if (!f) { seen.set(k, t); continue; }
+    if (t.pin && !f.pin) { f.pin = t.pin; delete f.g; } else if (!f.pin && !f.g && t.g) f.g = t.g;
+    tabs.splice(i, 1); i--; ch = true; if (t === cur) cur = f;
+  }
+  if (ch) { ST.settings.tabCur = Math.max(0, tabs.indexOf(cur)); tabNormalize(); save(); }
+  return ch;
+}
+{
+  const _ts = tabSync;
+  tabSync = function () { const r = _ts.apply(this, arguments); if (TABS.ready && !TABS.switching && tabDedupe()) renderTabs(); return r; };
+  const _ra4 = renderAll;
+  renderAll = function () { const r = _ra4.apply(this, arguments); if (TABS.ready && !TABS._dd) { TABS._dd = true; if (tabDedupe()) renderTabs(); } return r; };
+}
+
+/* --- multi-select: Move to column --- */
+function mvColumn(colId, ids) {
+  const col = ST.cards[colId]; if (!col || col.type !== 'column') return;
+  let lk = 0; const mv = [];
+  for (const id of ids) { const c = ST.cards[id]; if (!c || c.type === 'column' || c.type === 'frame' || id === colId) continue; if (c.locked) { lk++; continue; } mv.push(c); }
+  if (!mv.length) { toast(lk ? lk + ' locked item' + (lk > 1 ? 's' : '') + ' skipped' : 'Nothing to move'); return; }
+  const pos = new Map(mv.map(c => { const r = cardRect(c.id); return [c.id, r ? { x: r.x, y: r.y } : { x: c.x || 0, y: c.y || 0 }]; }));
+  mv.sort((a, b) => (pos.get(a.id).y - pos.get(b.id).y) || (pos.get(a.id).x - pos.get(b.id).x));
+  checkpoint();
+  for (const c of mv) { if (c.columnId && ST.cards[c.columnId]) { const o = ST.cards[c.columnId]; o.data.childIds = o.data.childIds.filter(x => x !== c.id); } c.columnId = col.id; c.updatedAt = now(); }
+  col.data.childIds = [...col.data.childIds.filter(x => !mv.some(c => c.id === x)), ...mv.map(c => c.id)]; col.data.collapsed = false;
+  S.sel = new Set(mv.map(c => c.id)); save(); renderBoard(); updateSelUI();
+  toast('Moved ' + mv.length + ' item' + (mv.length > 1 ? 's' : '') + (lk ? ' · ' + lk + ' locked skipped' : ''));
+}
+function mvColPop(anchor) {
+  const ids = [...S.sel], cols = cardsOf(S.boardId).filter(c => c.type === 'column' && !c.columnId);
+  if (!cols.length) { toast('No columns on this board'); return; }
+  popAt(anchor, [h('h4', null, 'Move to column'), h('div', { style: { display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '180px' } },
+    cols.map(c => h('button', { class: 'menu-item', style: { textAlign: 'left', padding: '7px 10px', border: 0, background: 'none', color: 'inherit', borderRadius: '6px', cursor: 'pointer', font: 'inherit' }, onclick: () => { closeTransient(); mvColumn(c.id, ids); } }, (c.data.title || 'Untitled column') + '  ·  ' + (c.data.childIds || []).length)))]);
+}
+{
+  const _ctm = ctxTools;
+  ctxTools = function () {
+    const r = _ctm(); if (!Array.isArray(r) || S.selLine || S.tool || S.sketchEdit || (S.editing && S.editing.rich)) return r;
+    const ids = [...S.sel].filter(id => ST.cards[id] && ST.cards[id].type !== 'column' && ST.cards[id].type !== 'frame');
+    if (ids.length > 1 && cardsOf(S.boardId).some(c => c.type === 'column')) { let i = r.findIndex(x => x && x.label === 'Align'); i = i < 0 ? (r.indexOf('sep') < 0 ? r.length - 1 : r.indexOf('sep')) : i + 1; r.splice(i, 0, { label: 'To column', icon: 'column', title: 'Move to column…', fn: b => mvColPop(b) }); }
+    return r;
+  };
+}
+
+/* --- hover plus --- */
+const HP_KINDS = () => [...MAIN_TOOLS, ...MORE_TOOLS].filter(t => t && t !== 'sep' && t !== 'spacer' && !['line', 'draw', 'more'].includes(t.k));
+function hpCreate(srcId, kind) {
+  const sc = ST.cards[srcId], r = cardRect(srcId); if (!sc || !r || sc.locked || sc.columnId) return;
+  const d = DEF[kind] || { w: 280 }, pos = freeSpotNear(r, d.w, d.h || 130);
+  if (kind === 'image' || kind === 'upload') {
+    const before = new Set(Object.keys(ST.cards));
+    pickFiles(kind === 'image' ? 'image/*' : '', async files => {
+      await addFiles(files, pos.x, pos.y);
+      const nc = Object.values(ST.cards).find(c => !before.has(c.id) && c.boardId === S.boardId);
+      if (nc && ST.cards[srcId]) { newLine({ cardId: srcId }, { cardId: nc.id }); save(); renderLines(); }
+    });
+    return;
+  }
+  endEdit(); exitSketch(); checkpoint();
+  const c = newCard(kind, pos.x, pos.y); snapCard(c); newLine({ cardId: srcId }, { cardId: c.id });
+  S.sel = new Set([c.id]); S.selLine = null; save(); renderBoard(); afterCreate(c);
+}
+function hpPop(btn, srcId) {
+  const g = h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(3,64px)', gap: '4px' } }, HP_KINDS().map(t =>
+    h('button', { class: 'tool', onclick: () => { closeTransient(); hpCreate(srcId, t.k); } }, h('span', { class: 'ti' + (t.box ? ' boxed' : '') + (t.blue ? ' blue' : ''), html: ICON[t.icon] || '' }), h('span', { class: 'tl-lab' }, t.label))));
+  popAt(btn, g);
+}
+/* --- color arc --- */
+function arcClose() { $$('.arc-pop').forEach(x => x.remove()); document.removeEventListener('keydown', arcKey, true); document.removeEventListener('pointerdown', arcDown, true); window.removeEventListener('wheel', arcClose, true); }
+function arcKey(e) { if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); arcClose(); } }
+function arcDown(e) { if (e.target.closest && e.target.closest('.arc-sw')) return; if (e.target.closest && e.target.closest('.hp-color')) { HP.skip = true; setTimeout(() => { HP.skip = false; }, 300); } arcClose(); }
+const HP = { skip: false };
+function hpCur(c) { return c.type === 'board' ? ST.boards[c.data.boardId]?.color : c.type === 'ink' ? c.data.paths[0]?.c : c.color; }
+function hpApply(id, col) {
+  const c = ST.cards[id]; if (!c) return; checkpoint();
+  if (c.type === 'board') { const b = ST.boards[c.data.boardId]; if (b) b.color = col || '#5f8ff0'; } else if (c.type === 'ink') c.data.paths.forEach(p => p.c = col || '#2b2d30'); else c.color = col;
+  c.updatedAt = now(); save(); rerenderCard(id); renderToolbar(); if (c.type === 'board') renderCrumbs();
+}
+function hpArc(dot, id) {
+  arcClose(); const c = ST.cards[id], cardEl = dot.closest('.card'); if (!c || !cardEl) return;
+  const r = cardEl.getBoundingClientRect(), cur = hpCur(c) || null, all = [...PALETTE, ...PALETTE_DARK], n = all.length, R = 122;
+  const vr = $('#viewport').getBoundingClientRect();
+  const up = r.top - 14 - R - 24 >= Math.max(0, vr.top);
+  const cx = Math.max(R + 24, Math.min(innerWidth - R - 24, r.left + r.width / 2)), cy = up ? r.top - 14 : r.bottom + 14;
+  const wrap = h('div', { class: 'arc-pop' });
+  const svg = svgEl('svg', {}); svg.append(svgEl('path', { d: `M${cx - R} ${cy} A${R} ${R} 0 0 ${up ? 1 : 0} ${cx + R} ${cy}` })); wrap.append(svg);
+  all.forEach((col, i) => {
+    const th = Math.PI - i * Math.PI / (n - 1), x = cx + R * Math.cos(th), y = up ? cy - R * Math.sin(th) : cy + R * Math.sin(th);
+    wrap.append(h('button', { class: 'arc-sw' + (col ? '' : ' none') + (col === cur ? ' cur' : ''), style: { left: x + 'px', top: y + 'px', background: col || '', animationDelay: (i * 6) + 'ms' }, title: col || 'No color', 'aria-label': col || 'No color', onclick: e => { e.stopPropagation(); arcClose(); hpApply(id, col); } }));
+  });
+  document.body.append(wrap);
+  document.addEventListener('keydown', arcKey, true); document.addEventListener('pointerdown', arcDown, true); window.addEventListener('wheel', arcClose, true);
+}
+document.addEventListener('pointerdown', e => { if (e.target.closest && e.target.closest('.hp-col button')) e.stopPropagation(); }, true);
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('.hp-col button'); if (!b) return;
+  const el = b.closest('.card'); if (!el) return; e.stopPropagation();
+  if (b.classList.contains('hp-plus')) hpPop(b, el.dataset.id);
+  else if (b.classList.contains('hp-color')) { if (HP.skip) return; hpArc(b, el.dataset.id); }
+}, true);
+function hpCanColor() {
+  if (S.sel.size !== 1 || S.selLine) return false; const c = ST.cards[[...S.sel][0]]; if (!c || c.locked || c.columnId) return false;
+  try { return !!(ctxTools() || []).some(t => t && t.label === 'Color'); } catch (e) { return false; }
+}
+{
+  const _rt = renderToolbar;
+  renderToolbar = function () { const r = _rt.apply(this, arguments); document.body.classList.toggle('sel-one', hpCanColor()); return r; };
+  const _rc4 = renderCard;
+  renderCard = function (c, inCol) {
+    const el = _rc4.apply(this, arguments);
+    if (inCol || c.locked || c.columnId || !c.boardId) return el;
+    const cur = hpCur(c) || null;
+    el.append(h('div', { class: 'hp-col' }, c.type === 'column' ? null : h('button', { class: 'hp-plus', title: 'Add linked item', 'aria-label': 'Add linked item' }, '+'),
+      h('button', { class: 'hp-color' + (cur ? '' : ' none'), title: 'Color', 'aria-label': 'Color', style: cur ? { background: cur } : {} })));
+    return el;
+  };
+}
 
 init();
 </script>
