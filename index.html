@@ -3672,6 +3672,35 @@ body.sel-one .card.selected>.hp-col .hp-color{display:block}
  .sr-li{flex-wrap:wrap}
  .sr-title.sr-in{font-size:24px}
 }
+/* grouped sidebar + modes */
+#sbDyn .sb-util{border-top:0;padding-top:0;margin-top:8px}
+.nv-n{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted)}
+.sb-item .sb-ic svg{display:block}
+.nv-row.fd-over{outline:2px dashed var(--sel);outline-offset:-2px}
+.nv-kids{display:flex;flex-direction:column;padding:0 0 4px 32px}
+.nv-kid{display:flex;align-items:center;gap:4px}
+.nv-open{flex:1;min-width:0;text-align:left;font-size:12px;padding:5px 6px;border-radius:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.nv-x,.nv-add{font-size:12px;color:var(--muted);padding:5px 8px;border-radius:5px}
+.nv-add{text-align:left;padding-left:6px}
+.nv-open:hover,.nv-x:hover,.nv-add:hover{background:var(--hover)}
+#nvModes{display:flex;gap:2px;padding:3px;margin-bottom:4px;border:1px solid var(--line);border-radius:8px}
+#nvModes button{flex:1;font-size:11px;padding:5px 0;border-radius:5px;color:var(--muted)}
+#nvModes button.on{background:var(--hover);color:var(--text);font-weight:700}
+.sb-rail .nv-n,.sb-rail .nv-kids,.sb-rail #nvModes,.sb-mobile #nvModes{display:none}
+#nvHot{display:none;position:fixed;left:0;top:0;bottom:0;width:10px;z-index:26500}
+.sb-auto #nvHot{display:block}
+.sb-auto #sidebar{position:fixed;left:0;top:0;bottom:0;width:248px;transform:translateX(-102%);visibility:hidden;transition:transform .18s ease,visibility .18s;z-index:26600}
+.sb-auto.sb-peek #sidebar{transform:none;visibility:visible;box-shadow:var(--shadow-lg)}
+.sb-auto #btnSide{display:grid!important}
+.sb-auto #btnSideClose{display:none!important}
+.sb-top-mode #app{flex-direction:column}
+.sb-top-mode #sidebar,.sb-top-mode #btnSide{display:none!important}
+.sb-top-mode #appmain{min-height:0}
+#sbTop{display:flex;align-items:center;gap:2px;height:48px;flex:none;padding:0 12px;background:var(--sb-bg);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+.nvt-brand{display:flex;align-items:center;gap:8px;font-weight:700;margin-right:10px}
+.nvt{flex:none;font-size:13px;padding:7px 10px;border-radius:7px;color:var(--text)}
+.nvt:hover,.nvt.on{background:var(--hover)}
+.nvt.on{font-weight:700}
 </style>
 </head>
 <body class="app-root">
@@ -15964,6 +15993,133 @@ function srWrap(b, R) {
     eachBlock(pg.blocks, b => { if (!SR_TYPES.includes(b.type)) return; if (b.d) parts.push(...Object.values(b.d).filter(v => typeof v === 'string')); if (b.text) parts.push(b.text); if (b.cap) parts.push(b.cap); for (const r of b.list || []) parts.push(...Object.values(r).filter(v => typeof v === 'string')); for (const s of b.shapes || []) if (s.label) parts.push(s.label); });
     return parts.length ? t + '\n' + parts.filter(Boolean).join('\n') : t;
   };
+}
+
+/* ========== grouped sidebar (Flow / Organize / Tools) + Auto-hide, Top, Static ========== */
+const NV_SVG = {
+  capture: '<path d="M3.5 13.5 6 5h12l2.5 8.5V19h-17z"/><path d="M3.5 13.5H9a3 3 0 0 0 6 0h5.5"/>',
+  distill: '<path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19z"/>',
+  express: '<path d="M21 3 3 11l7 3 3 7z"/>',
+  projects: '<path d="M3.5 6h6l2 2h9v11h-17z"/>',
+  areas: '<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
+  resources: '<path d="M5 4h14v16H5zM9 4v16"/>',
+  archives: '<path d="M3 4h18v4H3zM5 8v12h14V8M10 12h4"/>'
+};
+const nvIcon = k => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${NV_SVG[k]}</svg>`;
+const NV_STAGE = ['distill', 'express'], NV_PARA = ['projects', 'areas', 'resources', 'archives'];
+const NV_NAME = { capture: 'Capture', distill: 'Distill', express: 'Express', projects: 'Projects', areas: 'Areas', resources: 'Resources', archives: 'Archives' };
+const nvMap = b => { const s = ST.settings, k = NV_STAGE.includes(b) ? 'stage' : 'para'; return s[k] || (s[k] = {}); };
+const nvLive = key => { if (!refExists(key)) return false; const [k, id] = key.split(':'); return k === 'b' ? liveBoards().some(x => x.id === id) : k === 'p' ? pageIsLive(id) : dbIsLive(id); };
+const nvItems = b => Object.entries(nvMap(b)).filter(([key, v]) => v === b && nvLive(key)).map(([key]) => key);
+const nvInbox = () => liveBoards().find(x => x.id !== ST.rootId && (x.title || '').trim().toLowerCase() === 'inbox');
+const nvInboxCount = () => { const b = nvInbox(); return b ? cardsOf(b.id).length : 0; };
+function nvCurrent() {
+  if ($('.pv-wrap') && S.pageId) return 'p:' + S.pageId;
+  if ($('.dbfull')) { const o = placeObj(S.dbFull); return o && o.dbId ? 'd:' + o.dbId : null; }
+  if ($('.tasksview,.dashview')) return null;
+  return S.boardId && S.boardId !== ST.rootId ? 'b:' + S.boardId : null;
+}
+function nvFile(bucket, key) {
+  if (!key) { toast('Open a board, page or database first'); return; }
+  nvMap(bucket)[key] = bucket; save(); renderSidebar(); toast(`Filed under ${NV_NAME[bucket]}`);
+}
+function nvUnfile(bucket, key) { delete nvMap(bucket)[key]; save(); renderSidebar(); }
+function nvCapture() {
+  let b = nvInbox();
+  if (!b) { checkpoint(); b = createBoardIn(ST.rootId, 'Inbox'); save(); }
+  openRef('b:' + b.id); scheduleSidebar();
+}
+function nvRow(b) {
+  const open = !!(ST.settings.nvOpen || {})[b], items = b === 'capture' ? null : nvItems(b), n = items ? items.length : nvInboxCount();
+  const inboxOn = b === 'capture' && nvInbox() && S.boardId === nvInbox().id && !$('.pv-wrap,.tasksview,.dashview,.dbfull');
+  const btn = h('button', { class: 'sb-item nv-row' + (inboxOn ? ' on' : ''), title: `${NV_NAME[b]} (${n})`, 'data-nv': b, 'aria-expanded': items ? String(open) : null },
+    h('span', { class: 'sb-ic', html: nvIcon(b) }), h('span', { class: 'sb-lab' }, NV_NAME[b]), n ? h('span', { class: 'nv-n' }, String(n)) : null);
+  btn.onclick = () => {
+    if (b === 'capture') { nvCapture(); if (isMobileSb()) toggleSidebar(false); return; }
+    if (document.body.classList.contains('sb-rail')) toggleSidebar(true);
+    const o = ST.settings.nvOpen || (ST.settings.nvOpen = {}); o[b] = !open; save(); renderSidebar();
+  };
+  if (b === 'capture') return [btn];
+  btn.addEventListener('dragover', e => { if (!S.fdDrag || !S.fdDrag.item) return; e.preventDefault(); btn.classList.add('fd-over'); });
+  btn.addEventListener('dragleave', () => btn.classList.remove('fd-over'));
+  btn.addEventListener('drop', e => { const d = S.fdDrag; btn.classList.remove('fd-over'); if (!d || !d.item) return; e.preventDefault(); S.fdDrag = null; nvFile(b, d.item); });
+  if (!open) return [btn];
+  const kids = items.map(key => {
+    const inf = refInfo(key);
+    return h('div', { class: 'nv-kid' },
+      h('button', { class: 'nv-open', title: inf.title, onclick: e => openRef(key, e) }, inf.title),
+      h('button', { class: 'nv-x', title: `Remove from ${NV_NAME[b]}`, 'aria-label': `Remove ${inf.title} from ${NV_NAME[b]}`, onclick: () => nvUnfile(b, key) }, '×'));
+  });
+  const add = h('button', { class: 'nv-add', onclick: () => nvFile(b, nvCurrent()) }, '+ File what’s open');
+  return [btn, h('div', { class: 'nv-kids' }, ...kids, add)];
+}
+const nvMode = () => ST.settings.sbMode || 'static';
+function nvSetMode(m) { ST.settings.sbMode = m; save(); document.body.classList.remove('sb-peek'); applySidebar(); renderSidebar(); dispatchEvent(new Event('resize')); requestAnimationFrame(scheduleLines); }
+const NV_MODES = [['auto', 'Auto-hide'], ['top', 'Top'], ['static', 'Static']];
+function nvModeBar() {
+  const foot = $('.sb-foot'); if (!foot) return;
+  $('#nvModes')?.remove();
+  foot.prepend(h('div', { id: 'nvModes', role: 'group', 'aria-label': 'Sidebar mode' }, ...NV_MODES.map(([v, l]) => h('button', { class: v === nvMode() ? 'on' : '', 'aria-pressed': String(v === nvMode()), onclick: () => nvSetMode(v) }, l))));
+}
+function nvGroup() {
+  const dyn = $('#sbDyn'); if (!dyn || !ST) return;
+  const prim = dyn.querySelector('.sb-primary'); if (!prim || prim.dataset.nv) return;
+  prim.dataset.nv = 1;
+  const util = dyn.querySelector('.sb-util'), home = $('#sbHome'), dashes = [...prim.querySelectorAll(':scope > .sb-item:not(.sb-home)')];
+  const sec = (title, ...kids) => h('div', { class: 'sb-sec' }, h('div', { class: 'sb-h' }, title), ...kids);
+  prim.querySelector('.sb-h').remove();
+  const flow = sec('Flow', ...['capture', ...NV_STAGE].flatMap(nvRow)), org = sec('Organize', ...NV_PARA.flatMap(nvRow)), tools = sec('Tools', ...dashes);
+  prim.replaceChildren(home);
+  dyn.prepend(...[util, prim, flow, org, tools].filter(Boolean));
+}
+function nvTopBar() {
+  let bar = $('#sbTop');
+  if (!document.body.classList.contains('sb-top-mode')) { bar?.remove(); return; }
+  if (!bar) { bar = h('nav', { id: 'sbTop', 'aria-label': 'Main' }); $('#app').prepend(bar); }
+  const go = fn => () => { fn(); scheduleSidebar(); };
+  const b = (label, fn, on) => h('button', { class: 'nvt' + (on ? ' on' : ''), onclick: fn }, label);
+  const menu = (label, build) => { const el = b(label + ' ▾', e => { e.stopPropagation(); showMenuAt(el, build()); }); return el; };
+  const open = key => ({ label: refInfo(key).title, fn: () => { openRef(key); scheduleSidebar(); } });
+  const bucket = k => { const items = nvItems(k); return menu(`${NV_NAME[k]}${items.length ? ' ' + items.length : ''}`, () => [...items.map(open), items.length ? '-' : null, { label: 'File what’s open', fn: () => nvFile(k, nvCurrent()) }, ...(items.length ? [{ label: 'Remove what’s open', disabled: !items.includes(nvCurrent()), fn: () => nvUnfile(k, nvCurrent()) }] : [])]); };
+  const n = nvInboxCount();
+  bar.replaceChildren(
+    h('span', { class: 'nvt-brand' }, $('#sbLogo').cloneNode(true), 'Corkboard'),
+    b('Home', go(goHome), onHomeNow()), b('Capture' + (n ? ' ' + n : ''), go(nvCapture)), ...NV_STAGE.map(bucket),
+    menu('Organize', () => NV_PARA.map(k => ({ label: `${NV_NAME[k]} (${nvItems(k).length})`, sub: () => [...nvItems(k).map(open), { label: 'File what’s open', fn: () => nvFile(k, nvCurrent()) }, { label: 'Remove what’s open', disabled: !nvItems(k).includes(nvCurrent()), fn: () => nvUnfile(k, nvCurrent()) }] }))),
+    menu('Boards', () => [...liveBoards().map(x => open('b:' + x.id)), '-', ...Object.values(ST.pages).filter(p => pageIsLive(p.id)).slice(0, 30).map(p => open('p:' + p.id))]),
+    b('Tasks', go(() => { closePageView(); openTasksView(); }), !!$('.tasksview')),
+    b('Notes', go(() => { closePageView(); openNotesView(); }), !!$('.notesview')),
+    b('Focus', go(() => { closePageView(); openFocusView(); }), !!$('.focusview')),
+    h('span', { style: { flex: '1' } }),
+    b('Search', () => $('#btnSearch').click()),
+    menu('More', () => [{ label: 'Settings', fn: () => $('#btnSettings').click() }, { label: 'View, zoom and present', fn: () => $('#btnView').click() }, { label: 'Export this board', fn: () => $('#btnExport').click() }, '-', ...NV_MODES.map(([v, l]) => ({ label: (v === nvMode() ? '✓ ' : '') + l + ' navigation', fn: () => nvSetMode(v) }))]));
+}
+{ const _as = applySidebar; applySidebar = function () {
+  _as.apply(this, arguments);
+  if (!ST) return;
+  const mob = isMobileSb(), m = mob ? 'static' : nvMode(), c = document.body.classList;
+  c.toggle('sb-auto', m === 'auto'); c.toggle('sb-top-mode', m === 'top');
+  if (m !== 'static') { c.remove('sb-rail'); document.body.style.setProperty('--sbw', '0px'); }
+  if (m !== 'auto') c.remove('sb-peek');
+  nvTopBar();
+}; }
+{ const _ts = toggleSidebar; toggleSidebar = function (force) {
+  if (!isMobileSb() && nvMode() === 'auto') { document.body.classList.toggle('sb-peek', force ?? !document.body.classList.contains('sb-peek')); return; }
+  if (!isMobileSb() && nvMode() === 'top') return;
+  return _ts.apply(this, arguments);
+}; }
+{ const _rs = renderSidebar; renderSidebar = function () {
+  _rs.apply(this, arguments);
+  nvGroup(); nvModeBar();
+  if (!ST) return;
+  const want = !isMobileSb() && nvMode();
+  if (want && document.body.classList.contains('sb-top-mode') !== (want === 'top') || want && document.body.classList.contains('sb-auto') !== (want === 'auto')) applySidebar();
+  else nvTopBar();
+}; }
+{ const hot = h('div', { id: 'nvHot', 'aria-hidden': 'true' }); document.body.append(hot);
+  hot.addEventListener('pointerenter', () => document.body.classList.add('sb-peek'));
+  document.addEventListener('pointermove', e => { const c = document.body.classList; if (!c.contains('sb-peek') || !c.contains('sb-auto') || e.pointerType !== 'mouse') return; if (e.clientX > $('#sidebar').offsetWidth + 40 && !$('.menu,.pop,.modal-bg') && !$('#sidebar').contains(document.activeElement)) c.remove('sb-peek'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') document.body.classList.remove('sb-peek'); });
 }
 
 init();
