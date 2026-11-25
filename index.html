@@ -3701,6 +3701,94 @@ body.sel-one .card.selected>.hp-col .hp-color{display:block}
 .nvt{flex:none;font-size:13px;padding:7px 10px;border-radius:7px;color:var(--text)}
 .nvt:hover,.nvt.on{background:var(--hover)}
 .nvt.on{font-weight:700}
+/* dashboards */
+.hb-sbrow{display:flex;align-items:center}
+.hb-sbrow>.sb-item{flex:1;min-width:0}
+.hb-chev{flex:none;width:24px;height:28px;border-radius:5px;color:var(--muted);font-size:16px}
+.hb-chev.open{transform:rotate(90deg)}
+.hb-chev:hover{background:var(--hover)}
+.sb-rail .hb-chev{display:none}
+.hubview h2{margin:0;font-size:20px;font-weight:700;display:flex;align-items:center;gap:8px}
+.hubview p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.hb-page{flex:1;overflow:auto;padding:24px 24px 48px;display:flex;flex-direction:column;gap:16px}
+.hb-page>*{flex:none}
+.hb-head{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.hb-count{font-size:12px;background:var(--text);color:var(--card);border-radius:10px;padding:1px 8px}
+.hb-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.hb-gap{flex:1}
+.hb-btn{font-size:13px;font-weight:600;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--text)}
+.hb-btn.hb-solid{background:var(--text);border-color:var(--text);color:var(--card)}
+.hb-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hb-search,.hb-sel{font:13px var(--sans);padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--text);outline:none}
+.hb-search{width:min(320px,100%)}
+.hb-search:focus{border-color:var(--sel)}
+.hb-tabs{display:flex;gap:2px;flex-wrap:wrap;align-self:flex-start}
+.hb-tabs button{font-size:12px;font-weight:600;padding:6px 10px;border-radius:7px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.hb-tabs button.on{background:var(--text);color:var(--card)}
+.hb-tabs button span{font-size:11px;opacity:.7}
+.hb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;align-items:stretch}
+.hb-grid.list{grid-template-columns:1fr;gap:8px}
+.hb-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;cursor:pointer;overflow:hidden;text-align:left;color:var(--text);max-width:480px}
+.list .hb-card{max-width:none}
+.list .hb-cover{display:none}
+.hb-card:hover{box-shadow:var(--shadow-lg)}
+.hb-cover{height:84px;margin:-16px -16px -4px}
+.hb-cardtop{display:flex;gap:12px;align-items:center}
+.hb-ico{width:40px;height:40px;flex:none;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:17px}
+.hb-name{flex:1;min-width:0}
+.hb-name b{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-name span,.hb-res span{font-size:12px;color:var(--muted)}
+.hb-more{width:28px;height:28px;border-radius:6px;color:var(--muted);flex:none}
+.hb-more:hover{background:var(--hover)}
+.hb-chips{display:flex;gap:6px;flex-wrap:wrap}
+.hb-chip{font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;background:var(--hover)}
+.hb-prog>div:first-child{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
+.hb-bar{height:6px;border-radius:3px;background:var(--hover);overflow:hidden}
+.hb-bar i{display:block;height:100%}
+.hb-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:auto}
+.hb-addtile{border:1px dashed var(--line);border-radius:12px;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:13px;max-width:480px}
+.list .hb-addtile{min-height:56px;max-width:none}
+.hb-addtile b{font-size:22px}
+.hb-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:48px 16px;border:1px dashed var(--line);border-radius:12px;font-size:13px;color:var(--muted);grid-column:1/-1}
+.hb-empty b{color:var(--text);font-size:14px}
+.hb-library{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.hb-tile{display:grid;grid-template-columns:32px 1fr;column-gap:10px;text-align:left;align-items:center;padding:8px;border-radius:8px;color:var(--text)}
+.hb-tile:hover{background:var(--hover)}
+.hb-tile i{grid-row:1/3;width:32px;height:32px;border-radius:8px;opacity:.85}
+.hb-tile b{font-size:13px}
+.hb-tile span{font-size:11px;color:var(--muted)}
+.hb-cap{flex:1;min-height:0;display:flex;gap:12px;padding:12px}
+.hb-list,.hb-editor{background:var(--card);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;min-height:0}
+.hb-list{width:310px;flex:none;padding:14px;gap:10px}
+.hb-captabs button{padding:6px 7px;gap:4px}
+.hb-listhead{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.hb-list .hb-search{width:100%;flex:none}
+.hb-items{flex:1;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.hb-items>*{flex:none}
+.hb-date{font-size:11px;font-weight:700;color:var(--muted);display:flex;gap:6px;padding-top:4px}
+.hb-item{text-align:left;border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;color:var(--text)}
+.hb-item.on{background:var(--hover);border-color:var(--muted)}
+.hb-item b,.hb-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-item b{font-size:13px}
+.hb-item span,.hb-item time{font-size:11px;color:var(--muted)}
+.hb-editor{flex:1;min-width:0}
+.hb-edhead{display:flex;gap:8px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted);min-height:48px}
+.hb-doc{flex:1;overflow:auto;padding:32px max(24px,calc(50% - 340px));display:flex;flex-direction:column;gap:12px}
+.hb-doc .hb-title{font:700 28px var(--sans);border:0;background:none;color:var(--text);outline:none;padding:0;margin:0;flex:none;overflow-wrap:anywhere}
+.hb-text{flex:1;min-height:200px;outline:none;font-size:14px;line-height:1.6}
+.hb-text:empty::before{content:attr(data-ph);color:var(--muted);pointer-events:none}
+.hb-img{max-width:100%;border-radius:10px;align-self:flex-start}
+.hb-link{font-size:13px;overflow-wrap:anywhere}
+.hb-muted{white-space:pre-wrap}
+.hb-backlist{display:none}
+@container dash (max-width:640px){
+  .hb-page{padding:16px 12px 48px}
+  .hb-grid{grid-template-columns:1fr}
+  .hb-list{width:auto;flex:1}
+  .hb-cap .hb-editor,.hb-cap.detail .hb-list{display:none}
+  .hb-cap.detail .hb-editor{display:flex}
+  .hb-backlist{display:block}
+}
 </style>
 </head>
 <body class="app-root">
@@ -16121,6 +16209,286 @@ function nvTopBar() {
   document.addEventListener('pointermove', e => { const c = document.body.classList; if (!c.contains('sb-peek') || !c.contains('sb-auto') || e.pointerType !== 'mouse') return; if (e.clientX > $('#sidebar').offsetWidth + 40 && !$('.menu,.pop,.modal-bg') && !$('#sidebar').contains(document.activeElement)) c.remove('sb-peek'); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') document.body.classList.remove('sb-peek'); });
 }
+
+/* ========== dashboards: Capture, Projects, Areas, Resources, Archives ========== */
+const HB_KINDS = ['capture', ...NV_PARA];
+const HB_ONE = { projects: 'project', areas: 'area', resources: 'resource' };
+const HB_SUB = {
+  capture: 'Type, paste, or drop anything. Sort it later.',
+  projects: 'Work with an end date. Progress comes from the checklists inside each one.',
+  areas: 'Ongoing parts of your life and work.',
+  resources: 'Reference material you want to find again.',
+  archives: 'Tucked away, not deleted. Restore anything you need.'
+};
+const HB_KIND = { b: 'Board', p: 'Page', d: 'Database' };
+const HB_TYPES = [['notes', 'Notes', ['note', 'doc']], ['links', 'Links', ['link']], ['media', 'Media', ['image', 'video', 'audio', 'sketch']], ['files', 'Files', ['file']]];
+const HB_COL = ['#e5484d', '#e08a1e', '#22a06b', '#139fa3', '#4f7cf0', '#8b5cf6', '#d6498f'];
+const hbUI = { sel: null, q: {}, tab: {}, status: 'all', detail: false, today: true };
+const hbOpen = () => HB_KINDS.find(k => $('.dashview.hub-' + k)) || null;
+const hbView = () => ST.settings.hubView || (ST.settings.hubView = { layout: 'grid', sort: 'recent' });
+const hbType = c => (HB_TYPES.find(t => t[2].includes(c.type)) || [])[0] || 'other';
+const hbColor = (key, inf) => inf.kind === 'b' && ST.boards[inf.id].color || HB_COL[[...key].reduce((a, ch) => a + ch.charCodeAt(0), 0) % HB_COL.length];
+const hbCards = bid => cardsOf(bid).filter(c => c.type !== 'column' && liveCard(c));
+const hbBtn = (label, fn, cls) => h('button', { class: 'hb-btn' + (cls ? ' ' + cls : ''), onclick: fn }, label);
+const hbEmpty = (title, text, action) => h('div', { class: 'hb-empty' }, h('b', null, title), h('span', null, text), action || null);
+function hbTitle(c) {
+  const d = c.data;
+  return (d.title || (c.type === 'note' || c.type === 'doc' ? strip(d.html).trim().split('\n')[0] : '') || d.name || (c.type === 'board' ? ST.boards[d.boardId]?.title : '') || d.url || 'Untitled').slice(0, 90);
+}
+function hbStats(key) {
+  const [k, id] = key.split(':'), s = { tasks: 0, done: 0, notes: 0, res: 0, at: 0 };
+  if (k === 'b') {
+    s.at = ST.boards[id].updatedAt || boardCardFor(id)?.updatedAt || 0;
+    for (const c of hbCards(id)) {
+      s.at = Math.max(s.at, c.updatedAt || 0);
+      if (c.type === 'todo') for (const i of c.data.items) { s.tasks++; if (i.done) s.done++; }
+      const t = hbType(c); if (t === 'notes') s.notes++; else if (t !== 'other') s.res++;
+    }
+  } else if (k === 'p') {
+    const p = ST.pages[id]; s.at = p.updatedAt || 0;
+    eachBlock(p.blocks, b => { if (b.type === 'todo') { s.tasks++; if (b.checked) s.done++; } else if (['image', 'video', 'file', 'bookmark'].includes(b.type)) s.res++; });
+  } else { const d = ST.dbs[id]; s.at = d.updatedAt || 0; s.rows = d.rows.length; }
+  s.pct = s.tasks ? Math.round(s.done / s.tasks * 100) : 0;
+  s.status = !s.done ? 'new' : s.done === s.tasks ? 'done' : 'active';
+  return s;
+}
+const HB_STATUS = { new: 'Not started', active: 'In progress', done: 'Done' };
+
+function openHub(kind) {
+  closePageView(); if ($('.dbfull')) closeDbFull();
+  if (hbOpen() !== kind) { hbUI.sel = null; hbUI.detail = false; }
+  openDash('hubview hub-' + kind); hbRender(); scheduleSidebar();
+}
+function hbRender() {
+  const kind = hbOpen(); if (!kind) return;
+  const ov = $('.dashview.hubview'), y = ov.querySelector('.hb-scroll')?.scrollTop || 0;
+  if (kind === 'capture') hbCapture(ov); else hbPara(ov, kind);
+  const sc = ov.querySelector('.hb-scroll'); if (sc) sc.scrollTop = y;
+}
+function hbSearch(kind, label, onInput) {
+  const i = h('input', { class: 'hb-search', type: 'search', placeholder: label, 'aria-label': label, value: hbUI.q[kind] || '' });
+  i.addEventListener('input', () => { hbUI.q[kind] = i.value; onInput(); });
+  return i;
+}
+function hbTabs(list, cur, set) {
+  return h('div', { class: 'hb-tabs', role: 'group' }, ...list.map(([v, l, n]) => h('button', { class: v === cur ? 'on' : '', 'aria-pressed': String(v === cur), onclick: () => set(v) }, l, h('span', null, String(n)))));
+}
+
+/* ---- Capture ---- */
+function hbCaptures() { const b = nvInbox(); return b ? hbCards(b.id).sort((a, c) => (c.createdAt || 0) - (a.createdAt || 0)) : []; }
+function hbAdd(type, data) {
+  let b = nvInbox(); if (!b) b = createBoardIn(ST.rootId, 'Inbox');
+  const prev = S.boardId, p = openSpot(b.id); S.boardId = b.id;
+  const c = newCard(type, p.x, p.y, data); S.boardId = prev;
+  save(); renderBoard(); scheduleSidebar(); return c;
+}
+async function hbFiles(files) {
+  if (!files.length) return; checkpoint();
+  for (const f of files) {
+    const type = kindOf(f.type); const blob = type === 'image' ? await resizeImage(f, 1600) : f;
+    const bid = await Blobs.put(blob), th = type === 'image' ? await makeThumbFor(blob) : null;
+    const c = hbAdd(type, { blobId: bid, name: f.name || type, size: blob.size, mime: blob.type, thumbId: th || undefined, thumbFor: th ? bid : undefined });
+    hbUI.sel = c.id;
+  }
+  hbUI.detail = true; hbRender();
+}
+function hbList() {
+  const box = $('.hb-items'); if (!box) return;
+  const all = hbCaptures(), tab = hbUI.tab.capture || 'all', q = (hbUI.q.capture || '').trim().toLowerCase();
+  $('.hb-captabs').replaceChildren(hbTabs([['all', 'All', all.length], ...HB_TYPES.map(([v, l]) => [v, l, all.filter(c => hbType(c) === v).length])], tab, v => { hbUI.tab.capture = v; hbList(); }));
+  const list = all.filter(c => (tab === 'all' || hbType(c) === tab) && (!q || cardText(c).toLowerCase().includes(q)));
+  const midnight = new Date().setHours(0, 0, 0, 0);
+  const group = (label, items) => items.length ? [h('div', { class: 'hb-date' }, label, h('span', null, String(items.length))), ...items.map(c => {
+    const sub = c.type === 'link' ? c.data.url : c.type === 'note' || c.type === 'doc' ? strip(c.data.html).trim().slice(0, 80) : c.type;
+    return h('button', { class: 'hb-item' + (c.id === hbUI.sel ? ' on' : ''), 'data-id': c.id, onclick: () => { hbUI.sel = c.id; hbUI.detail = true; hbRender(); } },
+      h('b', null, hbTitle(c)), h('span', null, sub || 'Empty'), h('time', null, timeAgo(c.createdAt)));
+  })] : [];
+  box.replaceChildren(...(list.length ? [...group('Today', list.filter(c => c.createdAt >= midnight)), ...group('Earlier', list.filter(c => !(c.createdAt >= midnight)))] : [hbEmpty(all.length ? 'No matches' : 'Nothing captured yet', all.length ? 'Try another search or filter.' : 'Start typing on the right.')]));
+}
+function hbEditor() {
+  let c = hbUI.sel && ST.cards[hbUI.sel];
+  if (!c || !liveCard(c)) { c = null; hbUI.sel = null; }
+  let marked = false;
+  const mark = () => { if (!marked) { checkpoint(); marked = true; } };
+  const touch = () => { c.updatedAt = now(); save(); hbList(); };
+  const head = h('div', { class: 'hb-edhead' }, hbBtn('‹ List', () => { hbUI.detail = false; hbRender(); }, 'hb-backlist'), h('span', null, c ? 'Capture' : 'New capture'), h('span', { class: 'hb-gap' }),
+    c ? hbBtn('Open on board', () => { const id = c.id, bid = c.boardId; closeDashes(); openBoard(bid); requestAnimationFrame(() => { S.sel = new Set([ST.cards[id]?.columnId || id]); updateSelUI(); centerOn(id); }); scheduleSidebar(); }) : null,
+    c ? hbBtn('Delete', () => { trashCards([c.id]); hbUI.sel = null; hbUI.detail = false; save(); hbRender(); scheduleSidebar(); }) : null);
+  let body;
+  if (!c || c.type === 'note') {
+    const title = h('input', { class: 'hb-title', placeholder: 'Untitled', 'aria-label': 'Title', value: c?.data.title || '' });
+    const text = h('div', { class: 'hb-text rt', 'data-ph': 'Type, paste, or drop files here', role: 'textbox', 'aria-multiline': 'true', 'aria-label': 'Note', html: c?.data.html || '' });
+    text.contentEditable = 'true';
+    const write = () => {
+      const empty = !title.value && !strip(text.innerHTML).trim();
+      if (!c) { if (empty) return; checkpoint(); marked = true; c = hbAdd('note', { html: '' }); hbUI.sel = c.id; hbUI.detail = true; }
+      mark(); c.data.title = title.value; c.data.html = empty ? '' : text.innerHTML; touch();
+    };
+    title.addEventListener('input', write); text.addEventListener('input', write);
+    title.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); text.focus(); } });
+    text.addEventListener('paste', e => {
+      e.preventDefault(); e.stopPropagation();
+      if (e.clipboardData.files.length) return void hbFiles([...e.clipboardData.files]);
+      const t = e.clipboardData.getData('text/plain');
+      if (!c && !title.value && !strip(text.innerHTML).trim() && isUrl(t)) {
+        checkpoint(); const url = normUrl(t.trim()), n = hbAdd('link', { url, title: hostOf(url) }); hbUI.sel = n.id; hbUI.detail = true; fetchPreview(n.id); hbRender(); return;
+      }
+      document.execCommand('insertText', false, t);
+    });
+    body = [title, text];
+  } else {
+    const d = c.data, img = c.type === 'image' && (d.src || d.blobId && Blobs.url(d.blobId)) || c.type === 'link' && d.image;
+    body = [h('h3', { class: 'hb-title' }, hbTitle(c)),
+      img ? h('img', { class: 'hb-img', src: img, alt: '', referrerpolicy: 'no-referrer' }) : null,
+      c.type === 'link' ? h('a', { class: 'hb-link', href: d.url, target: '_blank', rel: 'noopener' }, d.url) : null,
+      h('p', { class: 'hb-muted' }, c.type === 'link' ? d.desc || '' : c.type === 'doc' ? strip(d.html).slice(0, 600) : img ? '' : 'Open it on the board to view or edit.')];
+  }
+  return h('section', { class: 'hb-editor' }, head, h('div', { class: 'hb-doc' }, ...body.filter(Boolean)));
+}
+function hbCapture(ov) {
+  const add = h('button', { class: 'hb-btn hb-solid', title: 'New capture', 'aria-label': 'New capture', onclick: () => { hbUI.sel = null; hbUI.detail = true; hbRender(); $('.hb-title')?.focus(); } }, '+');
+  const left = h('aside', { class: 'hb-list' }, h('div', { class: 'hb-listhead' }, h('div', null, h('h2', null, 'Capture'), h('p', null, HB_SUB.capture)), add),
+    hbSearch('capture', 'Search captures', hbList), h('div', { class: 'hb-captabs' }), h('div', { class: 'hb-items hb-scroll' }));
+  const wrap = h('div', { class: 'hb-cap' + (hbUI.detail ? ' detail' : '') }, left, hbEditor());
+  wrap.addEventListener('dragover', e => { if ([...e.dataTransfer.types].includes('Files')) e.preventDefault(); });
+  wrap.addEventListener('drop', e => { if (!e.dataTransfer.files.length) return; e.preventDefault(); hbFiles([...e.dataTransfer.files]); });
+  ov.replaceChildren(wrap); hbList();
+}
+
+/* ---- Projects / Areas / Resources / Archives ---- */
+function hbMove(key, to) { nvFile(to, key); hbRender(); }
+function hbRemove(key, bucket) { nvUnfile(bucket, key); delete (ST.settings.paraFrom || {})[key]; save(); hbRender(); }
+function hbRestore(key) {
+  const from = (ST.settings.paraFrom || {})[key];
+  if (from) { nvMap(from)[key] = from; delete ST.settings.paraFrom[key]; save(); renderSidebar(); toast(`Restored to ${NV_NAME[from]}`); } else hbRemove(key, 'archives');
+  hbRender();
+}
+function hbMenu(btn, key, kind) {
+  showMenuAt(btn, [
+    { label: 'Open', fn: () => { openRef(key); scheduleSidebar(); } },
+    kind === 'archives' ? { label: 'Restore', fn: () => hbRestore(key) } : null, '-',
+    ...NV_PARA.filter(k => k !== kind).map(k => ({ label: 'Move to ' + NV_NAME[k], fn: () => hbMove(key, k) })), '-',
+    { label: 'Remove from ' + NV_NAME[kind], fn: () => hbRemove(key, kind) }
+  ].filter(Boolean));
+}
+function hbNew(btn, kind) {
+  askText(btn, `New ${HB_ONE[kind]} name`, '', name => {
+    if (!name.trim()) return;
+    checkpoint(); const b = createBoardIn(ST.rootId, name.trim()); save(); renderBoard(); hbMove('b:' + b.id, kind);
+  });
+}
+function hbExisting(btn, kind) {
+  const have = new Set(nvItems(kind));
+  const keys = [...liveBoards().filter(b => b.id !== ST.rootId).map(b => 'b:' + b.id), ...Object.keys(ST.pages).filter(pageIsLive).map(id => 'p:' + id), ...liveDbs().map(d => 'd:' + d.id)].filter(k => !have.has(k));
+  if (!keys.length) return toast('Nothing left to file');
+  showMenuAt(btn, keys.slice(0, 60).map(k => ({ label: `${refInfo(k).title} · ${HB_KIND[k[0]]}`, fn: () => hbMove(k, kind) })));
+}
+function hbCard(key, kind) {
+  const inf = refInfo(key), s = hbStats(key), col = hbColor(key, inf), from = (ST.settings.paraFrom || {})[key];
+  const more = h('button', { class: 'hb-more', title: 'Options', 'aria-label': 'Options for ' + inf.title, onclick: e => { e.stopPropagation(); hbMenu(more, key, kind); } }, '⋯');
+  const chip = (n, one) => h('span', { class: 'hb-chip' }, `${n} ${one}${n === 1 ? '' : 's'}`);
+  const chips = h('div', { class: 'hb-chips' }, ...(inf.kind === 'd' ? [chip(s.rows, 'row')] : [chip(s.tasks, 'task'), chip(s.notes, 'note'), chip(s.res, 'resource')]));
+  const progress = kind === 'projects' ? h('div', { class: 'hb-prog' }, h('div', null, h('span', null, HB_STATUS[s.status]), h('span', null, s.pct + '%')), h('div', { class: 'hb-bar', role: 'progressbar', 'aria-valuenow': String(s.pct), 'aria-valuemin': '0', 'aria-valuemax': '100' }, h('i', { style: { width: s.pct + '%', background: col } }))) : null;
+  const card = h('article', { class: 'hb-card', 'data-key': key, tabindex: '0' },
+    kind === 'areas' ? h('div', { class: 'hb-cover', style: { background: `linear-gradient(135deg, ${col}, color-mix(in srgb, ${col} 25%, var(--card)))` } }) : null,
+    h('div', { class: 'hb-cardtop' }, h('span', { class: 'hb-ico', style: { background: col } }, inf.icon || inf.title.charAt(0).toUpperCase()),
+      h('div', { class: 'hb-name' }, h('b', null, inf.title), h('span', null, HB_KIND[inf.kind] + (kind === 'archives' && from ? ` · from ${NV_NAME[from]}` : ''))), more),
+    chips, progress,
+    h('div', { class: 'hb-foot' }, h('span', null, s.at ? 'Updated ' + timeAgo(s.at) : ''), kind === 'archives' ? hbBtn('Restore', e => { e.stopPropagation(); hbRestore(key); }) : h('span', null, '↗')));
+  card.addEventListener('click', e => { if (e.target.closest('button')) return; openRef(key, e); scheduleSidebar(); });
+  card.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target === card) { openRef(key); scheduleSidebar(); } });
+  return card;
+}
+function hbGrid(kind) {
+  const box = $('.hb-results'); if (!box) return;
+  const v = hbView(), q = (hbUI.q[kind] || '').trim().toLowerCase(), tab = hbUI.tab[kind] || 'all';
+  if (kind === 'resources' && tab !== 'all') {
+    const cards = nvItems(kind).filter(k => k[0] === 'b').flatMap(k => hbCards(k.slice(2))).filter(c => hbType(c) === tab && (!q || cardText(c).toLowerCase().includes(q)));
+    box.className = 'hb-results hb-grid' + (v.layout === 'list' ? ' list' : '');
+    box.replaceChildren(...(cards.length ? cards.map(c => h('button', { class: 'hb-card hb-res', onclick: () => { closeDashes(); openBoard(c.boardId); requestAnimationFrame(() => centerOn(c.id)); scheduleSidebar(); } }, h('b', null, hbTitle(c)), h('span', null, refInfo('b:' + c.boardId).title))) : [hbEmpty('Nothing here', 'Items of this type inside your resource boards show up here.')]));
+    return;
+  }
+  let keys = nvItems(kind);
+  const total = keys.length;
+  if (q) keys = keys.filter(k => refInfo(k).title.toLowerCase().includes(q));
+  if (kind === 'projects' && hbUI.status !== 'all') keys = keys.filter(k => hbStats(k).status === hbUI.status);
+  if (kind === 'archives' && tab !== 'all') keys = keys.filter(k => (ST.settings.paraFrom || {})[k] === tab);
+  keys.sort(v.sort === 'name' ? (a, b) => refInfo(a).title.localeCompare(refInfo(b).title) : (a, b) => hbStats(b).at - hbStats(a).at);
+  box.className = 'hb-results hb-grid' + (v.layout === 'list' ? ' list' : '');
+  const kids = keys.map(k => hbCard(k, kind));
+  if (!kids.length) {
+    box.className = 'hb-results';
+    kids.push(total ? hbEmpty('No matches', 'Try another search or filter.') : kind === 'archives' ? hbEmpty('Nothing archived', 'Move projects, areas, or resources here from their ⋯ menu.') : hbEmpty(`No ${kind} yet`, `Create one, or file a board, page, or database you already have.`, h('div', { class: 'hb-row' }, hbBtn(`+ New ${HB_ONE[kind]}`, e => { e.stopPropagation(); hbNew(e.currentTarget, kind); }, 'hb-solid'), hbBtn('File existing', e => { e.stopPropagation(); hbExisting(e.currentTarget, kind); }))));
+  } else if (kind === 'areas') kids.push(h('button', { class: 'hb-addtile', onclick: e => { e.stopPropagation(); hbNew(e.currentTarget, kind); } }, h('b', null, '+'), 'Add another area'));
+  box.replaceChildren(...kids);
+}
+function hbPara(ov, kind) {
+  const v = hbView(), items = nvItems(kind), from = ST.settings.paraFrom || {};
+  const set = (k, val) => { v[k] = val; save(); hbRender(); };
+  const sel = (label, opts, cur, fn) => { const s = h('select', { class: 'hb-sel', 'aria-label': label }, ...opts.map(([a, b]) => h('option', { value: a }, b))); s.value = cur; s.onchange = () => fn(s.value); return s; };
+  const actions = HB_ONE[kind] ? [hbBtn('File existing', e => { e.stopPropagation(); hbExisting(e.currentTarget, kind); }), hbBtn(`+ New ${HB_ONE[kind]}`, e => { e.stopPropagation(); hbNew(e.currentTarget, kind); }, 'hb-solid')] : [];
+  const parts = [h('header', { class: 'hb-head' }, h('div', null, h('h2', null, NV_NAME[kind], h('span', { class: 'hb-count' }, String(items.length))), h('p', null, HB_SUB[kind])), h('div', { class: 'hb-row' }, ...actions))];
+  if (kind === 'resources') {
+    const cards = items.filter(k => k[0] === 'b').flatMap(k => hbCards(k.slice(2)));
+    const n = t => cards.filter(c => hbType(c) === t).length, tab = hbUI.tab.resources || 'all';
+    const pick = t => { hbUI.tab.resources = t; hbRender(); };
+    parts.push(h('div', { class: 'hb-library' }, ...HB_TYPES.map(([t, l], i) => h('button', { class: 'hb-tile', onclick: () => pick(t) }, h('i', { style: { background: HB_COL[[5, 4, 2, 1][i]] } }), h('b', null, l), h('span', null, `${n(t)} item${n(t) === 1 ? '' : 's'}`)))),
+      hbTabs([['all', 'All', items.length], ...HB_TYPES.map(([t, l]) => [t, l, n(t)])], tab, pick));
+  }
+  if (kind === 'archives') parts.push(hbTabs([['all', 'All', items.length], ...['areas', 'projects', 'resources'].map(k => [k, NV_NAME[k], items.filter(x => from[x] === k).length])], hbUI.tab.archives || 'all', t => { hbUI.tab.archives = t; hbRender(); }));
+  parts.push(h('div', { class: 'hb-tools' }, hbSearch(kind, 'Search ' + kind, () => hbGrid(kind)), h('span', { class: 'hb-gap' }),
+    kind === 'projects' ? sel('Status', [['all', 'All statuses'], ...Object.entries(HB_STATUS)], hbUI.status, x => { hbUI.status = x; hbGrid(kind); }) : null,
+    sel('Sort', [['recent', 'Recent'], ['name', 'Name']], v.sort, x => set('sort', x)),
+    h('div', { class: 'hb-tabs' }, ...[['grid', 'Grid'], ['list', 'List']].map(([a, b]) => h('button', { class: v.layout === a ? 'on' : '', 'aria-pressed': String(v.layout === a), onclick: () => set('layout', a) }, b)))),
+    h('div', { class: 'hb-results' }));
+  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' }, ...parts)); hbGrid(kind);
+}
+
+/* ---- wiring ---- */
+{ const _f = nvFile; nvFile = function (bucket, key) {
+  if (key && NV_PARA.includes(bucket)) {
+    const from = ST.settings.paraFrom || (ST.settings.paraFrom = {}), was = nvMap(bucket)[key];
+    if (bucket === 'archives') { if (was && was !== 'archives') from[key] = was; } else delete from[key];
+  }
+  return _f.apply(this, arguments);
+}; }
+nvCapture = () => openHub('capture');
+{ const _row = nvRow; nvRow = function (b) {
+  const out = _row.apply(this, arguments);
+  if (!HB_KINDS.includes(b)) return out;
+  const btn = out[0], on = hbOpen() === b;
+  btn.classList.toggle('on', on); if (on) btn.setAttribute('aria-current', 'page');
+  btn.onclick = () => { openHub(b); if (isMobileSb()) toggleSidebar(false); };
+  btn.removeAttribute('aria-expanded');
+  if (b === 'capture') return out;
+  const open = !!(ST.settings.nvOpen || {})[b];
+  const chev = h('button', { class: 'hb-chev' + (open ? ' open' : ''), title: (open ? 'Collapse ' : 'Expand ') + NV_NAME[b], 'aria-label': (open ? 'Collapse ' : 'Expand ') + NV_NAME[b], 'aria-expanded': String(open), onclick: () => { const o = ST.settings.nvOpen || (ST.settings.nvOpen = {}); o[b] = !open; save(); renderSidebar(); } }, '›');
+  return [h('div', { class: 'hb-sbrow' }, btn, chev), ...out.slice(1)];
+}; }
+{ const _tb = nvTopBar; nvTopBar = function () {
+  _tb.apply(this, arguments);
+  const bar = $('#sbTop'); if (!bar) return;
+  const find = label => [...bar.querySelectorAll('.nvt')].find(x => x.textContent.startsWith(label));
+  find('Capture')?.classList.toggle('on', hbOpen() === 'capture');
+  const org = find('Organize');
+  if (org) { org.classList.toggle('on', NV_PARA.includes(hbOpen())); org.onclick = e => { e.stopPropagation(); showMenuAt(org, NV_PARA.map(k => ({ label: `${NV_NAME[k]} (${nvItems(k).length})`, fn: () => openHub(k) }))); }; }
+}; }
+{ const _co = curOverlay; curOverlay = function () { const k = hbOpen(); return k && !$('.pv-wrap') ? 'd:hb:' + k : _co.apply(this, arguments); }; }
+{ const _tl = tabLabel; tabLabel = function (t) { return t.o && t.o.startsWith('d:hb:') ? [NV_NAME[t.o.slice(5)], null, '▦'] : _tl.apply(this, arguments); }; }
+{ const _ta = tabApply; tabApply = function (t) { const o = t.o; _ta.apply(this, arguments); if (o && o.startsWith('d:hb:')) openHub(o.slice(5)); }; }
+{ const _ar = afterRestore; afterRestore = function () { _ar.apply(this, arguments); hbRender(); }; }
+{ const _tv = openTasksView; openTasksView = function () { $$('.dashview.hubview').forEach(x => x.remove()); const r = _tv.apply(this, arguments); scheduleSidebar(); return r; }; }
+/* paste outside a text field: Capture saves it; other dashboards ignore it (never lands on the hidden board) */
+window.addEventListener('paste', e => {
+  const kind = hbOpen(); if (!kind || isTypingTarget(e.target) || $('.pv-wrap,.modal-bg,.dbfull')) return;
+  e.preventDefault(); e.stopImmediatePropagation();
+  if (kind !== 'capture') return;
+  const files = [...(e.clipboardData?.files || [])]; if (files.length) return void hbFiles(files);
+  const t = (e.clipboardData?.getData('text/plain') || '').trim(); if (!t) return;
+  checkpoint(); const url = isUrl(t) && normUrl(t), c = url ? hbAdd('link', { url, title: hostOf(url) }) : hbAdd('note', { html: esc(t).replace(/\n/g, '<br>') });
+  if (url) fetchPreview(c.id);
+  hbUI.sel = c.id; hbUI.detail = true; hbRender();
+}, true);
 
 init();
 </script>
