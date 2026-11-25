@@ -3789,6 +3789,110 @@ body.sel-one .card.selected>.hp-col .hp-color{display:block}
   .hb-cap.detail .hb-editor{display:flex}
   .hb-backlist{display:block}
 }
+/* distill / express / habits */
+.ds-wrap{display:flex;gap:16px;align-items:flex-start}
+.ds-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.ds-side{width:260px;flex:none;display:flex;flex-direction:column;gap:12px}
+.ds-panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;font-size:13px}
+.ds-panel .hb-muted,.hb-muted{color:var(--muted);font-size:12px}
+.ds-layer{display:flex;gap:10px;align-items:center;font-size:12px}
+.ds-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.ds-note{background:var(--card);flex:none}
+.ds-bars{display:inline-flex;gap:3px;flex:none}
+.ds-bars i{width:12px;height:4px;border-radius:2px;background:var(--line)}
+.ds-bars i.l1{background:var(--muted)}.ds-bars i.l2{background:var(--text)}.ds-bars i.l3{background:#eab308}.ds-bars i.l4{background:#14b8a6}
+.ds-edit{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.ds-tools{justify-content:flex-start;align-items:center}
+.ds-title{margin:8px 0 0;font-size:22px}
+.ds-sum{font:13px var(--sans);padding:10px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--text);resize:vertical}
+.ds-text{min-height:260px}
+.ex-steps{display:grid;grid-template-columns:repeat(4,1fr) auto;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;align-items:start}
+.ex-steps>div{display:grid;grid-template-columns:24px 1fr;column-gap:10px;font-size:12px}
+.ex-steps i{grid-row:1/3;width:24px;height:24px;border-radius:50%;background:var(--text);color:var(--card);display:grid;place-items:center;font-style:normal;font-weight:700}
+.ex-steps span{color:var(--muted)}
+.ex-card.on{border-color:var(--text);box-shadow:0 0 0 2px var(--text)}
+.ex-text{margin:0;font-size:13px;line-height:1.5;color:var(--text);white-space:pre-wrap;overflow-wrap:anywhere}
+.hab-nav{display:flex;gap:8px;align-items:center;font-size:13px;flex-wrap:wrap}
+.hab-list{display:flex;flex-direction:column;gap:8px}
+.hab-row{display:flex;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.hab-row.month,.hab-row.year{flex-direction:column;align-items:stretch}
+.hab-row.paused{opacity:.55}
+.hab-name{display:flex;gap:8px;align-items:center;justify-content:space-between;width:200px;flex:none}
+.hab-name b{display:block;font-size:14px}
+.hab-name span,.hab-week span,.hab-all span{font-size:11px;color:var(--muted)}
+.hab-week{flex:1;display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.hab-week>div{display:flex;flex-direction:column;align-items:center;gap:4px}
+.hab-month{display:grid;grid-template-columns:repeat(7,34px);gap:4px}
+.hab-year{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,11px);grid-auto-columns:11px;gap:2px;overflow-x:auto;padding-bottom:6px}
+.hab-c{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);font-size:13px;font-weight:700;color:var(--text);padding:0;flex:none}
+.hab-year .hab-c{width:11px;height:11px;border-radius:2px;font-size:0}
+.hab-c.done{background:#16a34a;border-color:#16a34a;color:#fff}
+.hab-c.missed{color:#e5484d;border-color:#e5484d}
+.hab-c.due{border:2px solid #14b8a6}
+.hab-c.next{border-style:dashed;color:var(--muted)}
+.hab-c.rest,.hab-c.none{border-color:transparent;background:var(--hover);color:var(--muted)}
+.hab-all{display:flex;gap:32px}
+.hab-all b{display:block;font-size:20px}
+.hab-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.hab-legend span{display:flex;gap:6px;align-items:center}
+.hab-legend .hab-c{width:12px;height:12px}
+.hab-modal{display:flex;flex-direction:column;gap:12px;padding:20px;width:min(440px,92vw)}
+.hab-modal h3{margin:0}.hab-modal .hb-search{width:100%}
+/* tasks board */
+.tasksview.kb h2{margin:0;font-size:20px}
+.tasksview.kb p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.kb-top{padding:20px 24px 0;display:flex;flex-direction:column;gap:14px}
+.tasksview .tv-body.kb-body{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:12px;padding:16px 24px 32px;align-items:start}
+.kb-col{background:var(--hover);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:8px;min-height:240px}
+.kb-col.over{outline:2px dashed var(--sel)}
+.kb-h{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:8px;background:var(--card);font-size:13px;border-left:4px solid var(--muted)}
+.kb-col.todo .kb-h{border-left-color:#3b82f6}.kb-col.doing .kb-h{border-left-color:#e08a1e}.kb-col.done .kb-h{border-left-color:#16a34a}
+.kb-h span{font-size:11px;color:var(--muted)}
+.kb-add{font:13px var(--sans);padding:8px 10px;border-radius:8px;border:1px dashed var(--line);background:transparent;color:var(--text);outline:none;width:100%}
+.kb-add:focus{border-color:var(--sel);background:var(--card)}
+.kb-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;cursor:grab;font-size:13px}
+.kb-t{display:flex;gap:6px;justify-content:space-between;align-items:flex-start}
+.kb-t span{overflow-wrap:anywhere;min-width:0}
+.hb-chip.late{color:#e5484d}
+/* notes list */
+.hubview-like h2{margin:0;font-size:20px;font-weight:700;display:flex;align-items:center;gap:8px}
+.notesview .hb-list .hb-sel{flex:none;width:100%}
+.hb-listhead .hb-row{flex-wrap:nowrap}
+/* focus timer */
+.focusview .tv-body.fx-body{flex:1;min-height:0;overflow:auto;display:flex;gap:16px;padding:16px;align-items:stretch}
+.fx-timer,.fx-panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:14px}
+.fx-timer{flex:1;align-items:center;justify-content:center}
+.fx-panel{width:320px;flex:none;min-height:0;overflow:auto}
+.fx-modes{align-self:center}.fx-modes button{flex-direction:column;gap:2px;padding:6px 18px}.fx-modes button:disabled:not(.on){opacity:.4}
+.fx-dial{position:relative;width:min(260px,70vw);aspect-ratio:1;flex:none}
+.fx-ring{width:100%;height:100%}.fx-ring circle{stroke-width:4}
+.fx-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);font-size:12px}
+.fx-time{font-size:52px;color:var(--text);font-variant-numeric:tabular-nums}
+.fx-task{font-weight:700;font-size:15px;text-align:center}
+.fx-stats{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.fx-stats div{background:var(--hover);border-radius:8px;padding:8px 16px;display:flex;flex-direction:column;font-size:11px;color:var(--muted)}
+.fx-stats b{font-size:16px;color:var(--text)}
+.fx-list{display:flex;flex-direction:column;gap:6px}
+.fx-item{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px}
+.fx-item.on{border-color:var(--text);background:var(--hover)}
+.fx-check{width:20px;height:20px;flex:none;border-radius:50%;border:1.5px solid var(--muted);font-size:11px;color:var(--text)}
+.fx-pick{flex:1;min-width:0;text-align:left;color:var(--text)}
+.fx-pick b{display:block;font-size:13px;font-weight:600;overflow-wrap:anywhere}.fx-pick span{font-size:11px;color:var(--muted)}
+@container dash (max-width:760px){
+  .ds-wrap{flex-direction:column;align-items:stretch}.ds-side{width:auto}
+  .ex-steps{grid-template-columns:1fr auto}.ex-steps>div{grid-column:1}.ex-x{grid-column:2;grid-row:1}
+  .hab-row{flex-direction:column;align-items:stretch}.hab-name{width:auto}.hab-month{grid-template-columns:repeat(7,1fr)}
+  .focusview .tv-body.fx-body{flex-direction:column}.fx-panel{width:auto;overflow:visible}.fx-timer{flex:none}
+}
+@container dash (max-width:640px){
+  .hubview-like .hb-cap .hb-editor,.hubview-like .hb-cap.detail .hb-list{display:none}
+  .hubview-like .hb-cap.detail .hb-editor{display:flex}
+  .tasksview .tv-body.kb-body{grid-template-columns:1fr;padding:12px}.kb-top{padding:12px 12px 0}.kb-col{min-height:0}
+}
+.tasksview .tv-body.kb-body{grid-auto-rows:max-content;align-content:start}
+.kb-col,.kb-card{flex-shrink:0}
+.hb-list,.hb-cap,.hb-items{min-width:0}
+.hb-cap>*{min-width:0}
 </style>
 </head>
 <body class="app-root">
@@ -16489,6 +16593,373 @@ window.addEventListener('paste', e => {
   if (url) fetchPreview(c.id);
   hbUI.sel = c.id; hbUI.detail = true; hbRender();
 }, true);
+
+/* ========== Distill, Express, Habits ========== */
+HB_KINDS.push('distill', 'express', 'habits');
+NV_NAME.habits = 'Habits';
+NV_SVG.habits = '<path d="M4 6h16v14H4zM4 10h16M8 3v5M16 3v5"/><path d="m9 15 2 2 4-4"/>';
+const hbHead = (title, sub, ...actions) => h('header', { class: 'hb-head' }, h('div', null, h('h2', null, title), h('p', null, sub)), h('div', { class: 'hb-row' }, ...actions));
+const x3 = { note: null, q: '', picked: new Set(), view: 'week', off: 0, filter: 'all', hq: '' };
+const packets = () => ST.packets || (ST.packets = []);
+
+/* ---- Distill ---- */
+const LAYERS = [[1, 'Raw note, as captured'], [2, 'Bold the key sentences'], [3, 'Highlight the best of the bold'], [4, 'Summary on top (optional)']];
+const dsNotes = () => Object.values(ST.cards).filter(c => (c.type === 'note' || c.type === 'doc') && liveCard(c) && !c.unsorted && strip(c.data.html).trim());
+function dsLayer(c) {
+  if ((c.data.summary || '').trim()) return 4;
+  const d = document.createElement('div'); d.innerHTML = c.data.html || '';
+  if (d.querySelector('mark') || [...d.querySelectorAll('[style]')].some(e => e.style.backgroundColor && e.style.backgroundColor !== 'transparent')) return 3;
+  return d.querySelector('b,strong') || [...d.querySelectorAll('[style]')].some(e => /bold|[6-9]00/.test(e.style.fontWeight)) ? 2 : 1;
+}
+const dsBars = n => h('span', { class: 'ds-bars', title: 'Layer ' + n + ' of 4' }, ...[1, 2, 3, 4].map(i => h('i', { class: i <= n ? 'l' + i : '' })));
+function dsSave(text, src) {
+  text = (text || '').trim(); if (!text) return toast('Select some text in the note first');
+  checkpoint(); packets().unshift({ id: uid(), text, src, createdAt: now() }); save(); toast('Packet saved'); dsSide();
+}
+function dsSide() {
+  const box = $('.ds-side'); if (!box) return;
+  box.replaceChildren(
+    h('section', { class: 'ds-panel' }, h('b', null, 'Packets'), h('span', { class: 'hb-muted' }, `${packets().length} saved for Express`),
+      h('span', { class: 'hb-muted' }, 'Select text in a note, then choose Save as packet.'), hbBtn('Open Express', () => openHub('express'))),
+    h('section', { class: 'ds-panel' }, h('b', null, 'The four layers'), ...LAYERS.map(([n, l]) => h('div', { class: 'ds-layer' }, dsBars(n), h('span', null, l)))));
+}
+function dsRender(ov) {
+  const all = dsNotes(); let c = x3.note && ST.cards[x3.note];
+  if (c && !liveCard(c)) c = null;
+  let main;
+  if (!c) {
+    x3.note = null;
+    main = h('div', { class: 'ds-main' }, ...(all.length ? all.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)).map(n => h('button', { class: 'hb-item ds-note', onclick: () => { x3.note = n.id; hbRender(); } },
+      h('div', { class: 'ds-top' }, h('b', null, hbTitle(n)), dsBars(dsLayer(n))), h('span', null, strip(n.data.html).trim().slice(0, 140)), h('time', null, refInfo('b:' + n.boardId).title)))
+      : [hbEmpty('Nothing to distill yet', 'Write a note in Capture, then distill it here.', hbBtn('Open Capture', () => openHub('capture'), 'hb-solid'))]));
+  } else {
+    let marked = false; const mark = () => { if (!marked) { checkpoint(); marked = true; } };
+    const text = h('div', { class: 'hb-text rt ds-text', role: 'textbox', 'aria-label': 'Note text', html: c.data.html || '' }); text.contentEditable = String(!c.locked);
+    const bars = h('span', null, dsBars(dsLayer(c)));
+    const write = () => { mark(); c.data.html = text.innerHTML; c.updatedAt = now(); save(); bars.replaceChildren(dsBars(dsLayer(c))); };
+    text.addEventListener('input', write);
+    text.addEventListener('paste', e => { e.preventDefault(); e.stopPropagation(); document.execCommand('insertText', false, e.clipboardData.getData('text/plain')); });
+    const picked = () => { const s = getSelection(); return s.rangeCount && text.contains(s.anchorNode) ? s.toString() : ''; };
+    const fmt = (cmd, val, css) => { if (!picked()) return toast('Select some text first'); mark(); document.execCommand('styleWithCSS', false, css); document.execCommand(cmd, false, val); document.execCommand('styleWithCSS', false, false); write(); };
+    const tool = (label, fn) => { const b = hbBtn(label, fn); b.addEventListener('pointerdown', e => e.preventDefault()); return b; };
+    const sum = h('textarea', { class: 'ds-sum', placeholder: 'Layer 4: summary in your own words (optional)', 'aria-label': 'Summary', rows: '3' }); sum.value = c.data.summary || '';
+    sum.addEventListener('input', () => { mark(); c.data.summary = sum.value; c.updatedAt = now(); save(); bars.replaceChildren(dsBars(dsLayer(c))); });
+    main = h('div', { class: 'ds-main ds-edit' },
+      h('div', { class: 'hb-row ds-tools' }, hbBtn('‹ All notes', () => { x3.note = null; hbRender(); }), bars, h('span', { class: 'hb-gap' }),
+        tool('Bold', () => fmt('bold', null, false)), tool('Highlight', () => fmt('hiliteColor', 'rgba(255, 212, 0, 0.38)', true)), tool('Clear highlight', () => fmt('hiliteColor', 'transparent', true)), tool('Save as packet', () => dsSave(picked(), c.id))),
+      h('h3', { class: 'ds-title' }, hbTitle(c)), sum, text);
+  }
+  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' }, hbHead('Distill', `${all.length} note${all.length === 1 ? '' : 's'} with text. Add one layer each time you open one.`), h('div', { class: 'ds-wrap' }, main, h('aside', { class: 'ds-side' }))));
+  dsSide();
+}
+
+/* ---- Express ---- */
+const EX_STEPS = [['Start with a real project', 'Make one thing someone will use.'], ['Gather your blocks', 'Pick the packets you distilled.'], ['Make it yours', 'Bridge them in your own words.'], ['Ship and feed back', 'Send it, then learn.']];
+function exMake(btn) {
+  const chosen = packets().filter(p => x3.picked.has(p.id));
+  if (!chosen.length) return toast('Pick at least one packet');
+  const make = bid => askText(btn, 'Name what you are making', '', name => {
+    checkpoint();
+    const prev = S.boardId, at = openSpot(bid); S.boardId = bid; const card = newCard('page', at.x, at.y); S.boardId = prev;
+    const p = ST.pages[card.data.pageId]; p.title = name.trim() || 'Untitled';
+    p.blocks = [...chosen.map(k => nb('text', esc(k.text).replace(/\n/g, '<br>'))), nb('text')];
+    x3.picked.clear(); save(); renderBoard(); openPage(p.id); scheduleSidebar();
+  });
+  const projects = nvItems('projects').filter(k => k[0] === 'b');
+  if (!projects.length) return make(ST.rootId);
+  showMenuAt(btn, [...projects.map(k => ({ label: 'In ' + refInfo(k).title, fn: () => setTimeout(() => make(k.slice(2)), 0) })), '-', { label: 'On Home', fn: () => setTimeout(() => make(ST.rootId), 0) }]);
+}
+function exRender(ov) {
+  const list = packets();
+  const makeBtn = hbBtn(x3.picked.size ? `+ Make something (${x3.picked.size})` : '+ Make something', e => { e.stopPropagation(); exMake(e.currentTarget); }, 'hb-solid');
+  const strip4 = ST.settings.exHideSteps ? null : h('div', { class: 'ex-steps' }, ...EX_STEPS.map(([t, s], i) => h('div', null, h('i', null, String(i + 1)), h('b', null, t), h('span', null, s))),
+    h('button', { class: 'hb-more ex-x', title: 'Hide steps', 'aria-label': 'Hide steps', onclick: () => { ST.settings.exHideSteps = true; save(); hbRender(); } }, '×'));
+  const body = list.length ? h('div', { class: 'hb-grid' }, ...list.map(p => {
+    const on = x3.picked.has(p.id), src = ST.cards[p.src];
+    return h('article', { class: 'hb-card ex-card' + (on ? ' on' : ''), role: 'checkbox', 'aria-checked': String(on), tabindex: '0', onclick: e => { if (e.target.closest('button')) return; on ? x3.picked.delete(p.id) : x3.picked.add(p.id); hbRender(); }, onkeydown: e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); e.currentTarget.click(); } } },
+      h('p', { class: 'ex-text' }, p.text.slice(0, 280)),
+      h('div', { class: 'hb-foot' }, h('span', null, src && liveCard(src) ? hbTitle(src) : 'Source removed'), hbBtn('Delete', () => { checkpoint(); ST.packets = packets().filter(x => x.id !== p.id); x3.picked.delete(p.id); save(); hbRender(); })));
+  })) : hbEmpty('Nothing ready to make yet', 'Save a few packets in Distill and they show up here.', hbBtn('Open Distill', () => openHub('distill'), 'hb-solid'));
+  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' }, hbHead('Express', 'Start from a project, not a blank page.', makeBtn), strip4, body));
+}
+
+/* ---- Habits ---- */
+const habits = () => ST.habits || (ST.habits = []);
+const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const HAB_LABEL = { done: 'Completed', missed: 'Missed', due: 'Due today', next: 'Upcoming', rest: 'Rest day', none: 'Before start' };
+function habState(hb, d) {
+  const t = todayStr(); if (hb.done[d]) return 'done';
+  if (!hb.days.includes(parseYmd(d).getDay())) return 'rest';
+  if (d > t) return 'next'; if (d === t) return 'due';
+  return d < ymd(new Date(hb.createdAt)) ? 'none' : 'missed';
+}
+function habStreaks(hb) {
+  const t = todayStr(), keys = Object.keys(hb.done).sort(), start = keys.length ? [keys[0], ymd(new Date(hb.createdAt))].sort()[0] : ymd(new Date(hb.createdAt));
+  let run = 0, best = 0;
+  for (let d = start, n = 0; d <= t && n < 4000; d = addDays(d, 1), n++) {
+    if (hb.done[d]) { run++; best = Math.max(best, run); } else if (hb.days.includes(parseYmd(d).getDay()) && d !== t) run = 0;
+  }
+  return { cur: run, best, total: keys.length };
+}
+function habToggle(hb, d) { if (d > todayStr()) return; checkpoint(); if (hb.done[d]) delete hb.done[d]; else hb.done[d] = 1; save(); hbRender(); }
+function habDialog(hb) {
+  const name = h('input', { type: 'text', class: 'hb-search', placeholder: 'Habit name', 'aria-label': 'Habit name', value: hb ? hb.name : '' });
+  const days = new Set(hb ? hb.days : [0, 1, 2, 3, 4, 5, 6]);
+  const row = h('div', { class: 'hb-row' }, ...DOW.map((l, i) => { const b = h('button', { class: 'hb-btn' + (days.has(i) ? ' hb-solid' : ''), 'aria-pressed': String(days.has(i)), onclick: () => { days.has(i) ? days.delete(i) : days.add(i); b.classList.toggle('hb-solid', days.has(i)); b.setAttribute('aria-pressed', String(days.has(i))); } }, l); return b; }));
+  let bg; const close = () => bg.remove();
+  const ok = () => {
+    const n = name.value.trim(); if (!n) return name.focus(); if (!days.size) return toast('Pick at least one day');
+    checkpoint(); if (hb) { hb.name = n; hb.days = [...days].sort(); } else habits().push({ id: uid(), name: n, days: [...days].sort(), done: {}, paused: false, createdAt: now() });
+    save(); close(); hbRender();
+  };
+  name.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') ok(); if (e.key === 'Escape') close(); });
+  bg = h('div', { class: 'modal-bg' }, h('div', { class: 'modal hab-modal' }, h('h3', null, hb ? 'Edit habit' : 'New habit'), name, row, h('div', { class: 'hb-row' }, hbBtn('Cancel', close), hbBtn('Save', ok, 'hb-solid'))));
+  bg.addEventListener('pointerdown', e => { if (e.target === bg) close(); });
+  document.body.append(bg); setTimeout(() => name.focus(), 0);
+}
+function habRange() {
+  const base = parseYmd(todayStr());
+  if (x3.view === 'week') { base.setDate(base.getDate() - base.getDay() + x3.off * 7); const from = ymd(base); return { days: [...Array(7)].map((_, i) => addDays(from, i)), label: `${base.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} – ${parseYmd(addDays(from, 6)).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}` }; }
+  if (x3.view === 'month') { const m = new Date(base.getFullYear(), base.getMonth() + x3.off, 1), n = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate(); return { days: [...Array(n)].map((_, i) => addDays(ymd(m), i)), label: m.toLocaleDateString(undefined, { month: 'long', year: 'numeric' }) }; }
+  if (x3.view === 'year') { const y = base.getFullYear() + x3.off, days = []; for (let d = y + '-01-01'; d.startsWith(String(y)); d = addDays(d, 1)) days.push(d); return { days, label: String(y) }; }
+  return { days: [], label: 'All time' };
+}
+function habCell(hb, d, withNum) {
+  const s = habState(hb, d), label = `${hb.name}, ${parseYmd(d).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}: ${HAB_LABEL[s]}`;
+  return h('button', { class: 'hab-c ' + s, title: label, 'aria-label': label, 'data-d': d, disabled: d > todayStr() ? '' : null, onclick: () => habToggle(hb, d) }, withNum ? String(parseYmd(d).getDate()) : s === 'done' ? '✓' : s === 'missed' ? '×' : '');
+}
+function habRow(hb, range) {
+  const st = habStreaks(hb);
+  const more = h('button', { class: 'hb-more', title: 'Options', 'aria-label': 'Options for ' + hb.name, onclick: e => { e.stopPropagation(); showMenuAt(more, [{ label: 'Edit', fn: () => habDialog(hb) }, { label: hb.paused ? 'Resume' : 'Pause', fn: () => { checkpoint(); hb.paused = !hb.paused; save(); hbRender(); } }, '-', { label: 'Delete', fn: () => { checkpoint(); ST.habits = habits().filter(x => x.id !== hb.id); save(); hbRender(); toast('Habit deleted. Undo with ' + (navigator.platform.includes('Mac') ? '⌘Z' : 'Ctrl+Z')); } }]); } }, '⋯');
+  const cells = x3.view === 'all' ? h('div', { class: 'hab-all' }, ...[[st.total, 'check-ins'], [st.cur, 'current streak'], [st.best, 'best streak']].map(([n, l]) => h('div', null, h('b', null, String(n)), h('span', null, l))))
+    : x3.view === 'week' ? h('div', { class: 'hab-week' }, ...range.days.map(d => h('div', null, h('span', null, DOW[parseYmd(d).getDay()]), habCell(hb, d, false))))
+      : h('div', { class: x3.view === 'year' ? 'hab-year' : 'hab-month' }, ...[...Array(parseYmd(range.days[0]).getDay())].map(() => h('i')), ...range.days.map(d => habCell(hb, d, x3.view === 'month')));
+  return h('div', { class: 'hab-row ' + x3.view + (hb.paused ? ' paused' : ''), 'data-hab': hb.id }, h('div', { class: 'hab-name' }, h('div', null, h('b', null, hb.name), h('span', null, hb.paused ? 'Paused' : `${st.cur} streak`)), more), cells);
+}
+function habList() {
+  const box = $('.hab-list'); if (!box) return;
+  const q = x3.hq.trim().toLowerCase(), range = habRange();
+  const list = habits().filter(b => (x3.filter === 'all' || (x3.filter === 'paused') === !!b.paused) && (!q || b.name.toLowerCase().includes(q)));
+  const ideas = ['Drink water', 'Read 10 pages', 'Morning walk', 'Meditate', 'Stretch'];
+  box.replaceChildren(...(list.length ? list.map(b => habRow(b, range)) : habits().length ? [hbEmpty('No matches', 'Try another search or filter.')] : [hbEmpty('A small habit is a good start', 'Add one and choose the days you want to practice it.', h('div', { class: 'hb-row' }, hbBtn('+ Add your first habit', () => habDialog(), 'hb-solid'), ...ideas.map(n => hbBtn(n, () => { checkpoint(); habits().push({ id: uid(), name: n, days: [0, 1, 2, 3, 4, 5, 6], done: {}, paused: false, createdAt: now() }); save(); hbRender(); }))))]));
+}
+function habRender(ov) {
+  const range = habRange(), search = h('input', { class: 'hb-search', type: 'search', placeholder: 'Search habits', 'aria-label': 'Search habits', value: x3.hq });
+  search.addEventListener('input', () => { x3.hq = search.value; habList(); });
+  const seg = (opts, cur, fn) => h('div', { class: 'hb-tabs' }, ...opts.map(([v, l]) => h('button', { class: v === cur ? 'on' : '', 'aria-pressed': String(v === cur), onclick: () => fn(v) }, l)));
+  const nav = x3.view === 'all' ? h('b', null, 'All time') : h('div', { class: 'hab-nav' }, hbBtn('‹', () => { x3.off--; hbRender(); }), h('b', null, range.label), hbBtn('›', () => { x3.off++; hbRender(); }), hbBtn('Today', () => { x3.off = 0; hbRender(); }));
+  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' }, hbHead('Habits', 'Small actions, a little more consistent every day.', hbBtn('+ Add habit', () => habDialog(), 'hb-solid')),
+    h('div', { class: 'hb-tools' }, nav, h('span', { class: 'hb-gap' }), seg([['week', 'Week'], ['month', 'Month'], ['year', 'Year'], ['all', 'All time']], x3.view, v => { x3.view = v; x3.off = 0; hbRender(); })),
+    h('div', { class: 'hb-tools' }, search, seg([['all', 'All'], ['active', 'Active'], ['paused', 'Paused']], x3.filter, v => { x3.filter = v; hbRender(); })),
+    h('div', { class: 'hab-list' }),
+    h('div', { class: 'hab-legend' }, ...['done', 'missed', 'due', 'next', 'rest'].map(s => h('span', null, h('i', { class: 'hab-c ' + s }), HAB_LABEL[s])))));
+  habList();
+}
+{ const _hr = hbRender; hbRender = function () {
+  const kind = hbOpen(), fn = { distill: dsRender, express: exRender, habits: habRender }[kind];
+  if (!fn) return _hr.apply(this, arguments);
+  const ov = $('.dashview.hubview'), y = ov.querySelector('.hb-scroll')?.scrollTop || 0; fn(ov); ov.querySelector('.hb-scroll').scrollTop = y;
+}; }
+{ const _g = nvGroup; nvGroup = function () {
+  _g.apply(this, arguments);
+  const sec = [...$$('#sbDyn .sb-sec')].find(x => x.querySelector('.sb-h')?.textContent === 'Tools');
+  if (!sec || sec.querySelector('[data-nv=habits]')) return;
+  const on = hbOpen() === 'habits';
+  sec.append(h('button', { class: 'sb-item nv-row' + (on ? ' on' : ''), title: 'Habits', 'data-nv': 'habits', 'aria-current': on ? 'page' : null, onclick: () => { openHub('habits'); if (isMobileSb()) toggleSidebar(false); } }, h('span', { class: 'sb-ic', html: nvIcon('habits') }), h('span', { class: 'sb-lab' }, 'Habits')));
+}; }
+{ const _tb2 = nvTopBar; nvTopBar = function () {
+  _tb2.apply(this, arguments);
+  const bar = $('#sbTop'); if (!bar) return;
+  const find = label => [...bar.querySelectorAll('.nvt')].find(x => x.textContent.startsWith(label));
+  for (const k of ['distill', 'express']) { const el = find(NV_NAME[k]); if (!el) continue; el.textContent = NV_NAME[k]; el.classList.toggle('on', hbOpen() === k); el.onclick = () => openHub(k); }
+  if (!find('Habits')) find('Focus')?.after(h('button', { class: 'nvt' + (hbOpen() === 'habits' ? ' on' : ''), onclick: () => openHub('habits') }, 'Habits'));
+}; }
+
+/* ========== Tasks: four-column board (the previous dashboard stays one click away) ========== */
+const taskMode = () => ST.settings.taskMode || 'board';
+const KB_COLS = [['backlog', 'Backlog'], ['todo', 'To do'], ['doing', 'In progress'], ['done', 'Done']];
+const kbCol = it => it.done ? 'done' : it.col === 'backlog' || it.col === 'doing' ? it.col : 'todo';
+const kb = { q: '', board: 'all' };
+function kbSetMode(m) { ST.settings.taskMode = m; save(); openTasksView(); }
+function kbMove(tid, col) {
+  let f = findTask(tid); if (!f || kbCol(f.item) === col) return;
+  if ((col === 'done') !== !!f.item.done) toggleTask(tid); else checkpoint();
+  f = findTask(tid); if (col !== 'done') f.item.col = col; f.card.updatedAt = now(); save(); refreshTaskViews([f.card.id]);
+}
+function kbAdd(col, text) {
+  checkpoint(); const c = kb.board !== 'all' && allLists().find(x => x.boardId === kb.board) || ensureInbox(), t = newTask(text);
+  if (col === 'done') { t.done = true; t.doneAt = now(); } else t.col = col;
+  c.data.items.push(t); c.updatedAt = now(); save(); refreshTaskViews([c.id]);
+}
+function kbHead() {
+  const ov = $('.tasksview'); ov.querySelector('.tv-top')?.remove();
+  const q = h('input', { class: 'hb-search', type: 'search', placeholder: 'Search tasks', 'aria-label': 'Search tasks', value: kb.q });
+  q.addEventListener('input', () => { kb.q = q.value; kbBody(); });
+  const boards = [...new Set(taskLists().map(c => c.boardId))].filter(id => ST.boards[id]);
+  const sel = h('select', { class: 'hb-sel', 'aria-label': 'Board' }, h('option', { value: 'all' }, 'All boards'), ...boards.map(id => h('option', { value: id }, boardName(id)))); sel.value = boards.includes(kb.board) ? kb.board : (kb.board = 'all'); sel.onchange = () => { kb.board = sel.value; kbBody(); };
+  ov.prepend(h('div', { class: 'tv-top kb-top' }, hbHead('Tasks', 'Drag a card, or use ⋯, to move it.', hbBtn('Dashboard view', () => kbSetMode('dash')), hbBtn('+ Create task', () => newTaskFromDash(), 'hb-solid')), h('div', { class: 'hb-tools' }, q, sel)));
+}
+function kbBody() {
+  const ov = $('.tasksview'); if (!ov) return;
+  const old = ov.querySelector('.tv-body'), sx = old?.scrollLeft || 0, sy = old?.scrollTop || 0; old?.remove();
+  const q = kb.q.trim().toLowerCase(), all = [];
+  for (const c of taskLists()) { if (kb.board !== 'all' && c.boardId !== kb.board) continue; for (const it of c.data.items) { normTask(it); if (!q || (it.text + ' ' + boardName(c.boardId)).toLowerCase().includes(q)) all.push([it, c]); } }
+  const columns = KB_COLS.map(([col, label]) => {
+    let items = all.filter(([it]) => kbCol(it) === col);
+    items.sort(col === 'done' ? (a, b) => (b[0].doneAt || 0) - (a[0].doneAt || 0) : (a, b) => (a[0].due || '9999').localeCompare(b[0].due || '9999'));
+    const total = items.length; if (col === 'done') items = items.slice(0, 30);
+    const add = h('input', { class: 'kb-add', placeholder: '+ Add task', 'aria-label': 'Add task to ' + label });
+    add.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && add.value.trim()) { const v = add.value.trim(); add.value = ''; kbAdd(col, v); $(`.kb-col.${col} .kb-add`)?.focus(); } });
+    const el = h('section', { class: 'kb-col ' + col }, h('div', { class: 'kb-h' }, h('b', null, label), h('span', null, String(total))), add,
+      ...items.map(([it, c]) => {
+        const more = h('button', { class: 'hb-more', title: 'Move', 'aria-label': 'Move ' + (it.text || 'task'), onclick: e => { e.stopPropagation(); showMenuAt(more, [...KB_COLS.filter(k => k[0] !== col).map(([k, l]) => ({ label: 'Move to ' + l, fn: () => kbMove(it.id, k) })), '-', { label: 'Open', fn: () => openTask(it.id) }]); } }, '⋯');
+        const card = h('div', { class: 'kb-card', draggable: 'true', 'data-tid': it.id, tabindex: '0', onclick: e => { if (!e.target.closest('button')) openTask(it.id); }, onkeydown: e => { if (e.key === 'Enter' && e.target === card) openTask(it.id); } },
+          h('div', { class: 'kb-t' }, h('span', null, it.text || 'Untitled task'), more),
+          h('div', { class: 'hb-chips' }, h('span', { class: 'hb-chip' }, boardName(c.boardId)), it.due ? h('span', { class: 'hb-chip' + (!it.done && it.due < todayStr() ? ' late' : '') }, parseYmd(it.due).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })) : null, it.urgent ? h('span', { class: 'hb-chip late' }, 'Urgent') : null, it.important ? h('span', { class: 'hb-chip' }, 'Important') : null));
+        card.addEventListener('dragstart', e => { e.dataTransfer.setData('text/kb', it.id); e.dataTransfer.effectAllowed = 'move'; });
+        return card;
+      }));
+    el.addEventListener('dragover', e => { if ([...e.dataTransfer.types].includes('text/kb')) { e.preventDefault(); el.classList.add('over'); } });
+    el.addEventListener('dragleave', e => { if (!el.contains(e.relatedTarget)) el.classList.remove('over'); });
+    el.addEventListener('drop', e => { const id = e.dataTransfer.getData('text/kb'); el.classList.remove('over'); if (!id) return; e.preventDefault(); kbMove(id, col); });
+    return el;
+  });
+  const body = h('div', { class: 'tv-body kb-body' }, ...columns); ov.append(body); body.scrollLeft = sx; body.scrollTop = sy;
+}
+{ const _h = renderTVHead; renderTVHead = function () {
+  const ov = $('.tasksview'); if (!ov) return;
+  ov.classList.toggle('kb', taskMode() === 'board');
+  if (taskMode() === 'board') return kbHead();
+  _h.apply(this, arguments);
+  const bar = ov.querySelector('.t2-bar'); if (bar && !bar.querySelector('.kb-switch')) bar.querySelector('.btn.primary')?.before(h('button', { class: 'btn kb-switch', onclick: () => kbSetMode('board') }, 'Board view'));
+}; }
+{ const _b = renderTVBody; renderTVBody = function () { if (!$('.tasksview')) return; if (taskMode() === 'board') { S.tvSelMode = false; return kbBody(); } return _b.apply(this, arguments); }; }
+
+/* ========== Notes: list on the left, editor on the right (grid stays one click away) ========== */
+const noteMode = () => ST.settings.noteMode || 'list';
+const nlS = { sel: null, detail: false };
+function nlSetMode(m) { ST.settings.noteMode = m; save(); openNotesView(); }
+function nlList() {
+  const box = $('.notesview .hb-items'); if (!box) return;
+  const st = nvState(), list = allNotes().filter(c => noteMatches(c, { ...st, color: 'any', important: false, files: false, state: 'all' })).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  const count = $('.notesview .hb-count'); if (count) count.textContent = String(list.length);
+  box.replaceChildren(...(list.length ? list.map(c => h('button', { class: 'hb-item' + (c.id === nlS.sel ? ' on' : ''), 'data-id': c.id, onclick: () => { nlS.sel = c.id; nlS.detail = true; nlRender(); } },
+    h('b', null, (c.data.important ? '! ' : '') + hbTitle(c)), h('span', null, strip(c.data.html).trim().slice(0, 80) || 'Empty'), h('time', null, `${boardName(c.boardId)} · ${timeAgo(c.updatedAt)}`)))
+    : [hbEmpty(allNotes().length ? 'No matches' : 'No notes yet', allNotes().length ? 'Try another search or board.' : 'Create one with +.')]));
+}
+function nlEditor() {
+  let c = nlS.sel && ST.cards[nlS.sel]; if (c && !liveCard(c)) { c = null; nlS.sel = null; }
+  let marked = false;
+  const head = h('div', { class: 'hb-edhead' }, hbBtn('‹ List', () => { nlS.detail = false; nlRender(); }, 'hb-backlist'), h('span', null, c ? boardName(c.boardId) : 'New note'), h('span', { class: 'hb-gap' }),
+    c ? hbBtn(c.data.important ? 'Important ✓' : 'Important', () => { checkpoint(); c.data.important = !c.data.important; save(); nlRender(); }) : null,
+    c ? hbBtn('Open on board', () => goToCard(c.id)) : null);
+  const title = h('input', { class: 'hb-title', placeholder: 'Untitled', 'aria-label': 'Title', value: c?.data.title || '' });
+  const text = h('div', { class: 'hb-text rt', 'data-ph': 'Start writing', role: 'textbox', 'aria-multiline': 'true', 'aria-label': 'Note', html: c?.data.html || '' });
+  text.contentEditable = String(!c?.locked); title.disabled = !!c?.locked;
+  const write = () => {
+    const empty = !title.value && !strip(text.innerHTML).trim();
+    if (!c) { if (empty) return; checkpoint(); marked = true; const at = openSpot(ST.rootId), prev = S.boardId; S.boardId = ST.rootId; c = newCard('note', at.x, at.y, { html: '' }); S.boardId = prev; nlS.sel = c.id; nlS.detail = true; renderBoard(); }
+    if (!marked) { checkpoint(); marked = true; }
+    c.data.title = title.value; c.data.html = text.innerHTML; c.updatedAt = now(); save(); nlList();
+  };
+  title.addEventListener('input', write); text.addEventListener('input', write);
+  title.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); text.focus(); } });
+  text.addEventListener('paste', e => { e.preventDefault(); e.stopPropagation(); document.execCommand('insertText', false, e.clipboardData.getData('text/plain')); });
+  return h('section', { class: 'hb-editor' }, head, h('div', { class: 'hb-doc' }, title, text));
+}
+function nlRender() {
+  const ov = $('.notesview'); if (!ov) return; ov.classList.add('hubview-like');
+  const st = nvState(), y = ov.querySelector('.hb-items')?.scrollTop || 0;
+  const q = h('input', { class: 'hb-search', type: 'search', placeholder: 'Search notes', 'aria-label': 'Search notes', value: st.q });
+  q.addEventListener('input', () => { st.q = q.value; nlList(); });
+  const boards = [...new Set(allNotes().map(c => c.boardId))].filter(id => ST.boards[id]);
+  const sel = h('select', { class: 'hb-sel', 'aria-label': 'Board' }, h('option', { value: 'all' }, 'All boards'), ...boards.map(id => h('option', { value: id }, boardName(id)))); sel.value = boards.includes(st.board) ? st.board : 'all'; sel.onchange = () => { st.board = sel.value; save(); nlList(); };
+  const add = h('button', { class: 'hb-btn hb-solid', title: 'New note', 'aria-label': 'New note', onclick: () => { nlS.sel = null; nlS.detail = true; nlRender(); $('.notesview .hb-title')?.focus(); } }, '+');
+  ov.replaceChildren(h('div', { class: 'hb-cap' + (nlS.detail ? ' detail' : '') },
+    h('aside', { class: 'hb-list' }, h('div', { class: 'hb-listhead' }, h('h2', null, 'Notes', h('span', { class: 'hb-count' }, '0')), h('div', { class: 'hb-row' }, hbBtn('Grid', () => nlSetMode('grid')), add)), q, sel, h('div', { class: 'hb-items' })),
+    nlEditor()));
+  nlList(); ov.querySelector('.hb-items').scrollTop = y;
+}
+{ const _on = openNotesView; openNotesView = function () {
+  if (noteMode() !== 'list') return _on.apply(this, arguments);
+  closePageView(); const ov = openDash('notesview'); ov.classList.add('hubview-like'); nlS.detail = false;
+  if (!nlS.sel) nlS.sel = allNotes().sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0))[0]?.id || null;
+  nlRender(); scheduleSidebar();
+}; }
+{ const _h = renderNVHead; renderNVHead = function () {
+  if (noteMode() === 'list') return nlRender();
+  _h.apply(this, arguments);
+  const r = $('.notesview .tv-head-r'); if (r && !r.querySelector('.nl-switch')) r.prepend(h('button', { class: 'btn nl-switch', onclick: () => nlSetMode('list') }, 'List view'));
+}; }
+{ const _b = renderNVBody; renderNVBody = function () { if (noteMode() === 'list') return nlList(); return _b.apply(this, arguments); }; }
+
+/* ========== Focus: large timer with a task panel ========== */
+const FX_MODES = [['focus', 'Focus', 25], ['short', 'Short break', 5], ['long', 'Long break', 15]];
+const fx = { mode: 'focus', task: null, panel: 'active' };
+const fxTimerTab = () => (S.fvTab || 'timer') === 'timer';
+function fxStart() {
+  if (FT().active) return toast('A timer is already running');
+  const mins = FX_MODES.find(m => m[0] === fx.mode)[2], t = Date.now();
+  FT().active = { cardId: null, boardId: ST.rootId, planned: mins * 60000, acc: 0, resumedAt: t, startedAt: t, paused: false, taskId: fx.mode === 'focus' ? fx.task : null, kind: fx.mode };
+  save(); askNotify(); scheduleChime(mins * 60); armFinish(); renderFocusView();
+}
+function fxRender() {
+  const ov = $('.focusview'); if (!ov) return;
+  const a = FT().active; if (a && a.kind) fx.mode = a.kind;
+  const mins = FX_MODES.find(m => m[0] === fx.mode)[2], rem = a ? tRemain(a) : mins * 60000, frac = a ? rem / a.planned : 1;
+  const today = FT().sessions.filter(s => s.date === todayStr() && countable(s));
+  const svg = svgEl('svg', { viewBox: '0 0 120 120', class: 'fx-ring' });
+  svg.append(svgEl('circle', { cx: 60, cy: 60, r: RING_R, class: 'tmr-track' }), svgEl('circle', { cx: 60, cy: 60, r: RING_R, class: 'tmr-arc fx-arc', 'stroke-dasharray': RING_C.toFixed(2), 'stroke-dashoffset': (RING_C * (1 - frac)).toFixed(2), transform: 'rotate(-90 60 60)' }));
+  const taskId = a ? a.taskId : fx.task, taskText = timerTaskText(taskId);
+  const controls = !a ? [hbBtn('▶ Start ' + (fx.mode === 'focus' ? 'focus' : 'break'), fxStart, 'hb-solid')]
+    : [a.paused ? hbBtn('▶ Resume', () => { resumeTimer(); renderFocusView(); }, 'hb-solid') : hbBtn('Pause', () => { pauseTimer(); renderFocusView(); }, 'hb-solid'), hbBtn('Stop', () => { if (a.kind && a.kind !== 'focus') { cancelChime(); clearTimeout(TM.finishT); FT().active = null; save(); } else stopTimer(); renderFocusView(); renderMini(); })];
+  const timer = h('section', { class: 'fx-timer' },
+    h('div', { class: 'hb-tabs fx-modes' }, ...FX_MODES.map(([k, l, m]) => h('button', { class: k === fx.mode ? 'on' : '', disabled: a ? '' : null, 'aria-pressed': String(k === fx.mode), onclick: () => { fx.mode = k; renderFocusView(); } }, l, h('span', null, m + ' min')))),
+    h('div', { class: 'fx-dial' }, svg, h('div', { class: 'fx-face' }, h('b', { class: 'fx-time' }, fmtClock(rem)), h('span', null, a ? (a.paused ? 'Paused' : 'Remaining') : 'Ready'))),
+    h('div', { class: 'fx-task' }, taskText || (a && !a.kind ? 'Board timer running' : 'What will you focus on?')),
+    h('div', { class: 'hb-row' }, ...controls),
+    h('div', { class: 'fx-stats' }, h('div', null, h('span', null, 'Sessions today'), h('b', null, String(today.length))), h('div', null, h('span', null, 'Time focused'), h('b', null, fmtMins(focusMinutesOn(todayStr()))))));
+  const list = h('div', { class: 'fx-list' });
+  const open = fx.panel === 'active';
+  const items = open ? openTaskPool().sort(autoRank).slice(0, 40) : taskLists().flatMap(c => c.data.items.filter(i => i.done).map(it => ({ it, c }))).sort((x, y) => (y.it.doneAt || 0) - (x.it.doneAt || 0)).slice(0, 30);
+  for (const { it, c } of items) list.append(h('div', { class: 'fx-item' + (it.id === fx.task ? ' on' : '') },
+    h('button', { class: 'fx-check' + (it.done ? ' on' : ''), title: it.done ? 'Mark not done' : 'Mark done', 'aria-label': (it.done ? 'Mark not done: ' : 'Mark done: ') + it.text, onclick: () => { toggleTask(it.id); renderFocusView(); } }, it.done ? '✓' : ''),
+    h('button', { class: 'fx-pick', 'data-tid': it.id, 'aria-pressed': String(it.id === fx.task), onclick: () => { fx.task = fx.task === it.id ? null : it.id; const cur = FT().active; if (cur && cur.kind === 'focus') { cur.taskId = fx.task; save(); } renderFocusView(); } }, h('b', null, it.text || 'Untitled task'), h('span', null, boardName(c.boardId)))));
+  if (!items.length) list.append(hbEmpty(open ? 'A clear starting point' : 'Nothing completed yet', open ? 'Add a task, then give it your attention.' : 'Finished tasks appear here.'));
+  const add = h('input', { class: 'kb-add', placeholder: '+ Add task', 'aria-label': 'Add focus task' });
+  add.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && add.value.trim()) { checkpoint(); const c = ensureInbox(), t = newTask(add.value.trim()); c.data.items.push(t); c.updatedAt = now(); fx.task = t.id; save(); refreshTaskViews([c.id]); renderFocusView(); } });
+  const panelEl = h('aside', { class: 'fx-panel' }, h('b', null, 'Focus tasks'), add, h('div', { class: 'hb-tabs' }, ...[['active', 'Active'], ['done', 'Completed']].map(([k, l]) => h('button', { class: fx.panel === k ? 'on' : '', 'aria-pressed': String(fx.panel === k), onclick: () => { fx.panel = k; renderFocusView(); } }, l))), list);
+  const y = ov.querySelector('.tv-body')?.scrollTop || 0;
+  ov.replaceChildren(h('div', { class: 'tv-top' }, dashHead('Focus & Time', 'One task. One focused session.'), ttTabs()), h('div', { class: 'tv-body fx-body' }, timer, panelEl));
+  ov.querySelector('.tv-body').scrollTop = y;
+}
+{ const _tt = ttTabs; ttTabs = function () {
+  const el = _tt.apply(this, arguments), tl = el.querySelector('.ft-tl');
+  const on = fxTimerTab(); if (on) tl.querySelectorAll('.ft-tab').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-selected', 'false'); });
+  tl.prepend(h('button', { class: 'ft-tab' + (on ? ' on' : ''), role: 'tab', 'aria-selected': String(on), onclick: () => { S.fvTab = 'timer'; renderFocusView(); } }, 'Timer'));
+  return el;
+}; }
+{ const _rf = renderFocusView; renderFocusView = function () {
+  if (!$('.focusview')) return; if (!S.fvTab) S.fvTab = 'timer';
+  if (S.fvTab !== 'timer') return _rf.apply(this, arguments);
+  /* don't wipe a half-typed task */
+  const typing = document.activeElement; if (typing && typing.matches('.focusview .kb-add') && typing.value) return;
+  fxRender();
+}; }
+{ const _log = logSession; logSession = function (a, status, ms) { return a.kind && a.kind !== 'focus' ? { planned: Math.round(a.planned / 60000), actual: 0 } : _log.apply(this, arguments); }; }
+{ const _fin = finishTimer; finishTimer = function (late) {
+  const a = FT().active; if (!a || !a.kind || a.kind === 'focus') return _fin.apply(this, arguments);
+  FT().active = null; clearTimeout(TM.finishT); if (!TM.chime.length && !late) scheduleChime(0); TM.chime = []; save(); renderMini(); toast('Break over'); if ($('.focusview')) renderFocusView();
+}; }
+{ const _tick = tick; /* the interval holds the original tick, so the big dial has its own */
+  setInterval(() => { const a = ST && FT().active, t = $('.focusview .fx-time'); if (!a || !t) return; const rem = tRemain(a); t.textContent = fmtClock(rem); $('.focusview .fx-arc')?.setAttribute('stroke-dashoffset', (RING_C * (1 - rem / a.planned)).toFixed(2)); }, 500); }
+{ const _mini = renderMini; renderMini = function (force) {
+  const a = ST && FT().active;
+  if (a && !a.cardId && $('.focusview .fx-timer') && !force) { $('#focusMini')?.remove(); return; }
+  _mini.apply(this, arguments);
+  const m = $('#focusMini'); if (m && a && !a.cardId) m.addEventListener('click', e => { e.stopImmediatePropagation(); if (!e.target.closest('button')) { S.fvTab = 'timer'; openFocusView(); scheduleSidebar(); } }, { capture: true, once: true });
+}; }
+{ const _tv3 = openTasksView; openTasksView = function () { $$('.dashview').forEach(x => x.remove()); return _tv3.apply(this, arguments); }; }
 
 init();
 </script>
