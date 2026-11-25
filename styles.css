@@ -3236,7 +3236,7 @@ body.rd-active,body.rd-active *{user-select:none!important;-webkit-user-select:n
 @media (max-width:700px){#topbar.navbar{gap:2px;padding:0 4px;overflow:hidden}.bar-actions{padding-right:2px;margin-right:0;border-right:0}#topbar.navbar .ib{width:30px}#barSearch{display:none}
 #topbar.navbar .crumbs{flex:1 1 60px;min-width:60px}#topbar.navbar .crumb{padding:5px 6px}
 #topbar.navbar #unsortedBadge,#topbar.navbar #markBadge{font-size:0;padding:0 8px;gap:4px}#topbar.navbar #unsortedBadge b,#topbar.navbar #markBadge b{font-size:13px}#topbar.navbar #markBadge .mb-ic{font-size:13px}
-#topbar.navbar #unsortedBadge::after{content:'unsorted';font-size:11px;color:var(--muted)}}
+#topbar.navbar #unsortedBadge::after{content:'inbox';font-size:11px;color:var(--muted)}}
 
 /* ===== v6.1 pages editor ===== */
 .blk.msel>.bc{background:rgba(61,124,245,.2);border-radius:5px;box-shadow:0 0 0 2px rgba(61,124,245,.2)}
@@ -3796,3 +3796,7 @@ body.sel-one .card.selected>.hp-col .hp-color{display:block}
 .kb-col,.kb-card{flex-shrink:0}
 .hb-list,.hb-cap,.hb-items{min-width:0}
 .hb-cap>*{min-width:0}
+/* one inbox */
+.hb-item.task b{display:flex;align-items:center;gap:8px}
+.hb-tick{width:14px;height:14px;flex:none;border:1.5px solid var(--muted);border-radius:50%}
+.hb-edhead{flex-wrap:wrap}

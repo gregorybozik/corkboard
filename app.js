@@ -1777,26 +1777,14 @@ function openTrash() {
   render();
 }
 function updateUnsorted() {
-{ const n = cardsOf(S.boardId, true).filter(c => c.unsorted && !c.trashed).length; const b = $('#unsortedBadge'); if (b) { b.innerHTML = ''; b.append(h('b', null, String(n)), ' Unsorted'); } }
+{ const n = ST ? nvInboxCount() : 0; const b = $('#unsortedBadge'); if (b) { b.innerHTML = ''; b.append(h('b', null, String(n)), ' Inbox'); } }
 hook18: { const host = $('#unsortedBadge'); if (!host || !host.parentElement) break hook18;
     let b = $('#markBadge');
     if (!b) { b = h('button', { id: 'markBadge', title: 'Dim everything except bookmarked columns', onclick: () => { document.body.classList.toggle('mark-only'); updateUnsorted(); } }); host.after(b); }
     const n = bookmarkCount(); b.innerHTML = ''; b.append(h('span', { class: 'mb-ic', html: ICON.bookmark }), h('b', null, String(n)), ' Bookmarked');
     b.classList.toggle('on', document.body.classList.contains('mark-only')); }
 }
-function openUnsorted() {
-  closeTransient(); if ($('#unsortedPanel')) return closePanels(); closePanels();
-  const ta = h('textarea', { placeholder: 'Quick note or link…', rows: 2, style: { width: '100%', border: '1px solid var(--line)', borderRadius: '4px', padding: '6px 8px', background: 'var(--card)', outline: 'none', resize: 'vertical' } });
-  const addQuick = () => { const t = ta.value.trim(); if (!t) return; checkpoint(); if (isUrl(t) && videoInfo(t)) { ta.value = ''; addVideoCard(t, 0, 0, { unsorted: true }); renderUnsortedPanel(); return; } const c = isUrl(t) ? newCard('link', 0, 0, { url: normUrl(t), title: hostOf(normUrl(t)) }) : newCard('note', 0, 0, { html: esc(t).replace(/\n/g, '<br>') }); c.unsorted = true; ta.value = ''; save(); renderUnsortedPanel(); if (c.type === 'link') fetchPreview(c.id); };
-  ta.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) addQuick(); });
-  const p = h('div', { class: 'side', id: 'unsortedPanel' }, h('div', { class: 'side-h' }, h('span', null, 'Unsorted'), h('button', { class: 'ib', html: ICON.close, onclick: closePanels })),
-    h('div', { style: { padding: '10px 14px', borderBottom: '1px solid var(--line)' } }, h('div', { class: 'muted', style: { fontSize: '12px', marginBottom: '6px' } }, 'Capture notes, links and files here, then drag them onto the board when you are ready.'), ta,
-      h('div', { style: { display: 'flex', gap: '6px', marginTop: '6px' } }, h('button', { class: 'btn primary', onclick: addQuick }, 'Add'), h('button', { class: 'btn', onclick: () => pickFiles('', f => addFiles(f, 0, 0, null, { unsorted: true })) }, 'Add files'))),
-    h('div', { class: 'side-b' }));
-  p.addEventListener('dragover', e => e.preventDefault());
-  p.addEventListener('drop', e => { e.preventDefault(); if (e.dataTransfer.files.length) addFiles([...e.dataTransfer.files], 0, 0, null, { unsorted: true }); });
-  document.body.append(p); renderUnsortedPanel();
-}
+function openUnsorted() { closeTransient(); closePageView(); openHub('capture'); }
 function renderUnsortedPanel() {
   updateUnsorted(); const p = $('#unsortedPanel'); if (!p) return; const list = p.querySelector('.side-b'); list.innerHTML = '';
   const items = cardsOf(S.boardId, true).filter(c => c.unsorted && !c.trashed).sort((a, b) => b.createdAt - a.createdAt);
@@ -2462,9 +2450,9 @@ function moveTask(tid, toId, beforeTid) {
 }
 function toggleTask(tid) { const f = findTask(tid); if (!f) return; checkpoint(); f.item.done = !f.item.done; f.item.doneAt = f.item.done ? now() : null; f.card.updatedAt = now(); save(); refreshTaskViews([f.card.id]); }
 function ensureInbox() {
-  let c = allLists().find(x => x.boardId === ST.rootId && listName(x) === 'Inbox'); if (c) return c;
-  const others = cardsOf(ST.rootId).filter(x => !x.columnId); const y = others.length ? Math.max(...others.map(x => x.y)) + 260 : 40;
-  const prev = S.boardId; S.boardId = ST.rootId; c = newCard('todo', 40, y, { title: 'Inbox', items: [] }); S.boardId = prev;
+  let b = nvInbox(); if (!b) b = createBoardIn(ST.rootId, 'Inbox');
+  let c = inboxList(); if (c) return c;
+  const prev = S.boardId, p = openSpot(b.id); S.boardId = b.id; c = newCard('todo', p.x, p.y, { title: 'Tasks', items: [] }); S.boardId = prev;
   return c;
 }
 
@@ -3642,6 +3630,7 @@ function treeRow(key, depth, parentKey, cardId) {
   return out;
 }
 function renderSidebar() {
+if (ST && typeof nvInbox === 'function') updateUnsorted();
 core: {
   const dyn = $('#sbDyn'); if (!dyn || !ST) break core;
   const q = (S.sbQuery || '').trim().toLowerCase();
@@ -12086,7 +12075,9 @@ const nvMap = b => { const s = ST.settings, k = NV_STAGE.includes(b) ? 'stage' :
 const nvLive = key => { if (!refExists(key)) return false; const [k, id] = key.split(':'); return k === 'b' ? liveBoards().some(x => x.id === id) : k === 'p' ? pageIsLive(id) : dbIsLive(id); };
 const nvItems = b => Object.entries(nvMap(b)).filter(([key, v]) => v === b && nvLive(key)).map(([key]) => key);
 const nvInbox = () => liveBoards().find(x => x.id !== ST.rootId && (x.title || '').trim().toLowerCase() === 'inbox');
-const nvInboxCount = () => { const b = nvInbox(); return b ? cardsOf(b.id).length : 0; };
+const inboxList = () => { const b = nvInbox(); return b ? allLists().find(x => x.boardId === b.id && listName(x) === 'Tasks') || null : null; };
+const inboxTasks = () => { const c = inboxList(); return c ? c.data.items.filter(i => !i.done).map(it => ({ it, c })) : []; };
+const nvInboxCount = () => hbCaptures().length + inboxTasks().length;
 function nvCurrent() {
   if ($('.pv-wrap') && S.pageId) return 'p:' + S.pageId;
   if ($('.dbfull')) { const o = placeObj(S.dbFull); return o && o.dbId ? 'd:' + o.dbId : null; }
@@ -12258,7 +12249,7 @@ function hbTabs(list, cur, set) {
 }
 
 /* ---- Capture ---- */
-function hbCaptures() { const b = nvInbox(); return b ? hbCards(b.id).sort((a, c) => (c.createdAt || 0) - (a.createdAt || 0)) : []; }
+function hbCaptures() { const b = nvInbox(), tl = inboxList(); return b ? hbCards(b.id).filter(c => c !== tl).sort((a, c) => (c.createdAt || 0) - (a.createdAt || 0)) : []; }
 function hbAdd(type, data) {
   let b = nvInbox(); if (!b) b = createBoardIn(ST.rootId, 'Inbox');
   const prev = S.boardId, p = openSpot(b.id); S.boardId = b.id;
@@ -12277,26 +12268,83 @@ async function hbFiles(files) {
 }
 function hbList() {
   const box = $('.hb-items'); if (!box) return;
-  const all = hbCaptures(), tab = hbUI.tab.capture || 'all', q = (hbUI.q.capture || '').trim().toLowerCase();
-  $('.hb-captabs').replaceChildren(hbTabs([['all', 'All', all.length], ...HB_TYPES.map(([v, l]) => [v, l, all.filter(c => hbType(c) === v).length])], tab, v => { hbUI.tab.capture = v; hbList(); }));
-  const list = all.filter(c => (tab === 'all' || hbType(c) === tab) && (!q || cardText(c).toLowerCase().includes(q)));
+  const cards = hbCaptures(), tasks = inboxTasks(), tab = hbUI.tab.capture || 'all', q = (hbUI.q.capture || '').trim().toLowerCase();
+  $('.hb-captabs').replaceChildren(hbTabs([['all', 'All', cards.length + tasks.length], ['tasks', 'Tasks', tasks.length], ...HB_TYPES.map(([v, l]) => [v, l, cards.filter(c => hbType(c) === v).length])], tab, v => { hbUI.tab.capture = v; hbList(); }));
+  const items = [
+    ...(tab === 'all' || tab === 'tasks' ? tasks.filter(({ it }) => !q || (it.text + ' ' + strip(it.notes)).toLowerCase().includes(q)).map(({ it }) => ({ key: 't:' + it.id, at: it.createdAt || 0, title: it.text || 'Untitled task', sub: 'Task' + (it.due ? ' · due ' + parseYmd(it.due).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : ''), task: true })) : []),
+    ...(tab === 'tasks' ? [] : cards.filter(c => (tab === 'all' || hbType(c) === tab) && (!q || cardText(c).toLowerCase().includes(q))).map(c => ({ key: c.id, at: c.createdAt || 0, title: hbTitle(c), sub: (c.type === 'link' ? c.data.url : c.type === 'note' || c.type === 'doc' ? strip(c.data.html).trim().slice(0, 80) : c.type) || 'Empty' })))
+  ].sort((a, b) => b.at - a.at);
   const midnight = new Date().setHours(0, 0, 0, 0);
-  const group = (label, items) => items.length ? [h('div', { class: 'hb-date' }, label, h('span', null, String(items.length))), ...items.map(c => {
-    const sub = c.type === 'link' ? c.data.url : c.type === 'note' || c.type === 'doc' ? strip(c.data.html).trim().slice(0, 80) : c.type;
-    return h('button', { class: 'hb-item' + (c.id === hbUI.sel ? ' on' : ''), 'data-id': c.id, onclick: () => { hbUI.sel = c.id; hbUI.detail = true; hbRender(); } },
-      h('b', null, hbTitle(c)), h('span', null, sub || 'Empty'), h('time', null, timeAgo(c.createdAt)));
-  })] : [];
-  box.replaceChildren(...(list.length ? [...group('Today', list.filter(c => c.createdAt >= midnight)), ...group('Earlier', list.filter(c => !(c.createdAt >= midnight)))] : [hbEmpty(all.length ? 'No matches' : 'Nothing captured yet', all.length ? 'Try another search or filter.' : 'Start typing on the right.')]));
+  const group = (label, list) => list.length ? [h('div', { class: 'hb-date' }, label, h('span', null, String(list.length))), ...list.map(x =>
+    h('button', { class: 'hb-item' + (x.task ? ' task' : '') + (x.key === hbUI.sel ? ' on' : ''), 'data-id': x.key, onclick: () => { hbUI.sel = x.key; hbUI.detail = true; hbRender(); } },
+      h('b', null, x.task ? h('i', { class: 'hb-tick', 'aria-hidden': 'true' }) : null, x.title), h('span', null, x.sub), h('time', null, timeAgo(x.at))))] : [];
+  const total = cards.length + tasks.length;
+  box.replaceChildren(...(items.length ? [...group('Today', items.filter(x => x.at >= midnight)), ...group('Earlier', items.filter(x => x.at < midnight))]
+    : [hbEmpty(total ? 'No matches' : 'Inbox is clear', total ? 'Try another search or filter.' : 'Type, paste or drop something to capture it.')]));
+}
+/* ---- sorting a capture ---- */
+function sortTargets() { // PARA-filed boards first, then Home
+  const out = [], seen = new Set();
+  for (const k of ['projects', 'areas', 'resources']) for (const key of nvItems(k)) if (key[0] === 'b' && !seen.has(key)) { seen.add(key); out.push({ bid: key.slice(2), label: `${refInfo(key).title} · ${NV_NAME[k].replace(/s$/, '')}` }); }
+  out.push({ bid: ST.rootId, label: 'Home' });
+  return out;
+}
+function moveCardTo(c, bid) { checkpoint(); relocateCard(c, bid); save(); renderBoard(); scheduleSidebar(); }
+function relocateCard(c, bid) {
+  if (c.columnId && ST.cards[c.columnId]) { const col = ST.cards[c.columnId]; col.data.childIds = col.data.childIds.filter(x => x !== c.id); c.columnId = null; }
+  for (const id in ST.lines) { const l = ST.lines[id]; if ([l.from, l.to].some(e => e === c.id || (e && e.cardId === c.id))) delete ST.lines[id]; }
+  const p = openSpot(bid); c.boardId = bid; c.x = p.x; c.y = p.y; c.z = maxZ(bid) + 1; c.unsorted = false; c.updatedAt = now();
+}
+function moveTaskTo(tid, bid) {
+  const f = findTask(tid); if (!f) return; checkpoint();
+  let list = allLists().find(x => x.boardId === bid && !x.columnId) || allLists().find(x => x.boardId === bid);
+  if (!list) { const prev = S.boardId, p = openSpot(bid); S.boardId = bid; list = newCard('todo', p.x, p.y, { title: 'Tasks', items: [] }); S.boardId = prev; }
+  f.card.data.items.splice(f.idx, 1); list.data.items.push(f.item); f.card.updatedAt = list.updatedAt = now();
+  save(); refreshTaskViews([f.card.id, list.id]); scheduleSidebar();
+}
+function sortMenu(btn, onPick) { showMenuAt(btn, sortTargets().map(t => ({ label: t.label, fn: () => onPick(t.bid, t.label) }))); }
+function captureToTask(c) {
+  checkpoint(); const list = ensureInbox(), d = c.data, t = newTask(hbTitle(c));
+  if (c.type === 'note' || c.type === 'doc') { const body = (d.html || '').trim(); if (body && strip(body).trim() !== t.text) t.notes = body; }
+  if (c.type === 'link' && d.url) t.notes = `<a href="${esc(d.url)}">${esc(d.url)}</a>`;
+  list.data.items.push(t); list.updatedAt = now(); trashCards([c.id], true);
+  save(); refreshTaskViews([list.id]); scheduleSidebar(); return t;
+}
+function hbTaskPane(it) {
+  const f = findTask(it); if (!f) { hbUI.sel = null; return null; }
+  const t = f.item;
+  const title = h('input', { class: 'hb-title', 'aria-label': 'Task', value: t.text || '', placeholder: 'Untitled task' });
+  let marked = false;
+  title.addEventListener('input', () => { if (!marked) { checkpoint(); marked = true; } t.text = title.value; f.card.updatedAt = now(); save(); hbList(); });
+  title.addEventListener('keydown', e => { if (e.key === 'Enter') title.blur(); });
+  const move = hbBtn('Move to…', e => { e.stopPropagation(); sortMenu(move, (bid, label) => { moveTaskTo(t.id, bid); hbUI.sel = null; hbUI.detail = false; hbRender(); toast('Moved to ' + label); }); });
+  const head = h('div', { class: 'hb-edhead' }, hbBtn('‹ List', () => { hbUI.detail = false; hbRender(); }, 'hb-backlist'), h('span', null, 'Task'), h('span', { class: 'hb-gap' }),
+    hbBtn('Mark done', () => { toggleTask(t.id); hbUI.sel = null; hbUI.detail = false; hbRender(); scheduleSidebar(); }, 'hb-solid'), move,
+    hbBtn('Details', () => openTask(t.id)),
+    hbBtn('Delete', () => { const g = findTask(t.id); if (!g) return; checkpoint(); g.card.data.items.splice(g.idx, 1); save(); refreshTaskViews([g.card.id]); hbUI.sel = null; hbUI.detail = false; hbRender(); scheduleSidebar(); }));
+  const notes = strip(t.notes || '').trim();
+  return h('section', { class: 'hb-editor' }, head, h('div', { class: 'hb-doc' }, title,
+    h('div', { class: 'hb-chips' }, t.due ? h('span', { class: 'hb-chip' }, 'Due ' + parseYmd(t.due).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })) : null, t.important ? h('span', { class: 'hb-chip' }, 'Important') : null, t.urgent ? h('span', { class: 'hb-chip late' }, 'Urgent') : null),
+    notes ? h('p', { class: 'hb-muted' }, notes.slice(0, 800)) : h('p', { class: 'hb-muted' }, 'Open Details to add a due date, notes or subtasks.')));
 }
 function hbEditor() {
+  if (hbUI.sel && hbUI.sel.startsWith('t:')) { const pane = hbTaskPane(hbUI.sel.slice(2)); if (pane) return pane; }
   let c = hbUI.sel && ST.cards[hbUI.sel];
   if (!c || !liveCard(c)) { c = null; hbUI.sel = null; }
   let marked = false;
   const mark = () => { if (!marked) { checkpoint(); marked = true; } };
   const touch = () => { c.updatedAt = now(); save(); hbList(); };
-  const head = h('div', { class: 'hb-edhead' }, hbBtn('‹ List', () => { hbUI.detail = false; hbRender(); }, 'hb-backlist'), h('span', null, c ? 'Capture' : 'New capture'), h('span', { class: 'hb-gap' }),
-    c ? hbBtn('Open on board', () => { const id = c.id, bid = c.boardId; closeDashes(); openBoard(bid); requestAnimationFrame(() => { S.sel = new Set([ST.cards[id]?.columnId || id]); updateSelUI(); centerOn(id); }); scheduleSidebar(); }) : null,
-    c ? hbBtn('Delete', () => { trashCards([c.id]); hbUI.sel = null; hbUI.detail = false; save(); hbRender(); scheduleSidebar(); }) : null);
+  const mkHead = () => {
+  const done = () => { hbUI.sel = null; hbUI.detail = false; hbRender(); };
+  const move = c && hbBtn('Move to…', e => { e.stopPropagation(); sortMenu(move, (bid, label) => { moveCardTo(c, bid); done(); toast('Moved to ' + label); }); });
+  const more = c && h('button', { class: 'hb-more', title: 'More', 'aria-label': 'More actions', onclick: e => { e.stopPropagation(); showMenuAt(more, [
+    { label: 'Open on board', fn: () => { const id = c.id, bid = c.boardId; closeDashes(); openBoard(bid); requestAnimationFrame(() => { S.sel = new Set([ST.cards[id]?.columnId || id]); updateSelUI(); centerOn(id); }); scheduleSidebar(); } },
+    { label: 'Delete', fn: () => { trashCards([c.id]); save(); done(); scheduleSidebar(); } }]); } }, '⋯');
+  return h('div', { class: 'hb-edhead' }, hbBtn('‹ List', () => { hbUI.detail = false; hbRender(); }, 'hb-backlist'), h('span', null, c ? 'Capture' : 'New capture'), h('span', { class: 'hb-gap' }),
+    c && ['note', 'doc', 'link'].includes(c.type) ? hbBtn('Make task', () => { const t = captureToTask(c); hbUI.sel = 't:' + t.id; hbRender(); toast('Now a task'); }, 'hb-solid') : null,
+    move || null, more || null);
+  };
+  let head = mkHead();
   let body;
   if (!c || c.type === 'note') {
     const title = h('input', { class: 'hb-title', placeholder: 'Untitled', 'aria-label': 'Title', value: c?.data.title || '' });
@@ -12304,7 +12352,7 @@ function hbEditor() {
     text.contentEditable = 'true';
     const write = () => {
       const empty = !title.value && !strip(text.innerHTML).trim();
-      if (!c) { if (empty) return; checkpoint(); marked = true; c = hbAdd('note', { html: '' }); hbUI.sel = c.id; hbUI.detail = true; }
+      if (!c) { if (empty) return; checkpoint(); marked = true; c = hbAdd('note', { html: '' }); hbUI.sel = c.id; hbUI.detail = true; const nh = mkHead(); head.replaceWith(nh); head = nh; }
       mark(); c.data.title = title.value; c.data.html = empty ? '' : text.innerHTML; touch();
     };
     title.addEventListener('input', write); text.addEventListener('input', write);
@@ -12329,7 +12377,9 @@ function hbEditor() {
   return h('section', { class: 'hb-editor' }, head, h('div', { class: 'hb-doc' }, ...body.filter(Boolean)));
 }
 function hbCapture(ov) {
-  const add = h('button', { class: 'hb-btn hb-solid', title: 'New capture', 'aria-label': 'New capture', onclick: () => { hbUI.sel = null; hbUI.detail = true; hbRender(); $('.hb-title')?.focus(); } }, '+');
+  const add = h('button', { class: 'hb-btn hb-solid', title: 'New capture', 'aria-label': 'New capture', onclick: () => {
+    if (hbUI.tab.capture === 'tasks') { checkpoint(); const c = ensureInbox(), t = newTask(''); c.data.items.push(t); c.updatedAt = now(); save(); refreshTaskViews([c.id]); hbUI.sel = 't:' + t.id; hbUI.detail = true; hbRender(); $('.hb-editor .hb-title')?.focus(); return; }
+    hbUI.sel = null; hbUI.detail = true; hbRender(); $('.hb-title')?.focus(); } }, '+');
   const left = h('aside', { class: 'hb-list' }, h('div', { class: 'hb-listhead' }, h('div', null, h('h2', null, 'Capture'), h('p', null, HB_SUB.capture)), add),
     hbSearch('capture', 'Search captures', hbList), h('div', { class: 'hb-captabs' }), h('div', { class: 'hb-items hb-scroll' }));
   const wrap = h('div', { class: 'hb-cap' + (hbUI.detail ? ' detail' : '') }, left, hbEditor());
@@ -12696,7 +12746,7 @@ function nlEditor() {
   text.contentEditable = String(!c?.locked); title.disabled = !!c?.locked;
   const write = () => {
     const empty = !title.value && !strip(text.innerHTML).trim();
-    if (!c) { if (empty) return; checkpoint(); marked = true; const at = openSpot(ST.rootId), prev = S.boardId; S.boardId = ST.rootId; c = newCard('note', at.x, at.y, { html: '' }); S.boardId = prev; nlS.sel = c.id; nlS.detail = true; renderBoard(); }
+    if (!c) { if (empty) return; checkpoint(); marked = true; c = hbAdd('note', { html: '' }); nlS.sel = c.id; nlS.detail = true; }
     if (!marked) { checkpoint(); marked = true; }
     c.data.title = title.value; c.data.html = text.innerHTML; c.updatedAt = now(); save(); nlList();
   };
@@ -12799,4 +12849,22 @@ function fxRender() {
 }; }
 { const _tv3 = openTasksView; openTasksView = function () { $$('.dashview').forEach(x => x.remove()); return _tv3.apply(this, arguments); }; }
 
-init();
+/* one-time: move the old Home "Inbox" checklist and Unsorted tray items into the Inbox board */
+function oneInbox() {
+  if (ST.settings.oneInbox) return; ST.settings.oneInbox = 1;
+  const old = allLists().filter(c => c.boardId === ST.rootId && listName(c) === 'Inbox');
+  const trays = Object.values(ST.cards).filter(c => c.unsorted && !c.trashed && ST.boards[c.boardId] && boardIsLive(c.boardId));
+  if (!old.length && !trays.length) { save(); return; }
+  checkpoint();
+  let b = nvInbox(); if (!b) b = createBoardIn(ST.rootId, 'Inbox');
+  for (const c of old) {
+    const tl = inboxList();
+    if (!tl) { relocateCard(c, b.id); c.data.title = 'Tasks'; }
+    else { tl.data.items.push(...c.data.items); c.data.items = []; tl.updatedAt = now(); trashCards([c.id], true); }
+  }
+  for (const c of trays) relocateCard(c, b.id);
+  save(); renderBoard(); scheduleSidebar();
+  toast('Your old inbox items are now in Capture', 5000);
+}
+{ const _rtv = refreshTaskViews; refreshTaskViews = function () { const r = _rtv.apply(this, arguments); if (hbOpen() === 'capture') hbRender(); return r; }; }
+init().then(oneInbox);
