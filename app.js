@@ -3976,7 +3976,11 @@ hook26: { const p = $('.emopop'); if (!p) break hook26; const row = h('div', { c
 }
 
 /* ---- page view (center peek / full) ---- */
-function closePageView() { const w = $('.pv-wrap'); if (!w) return; flushBlocks(); closeSlash(); closeMention(); $('.fmtbar')?.remove(); w.remove(); const pid = S.pageId; S.pageId = null; S.pvStack = []; closeTransient(); if (pid && ST.pages[pid]) syncPageCard(pid); scheduleSidebar(); renderToolbar(); }
+function closePageView() { const w = $('.pv-wrap'); if (!w) return; flushBlocks(); closeSlash(); closeMention(); $('.fmtbar')?.remove(); w.remove(); const pid = S.pageId; S.pageId = null; S.pvStack = []; closeTransient(); if (pid && ST.pages[pid]) syncPageCard(pid); scheduleSidebar(); renderToolbar();
+  /* a page opened from Journal returns to Journal when closed (not when you navigate elsewhere) */
+  const ret = S.pvReturn; S.pvReturn = null;
+  if (ret && ret.pid === pid) { const bid = S.boardId; setTimeout(() => { if (!$('.pv-wrap') && !$('.dashview') && !$('.dbfull') && S.boardId === bid) openHub(ret.k); }, 0); }
+}
 function openPage(pid, opts) {
   if (!ST.pages[pid]) return toast('That page no longer exists');
   if (!pageIsLive(pid)) return toast('That page is in the trash');
@@ -12143,7 +12147,10 @@ core: {
 hook35: { const sec = [...$$('#sbDyn .sb-sec')].find(x => x.querySelector('.sb-h')?.textContent === 'Tools');
   if (!sec || sec.querySelector('[data-nv=habits]')) break hook35;
   const on = hbOpen() === 'habits';
-  sec.append(h('button', { class: 'sb-item nv-row' + (on ? ' on' : ''), title: 'Habits', 'data-nv': 'habits', 'aria-current': on ? 'page' : null, onclick: () => { openHub('habits'); if (isMobileSb()) toggleSidebar(false); } }, h('span', { class: 'sb-ic', html: nvIcon('habits') }), h('span', { class: 'sb-lab' }, 'Habits'))); }
+  sec.append(...['journal', 'review'].map(k => { const a = hbOpen() === k, sub = k === 'review' ? rvSince() : '';
+    return h('button', { class: 'sb-item nv-row' + (a ? ' on' : ''), title: NV_NAME[k] + (sub ? ' · last review ' + sub : ''), 'data-nv': k, 'aria-current': a ? 'page' : null, onclick: () => { openHub(k); if (isMobileSb()) toggleSidebar(false); } },
+      h('span', { class: 'sb-ic', html: nvIcon(k) }), h('span', { class: 'sb-lab' }, NV_NAME[k]), sub ? h('span', { class: 'nv-n nv-sub' }, sub) : null); }));
+  sec.querySelector('[data-nv=journal]').before(h('button', { class: 'sb-item nv-row' + (on ? ' on' : ''), title: 'Habits', 'data-nv': 'habits', 'aria-current': on ? 'page' : null, onclick: () => { openHub('habits'); if (isMobileSb()) toggleSidebar(false); } }, h('span', { class: 'sb-ic', html: nvIcon('habits') }), h('span', { class: 'sb-lab' }, 'Habits'))); }
 }
 function nvTopBar() {
 core: {
@@ -12176,7 +12183,7 @@ hook33: { const bar = $('#sbTop'); if (!bar) break hook33;
 hook34: { const bar = $('#sbTop'); if (!bar) break hook34;
   const find = label => [...bar.querySelectorAll('.nvt')].find(x => x.textContent.startsWith(label));
   for (const k of ['distill', 'express']) { const el = find(NV_NAME[k]); if (!el) continue; el.textContent = NV_NAME[k]; el.classList.toggle('on', hbOpen() === k); el.onclick = () => openHub(k); }
-  if (!find('Habits')) find('Focus')?.after(h('button', { class: 'nvt' + (hbOpen() === 'habits' ? ' on' : ''), onclick: () => openHub('habits') }, 'Habits')); }
+  if (!find('Habits')) find('Focus')?.after(...['habits', 'journal', 'review'].map(k => h('button', { class: 'nvt' + (hbOpen() === k ? ' on' : ''), onclick: () => openHub(k) }, NV_NAME[k]))); }
 }
 
 
@@ -12242,7 +12249,7 @@ function openHub(kind) {
 function hbRender() {
   const kind = hbOpen(); if (!kind) return;
   const ov = $('.dashview.hubview'), y = ov.querySelector('.hb-scroll')?.scrollTop || 0;
-  ({ capture: hbCapture, distill: dsRender, express: exRender, habits: habRender }[kind] || (o => hbPara(o, kind)))(ov);
+  ({ capture: hbCapture, distill: dsRender, express: exRender, habits: habRender, journal: jnRender, review: rvRender }[kind] || (o => hbPara(o, kind)))(ov);
   const sc = ov.querySelector('.hb-scroll'); if (sc) sc.scrollTop = y;
 }
 function hbSearch(kind, label, onInput) {
@@ -12505,8 +12512,10 @@ window.addEventListener('paste', e => {
 }, true);
 
 /* ========== Distill, Express, Habits ========== */
-HB_KINDS.push('distill', 'express', 'habits');
-NV_NAME.habits = 'Habits';
+HB_KINDS.push('distill', 'express', 'habits', 'journal', 'review');
+NV_NAME.habits = 'Habits'; NV_NAME.journal = 'Journal'; NV_NAME.review = 'Review';
+NV_SVG.journal = '<path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6z"/><path d="M6 3v18M10 8h5M10 12h5"/>';
+NV_SVG.review = '<path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/>';
 NV_SVG.habits = '<path d="M4 6h16v14H4zM4 10h16M8 3v5M16 3v5"/><path d="m9 15 2 2 4-4"/>';
 const hbHead = (title, sub, ...actions) => h('header', { class: 'hb-head' }, h('div', null, h('h2', null, title), h('p', null, sub)), h('div', { class: 'hb-row' }, ...actions));
 const x3 = { note: null, q: '', picked: new Set(), view: 'week', off: 0, filter: 'all', hq: '' };
@@ -12714,6 +12723,7 @@ function kbBody() {
           h('div', { class: 'kb-t' }, h('span', null, e.text), more),
           h('div', { class: 'hb-chips' }, h('span', { class: 'hb-chip kb-src', title: KIND[e.kind] }, h('i', { class: 'kb-dot ' + e.kind }), e.label),
             when ? h('span', { class: 'hb-chip' + (entryLate(e) ? ' late' : '') }, when) : null,
+            plChip(e),
             it && it.repeat ? h('span', { class: 'hb-chip', title: (REPEATS.find(r => r[0] === it.repeat.k) || [])[1] }, '↻') : null,
             it && it.remind && !it.done ? h('span', { class: 'hb-chip', title: 'Reminder set' }, '⏰') : null,
             it && it.urgent ? h('span', { class: 'hb-chip late' }, 'Urgent') : null, it && it.important ? h('span', { class: 'hb-chip' }, 'Important') : null));
@@ -12798,9 +12808,9 @@ function nlRender() {
 const FX_MODES = [['focus', 'Focus', 25], ['short', 'Short break', 5], ['long', 'Long break', 15]];
 const fx = { mode: 'focus', task: null, panel: 'active' };
 const fxTimerTab = () => (S.fvTab || 'timer') === 'timer';
-function fxStart() {
+function fxStart(len) {
   if (FT().active) return toast('A timer is already running');
-  const mins = FX_MODES.find(m => m[0] === fx.mode)[2], t = Date.now();
+  const mins = typeof len === 'number' && len > 0 ? len : FX_MODES.find(m => m[0] === fx.mode)[2], t = Date.now();
   FT().active = { cardId: null, boardId: ST.rootId, planned: mins * 60000, acc: 0, resumedAt: t, startedAt: t, paused: false, taskId: fx.mode === 'focus' ? fx.task : null, kind: fx.mode };
   save(); askNotify(); scheduleChime(mins * 60); armFinish(); renderFocusView();
 }
@@ -12837,11 +12847,14 @@ function fxRender() {
 { const _tt = ttTabs; ttTabs = function () {
   const el = _tt.apply(this, arguments), tl = el.querySelector('.ft-tl');
   const on = fxTimerTab(); if (on) tl.querySelectorAll('.ft-tab').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-selected', 'false'); });
-  tl.prepend(h('button', { class: 'ft-tab' + (on ? ' on' : ''), role: 'tab', 'aria-selected': String(on), onclick: () => { S.fvTab = 'timer'; renderFocusView(); } }, 'Timer'));
+  const pl = S.fvTab === 'plan'; if (pl) tl.querySelectorAll('.ft-tab').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-selected', 'false'); });
+  tl.prepend(h('button', { class: 'ft-tab' + (on ? ' on' : ''), role: 'tab', 'aria-selected': String(on), onclick: () => { S.fvTab = 'timer'; renderFocusView(); } }, 'Timer'),
+    h('button', { class: 'ft-tab' + (pl ? ' on' : ''), role: 'tab', 'aria-selected': String(pl), onclick: () => { S.fvTab = 'plan'; renderFocusView(); } }, 'Plan'));
   return el;
 }; }
 { const _rf = renderFocusView; renderFocusView = function () {
   if (!$('.focusview')) return; if (!S.fvTab) S.fvTab = 'timer';
+  if (S.fvTab === 'plan') { const a = document.activeElement; if (a && a.matches('.focusview .pl-q') && $('.pl-side')) return; return plRender(); }
   if (S.fvTab !== 'timer') return _rf.apply(this, arguments);
   /* don't wipe a half-typed task */
   const typing = document.activeElement; if (typing && typing.matches('.focusview .kb-add') && typing.value) return;
@@ -12935,8 +12948,9 @@ function whenRow(tid, change, dueInput) {
   paint(); return row;
 }
 function remBar() { let b = $('#remBar'); if (!b) { b = h('div', { id: 'remBar', role: 'alert', 'aria-live': 'assertive' }); document.body.append(b); } return b; }
-function showReminder(tid) {
+function showReminder(tid, kind) {
   const f = findTask(tid); if (!f) return; const it = f.item, bar = remBar();
+  if (kind === 'block') return plBlockNotice(it);
   bar.querySelector(`[data-tid="${tid}"]`)?.remove();
   const close = () => { card.remove(); if (!bar.children.length) bar.remove(); };
   const snooze = m => { const g = findTask(tid); if (g) { g.item.snooze = Date.now() + m * 60000; save(); } close(); };
@@ -12958,6 +12972,12 @@ function checkReminders() {
     it.reminded = at; changed = true;
     if (at >= t - 864e5) showReminder(it.id);
   }
+  for (const c of allLists()) for (const it of c.data.items) {
+    const b = it.block; if (!b || !b.remind || it.done) continue; const at = plStartMs(b);
+    if (at > t || it.blockReminded === at) continue; it.blockReminded = at; changed = true;
+    if (at >= t - 36e5) showReminder(it.id, 'block');
+  }
+  if (rvCheck(t)) changed = true;
   if (changed) save();
 }
 setInterval(checkReminders, 15000);
@@ -13017,6 +13037,293 @@ function entryMove(key, col) {
   }
   if ($('.tasksview')) renderTVBody();
 }
+
+/* ========== Journal, Weekly review, Plan (time blocking) ========== */
+const jnUI = { off: 0 };
+const jnTitle = d => parseYmd(d).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+const jnEntry = d => Object.values(ST.pages).find(p => p.journal === d && pageIsLive(p.id)) || null;
+function jnBoard() {
+  let b = ST.settings.journalBoard && ST.boards[ST.settings.journalBoard];
+  if (!b || !boardIsLive(b.id)) b = Object.values(ST.boards).find(x => x.id !== ST.rootId && (x.title || '').trim().toLowerCase() === 'journal' && boardIsLive(x.id)) || null;
+  if (!b) b = createBoardIn(ST.rootId, 'Journal');
+  ST.settings.journalBoard = b.id; return b;
+}
+/* the day's page, made from the template when missing (caller checkpoints) */
+function jnEnsure(d) {
+  let p = jnEntry(d); if (p) return p;
+  const b = jnBoard(), prev = S.boardId, at = openSpot(b.id); S.boardId = b.id;
+  const c = newCard('page', at.x, at.y); S.boardId = prev;
+  p = ST.pages[c.data.pageId]; p.title = jnTitle(d); p.journal = d;
+  p.blocks = [nb('h2', 'Top 3'), nb('todo'), nb('todo'), nb('todo'), nb('h2', 'Notes'), nb('text'), nb('h2', 'Wins'), nb('text'), nb('h2', 'Tomorrow'), nb('text')];
+  p.updatedAt = now(); return p;
+}
+function jnOpen(d) { if (!jnEntry(d)) { checkpoint(); jnEnsure(d); save(); renderBoard(); } const pid = jnEntry(d).id; openPage(pid); S.pvReturn = { k: 'journal', pid }; scheduleSidebar(); }
+function jnSnippet(p) { let t = ''; eachBlock(p.blocks, b => { if (!t && ['text', 'todo', 'bullet', 'number', 'quote'].includes(b.type)) t = strip(b.html || '').trim(); }); return t; }
+function jnTaskRow(it, c, why) {
+  return h('div', { class: 'jn-task' + (it.done ? ' done' : '') },
+    h('button', { class: 'fx-check' + (it.done ? ' on' : ''), title: it.done ? 'Mark not done' : 'Mark done', 'aria-label': (it.done ? 'Mark not done: ' : 'Mark done: ') + (it.text || 'task'), onclick: () => { toggleTask(it.id); hbRender(); } }, it.done ? '✓' : ''),
+    h('button', { class: 'fx-pick', onclick: () => openTask(it.id) }, h('b', null, it.text || 'Untitled task'), h('span', null, [boardName(c.boardId), why].filter(Boolean).join(' · '))));
+}
+function jnRender(ov) {
+  const t = todayStr(), base = parseYmd(t), m = new Date(base.getFullYear(), base.getMonth() + jnUI.off, 1);
+  const days = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate(), first = ymd(m);
+  const cal = h('div', { class: 'jn-cal' }, ...DOW.map(d => h('span', { class: 'jn-dow' }, d.slice(0, 2))), ...[...Array(m.getDay())].map(() => h('i')),
+    ...[...Array(days)].map((_, i) => { const d = addDays(first, i), has = !!jnEntry(d); return h('button', { class: 'jn-day' + (d === t ? ' today' : '') + (has ? ' has' : '') + (d > t ? ' future' : ''), title: jnTitle(d) + (has ? '' : ' · no entry yet'), 'aria-label': jnTitle(d) + (has ? ', has an entry' : ''), onclick: () => jnOpen(d) }, String(i + 1)); }));
+  const nav = h('div', { class: 'hab-nav' }, hbBtn('‹', () => { jnUI.off--; hbRender(); }), h('b', null, m.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })), hbBtn('›', () => { jnUI.off++; hbRender(); }), hbBtn('This month', () => { jnUI.off = 0; hbRender(); }));
+  const midnight = new Date().setHours(0, 0, 0, 0), lists = taskLists();
+  const due = [], doneToday = [];
+  for (const c of lists) for (const it of c.data.items) { if (!it.done && it.due && it.due <= t) due.push([it, c]); if (it.done && it.doneAt >= midnight) doneToday.push([it, c]); }
+  const top = top3(), sec = (title, n, ...kids) => h('section', { class: 'ds-panel jn-sec' }, h('div', { class: 'jn-sh' }, h('b', null, title), n != null ? h('span', { class: 'hb-muted' }, String(n)) : null), ...kids);
+  const today = h('div', { class: 'jn-today' },
+    sec('Top 3', null, ...(top.length ? top.map(x => jnTaskRow(x.it, x.c, x.why)) : [h('span', { class: 'hb-muted' }, 'No open tasks.')])),
+    sec('Due today', due.length, ...(due.length ? due.sort((a, b) => (a[0].due + (a[0].time || '')).localeCompare(b[0].due + (b[0].time || ''))).slice(0, 12).map(([it, c]) => jnTaskRow(it, c, it.due < t ? 'Overdue' : it.time ? clockHM(it.time) : '')) : [h('span', { class: 'hb-muted' }, 'Nothing due.')])),
+    sec('Completed today', doneToday.length, ...(doneToday.length ? doneToday.slice(0, 12).map(([it, c]) => jnTaskRow(it, c, '')) : [h('span', { class: 'hb-muted' }, 'Nothing yet.')])),
+    sec('Focus today', null, h('b', { class: 'jn-big' }, fmtMins(focusMinutesOn(t))), h('span', { class: 'hb-muted' }, `${FT().sessions.filter(x => x.date === t && countable(x)).length} sessions`)));
+  const recent = Object.values(ST.pages).filter(p => p.journal && pageIsLive(p.id)).sort((a, b) => b.journal.localeCompare(a.journal)).slice(0, 7);
+  const list = h('section', { class: 'ds-panel jn-recent' }, h('b', null, 'Recent entries'), ...(recent.length ? recent.map(p => h('button', { class: 'hb-item', onclick: () => jnOpen(p.journal) }, h('b', null, jnTitle(p.journal)), h('span', null, jnSnippet(p) || 'Empty'))) : [h('span', { class: 'hb-muted' }, 'Open today to write your first entry.')]));
+  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' },
+    hbHead('Journal', 'One page a day. Checkboxes you write here show up in Tasks.', hbBtn(jnEntry(t) ? 'Open today' : '+ Start today', () => jnOpen(t), 'hb-solid')),
+    h('section', { class: 'ds-panel' }, nav, cal), h('div', { class: 'jn-cols' }, today, list)));
+}
+
+/* ---------- Weekly review ---------- */
+function rvSince() {
+  const at = ST && ST.settings.lastReview; if (!at) return '';
+  const d = Math.floor((new Date().setHours(0, 0, 0, 0) - new Date(at).setHours(0, 0, 0, 0)) / 864e5);
+  return d <= 0 ? 'today' : d === 1 ? '1 day ago' : d + ' days ago';
+}
+function rvSetDue(tid, d) {
+  const f = findTask(tid); if (!f) return; checkpoint();
+  f.item.due = d; f.item.snooze = null; f.item.reminded = null; f.card.updatedAt = now(); save(); refreshTaskViews([f.card.id]); hbRender();
+}
+const rvWhen = tid => [['Today', todayStr()], ['Tomorrow', addDays(todayStr(), 1)], ['Next week', (() => { let d = addDays(todayStr(), 1); while (parseYmd(d).getDay() !== 1) d = addDays(d, 1); return d; })()]].map(([l, d]) => hbBtn(l, () => rvSetDue(tid, d)));
+function rvAddTask(bid, text) {
+  checkpoint();
+  let list = allLists().find(x => x.boardId === bid && !x.columnId) || allLists().find(x => x.boardId === bid);
+  if (!list) { const prev = S.boardId, p = openSpot(bid); S.boardId = bid; list = newCard('todo', p.x, p.y, { title: 'Tasks', items: [] }); S.boardId = prev; }
+  list.data.items.push(newTask(text)); list.updatedAt = now(); save(); refreshTaskViews([list.id]); hbRender();
+}
+function rvWeek() { const t = todayStr(), d = parseYmd(t); return { from: addDays(t, -d.getDay()), to: t }; }
+function rvHabitRows() {
+  const { from, to } = rvWeek();
+  return habits().filter(b => !b.paused).map(b => {
+    let due = 0, done = 0; for (let d = from; d <= to; d = addDays(d, 1)) { const s = habState(b, d); if (s === 'done') { done++; due++; } else if (s === 'missed' || s === 'due') due++; }
+    const pct = due ? Math.round(done / due * 100) : 0;
+    return h('div', { class: 'rv-hab' }, h('span', null, b.name), h('div', { class: 'hb-bar' }, h('i', { style: { width: pct + '%', background: '#16a34a' } })), h('span', { class: 'hb-muted' }, `${done}/${due}`));
+  });
+}
+function rvRender(ov) {
+  const t = todayStr(), lists = taskLists(), draft = ST.settings.reviewDraft || (ST.settings.reviewDraft = { wins: '', lessons: '' });
+  const inbox = [...hbCaptures().map(c => ({ c })), ...inboxTasks().map(x => ({ task: x.it }))];
+  const overdue = [], next = [];
+  for (const c of lists) for (const it of c.data.items) { if (it.done || !it.due) continue; if (it.due < t) overdue.push([it, c]); else if (it.due > t && it.due <= addDays(t, 7)) next.push([it, c]); }
+  next.sort((a, b) => (a[0].due + (a[0].time || '')).localeCompare(b[0].due + (b[0].time || '')));
+  const stalled = nvItems('projects').filter(k => { const s = hbStats(k); return s.tasks === s.done; });
+  const step = (n, title, count, sub, ...kids) => h('section', { class: 'ds-panel rv-step' + (count === 0 ? ' clear' : '') },
+    h('div', { class: 'rv-sh' }, h('i', { class: 'rv-n' }, count === 0 ? '✓' : String(n)), h('div', null, h('b', null, title), h('span', { class: 'hb-muted' }, sub)), count ? h('span', { class: 'hb-count' }, String(count)) : null), ...kids);
+  const row = (title, sub, ...acts) => h('div', { class: 'rv-row' }, h('div', { class: 'rv-t' }, h('b', null, title), sub ? h('span', { class: 'hb-muted' }, sub) : null), h('div', { class: 'hb-row rv-acts' }, ...acts));
+  const more = (list, max, map) => [...list.slice(0, max).map(map), list.length > max ? h('span', { class: 'hb-muted' }, `+ ${list.length - max} more`) : null];
+  const fmtD = d => parseYmd(d).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+  const s1 = step(1, 'Clear the inbox', inbox.length, 'Turn captures into tasks, file them, or delete them.',
+    ...more(inbox, 8, x => x.c
+      ? row(hbTitle(x.c), hbType(x.c) === 'other' ? x.c.type : hbType(x.c),
+        ['note', 'doc', 'link'].includes(x.c.type) ? hbBtn('Make task', () => { captureToTask(x.c); hbRender(); }) : null,
+        (() => { const b = hbBtn('Move to…', e => { e.stopPropagation(); sortMenu(b, bid => { moveCardTo(x.c, bid); hbRender(); }); }); return b; })(),
+        hbBtn('Delete', () => { trashCards([x.c.id]); save(); hbRender(); scheduleSidebar(); }))
+      : row(x.task.text || 'Untitled task', 'Task in inbox',
+        (() => { const b = hbBtn('Move to…', e => { e.stopPropagation(); sortMenu(b, bid => { moveTaskToBoard(x.task.id, bid); hbRender(); }); }); return b; })(),
+        hbBtn('Done', () => { toggleTask(x.task.id); hbRender(); }))),
+    inbox.length ? hbBtn('Open Capture', () => openHub('capture')) : null);
+  const s2 = step(2, 'Overdue tasks', overdue.length, 'Pick a new day or mark them done.',
+    ...more(overdue, 10, ([it, c]) => row(it.text || 'Untitled task', `${boardName(c.boardId)} · was due ${fmtD(it.due)}`, ...rvWhen(it.id), hbBtn('Done', () => { toggleTask(it.id); hbRender(); }, 'hb-solid'))));
+  const s3 = step(3, 'Stalled projects', stalled.length, 'Projects with no open tasks. Add a next step or archive them.',
+    ...more(stalled, 8, key => { const inf = refInfo(key); return row(inf.title, HB_KIND[inf.kind],
+      key[0] === 'b' ? (() => { const b = hbBtn('+ Add a task', e => { e.stopPropagation(); askText(b, 'Next step for ' + inf.title, '', v => { if (v.trim()) rvAddTask(key.slice(2), v.trim()); }); }); return b; })() : hbBtn('Open', () => { openRef(key); scheduleSidebar(); }),
+      hbBtn('Archive', () => { hbMove(key, 'archives'); hbRender(); })); }));
+  const s4 = step(4, 'Next 7 days', next.length, 'What is coming up. Reschedule or pin to Top 3.',
+    ...more(next, 10, ([it, c]) => row(it.text || 'Untitled task', `${boardName(c.boardId)} · ${fmtD(it.due)}${it.time ? ' ' + clockHM(it.time) : ''}`,
+      (() => { const b = hbBtn('Reschedule', e => { e.stopPropagation(); showMenuAt(b, [['Today', 0], ['Tomorrow', 1], ['+ 2 days', 2], ['+ 1 week', 7]].map(([l, n]) => ({ label: l, fn: () => rvSetDue(it.id, n === 0 ? t : n === 1 ? addDays(t, 1) : addDays(it.due, n)) }))); }); return b; })(),
+      c.virtual ? null : hbBtn(it.pinned ? 'In Top 3 ✓' : 'Top 3', () => { togglePin(it.id); hbRender(); }))));
+  const hr = rvHabitRows();
+  const s5 = step(5, 'Habits this week', null, hr.length ? 'Completed vs scheduled, Sunday to today.' : 'No active habits.', ...hr);
+  const ta = (k, ph) => { const x = h('textarea', { class: 'ds-sum', rows: '3', placeholder: ph, 'aria-label': ph }); x.value = draft[k] || ''; x.addEventListener('input', () => { draft[k] = x.value; save(); }); return x; };
+  const s6 = step(6, 'Reflect', null, 'Saved into today’s journal entry when you finish.', ta('wins', 'Wins this week'), ta('lessons', 'What to change next week'));
+  const rr = ST.settings.reviewRemind || null;
+  const day = h('select', { class: 'hb-sel', 'aria-label': 'Review reminder day' }, h('option', { value: '' }, 'No reminder'), ...DOW.map((d, i) => h('option', { value: String(i) }, d)));
+  day.value = rr ? String(rr.dow) : '';
+  const time = h('input', { type: 'time', class: 'hb-sel', 'aria-label': 'Review reminder time', value: rr ? rr.time : '15:00' });
+  const setR = () => { ST.settings.reviewRemind = day.value === '' ? null : { dow: +day.value, time: time.value || '15:00' }; ST.settings.reviewFired = null; ST.settings.reviewSnooze = null; save(); if (day.value !== '') askNotify(); hbRender(); };
+  day.onchange = setR; time.onchange = setR;
+  const finishFn = () => {
+    checkpoint();
+    const w = (draft.wins || '').trim(), l = (draft.lessons || '').trim();
+    if (w || l) { const p = jnEnsure(t); p.blocks.push(nb('h2', 'Weekly review'), ...(w ? [nb('text', '<b>Wins:</b> ' + esc(w).replace(/\n/g, '<br>'))] : []), ...(l ? [nb('text', '<b>Next week:</b> ' + esc(l).replace(/\n/g, '<br>'))] : [])); p.updatedAt = now(); }
+    ST.settings.lastReview = now(); ST.settings.reviewDraft = { wins: '', lessons: '' };
+    save(); renderBoard(); scheduleSidebar(); hbRender(); toast(w || l ? 'Review finished · notes saved to today’s journal' : 'Review finished');
+  };
+  const finish = () => hbBtn('Finish review', finishFn, 'hb-solid');
+  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' },
+    hbHead('Weekly review', ST.settings.lastReview ? 'Last review ' + rvSince() + '.' : 'Work down the list. Each step clears as you go.', h('span', { class: 'hb-muted rv-rl' }, 'Remind me'), day, rr ? time : null, finish()),
+    s1, s2, s3, s4, s5, s6, h('div', { class: 'hb-row rv-end' }, finish())));
+}
+function rvCheck(t) {
+  const rr = ST.settings.reviewRemind; if (!rr) return false;
+  const today = todayStr(), back = (parseYmd(today).getDay() - rr.dow + 7) % 7, at = new Date(addDays(today, -back) + 'T' + (rr.time || '15:00')).getTime();
+  if (t < at || (ST.settings.lastReview || 0) >= at || ST.settings.reviewFired === at || (ST.settings.reviewSnooze || 0) > t || at < t - 864e5) return false;
+  ST.settings.reviewFired = at; rvNotice(); return true;
+}
+function rvNotice() {
+  const bar = remBar(); bar.querySelector('[data-tid="review"]')?.remove();
+  const close = () => { card.remove(); if (!bar.children.length) bar.remove(); };
+  const card = h('div', { class: 'rem-card', 'data-tid': 'review' },
+    h('div', { class: 'rem-t' }, h('b', null, 'Weekly review'), h('span', null, ST.settings.lastReview ? 'Last review ' + rvSince() : 'Time to review your week')),
+    h('div', { class: 'hb-row' }, hbBtn('Start review', () => { close(); closePageView(); openHub('review'); }, 'hb-solid'),
+      hbBtn('Snooze 1 hour', () => { ST.settings.reviewSnooze = Date.now() + 36e5; ST.settings.reviewFired = null; save(); close(); }),
+      h('button', { class: 'hb-more', title: 'Dismiss', 'aria-label': 'Dismiss reminder', onclick: close }, '×')));
+  bar.prepend(card);
+  try { if ('Notification' in window && Notification.permission === 'granted') { const n = new Notification('Weekly review', { body: 'Time to review your week', tag: 'cb-review' }); n.onclick = () => { window.focus(); openHub('review'); n.close(); }; } } catch (e) { }
+}
+
+/* ---------- Plan: time blocking ---------- */
+const PLAN = { from: 6 * 60, to: 22 * 60, ppm: 1.1, snap: 15 };
+const plUI = { day: null, q: '' };
+const plMin = hm => { const [H, M] = hm.split(':').map(Number); return H * 60 + M; };
+const plHM = m => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+const plStartMs = b => new Date(b.date + 'T' + b.start).getTime();
+const plRange = b => `${clockHM(b.start)}–${clockHM(plHM(plMin(b.start) + b.mins))}`;
+function plChip(e) {
+  const it = e.it || (e.kind === 'page' && !e.loose ? findTask(e.key)?.item : null), b = it && it.block;
+  if (!b || e.col === 'done') return null;
+  const d = b.date === todayStr() ? '' : parseYmd(b.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' ';
+  return h('span', { class: 'hb-chip pl-chip', title: 'Time block' }, '▦ ' + d + plRange(b));
+}
+function plBlocks(day) { const out = []; for (const c of taskLists()) for (const it of c.data.items) if (it.block && it.block.date === day) out.push({ it, c }); return out; }
+function plSet(tid, day, start, mins, quiet) {
+  const f = findTask(tid); if (!f) return; if (!quiet) checkpoint();
+  const s0 = Math.max(PLAN.from, Math.min(PLAN.to - 15, start)), m0 = Math.max(15, Math.min(PLAN.to - s0, mins));
+  f.item.block = { date: day, start: plHM(s0), mins: m0, remind: !!(f.item.block && f.item.block.remind) }; f.item.blockReminded = null;
+  f.card.updatedAt = now(); save(); refreshTaskViews([f.card.id]);
+}
+function plFree(day, len, n = 4) {
+  const busy = plBlocks(day).map(({ it }) => [plMin(it.block.start), plMin(it.block.start) + it.block.mins]);
+  let m = day === todayStr() ? Math.ceil((new Date().getHours() * 60 + new Date().getMinutes()) / 15) * 15 : 9 * 60; m = Math.max(m, PLAN.from);
+  const out = []; for (; m + len <= PLAN.to && out.length < n; m += 15) if (!busy.some(([a, b]) => m < b && m + len > a)) { out.push(m); m += len - 15; }
+  return out;
+}
+function plStartFocus(tid) {
+  const f = findTask(tid); if (!f) return; if (FT().active) return toast('A timer is already running');
+  fx.task = tid; fx.mode = 'focus'; S.fvTab = 'timer'; fxStart(f.item.block ? f.item.block.mins : 0);
+}
+function plBlockMenu(btn, it) {
+  showMenuAt(btn, [
+    { label: '▶ Start focus (' + it.block.mins + ' min)', fn: () => plStartFocus(it.id) },
+    { label: 'Open task', fn: () => openTask(it.id) },
+    { label: (it.block.remind ? '✓ ' : '') + 'Remind me at start', fn: () => { checkpoint(); it.block.remind = !it.block.remind; it.blockReminded = null; save(); if (it.block.remind) askNotify(); plRender(); } }, '-',
+    { label: 'Remove block', fn: () => { const f = findTask(it.id); if (!f) return; checkpoint(); delete f.item.block; save(); refreshTaskViews([f.card.id]); plRender(); } }]);
+}
+function plBlockNotice(it) {
+  const bar = remBar(), tid = it.id; bar.querySelector(`[data-tid="${tid}"]`)?.remove();
+  const close = () => { card.remove(); if (!bar.children.length) bar.remove(); };
+  const card = h('div', { class: 'rem-card', 'data-tid': tid },
+    h('div', { class: 'rem-t' }, h('b', null, it.text || 'Untitled task'), h('span', null, 'Time block · ' + plRange(it.block))),
+    h('div', { class: 'hb-row' }, hbBtn('▶ Start focus', () => { close(); closePageView(); closeDashes(); S.fvTab = 'timer'; openFocusView(); plStartFocus(tid); }, 'hb-solid'), hbBtn('Open', () => { close(); openTask(tid); }),
+      h('button', { class: 'hb-more', title: 'Dismiss', 'aria-label': 'Dismiss reminder', onclick: close }, '×')));
+  bar.prepend(card);
+  try { if ('Notification' in window && Notification.permission === 'granted') new Notification(it.text || 'Time block', { body: 'Starts now · ' + plRange(it.block), tag: 'cb-blk-' + tid }); } catch (e) { }
+}
+function plTaskMenu(btn, it, day) {
+  const len = it.block ? it.block.mins : (it.est || 30);
+  let d = day, free = plFree(d, len), pre = '';
+  if (!free.length) { d = addDays(day, 1); free = plFree(d, len); pre = d === addDays(todayStr(), 1) ? 'Tomorrow ' : parseYmd(d).toLocaleDateString(undefined, { weekday: 'short' }) + ' '; }
+  showMenuAt(btn, [...free.map(m => ({ label: `Block ${pre}${clockHM(plHM(m))}–${clockHM(plHM(m + len))}`, fn: () => { plSet(it.id, d, m, len); if (d !== day) { plUI.day = d; toast('Blocked on ' + parseYmd(d).toLocaleDateString(undefined, { weekday: 'long' })); } plRender(); } })),
+    ...(free.length ? [] : [{ label: 'No free time left', fn: () => { } }]), '-',
+    { label: 'Open task', fn: () => openTask(it.id) },
+    it.block ? { label: 'Remove block', fn: () => { const f = findTask(it.id); if (!f) return; checkpoint(); delete f.item.block; save(); refreshTaskViews([f.card.id]); plRender(); } } : null].filter(Boolean));
+}
+function plRender() {
+  const ov = $('.focusview'); if (!ov) return;
+  const day = plUI.day || (plUI.day = todayStr()), t = todayStr(), H = (PLAN.to - PLAN.from) * PLAN.ppm;
+  const old = ov.querySelector('.pl-scroll'), sy = old ? old.scrollTop : null;
+  const nav = h('div', { class: 'hab-nav' }, hbBtn('‹', () => { plUI.day = addDays(day, -1); plRender(); }), h('b', null, parseYmd(day).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })), hbBtn('›', () => { plUI.day = addDays(day, 1); plRender(); }), hbBtn('Today', () => { plUI.day = t; plRender(); }));
+  const grid = h('div', { class: 'pl-grid', style: { height: H + 'px' } });
+  for (let m = PLAN.from; m <= PLAN.to; m += 60) grid.append(h('div', { class: 'pl-hr', style: { top: (m - PLAN.from) * PLAN.ppm + 'px' } }, h('span', null, clockHM(plHM(m)).replace(':00', ''))));
+  grid.append(h('div', { class: 'pl-lab' }, 'Planned'), h('div', { class: 'pl-lab act' }, 'Actual'));
+  /* actual: tracked time, faint, in its own lane */
+  const a0 = tMid(day);
+  for (const e of ttAll(a0 + PLAN.from * 6e4, a0 + PLAN.to * 6e4)) {
+    const s = Math.max(PLAN.from, (e.start - a0) / 6e4), en = Math.min(PLAN.to, (e.end - a0) / 6e4); if (en <= s) continue;
+    const f = e.taskId && findTask(e.taskId);
+    grid.append(h('div', { class: 'pl-act', title: `${f ? f.item.text + ' · ' : ''}${tClock(e.start)}–${tClock(e.end)}`, style: { top: (s - PLAN.from) * PLAN.ppm + 'px', height: Math.max(3, (en - s) * PLAN.ppm) + 'px' } }));
+  }
+  /* planned blocks, side by side when they overlap */
+  const blocks = plBlocks(day).sort((x, y) => plMin(x.it.block.start) - plMin(y.it.block.start));
+  let cluster = [], end = -1; const lanes = new Map();
+  const flush = () => { const cols = []; for (const b of cluster) { const s = plMin(b.it.block.start); let i = cols.findIndex(e2 => e2 <= s); if (i < 0) { i = cols.length; cols.push(0); } cols[i] = s + b.it.block.mins; lanes.set(b, [i, 0]); } for (const b of cluster) lanes.get(b)[1] = cols.length; cluster = []; };
+  for (const b of blocks) { const s = plMin(b.it.block.start); if (s >= end) { flush(); end = -1; } cluster.push(b); end = Math.max(end, s + b.it.block.mins); } flush();
+  for (const b of blocks) {
+    const it = b.it, bl = it.block, s = plMin(bl.start), [li, ln] = lanes.get(b);
+    const more = h('button', { class: 'hb-more', title: 'Block options', 'aria-label': 'Options for ' + (it.text || 'block'), onclick: ev => { ev.stopPropagation(); plBlockMenu(more, it); } }, '⋯');
+    const el = h('div', { class: 'pl-blk' + (it.done ? ' done' : '') + (day === t && plStartMs(bl) + bl.mins * 6e4 < Date.now() && !it.done ? ' past' : ''), 'data-tid': it.id, tabindex: '0', title: 'Drag to move, drag the bottom edge to resize',
+      style: { top: (s - PLAN.from) * PLAN.ppm + 'px', height: Math.max(18, bl.mins * PLAN.ppm - 2) + 'px', left: `calc(var(--pl-l) + (100% - var(--pl-l) - var(--pl-r)) * ${li / ln})`, width: `calc((100% - var(--pl-l) - var(--pl-r)) / ${ln} - 4px)` } },
+      h('div', { class: 'pl-bt' }, h('b', null, it.text || 'Untitled task'), h('span', null, plRange(bl) + (bl.remind ? ' · ⏰' : ''))),
+      h('button', { class: 'hb-more pl-go', title: 'Start focus', 'aria-label': 'Start focus on ' + (it.text || 'block'), onclick: ev => { ev.stopPropagation(); plStartFocus(it.id); } }, '▶'), more,
+      h('div', { class: 'pl-rs', 'aria-hidden': 'true' }));
+    el.addEventListener('pointerdown', ev => {
+      if (ev.button !== 0 || ev.target.closest('button')) return;
+      const rs = ev.target.classList.contains('pl-rs'), y0 = ev.clientY, s0 = s, m0 = bl.mins; let moved = false, cp = false, ns = s0, nm = m0;
+      el.setPointerCapture(ev.pointerId);
+      const mv = e2 => {
+        const dm = Math.round((e2.clientY - y0) / PLAN.ppm / PLAN.snap) * PLAN.snap; if (!moved && Math.abs(e2.clientY - y0) < 5) return; moved = true;
+        if (rs) { nm = Math.max(15, Math.min(PLAN.to - s0, m0 + dm)); el.style.height = Math.max(18, nm * PLAN.ppm - 2) + 'px'; }
+        else { ns = Math.max(PLAN.from, Math.min(PLAN.to - m0, s0 + dm)); el.style.top = (ns - PLAN.from) * PLAN.ppm + 'px'; }
+        el.querySelector('.pl-bt span').textContent = `${clockHM(plHM(ns))}–${clockHM(plHM(ns + nm))}`;
+      };
+      const up = () => { el.removeEventListener('pointermove', mv); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up);
+        if (!moved) return openTask(it.id);
+        if (!cp) { checkpoint(); cp = true; } plSet(it.id, day, ns, nm, true); plRender(); };
+      el.addEventListener('pointermove', mv); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+    });
+    el.addEventListener('keydown', ev => { if (ev.key === 'Enter' && ev.target === el) openTask(it.id); });
+    grid.append(el);
+  }
+  if (day === t) { const n = new Date(), m = n.getHours() * 60 + n.getMinutes(); if (m >= PLAN.from && m <= PLAN.to) grid.append(h('div', { class: 'pl-now', style: { top: (m - PLAN.from) * PLAN.ppm + 'px' } })); }
+  grid.addEventListener('dragover', ev => { if ([...ev.dataTransfer.types].includes('text/pl')) { ev.preventDefault(); grid.classList.add('over'); } });
+  grid.addEventListener('dragleave', ev => { if (!grid.contains(ev.relatedTarget)) grid.classList.remove('over'); });
+  grid.addEventListener('drop', ev => {
+    const tid = ev.dataTransfer.getData('text/pl'); grid.classList.remove('over'); if (!tid) return; ev.preventDefault();
+    const f = findTask(tid); if (!f) return; const r = grid.getBoundingClientRect(), m = PLAN.from + Math.floor((ev.clientY - r.top) / PLAN.ppm / PLAN.snap) * PLAN.snap;
+    plSet(tid, day, m, f.item.block ? f.item.block.mins : (f.item.est || 30)); plRender();
+  });
+  /* side: tasks to place */
+  const q = plUI.q.trim().toLowerCase(), seen = new Set();
+  const item = (it, c, why) => {
+    if (seen.has(it.id) || it.done) return null; seen.add(it.id);
+    const el = h('div', { class: 'fx-item pl-task', draggable: 'true', 'data-tid': it.id },
+      h('button', { class: 'fx-pick', title: 'Drag onto the day, or tap to pick a time', onclick: ev => plTaskMenu(ev.currentTarget, it, day) },
+        h('b', null, it.text || 'Untitled task'), h('span', null, [boardName(c.boardId), why, it.est ? it.est + ' min' : '', it.block ? (it.block.date === day ? '' : parseYmd(it.block.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' ') + plRange(it.block) : ''].filter(Boolean).join(' · '))));
+    el.addEventListener('dragstart', ev => { ev.dataTransfer.setData('text/pl', it.id); ev.dataTransfer.effectAllowed = 'move'; });
+    return el;
+  };
+  const grp = (title, rows) => { rows = rows.filter(Boolean); return rows.length ? [h('div', { class: 'hb-date' }, title, h('span', null, String(rows.length))), ...rows] : []; };
+  const side = h('aside', { class: 'fx-panel pl-side' }, h('b', null, 'Tasks to place'));
+  const qi = h('input', { class: 'hb-search pl-q', type: 'search', placeholder: 'Find any open task', 'aria-label': 'Find any open task', value: plUI.q });
+  qi.addEventListener('input', () => { plUI.q = qi.value; const y = side.scrollTop; plRender(); const n = $('.pl-q'); if (n) { n.focus(); n.setSelectionRange(n.value.length, n.value.length); $('.pl-side').scrollTop = y; } });
+  side.append(qi, h('span', { class: 'hb-muted' }, 'Drag a task onto the day, or tap it to pick a free time.'));
+  if (q) side.append(...grp('Matches', openTaskPool().filter(x => (x.it.text || '').toLowerCase().includes(q)).slice(0, 40).map(x => item(x.it, x.c, ''))));
+  else {
+    side.append(...grp('Top 3', top3().map(x => item(x.it, x.c, x.why))));
+    side.append(...grp('Today', todayItems().map(x => item(x.it, x.c, x.it.due && x.it.due < t ? 'Overdue' : ''))));
+    side.append(...grp('Due this week', openTaskPool().filter(x => x.it.due && x.it.due > t && x.it.due <= addDays(t, 7)).sort((a, b) => a.it.due.localeCompare(b.it.due)).map(x => item(x.it, x.c, parseYmd(x.it.due).toLocaleDateString(undefined, { weekday: 'short' })))));
+  }
+  if (side.querySelectorAll('.pl-task').length === 0) side.append(hbEmpty('Nothing to place', q ? 'No open task matches.' : 'Add tasks to Today or Top 3, or search above.'));
+  const planned = blocks.reduce((n, b) => n + b.it.block.mins, 0), tracked = ttAll(a0, a0 + 864e5).reduce((n, e) => n + eMins(e), 0);
+  const body = h('div', { class: 'tv-body pl-body' },
+    h('section', { class: 'fx-timer pl-day' }, h('div', { class: 'pl-head' }, nav, h('span', { class: 'hb-muted' }, `${fmtMins(planned)} planned · ${fmtMins(tracked)} tracked`)), h('div', { class: 'pl-scroll' }, grid)), side);
+  ov.replaceChildren(h('div', { class: 'tv-top' }, dashHead('Focus & Time', 'Plan your day in blocks.'), ttTabs()), body);
+  const sc = ov.querySelector('.pl-scroll');
+  if (sy != null) sc.scrollTop = sy; else { const n = new Date(), m = day === t ? n.getHours() * 60 + n.getMinutes() - 60 : 8 * 60; sc.scrollTop = Math.max(0, (m - PLAN.from) * PLAN.ppm); }
+}
+
 /* one-time: move the old Home "Inbox" checklist and Unsorted tray items into the Inbox board */
 function oneInbox() {
   if (ST.settings.oneInbox) return; ST.settings.oneInbox = 1;
