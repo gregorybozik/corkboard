@@ -3800,3 +3800,16 @@ body.sel-one .card.selected>.hp-col .hp-color{display:block}
 .hb-item.task b{display:flex;align-items:center;gap:8px}
 .hb-tick{width:14px;height:14px;flex:none;border:1.5px solid var(--muted);border-radius:50%}
 .hb-edhead{flex-wrap:wrap}
+/* tasks from every source, time, reminders, repeats */
+.kb-src{display:inline-flex;align-items:center;gap:5px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kb-dot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--muted)}
+.kb-dot.page{background:#8b5cf6}.kb-dot.row{background:#139fa3}.kb-dot.list{background:#3b82f6}
+.tm-when{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tm-when .tm-n{width:64px}
+.tm-hint{flex-basis:100%;font-size:11px;color:var(--muted)}
+#remBar{position:fixed;right:16px;bottom:16px;z-index:30000;display:flex;flex-direction:column;gap:8px;width:min(380px,calc(100vw - 32px))}
+.rem-card{background:var(--card);border:1px solid var(--line);border-left:4px solid #e08a1e;border-radius:12px;box-shadow:var(--shadow-lg);padding:12px;display:flex;flex-direction:column;gap:10px}
+.rem-t b{display:block;font-size:14px;overflow-wrap:anywhere}.rem-t span{font-size:12px;color:var(--muted)}
+.rem-card .hb-row{justify-content:flex-start;align-items:center}.rem-card .hb-btn{padding:6px 10px;font-size:12px}
+.pv-wrap .blk.flash{animation:blkflash 1.4s ease}
+@keyframes blkflash{0%,60%{background:color-mix(in srgb,#eab308 30%,transparent)}100%{background:transparent}}

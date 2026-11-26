@@ -2378,14 +2378,16 @@ function fmtDue(s) {
   const dt = parseYmd(s), o = { month: 'short', day: 'numeric' }; if (dt.getFullYear() !== new Date().getFullYear()) o.year = 'numeric';
   return dt.toLocaleDateString(undefined, o);
 }
-function dueState(it) { if (!it.due || it.done) return ''; const t = todayStr(); return it.due < t ? 'overdue' : it.due === t ? 'today' : ''; }
+function dueState(it) { if (!it.due || it.done) return ''; const t = todayStr(); return it.due < t ? 'overdue' : it.due === t ? (it.time && Date.now() > dueAt(it) ? 'overdue' : 'today') : ''; }
+const dueAt = it => new Date(it.due + 'T' + (it.time || '09:00')).getTime();
+const clockHM = t => { const [H, M] = t.split(':').map(Number); return new Date(2000, 0, 1, H, M).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); };
 function normTask(it) { it.tags = it.tags || []; it.subtasks = it.subtasks || []; it.notes = it.notes || ''; it.important = !!it.important; it.urgent = !!it.urgent; it.due = it.due || null; it.color = it.color || null; return it; }
 function newTask(text) { return normTask({ id: uid(), text: text || '', done: false, createdAt: now() }); }
 const tagById = id => ST.labels.find(l => l.id === id);
 
 function taskChips(it) {
   const out = [];
-  if (it.due) out.push(h('span', { class: 'tchip due ' + dueState(it), title: 'Due ' + parseYmd(it.due).toDateString() }, icon('calendar'), fmtDue(it.due)));
+  if (it.due) out.push(h('span', { class: 'tchip due ' + dueState(it), title: 'Due ' + parseYmd(it.due).toDateString() }, icon('calendar'), fmtDue(it.due) + (it.time ? ' ' + clockHM(it.time) : '')));
   for (const id of it.tags || []) { const l = tagById(id); if (l) out.push(h('span', { class: 'tchip tag', 'data-tag': id, title: 'Click to change color', style: { background: l.color } }, l.name)); }
   if (it.notes && strip(it.notes)) out.push(h('span', { class: 'tchip', title: 'Has notes' }, icon('note')));
   const pr = subProgress(it); if (pr) out.push(pr);
@@ -2448,7 +2450,7 @@ function moveTask(tid, toId, beforeTid) {
   f.card.updatedAt = dest.updatedAt = now(); save(); refreshTaskViews([f.card.id, toId]);
   if (f.card.id !== toId) toast(`Moved to “${listName(dest)}”`);
 }
-function toggleTask(tid) { const f = findTask(tid); if (!f) return; checkpoint(); f.item.done = !f.item.done; f.item.doneAt = f.item.done ? now() : null; f.card.updatedAt = now(); save(); refreshTaskViews([f.card.id]); }
+function toggleTask(tid) { const f = findTask(tid); if (!f) return; checkpoint(); if (f.item.done) { f.item.done = false; f.item.doneAt = null; } else markDone(f.item); f.card.updatedAt = now(); save(); refreshTaskViews([f.card.id]); }
 function ensureInbox() {
   let b = nvInbox(); if (!b) b = createBoardIn(ST.rootId, 'Inbox');
   let c = inboxList(); if (c) return c;
@@ -2498,7 +2500,7 @@ core: {
   title.addEventListener('input', () => { change(() => { it.text = title.value.replace(/\n/g, ' '); }); fit(); });
   title.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); title.blur(); } });
   const chk = h('button', { class: 'chk big' + (it.done ? ' on' : ''), title: 'Mark complete', html: it.done ? ICON.check : '' });
-  chk.onclick = () => { change(() => { it.done = !it.done; it.doneAt = it.done ? now() : null; }); chk.classList.toggle('on', it.done); chk.innerHTML = it.done ? ICON.check : ''; renderFoot(); };
+  chk.onclick = () => { let r; change(() => { if (it.done) { it.done = false; it.doneAt = null; } else r = markDone(it); }); if (r === 'repeat') { openTask(tid); return; } chk.classList.toggle('on', it.done); chk.innerHTML = it.done ? ICON.check : ''; renderFoot(); };
   const due = h('input', { type: 'date', class: 'tm-input', value: it.due || '' });
   due.onchange = () => change(() => { it.due = due.value || null; });
   const dueQuick = [['Today', 0], ['Tomorrow', 1], ['Next week', 7]].map(([n, d]) => h('button', { class: 'mini', onclick: () => { const v = addDays(todayStr(), d); due.value = v; change(() => { it.due = v; }); } }, n));
@@ -2592,6 +2594,7 @@ hook24: { const f = findTask(tid), due = f && document.querySelector('.modal-bg 
   const dates = h('div', { class: 'tm-dates' }, h('label', { class: 'tm-df' }, h('span', { class: 'tm-cap' }, 'Start'), start), h('label', { class: 'tm-df' }, h('span', { class: 'tm-cap' }, 'Due'), due));
   dueLabel.textContent = 'Dates'; dueLabel.after(dates); dates.after(h('div', { class: 'tm-label' })); /* empty label cell keeps shortcuts aligned */
   const planRow = h('div', { class: 'tm-row tm-plan' }); dueRow.after(h('div', { class: 'tm-label' }, 'Plan'), planRow);
+  planRow.after(h('div', { class: 'tm-label' }, 'When'), whenRow(tid, change, due));
   const paint = () => {
     const cur = findTask(tid).item; planRow.innerHTML = '';
     const who = h('button', { class: 'btn', onclick: e => peoplePop(e.currentTarget, cur.assignee || [], v => { change(x => { x.assignee = v; }); paint(); }) }, (cur.assignee || []).length ? (cur.assignee).map(personById).filter(Boolean).map(p => p.name).join(', ') : 'Assign people');
@@ -6543,7 +6546,7 @@ function bulkBar() {
   const date = h('input', { type: 'date', class: 'tp-in', title: 'Set due date', ...dis }); date.onchange = () => { if (date.value) { const v = date.value; bulkApply(x => { x.due = v; }); } };
   const bar = h('div', { class: 'tv-bulk' }, h('b', null, n ? `${n} selected` : 'Click tasks to select'),
     h('button', { class: 'mini', onclick: () => { S.tvSel = new Set($$('.tv-row[data-tid],.tcard[data-tid],.t2row[data-tid]').map(r => r.dataset.tid)); renderTVBody(); } }, 'Select all shown'),
-    h('button', { class: 'mini', ...dis, onclick: () => { bulkApply(x => { x.done = true; x.doneAt = now(); }); S.tvSel = new Set(); renderTVBody(); } }, 'Complete'),
+    h('button', { class: 'mini', ...dis, onclick: () => { bulkApply(x => { if (!x.done) markDone(x); }); S.tvSel = new Set(); renderTVBody(); } }, 'Complete'),
     date,
     h('button', { class: 'mini', ...dis, onclick: e => { const r = e.currentTarget.getBoundingClientRect(); showMenu(r.left, r.top - 4, ST.labels.map(l => ({ label: 'Add tag: ' + l.name, fn: () => bulkApply(x => { if (!x.tags.includes(l.id)) x.tags.push(l.id); }) })).concat(ST.labels.length ? [{ label: 'Remove all tags', fn: () => bulkApply(x => { x.tags = []; }) }] : [{ label: 'No tags yet', fn: () => {} }])); } }, 'Tag…'),
     h('button', { class: 'mini', ...dis, onclick: e => { const r = e.currentTarget.getBoundingClientRect(); showMenu(r.left, r.top - 4, ['important', 'urgent'].flatMap(k => [{ label: 'Mark ' + k, fn: () => bulkApply(x => { x[k] = true; }) }, { label: 'Unmark ' + k, fn: () => bulkApply(x => { x[k] = false; }) }])); } }, 'Flags…'),
@@ -9782,7 +9785,7 @@ async function init() {
   await DB.open();
   let st = null; try { st = await DB.get('kv', 'state'); } catch { }
   ST = st && st.boards && st.rootId ? st : defaultState();
-  migrate(); migratePages();
+  repairHiddenLists(true); migrate(); migratePages();
   await Blobs.loadAll();
   const h0 = decodeURIComponent(location.hash.slice(1));
   const _pl = h0.startsWith('p:') && ST.pages[h0.slice(2)] && pageIsLive(h0.slice(2)) ? h0.slice(2) : null;
@@ -12216,12 +12219,15 @@ function hbStats(key) {
     for (const c of hbCards(id)) {
       s.at = Math.max(s.at, c.updatedAt || 0);
       if (c.type === 'todo') for (const i of c.data.items) { s.tasks++; if (i.done) s.done++; }
+      if (c.type === 'page' && !c.data.linked && ST.pages[c.data.pageId]) for (const b of pageTodos(c.data.pageId)) { s.tasks++; if (b.checked) s.done++; }
+      if (c.type === 'database' && ST.dbs[c.data.dbId] && !c.data.linked) for (const r of statusRows(ST.dbs[c.data.dbId])) { s.tasks++; if (r.group === 'done') s.done++; }
       const t = hbType(c); if (t === 'notes') s.notes++; else if (t !== 'other') s.res++;
     }
   } else if (k === 'p') {
     const p = ST.pages[id]; s.at = p.updatedAt || 0;
-    eachBlock(p.blocks, b => { if (b.type === 'todo') { s.tasks++; if (b.checked) s.done++; } else if (['image', 'video', 'file', 'bookmark'].includes(b.type)) s.res++; });
-  } else { const d = ST.dbs[id]; s.at = d.updatedAt || 0; s.rows = d.rows.length; }
+    eachBlock(p.blocks, b => { if (['image', 'video', 'file', 'bookmark'].includes(b.type)) s.res++; });
+    for (const b of pageTodos(id)) { s.tasks++; if (b.checked) s.done++; }
+  } else { const d = ST.dbs[id]; s.at = d.updatedAt || 0; s.rows = d.rows.length; for (const r of statusRows(d)) { s.tasks++; if (r.group === 'done') s.done++; } }
   s.pct = s.tasks ? Math.round(s.done / s.tasks * 100) : 0;
   s.status = !s.done ? 'new' : s.done === s.tasks ? 'done' : 'active';
   return s;
@@ -12295,7 +12301,7 @@ function relocateCard(c, bid) {
   for (const id in ST.lines) { const l = ST.lines[id]; if ([l.from, l.to].some(e => e === c.id || (e && e.cardId === c.id))) delete ST.lines[id]; }
   const p = openSpot(bid); c.boardId = bid; c.x = p.x; c.y = p.y; c.z = maxZ(bid) + 1; c.unsorted = false; c.updatedAt = now();
 }
-function moveTaskTo(tid, bid) {
+function moveTaskToBoard(tid, bid) {
   const f = findTask(tid); if (!f) return; checkpoint();
   let list = allLists().find(x => x.boardId === bid && !x.columnId) || allLists().find(x => x.boardId === bid);
   if (!list) { const prev = S.boardId, p = openSpot(bid); S.boardId = bid; list = newCard('todo', p.x, p.y, { title: 'Tasks', items: [] }); S.boardId = prev; }
@@ -12317,7 +12323,7 @@ function hbTaskPane(it) {
   let marked = false;
   title.addEventListener('input', () => { if (!marked) { checkpoint(); marked = true; } t.text = title.value; f.card.updatedAt = now(); save(); hbList(); });
   title.addEventListener('keydown', e => { if (e.key === 'Enter') title.blur(); });
-  const move = hbBtn('Move to…', e => { e.stopPropagation(); sortMenu(move, (bid, label) => { moveTaskTo(t.id, bid); hbUI.sel = null; hbUI.detail = false; hbRender(); toast('Moved to ' + label); }); });
+  const move = hbBtn('Move to…', e => { e.stopPropagation(); sortMenu(move, (bid, label) => { moveTaskToBoard(t.id, bid); hbUI.sel = null; hbUI.detail = false; hbRender(); toast('Moved to ' + label); }); });
   const head = h('div', { class: 'hb-edhead' }, hbBtn('‹ List', () => { hbUI.detail = false; hbRender(); }, 'hb-backlist'), h('span', null, 'Task'), h('span', { class: 'hb-gap' }),
     hbBtn('Mark done', () => { toggleTask(t.id); hbUI.sel = null; hbUI.detail = false; hbRender(); scheduleSidebar(); }, 'hb-solid'), move,
     hbBtn('Details', () => openTask(t.id)),
@@ -12683,33 +12689,40 @@ function kbHead() {
   const ov = $('.tasksview'); ov.querySelector('.tv-top')?.remove();
   const q = h('input', { class: 'hb-search', type: 'search', placeholder: 'Search tasks', 'aria-label': 'Search tasks', value: kb.q });
   q.addEventListener('input', () => { kb.q = q.value; kbBody(); });
-  const boards = [...new Set(taskLists().map(c => c.boardId))].filter(id => ST.boards[id]);
+  const boards = [...new Set(taskEntries().map(e => e.boardId))].filter(id => id && ST.boards[id]);
   const sel = h('select', { class: 'hb-sel', 'aria-label': 'Board' }, h('option', { value: 'all' }, 'All boards'), ...boards.map(id => h('option', { value: id }, boardName(id)))); sel.value = boards.includes(kb.board) ? kb.board : (kb.board = 'all'); sel.onchange = () => { kb.board = sel.value; kbBody(); };
-  ov.prepend(h('div', { class: 'tv-top kb-top' }, hbHead('Tasks', 'Drag a card, or use ⋯, to move it.', hbBtn('Dashboard view', () => kbSetMode('dash')), hbBtn('+ Create task', () => newTaskFromDash(), 'hb-solid')), h('div', { class: 'hb-tools' }, q, sel)));
+  ov.prepend(h('div', { class: 'tv-top kb-top' }, hbHead('Tasks', 'From boards, pages and databases. Drag a card, or use ⋯, to move it.', hbBtn('Dashboard view', () => kbSetMode('dash')), hbBtn('+ Create task', () => newTaskFromDash(), 'hb-solid')), h('div', { class: 'hb-tools' }, q, sel)));
 }
 function kbBody() {
   const ov = $('.tasksview'); if (!ov) return;
   const old = ov.querySelector('.tv-body'), sx = old?.scrollLeft || 0, sy = old?.scrollTop || 0; old?.remove();
-  const q = kb.q.trim().toLowerCase(), all = [];
-  for (const c of taskLists()) { if (kb.board !== 'all' && c.boardId !== kb.board) continue; for (const it of c.data.items) { normTask(it); if (!q || (it.text + ' ' + boardName(c.boardId)).toLowerCase().includes(q)) all.push([it, c]); } }
+  const q = kb.q.trim().toLowerCase();
+  const all = taskEntries().filter(e => (kb.board === 'all' || e.boardId === kb.board) && (!q || (e.text + ' ' + e.label).toLowerCase().includes(q)));
+  const KIND = { list: 'Board', page: 'Page', row: 'Database' };
+  const byDue = (a, b) => ((a.due || '9999') + (a.time || '99')).localeCompare((b.due || '9999') + (b.time || '99')) || b.at - a.at;
   const columns = KB_COLS.map(([col, label]) => {
-    let items = all.filter(([it]) => kbCol(it) === col);
-    items.sort(col === 'done' ? (a, b) => (b[0].doneAt || 0) - (a[0].doneAt || 0) : (a, b) => (a[0].due || '9999').localeCompare(b[0].due || '9999'));
+    let items = all.filter(e => e.col === col).sort(col === 'done' ? (a, b) => b.at - a.at : byDue);
     const total = items.length; if (col === 'done') items = items.slice(0, 30);
     const add = h('input', { class: 'kb-add', placeholder: '+ Add task', 'aria-label': 'Add task to ' + label });
     add.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && add.value.trim()) { const v = add.value.trim(); add.value = ''; kbAdd(col, v); $(`.kb-col.${col} .kb-add`)?.focus(); } });
     const el = h('section', { class: 'kb-col ' + col }, h('div', { class: 'kb-h' }, h('b', null, label), h('span', null, String(total))), add,
-      ...items.map(([it, c]) => {
-        const more = h('button', { class: 'hb-more', title: 'Move', 'aria-label': 'Move ' + (it.text || 'task'), onclick: e => { e.stopPropagation(); showMenuAt(more, [...KB_COLS.filter(k => k[0] !== col).map(([k, l]) => ({ label: 'Move to ' + l, fn: () => kbMove(it.id, k) })), '-', { label: 'Open', fn: () => openTask(it.id) }]); } }, '⋯');
-        const card = h('div', { class: 'kb-card', draggable: 'true', 'data-tid': it.id, tabindex: '0', onclick: e => { if (!e.target.closest('button')) openTask(it.id); }, onkeydown: e => { if (e.key === 'Enter' && e.target === card) openTask(it.id); } },
-          h('div', { class: 'kb-t' }, h('span', null, it.text || 'Untitled task'), more),
-          h('div', { class: 'hb-chips' }, h('span', { class: 'hb-chip' }, boardName(c.boardId)), it.due ? h('span', { class: 'hb-chip' + (!it.done && it.due < todayStr() ? ' late' : '') }, parseYmd(it.due).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })) : null, it.urgent ? h('span', { class: 'hb-chip late' }, 'Urgent') : null, it.important ? h('span', { class: 'hb-chip' }, 'Important') : null));
-        card.addEventListener('dragstart', e => { e.dataTransfer.setData('text/kb', it.id); e.dataTransfer.effectAllowed = 'move'; });
+      ...items.map(e => {
+        const it = e.it;
+        const more = h('button', { class: 'hb-more', title: 'Move', 'aria-label': 'Move ' + e.text, onclick: ev => { ev.stopPropagation(); showMenuAt(more, [...KB_COLS.filter(k => k[0] !== col).map(([k, l]) => ({ label: 'Move to ' + l, fn: () => entryMove(e.key, k) })), '-', { label: 'Open', fn: () => entryOpen(e) }]); } }, '⋯');
+        const when = e.due ? parseYmd(e.due).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + (e.time ? ' ' + clockHM(e.time) : '') : '';
+        const card = h('div', { class: 'kb-card kind-' + e.kind, draggable: 'true', 'data-tid': e.key, tabindex: '0', onclick: ev => { if (!ev.target.closest('button')) entryOpen(e); }, onkeydown: ev => { if (ev.key === 'Enter' && ev.target === card) entryOpen(e); } },
+          h('div', { class: 'kb-t' }, h('span', null, e.text), more),
+          h('div', { class: 'hb-chips' }, h('span', { class: 'hb-chip kb-src', title: KIND[e.kind] }, h('i', { class: 'kb-dot ' + e.kind }), e.label),
+            when ? h('span', { class: 'hb-chip' + (entryLate(e) ? ' late' : '') }, when) : null,
+            it && it.repeat ? h('span', { class: 'hb-chip', title: (REPEATS.find(r => r[0] === it.repeat.k) || [])[1] }, '↻') : null,
+            it && it.remind && !it.done ? h('span', { class: 'hb-chip', title: 'Reminder set' }, '⏰') : null,
+            it && it.urgent ? h('span', { class: 'hb-chip late' }, 'Urgent') : null, it && it.important ? h('span', { class: 'hb-chip' }, 'Important') : null));
+        card.addEventListener('dragstart', ev => { ev.dataTransfer.setData('text/kb', e.key); ev.dataTransfer.effectAllowed = 'move'; });
         return card;
       }));
-    el.addEventListener('dragover', e => { if ([...e.dataTransfer.types].includes('text/kb')) { e.preventDefault(); el.classList.add('over'); } });
-    el.addEventListener('dragleave', e => { if (!el.contains(e.relatedTarget)) el.classList.remove('over'); });
-    el.addEventListener('drop', e => { const id = e.dataTransfer.getData('text/kb'); el.classList.remove('over'); if (!id) return; e.preventDefault(); kbMove(id, col); });
+    el.addEventListener('dragover', ev => { if ([...ev.dataTransfer.types].includes('text/kb')) { ev.preventDefault(); el.classList.add('over'); } });
+    el.addEventListener('dragleave', ev => { if (!el.contains(ev.relatedTarget)) el.classList.remove('over'); });
+    el.addEventListener('drop', ev => { const id = ev.dataTransfer.getData('text/kb'); el.classList.remove('over'); if (!id) return; ev.preventDefault(); entryMove(id, col); });
     return el;
   });
   const body = h('div', { class: 'tv-body kb-body' }, ...columns); ov.append(body); body.scrollLeft = sx; body.scrollTop = sy;
@@ -12849,6 +12862,161 @@ function fxRender() {
 }; }
 { const _tv3 = openTasksView; openTasksView = function () { $$('.dashview').forEach(x => x.remove()); return _tv3.apply(this, arguments); }; }
 
+
+/* ========== tasks from every source, due times, reminders, repeats ========== */
+/* --- repeating tasks --- */
+const REPEATS = [['', 'Does not repeat'], ['daily', 'Every day'], ['weekdays', 'Every weekday'], ['weekly', 'Every week'], ['days', 'Every N days'], ['monthly', 'Every month'], ['yearly', 'Every year']];
+function nextDue(it) {
+  const r = it.repeat, t = todayStr(); let d = it.due || t;
+  const step = x => {
+    if (r.k === 'daily') return addDays(x, 1);
+    if (r.k === 'days') return addDays(x, Math.max(1, r.n || 1));
+    if (r.k === 'weekly') return addDays(x, 7);
+    if (r.k === 'weekdays') { let y = addDays(x, 1); while ([0, 6].includes(parseYmd(y).getDay())) y = addDays(y, 1); return y; }
+    const [Y, M, D] = x.split('-').map(Number), base = it.repeatDay || D;
+    const add = r.k === 'yearly' ? 12 : 1, m0 = new Date(Y, M - 1 + add, 1), last = new Date(m0.getFullYear(), m0.getMonth() + 1, 0).getDate();
+    return ymd(new Date(m0.getFullYear(), m0.getMonth(), Math.min(base, last)));
+  };
+  let n = 0; do { d = step(d); } while (d <= t && n++ < 1000);
+  return d;
+}
+function markDone(it) {
+  if (it.repeat && it.repeat.k) {
+    if (!it.repeatDay && it.due) it.repeatDay = +it.due.slice(8, 10);
+    (it.history || (it.history = [])).push(now());
+    it.due = nextDue(it); it.done = false; it.doneAt = null; it.snooze = null; it.reminded = null;
+    for (const s of it.subtasks || []) s.done = false;
+    toast('Repeats · next due ' + parseYmd(it.due).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) + (it.time ? ' ' + clockHM(it.time) : ''));
+    return 'repeat';
+  }
+  it.done = true; it.doneAt = now(); return 'done';
+}
+/* --- reminders --- */
+const REMINDS = [['', 'No reminder'], ['0', 'At due time'], ['15', '15 minutes before'], ['60', '1 hour before'], ['1440', '1 day before'], ['custom', 'Custom…']];
+function remindAt(it) {
+  if (!it.remind || it.done) return null;
+  if (it.remind.k === 'custom') return it.remind.at || null;
+  return it.due ? dueAt(it) - (it.remind.m || 0) * 60000 : null;
+}
+const effRemind = it => { const r = remindAt(it); if (r == null) return null; return it.snooze && it.snooze > r ? it.snooze : r; };
+function whenRow(tid, change, dueInput) {
+  const row = h('div', { class: 'tm-row tm-when' });
+  const paint = () => {
+    const it = findTask(tid)?.item; if (!it) return; row.replaceChildren();
+    const needDue = x => { if (!x.due) { x.due = todayStr(); if (dueInput) dueInput.value = x.due; } };
+    const time = h('input', { type: 'time', class: 'tm-input', value: it.time || '', 'aria-label': 'Due time' });
+    time.onchange = () => { change(x => { x.time = time.value || null; if (x.time) needDue(x); x.snooze = null; x.reminded = null; }); paint(); };
+    const rem = h('select', { class: 'tm-input', 'aria-label': 'Reminder' }, ...REMINDS.map(([v, l]) => h('option', { value: v }, l)));
+    rem.value = !it.remind ? '' : it.remind.k === 'custom' ? 'custom' : String(it.remind.m);
+    rem.onchange = () => {
+      const v = rem.value;
+      change(x => { x.snooze = null; x.reminded = null; if (!v) x.remind = null; else if (v === 'custom') { const d = x.due ? dueAt(x) : Date.now() + 36e5; x.remind = { k: 'custom', at: d }; } else { x.remind = { k: 'before', m: +v }; needDue(x); } });
+      if (v) askNotify(); paint();
+    };
+    const kids = [time, rem];
+    if (it.remind && it.remind.k === 'custom') {
+      const pad = n => String(n).padStart(2, '0'), d = new Date(it.remind.at);
+      const at = h('input', { type: 'datetime-local', class: 'tm-input', 'aria-label': 'Reminder time', value: `${ymd(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}` });
+      at.onchange = () => { if (!at.value) return; change(x => { x.remind = { k: 'custom', at: new Date(at.value).getTime() }; x.snooze = null; x.reminded = null; }); };
+      kids.push(at);
+    }
+    const rep = h('select', { class: 'tm-input', 'aria-label': 'Repeat' }, ...REPEATS.map(([v, l]) => h('option', { value: v }, l)));
+    rep.value = it.repeat ? it.repeat.k : '';
+    rep.onchange = () => { const v = rep.value; change(x => { x.repeat = v ? { k: v, n: v === 'days' ? (x.repeat && x.repeat.n) || 2 : undefined } : null; x.repeatDay = null; if (v) needDue(x); }); paint(); };
+    kids.push(rep);
+    if (it.repeat && it.repeat.k === 'days') {
+      const n = h('input', { type: 'number', min: '1', max: '365', class: 'tm-input tm-n', value: String(it.repeat.n || 2), 'aria-label': 'Repeat every how many days' });
+      n.onchange = () => change(x => { x.repeat = { k: 'days', n: Math.max(1, Math.min(365, +n.value || 1)) }; });
+      kids.push(h('label', { class: 'tm-df' }, n, h('span', { class: 'tm-cap' }, 'days')));
+    }
+    if (it.remind) kids.push(h('div', { class: 'tm-hint' }, 'Reminders appear while Corkboard is open in a tab or on your Home Screen.'));
+    row.append(...kids);
+  };
+  paint(); return row;
+}
+function remBar() { let b = $('#remBar'); if (!b) { b = h('div', { id: 'remBar', role: 'alert', 'aria-live': 'assertive' }); document.body.append(b); } return b; }
+function showReminder(tid) {
+  const f = findTask(tid); if (!f) return; const it = f.item, bar = remBar();
+  bar.querySelector(`[data-tid="${tid}"]`)?.remove();
+  const close = () => { card.remove(); if (!bar.children.length) bar.remove(); };
+  const snooze = m => { const g = findTask(tid); if (g) { g.item.snooze = Date.now() + m * 60000; save(); } close(); };
+  const when = it.due ? parseYmd(it.due).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) + (it.time ? ' ' + clockHM(it.time) : '') : '';
+  const card = h('div', { class: 'rem-card', 'data-tid': tid },
+    h('div', { class: 'rem-t' }, h('b', null, it.text || 'Untitled task'), h('span', null, when ? 'Due ' + when : 'Reminder')),
+    h('div', { class: 'hb-row' },
+      hbBtn('Done', () => { const g = findTask(tid); if (g && !g.item.done) toggleTask(tid); close(); }, 'hb-solid'),
+      hbBtn('Snooze 10 min', () => snooze(10)), hbBtn('1 hour', () => snooze(60)),
+      hbBtn('Open', () => { close(); openTask(tid); }),
+      h('button', { class: 'hb-more', title: 'Dismiss', 'aria-label': 'Dismiss reminder', onclick: close }, '×')));
+  bar.prepend(card);
+  try { if ('Notification' in window && Notification.permission === 'granted') { const n = new Notification(it.text || 'Task reminder', { body: when ? 'Due ' + when : 'Corkboard reminder', tag: 'cb-' + tid }); n.onclick = () => { window.focus(); openTask(tid); n.close(); }; } } catch (e) { }
+}
+function checkReminders() {
+  if (!ST) return; const t = Date.now(); let changed = false;
+  for (const c of allLists()) for (const it of c.data.items) {
+    const at = effRemind(it); if (at == null || at > t || it.reminded === at) continue;
+    it.reminded = at; changed = true;
+    if (at >= t - 864e5) showReminder(it.id);
+  }
+  if (changed) save();
+}
+setInterval(checkReminders, 15000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkReminders(); });
+
+/* --- one board, three sources: checklist tasks, page checkboxes, database rows with a Status --- */
+function statusProp(db) { return (db.schema || []).find(p => p.type === 'status' && (p.options || []).length); }
+function statusRows(db) {
+  const sp = statusProp(db); if (!sp) return [];
+  return dbRows(db).map(row => { const o = sp.options.find(x => x.id === (row.values || {})[sp.id]); return { row, group: o ? o.group : 'todo' }; });
+}
+function pageTodos(pid, depth = 0, seen = new Set()) {
+  const p = ST.pages[pid]; if (!p || seen.has(pid) || depth > 20) return []; seen.add(pid);
+  const out = []; eachBlock(p.blocks, b => { if (b.type === 'todo' && strip(b.html || '').trim() && !(b.srcCol && ST.cards[b.srcCol] && !ST.cards[b.srcCol].trashed)) out.push(b); });
+  for (const sp of subPageIds(pid)) out.push(...pageTodos(sp, depth + 1, seen));
+  return out;
+}
+function taskEntries() {
+  const out = [];
+  for (const c of taskLists()) for (const it of c.data.items) {
+    if (!c.virtual) normTask(it);
+    const pg = c.virtual && ST.pages[c.pageId];
+    out.push({ key: it.id, kind: pg ? 'page' : 'list', text: it.text || 'Untitled task', col: kbCol(it), due: it.due, time: it.time, it: pg ? null : it, pid: pg ? pg.id : null, bid: pg ? it.id : null, boardId: c.boardId, label: pg ? 'Page · ' + (pg.title || 'Untitled') : boardName(c.boardId), at: it.doneAt || c.updatedAt || 0 });
+  }
+  for (const p of Object.values(ST.pages)) { /* pages that are not on a board (database row pages) */
+    if (!p.blocks || !pageIsLive(p.id)) continue;
+    const root = pageRoot(p.id); if (root && root.parent && root.parent.t === 'card') continue;
+    eachBlock(p.blocks, b => {
+      if (b.type !== 'todo' || (b.srcCol && ST.cards[b.srcCol] && !ST.cards[b.srcCol].trashed)) return; const text = strip(b.html || '').trim(); if (!text) return;
+      out.push({ key: 'pg:' + p.id + ':' + b.id, kind: 'page', loose: true, text, col: b.checked ? 'done' : b.col === 'backlog' || b.col === 'doing' ? b.col : 'todo', pid: p.id, bid: b.id, b, boardId: null, label: 'Page · ' + (p.title || 'Untitled'), at: p.updatedAt || 0 });
+    });
+  }
+  for (const db of liveDbs()) {
+    const sp = statusProp(db); if (!sp) continue; const dp = (db.schema || []).find(x => x.type === 'date'), bid = dbBoardId(db);
+    for (const { row, group } of statusRows(db)) {
+      const due = dp && ((row.values || {})[dp.id] || {}).start || null;
+      out.push({ key: 'rw:' + row.id, kind: 'row', text: row.title || 'Untitled', col: group === 'done' ? 'done' : group === 'prog' ? 'doing' : row.kbCol === 'backlog' ? 'backlog' : 'todo', due, row, db, sp, boardId: bid, label: db.title || 'Database', at: row.updatedAt || 0 });
+    }
+  }
+  return out;
+}
+const entryLate = e => e.col !== 'done' && e.due && (e.due < todayStr() || (e.due === todayStr() && e.time && Date.now() > dueAt(e)));
+function entryOpen(e) {
+  if (e.kind === 'list') return openTask(e.key);
+  closeDashes(); openPage(e.kind === 'page' ? e.pid : e.row.id);
+  if (e.kind === 'page') requestAnimationFrame(() => setTimeout(() => { const el = $(`.pv-wrap .blk[data-bid="${e.bid}"]`); if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1400); } }, 60));
+}
+function entryMove(key, col) {
+  const e = taskEntries().find(x => x.key === key); if (!e || e.col === col) return;
+  if (e.kind === 'list' || (e.kind === 'page' && !e.loose)) return kbMove(key, col);
+  if (e.kind === 'page') {
+    const p = ST.pages[e.pid]; pageCommit(p, () => { e.b.checked = col === 'done'; if (col === 'backlog' || col === 'doing') e.b.col = col; else delete e.b.col; }, $('.pv-wrap') && S.pageId === p.id);
+  } else {
+    const g = col === 'done' ? 'done' : col === 'doing' ? 'prog' : 'todo', o = e.sp.options.find(x => x.group === g);
+    if (!o) return toast(`“${e.sp.name || 'Status'}” has no ${g === 'prog' ? 'in-progress' : g === 'done' ? 'complete' : 'to-do'} option`);
+    commitDb(e.db, () => { e.row.values = e.row.values || {}; e.row.values[e.sp.id] = o.id; if (col === 'backlog') e.row.kbCol = 'backlog'; else delete e.row.kbCol; }, e.row);
+  }
+  if ($('.tasksview')) renderTVBody();
+}
 /* one-time: move the old Home "Inbox" checklist and Unsorted tray items into the Inbox board */
 function oneInbox() {
   if (ST.settings.oneInbox) return; ST.settings.oneInbox = 1;
@@ -12867,4 +13035,15 @@ function oneInbox() {
   toast('Your old inbox items are now in Capture', 5000);
 }
 { const _rtv = refreshTaskViews; refreshTaskViews = function () { const r = _rtv.apply(this, arguments); if (hbOpen() === 'capture') hbRender(); return r; }; }
-init().then(oneInbox);
+/* repair: tasks moved with the task-details Board/List picker in the one-inbox release landed in a hidden checklist */
+function repairHiddenLists(quiet) {
+  let n = 0;
+  for (const c of Object.values(ST.cards)) {
+    if (c.type !== 'todo' || ST.boards[c.boardId]) continue;
+    const dest = ST.cards[c.boardId]; if (!dest || dest.type !== 'todo') continue;
+    n += c.data.items.length; dest.data.items.push(...c.data.items); dest.updatedAt = now(); delete ST.cards[c.id];
+  }
+  if (quiet) { repairHiddenLists.found = n; return; }
+  if (n) { save(); renderBoard(); scheduleSidebar(); toast(`Recovered ${n} task${n === 1 ? '' : 's'} that had been hidden`, 6000); }
+}
+init().then(() => { const n = repairHiddenLists.found || 0; if (n) { save(); toast(`Recovered ${n} task${n === 1 ? '' : 's'} that had been hidden`, 6000); } oneInbox(); checkReminders(); });
