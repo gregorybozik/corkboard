@@ -7456,7 +7456,7 @@ function tabList() { const s = ST.settings; if (!Array.isArray(s.tabs)) s.tabs =
 function tabBoards() { return new Set(tabList().map(t => t.b)); }
 function curOverlay() { if (S.pageId && $('.pv-wrap') && ST.pages[S.pageId]) return 'p:' + S.pageId; if ($('.tasksview')) return 'd:tasks'; if ($('.dashview.notesview')) return 'd:notes'; if ($('.dashview.focusview')) return 'd:focus'; return null; }
 function tabLabel(t) {
-  if (t.o === 'd:tasks') return ['Tasks', null, '☑']; if (t.o === 'd:notes') return ['Notes', null, '≡']; if (t.o === 'd:focus') return ['Focus', null, '◎'];
+  if (t.o === 'd:tasks') return ['Tasks', null, ICON.todo]; if (t.o === 'd:notes') return ['Notes', null, ICON.note]; if (t.o === 'd:focus') return ['Focus', null, ICON.focus];
   if (t.o && t.o[0] === 'p') { const p = ST.pages[t.o.slice(2)]; if (p) return [p.title || 'Untitled page', null, p.icon || '📄']; }
   const b = ST.boards[t.b] || {}; return [b.title || 'Untitled', b.color || '#5f8ff0', b.icon || ''];
 }
@@ -7511,7 +7511,7 @@ function tabGroupMenu(e, gid) {
 function tabAll(anchor) {
   const tabs = tabList(), cur = ST.settings.tabCur, box = h('div', { class: 'tab-all' });
   const row = (t, i) => { const [title, color, icon] = tabLabel(t); const g = t.g && tabGroup(t.g);
-    return h('div', { class: 'ta-row' + (i === cur ? ' cur' : '') }, h('button', { class: 'ta-go', onclick: () => { closeTransient(); switchTab(i); } }, h('span', { class: 'ta-dot', style: { background: g ? g.color : 'transparent' } }), h('span', { class: 'ta-ic' }, icon || tabInitial(title)), h('span', { class: 'ta-t' }, title), t.pin ? h('span', { class: 'ta-pin' }, 'Pinned') : null),
+    return h('div', { class: 'ta-row' + (i === cur ? ' cur' : '') }, h('button', { class: 'ta-go', onclick: () => { closeTransient(); switchTab(i); } }, h('span', { class: 'ta-dot', style: { background: g ? g.color : 'transparent' } }), h('span', { class: 'ta-ic' }, tabIcEl(icon) || tabInitial(title)), h('span', { class: 'ta-t' }, title), t.pin ? h('span', { class: 'ta-pin' }, 'Pinned') : null),
       !t.pin && tabs.length > 1 ? h('button', { class: 'ta-x', title: 'Close tab', onclick: e => { e.stopPropagation(); closeTab(i); closeTransient(); tabAll(anchor); } }, '×') : null); };
   let lastG = '__';
   tabs.forEach((t, i) => { if ((t.g || '') !== lastG) { lastG = t.g || ''; const g = t.g && tabGroup(t.g); if (g) box.append(h('div', { class: 'ta-g', style: { color: g.color } }, g.name)); } box.append(row(t, i)); });
@@ -7555,7 +7555,7 @@ function renderTabs() {
   const pins = h('div', { class: 'tab-pins' }), scr = h('div', { class: 'tabs-scroll' }); let wrap = null, wrapG = null;
   tabs.forEach((t, i) => {
     const [title, color, icon] = tabLabel(t), g = t.g && tabGroup(t.g);
-    const ic = h('span', { class: 'tab-ic' + (t.pin ? ' pin' : '') }, icon || (t.pin ? tabInitial(title) : '')); /* v4.9: no color behind the icon */
+    const ic = h('span', { class: 'tab-ic' + (t.pin ? ' pin' : '') }, tabIcEl(icon) || (t.pin ? tabInitial(title) : '')); /* v4.9: no color behind the icon */
     const el = h('div', { class: 'tab' + (i === cur ? ' cur' : '') + (t.pin ? ' pinned' : ''), title: t.pin ? title : title, draggable: 'true', style: g ? { '--gc': g.color } : {} }, ic, t.pin ? null : h('span', { class: 'tab-t' }, title),
       !t.pin && tabs.length > 1 ? h('button', { class: 'tab-x', title: 'Close tab', onclick: e => { e.stopPropagation(); closeTab(i); } }, '×') : null);
     el.addEventListener('click', () => switchTab(i));
@@ -12291,7 +12291,7 @@ function hbList() {
   const group = (label, list) => list.length ? [h('div', { class: 'hb-date' }, label, h('span', null, String(list.length))), ...list.map(x =>
     h('button', { class: 'hb-item' + (x.task ? ' task' : '') + (x.key === hbUI.sel ? ' on' : ''), 'data-id': x.key, onclick: () => { hbUI.sel = x.key; hbUI.detail = true; hbRender(); } },
       h('b', null, x.task ? h('i', { class: 'hb-tick', 'aria-hidden': 'true' }) : null, x.title), h('span', null, x.sub), h('time', null, timeAgo(x.at))))] : [];
-  const total = cards.length + tasks.length;
+  const total = cards.length + tasks.length; { const n = $('.hb-listhead .hb-count'); if (n && hbOpen() === 'capture') n.textContent = String(total); }
   box.replaceChildren(...(items.length ? [...group('Today', items.filter(x => x.at >= midnight)), ...group('Earlier', items.filter(x => x.at < midnight))]
     : [hbEmpty(total ? 'No matches' : 'Inbox is clear', total ? 'Try another search or filter.' : 'Type, paste or drop something to capture it.')]));
 }
@@ -12392,8 +12392,8 @@ function hbEditor() {
 function hbCapture(ov) {
   const add = h('button', { class: 'hb-btn hb-solid', title: 'New capture', 'aria-label': 'New capture', onclick: () => {
     if (hbUI.tab.capture === 'tasks') { checkpoint(); const c = ensureInbox(), t = newTask(''); c.data.items.push(t); c.updatedAt = now(); save(); refreshTaskViews([c.id]); hbUI.sel = 't:' + t.id; hbUI.detail = true; hbRender(); $('.hb-editor .hb-title')?.focus(); return; }
-    hbUI.sel = null; hbUI.detail = true; hbRender(); $('.hb-title')?.focus(); } }, '+');
-  const left = h('aside', { class: 'hb-list' }, h('div', { class: 'hb-listhead' }, h('div', null, h('h2', null, 'Capture'), h('p', null, HB_SUB.capture)), add),
+    hbUI.sel = null; hbUI.detail = true; hbRender(); $('.hb-title')?.focus(); } }, '+ New capture');
+  const left = h('aside', { class: 'hb-list' }, h('div', { class: 'hb-listhead' }, h('div', null, h('h2', null, 'Capture', h('span', { class: 'hb-count' }, String(nvInboxCount()))), h('p', null, HB_SUB.capture)), add),
     hbSearch('capture', 'Search captures', hbList), h('div', { class: 'hb-captabs' }), h('div', { class: 'hb-items hb-scroll' }));
   const wrap = h('div', { class: 'hb-cap' + (hbUI.detail ? ' detail' : '') }, left, hbEditor());
   wrap.addEventListener('dragover', e => { if ([...e.dataTransfer.types].includes('Files')) e.preventDefault(); });
@@ -12419,6 +12419,7 @@ function hbMenu(btn, key, kind) {
 }
 function hbNew(btn, kind) {
   if (kind === 'resources') return void srcOpen(null, { status: 'distilled' });
+  if (kind === 'projects' || kind === 'areas') return void pnDialog(kind);
   askText(btn, `New ${HB_ONE[kind]} name`, '', name => {
     if (!name.trim()) return;
     checkpoint(); const b = createBoardIn(ST.rootId, name.trim()); save(); renderBoard(); hbMove('b:' + b.id, kind);
@@ -12437,8 +12438,8 @@ function hbCard(key, kind) {
   const chips = h('div', { class: 'hb-chips' }, ...(inf.kind === 'd' ? [chip(s.rows, 'row')] : [chip(s.tasks, 'task'), chip(s.notes, 'note'), chip(s.res, 'resource')]));
   const progress = kind === 'projects' ? pjProgEl(key, col) : null;
   const card = h('article', { class: 'hb-card', 'data-key': key, tabindex: '0' },
-    kind === 'areas' ? h('div', { class: 'hb-cover', style: { background: `linear-gradient(135deg, ${col}, color-mix(in srgb, ${col} 25%, var(--card)))` } }) : null,
-    h('div', { class: 'hb-cardtop' }, h('span', { class: 'hb-ico', style: { background: col } }, inf.icon || inf.title.charAt(0).toUpperCase()),
+    paraCover(key, inf, 'hb-bcover'),
+    h('div', { class: 'hb-cardtop' }, paraIconEl(key, inf, 'hb-lic'),
       h('div', { class: 'hb-name' }, h('b', null, inf.title), h('span', null, HB_KIND[inf.kind] + (kind === 'archives' && from ? ` · from ${NV_NAME[from]}` : '') + (kind === 'projects' && pjArea(key) ? ' · ' + refInfo(pjArea(key)).title : '') + (kind === 'areas' && areaProjects(key).length ? ` · ${areaProjects(key).length} project${areaProjects(key).length === 1 ? '' : 's'}` : ''))), more),
     chips, progress,
     h('div', { class: 'hb-foot' }, h('span', null, s.at ? 'Updated ' + timeAgo(s.at) : ''), kind === 'archives' ? hbBtn('Restore', e => { e.stopPropagation(); hbRestore(key); }) : h('span', null, '↗')));
@@ -12488,8 +12489,8 @@ function hbPara(ov, kind) {
     const n = t => cards.filter(c => hbType(c) === t).length, tab = hbUI.tab.resources || 'all';
     const pick = t => { hbUI.tab.resources = t; hbRender(); };
     const ns = sources().filter(x => x.status === 'distilled').length;
-    parts.push(h('div', { class: 'hb-library' }, h('button', { class: 'hb-tile', onclick: () => pick('sources') }, h('i', { style: { background: HB_COL[0] } }), h('b', null, 'Sources'), h('span', null, `${ns} item${ns === 1 ? '' : 's'}`)),
-      ...HB_TYPES.map(([t, l], i) => h('button', { class: 'hb-tile', onclick: () => pick(t) }, h('i', { style: { background: HB_COL[[5, 4, 2, 1][i]] } }), h('b', null, l), h('span', null, `${n(t)} item${n(t) === 1 ? '' : 's'}`)))),
+    parts.push(h('div', { class: 'hb-library' }, h('button', { class: 'hb-tile', onclick: () => pick('sources') }, h('i', { class: 'hb-tic', html: nvIcon('distill') }), h('b', null, 'Sources'), h('span', null, `${ns} item${ns === 1 ? '' : 's'}`)),
+      ...HB_TYPES.map(([t, l], i) => h('button', { class: 'hb-tile', onclick: () => pick(t) }, h('i', { class: 'hb-tic', html: [ICON.note, ICON.link, ICON.image, ICON.doc][i] }), h('b', null, l), h('span', null, `${n(t)} item${n(t) === 1 ? '' : 's'}`)))),
       hbTabs([['all', 'All', items.length + ns], ['sources', 'Sources', ns], ...HB_TYPES.map(([t, l]) => [t, l, n(t)])], tab, pick));
   }
   if (kind === 'archives') parts.push(hbTabs([['all', 'All', items.length], ...['areas', 'projects', 'resources'].map(k => [k, NV_NAME[k], items.filter(x => from[x] === k).length])], hbUI.tab.archives || 'all', t => { hbUI.tab.archives = t; hbRender(); }));
@@ -12506,7 +12507,7 @@ function hbPara(ov, kind) {
 
 
 { const _co = curOverlay; curOverlay = function () { const k = hbOpen(); return k && !$('.pv-wrap') ? 'd:hb:' + k : _co.apply(this, arguments); }; }
-{ const _tl = tabLabel; tabLabel = function (t) { return t.o && t.o.startsWith('d:hb:') ? [NV_NAME[t.o.slice(5)], null, '▦'] : _tl.apply(this, arguments); }; }
+{ const _tl = tabLabel; tabLabel = function (t) { return t.o && t.o.startsWith('d:hb:') ? [NV_NAME[t.o.slice(5)], null, nvIcon(t.o.slice(5))] : _tl.apply(this, arguments); }; }
 { const _ta = tabApply; tabApply = function (t) { const o = t.o; _ta.apply(this, arguments); if (o && o.startsWith('d:hb:')) openHub(o.slice(5)); }; }
 { const _ar = afterRestore; afterRestore = function () { _ar.apply(this, arguments); hbRender(); }; }
 { const _tv = openTasksView; openTasksView = function () { $$('.dashview.hubview').forEach(x => x.remove()); const r = _tv.apply(this, arguments); scheduleSidebar(); return r; }; }
@@ -12529,7 +12530,7 @@ NV_NAME.habits = 'Habits'; NV_NAME.journal = 'Journal'; NV_NAME.review = 'Review
 NV_SVG.journal = '<path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6z"/><path d="M6 3v18M10 8h5M10 12h5"/>';
 NV_SVG.review = '<path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/>';
 NV_SVG.habits = '<path d="M4 6h16v14H4zM4 10h16M8 3v5M16 3v5"/><path d="m9 15 2 2 4-4"/>';
-const hbHead = (title, sub, ...actions) => h('header', { class: 'hb-head' }, h('div', null, h('h2', null, title), h('p', null, sub)), h('div', { class: 'hb-row' }, ...actions));
+const hbHead = (title, sub, ...actions) => h('header', { class: 'hb-head' }, h('div', null, Array.isArray(title) ? h('h2', null, title[0], h('span', { class: 'hb-count' }, String(title[1]))) : h('h2', null, title), h('p', null, sub)), h('div', { class: 'hb-row' }, ...actions));
 const x3 = { note: null, q: '', picked: new Set(), view: 'week', off: 0, filter: 'all', hq: '' };
 const packets = () => ST.packets || (ST.packets = []);
 
@@ -12610,7 +12611,7 @@ function exRender(ov) {
       h('p', { class: 'ex-text' }, p.text.slice(0, 280)),
       h('div', { class: 'hb-foot' }, h('span', null, packetFrom(p)), hbBtn('Delete', () => { checkpoint(); ST.packets = packets().filter(x => x.id !== p.id); x3.picked.delete(p.id); save(); hbRender(); })));
   })) : hbEmpty('Nothing ready to make yet', 'Save a few packets in Distill and they show up here.', hbBtn('Open Distill', () => openHub('distill'), 'hb-solid'));
-  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' }, hbHead('Express', 'Start from a project, not a blank page.', makeBtn), strip4, body));
+  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' }, hbHead(['Express', packets().length], 'Start from a project, not a blank page.', makeBtn), strip4, body));
 }
 
 /* ---- Habits ---- */
@@ -12680,7 +12681,7 @@ function habRender(ov) {
   search.addEventListener('input', () => { x3.hq = search.value; habList(); });
   const seg = (opts, cur, fn) => h('div', { class: 'hb-tabs' }, ...opts.map(([v, l]) => h('button', { class: v === cur ? 'on' : '', 'aria-pressed': String(v === cur), onclick: () => fn(v) }, l)));
   const nav = x3.view === 'all' ? h('b', null, 'All time') : h('div', { class: 'hab-nav' }, hbBtn('‹', () => { x3.off--; hbRender(); }), h('b', null, range.label), hbBtn('›', () => { x3.off++; hbRender(); }), hbBtn('Today', () => { x3.off = 0; hbRender(); }));
-  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' }, hbHead('Habits', 'Small actions, a little more consistent every day.', hbBtn('+ Add habit', () => habDialog(), 'hb-solid')),
+  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' }, hbHead(['Habits', habits().length], 'Small actions, a little more consistent every day.', hbBtn('+ Add habit', () => habDialog(), 'hb-solid')),
     h('div', { class: 'hb-tools' }, nav, h('span', { class: 'hb-gap' }), seg([['week', 'Week'], ['month', 'Month'], ['year', 'Year'], ['all', 'All time']], x3.view, v => { x3.view = v; x3.off = 0; hbRender(); })),
     h('div', { class: 'hb-tools' }, search, seg([['all', 'All'], ['active', 'Active'], ['paused', 'Paused']], x3.filter, v => { x3.filter = v; hbRender(); })),
     h('div', { class: 'hab-list' }),
@@ -12713,10 +12714,11 @@ function kbHead() {
   q.addEventListener('input', () => { kb.q = q.value; kbBody(); });
   const boards = [...new Set(taskEntries().map(e => e.boardId))].filter(id => id && ST.boards[id]);
   const sel = h('select', { class: 'hb-sel', 'aria-label': 'Board' }, h('option', { value: 'all' }, 'All boards'), ...boards.map(id => h('option', { value: id }, boardName(id)))); sel.value = boards.includes(kb.board) ? kb.board : (kb.board = 'all'); sel.onchange = () => { kb.board = sel.value; kbBody(); };
-  ov.prepend(h('div', { class: 'tv-top kb-top' }, hbHead('Tasks', 'From boards, pages and databases. Drag a card, or use ⋯, to move it.', hbBtn('Dashboard view', () => kbSetMode('dash')), hbBtn('+ Create task', () => newTaskFromDash(), 'hb-solid')), h('div', { class: 'hb-tools' }, q, sel)));
+  ov.prepend(h('div', { class: 'tv-top kb-top' }, hbHead(['Tasks', taskEntries().filter(e => e.col !== 'done').length], 'From boards, pages and databases. Drag a card, or use ⋯, to move it.', hbBtn('Dashboard view', () => kbSetMode('dash')), hbBtn('+ Create task', () => newTaskFromDash(), 'hb-solid')), h('div', { class: 'hb-tools' }, q, sel)));
 }
 function kbBody() {
   const ov = $('.tasksview'); if (!ov) return;
+  { const n = ov.querySelector('.kb-top .hb-count'); if (n) n.textContent = String(taskEntries().filter(e => e.col !== 'done').length); }
   const old = ov.querySelector('.tv-body'), sx = old?.scrollLeft || 0, sy = old?.scrollTop || 0; old?.remove();
   const q = kb.q.trim().toLowerCase();
   const all = taskEntries().filter(e => (kb.board === 'all' || e.boardId === kb.board) && (!q || (e.text + ' ' + e.label).toLowerCase().includes(q)));
@@ -12798,7 +12800,7 @@ function nlRender() {
   q.addEventListener('input', () => { st.q = q.value; nlList(); });
   const boards = [...new Set(allNotes().map(c => c.boardId))].filter(id => ST.boards[id]);
   const sel = h('select', { class: 'hb-sel', 'aria-label': 'Board' }, h('option', { value: 'all' }, 'All boards'), ...boards.map(id => h('option', { value: id }, boardName(id)))); sel.value = boards.includes(st.board) ? st.board : 'all'; sel.onchange = () => { st.board = sel.value; save(); nlList(); };
-  const add = h('button', { class: 'hb-btn hb-solid', title: 'New note', 'aria-label': 'New note', onclick: () => { nlS.sel = null; nlS.detail = true; nlRender(); $('.notesview .hb-title')?.focus(); } }, '+');
+  const add = h('button', { class: 'hb-btn hb-solid', title: 'New note', 'aria-label': 'New note', onclick: () => { nlS.sel = null; nlS.detail = true; nlRender(); $('.notesview .hb-title')?.focus(); } }, '+ New note');
   ov.replaceChildren(h('div', { class: 'hb-cap' + (nlS.detail ? ' detail' : '') },
     h('aside', { class: 'hb-list' }, h('div', { class: 'hb-listhead' }, h('h2', null, 'Notes', h('span', { class: 'hb-count' }, '0')), h('div', { class: 'hb-row' }, hbBtn('Grid', () => nlSetMode('grid')), add)), q, sel, h('div', { class: 'hb-items' })),
     nlEditor()));
@@ -13176,7 +13178,7 @@ function rvRender(ov) {
   };
   const finish = () => hbBtn('Finish review', finishFn, 'hb-solid');
   ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' },
-    hbHead('Weekly review', ST.settings.lastReview ? 'Last review ' + rvSince() + '.' : 'Work down the list. Each step clears as you go.', h('span', { class: 'hb-muted rv-rl' }, 'Remind me'), day, rr ? time : null, finish()),
+    hbHead('Review', ST.settings.lastReview ? 'Weekly review. Last done ' + rvSince() + '.' : 'Weekly review. Work down the list; each step clears as you go.', h('span', { class: 'hb-muted rv-rl' }, 'Remind me'), day, rr ? time : null, finish()),
     s1, s2, s3, s4, s5, s6, h('div', { class: 'hb-row rv-end' }, finish())));
 }
 function rvCheck(t) {
@@ -13512,7 +13514,7 @@ function srcOpen(id, preset) {
     isNew ? hbBtn(s.status === 'distilled' ? 'Add resource' : 'Park source', commit, 'hb-solid')
       : s.status === 'distilled' ? hbBtn('Done', close, 'hb-solid') : hbBtn('Mark distilled', () => { s.status = 'distilled'; s.distilledAt = now(); if (!s.consumed) s.consumed = todayStr(); touch(); close(); toast('Moved to Resources · Sources'); }, 'hb-solid'));
   paintMedia(); paintLog(); paintFoot();
-  const head = h('div', { class: 'src-head' }, h('span', { class: 'src-ic', style: { background: col } }, tl[0]),
+  const head = h('div', { class: 'src-head' }, h('span', { class: 'src-ic plain', style: { color: col }, html: { article: ICON.globe, video: ICON.video, podcast: ICON.audio, book: ICON.doc, file: ICON.upload, note: ICON.note }[s.type] || ICON.doc }),
     h('div', null, h('b', null, isNew ? (s.status === 'distilled' ? 'New resource' : 'Park a source') : 'Source'), h('span', { class: 'hb-muted' }, isNew ? 'Articles, videos, podcasts, books, files and notes in one place.' : `Added ${timeAgo(s.createdAt)}`)),
     h('span', { class: 'hb-gap' }), h('button', { class: 'hb-more', title: 'Close', 'aria-label': 'Close', onclick: close }, '×'));
   bg = h('div', { class: 'modal-bg src-bg' }, h('div', { class: 'src-modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': isNew ? 'Park a source' : srcTitle(s) }, head, h('div', { class: 'src-body' }, left, log), foot));
@@ -13526,7 +13528,7 @@ function dsRender(ov) {
   const open = sources().filter(s => s.status !== 'distilled'), tab = srcUI.tab;
   const tabs = hbTabs([...SRC_TABS.map(([k, l, t]) => [k, l, open.filter(s => !t || t.includes(s.type)).length]), ['notes', 'Board notes', dsNotes().length]], tab, v => { srcUI.tab = v; x3.note = null; hbRender(); });
   ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' },
-    hbHead('Distill', `${open.length} source${open.length === 1 ? '' : 's'} waiting. Park articles, videos, podcasts and notes, then break them down in layers.`, hbBtn('+ Park a source', () => srcOpen(null), 'hb-solid')),
+    hbHead(['Distill', open.length], `${open.length} source${open.length === 1 ? '' : 's'} waiting. Park articles, videos, podcasts and notes, then break them down in layers.`, hbBtn('+ Park a source', () => srcOpen(null), 'hb-solid')),
     tabs, h('div', { class: 'ds-wrap' }, tab === 'notes' ? dsNotesMain() : dsSourcesMain(), h('aside', { class: 'ds-side' }))));
   dsSide();
 }
@@ -13579,13 +13581,14 @@ function pdOpen(key, kind, back) {
   const field = (label, el) => h('label', { class: 'src-f' }, h('span', null, label), el);
   const main = h('div', { class: 'pd-main' }), side = h('aside', { class: 'src-log pd-side' });
   const openLabel = { b: 'Open board', p: 'Open page', d: 'Open database' }[key[0]];
+  const mkBanner = () => paraCover(key, refInfo(key), 'pd-banner', key[0] !== 'd' ? h('button', { class: 'hb-btn pd-cvbtn', onclick: e => { e.stopPropagation(); paraCoverPop(e.currentTarget, key); } }, 'Change cover') : null);
+  let banner = mkBanner();
   const head = h('div', { class: 'src-head' },
     back ? h('button', { class: 'hb-btn pd-back', onclick: () => pdOpen(back.key, back.kind) }, '‹ ' + refInfo(back.key).title) : null,
-    h('span', { class: 'src-ic', style: { background: col } }, inf.icon || inf.title.charAt(0).toUpperCase()),
     h('div', null, h('b', null, inf.title), h('span', { class: 'hb-muted' }, `${HB_ONE[kind] === 'project' ? 'Project' : 'Area'} · ${HB_KIND[key[0]]}`)),
     h('span', { class: 'hb-gap' }), hbBtn(openLabel, e => { pdClose(); openRef(key, e); scheduleSidebar(); }, 'hb-solid'),
     h('button', { class: 'hb-more', title: 'Close', 'aria-label': 'Close', onclick: pdClose }, '×'));
-  const bg = h('div', { class: 'modal-bg src-bg' }, h('div', { class: 'src-modal pd-modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': inf.title }, head, h('div', { class: 'src-body' }, main, side)));
+  const bg = h('div', { class: 'modal-bg src-bg' }, h('div', { class: 'src-modal pd-modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': inf.title }, banner, head, h('div', { class: 'src-body' }, main, side)));
   const onKey = e => { if (e.key !== 'Escape' || $$('.modal-bg').at(-1) !== bg || e.target.closest('.menu,.pop')) return; e.preventDefault(); e.stopPropagation(); pdClose(); };
   bg.addEventListener('pointerdown', e => { if (e.target === bg) pdClose(); });
 
@@ -13621,7 +13624,7 @@ function pdOpen(key, kind, back) {
   const projSec = () => {
     const list = areaProjects(key);
     return pdSec('Projects', list.length, ...(list.length ? list.map(p => { const pi = refInfo(p), pc = hbColor(p, pi), pr = paraProg(p);
-      return h('button', { class: 'pd-proj', onclick: () => pdOpen(p, 'projects', { key, kind }) }, h('span', { class: 'hb-ico pd-mini', style: { background: pc } }, pi.icon || pi.title.charAt(0).toUpperCase()),
+      return h('button', { class: 'pd-proj', onclick: () => pdOpen(p, 'projects', { key, kind }) }, paraIconEl(p, pi, 'pd-mini'),
         h('div', null, h('b', null, pi.title), h('span', null, PJ_STATUS[pjStatus(p)] + (pjDue(p) ? ' · ' + pjDue(p).text : ''))),
         h('div', { class: 'hb-bar pd-pbar' }, h('i', { style: { width: pr.pct + '%', background: pc } })), h('em', null, pr.pct + '%')); })
       : [h('p', { class: 'hb-muted pd-none' }, 'Open a project and set its Parent area to this area.')]));
@@ -13667,7 +13670,7 @@ function pdOpen(key, kind, back) {
   };
   const paint = () => {
     if (!refExists(key)) return pdClose();
-    marked = false; const y = main.scrollTop;
+    marked = false; const y = main.scrollTop; { const nb = mkBanner(); banner.replaceWith(nb); banner = nb; }
     main.replaceChildren(...[goalsSec(), isP ? null : projSec(), tasksSec(), isP ? null : habSec(), srcSec(), recentSec()].filter(Boolean));
     side.replaceChildren(...(isP ? sideP() : sideA()).filter(Boolean), h('span', { class: 'hb-muted pd-auto' }, 'Changes save automatically'));
     main.scrollTop = y;
@@ -13677,6 +13680,84 @@ function pdOpen(key, kind, back) {
   paint(); document.addEventListener('keydown', onKey, true); document.body.append(bg);
 }
 { const _hr = hbRender; hbRender = function () { _hr.apply(this, arguments); if (pdCur && pdCur.bg.isConnected) pdCur.paint(); }; }
+
+/* ========== PARA cards: board cover + plain icon; New project/area window; consistency ========== */
+function paraCoverCss(key) { const [k, id] = key.split(':'), cv = k === 'b' ? ST.boards[id]?.cover : k === 'p' ? ST.pages[id]?.banner : null; return cv && (cv.blobId || cv.src || cv.grad) ? bannerCss(cv) : null; }
+function paraBc(key, inf) { return inf.kind === 'b' ? (ST.boards[inf.id].color || '#5f8ff0') : hbColor(key, inf); }
+function paraIconEl(key, inf, cls) { return h('span', { class: cls }, inf.icon ? inf.icon : h('span', { class: 'para-svg', html: inf.kind === 'b' ? ICON.board : inf.kind === 'd' ? ICON.database : ICON.page })); }
+function paraCover(key, inf, cls, extra) { const css = paraCoverCss(key); return h('div', { class: 'board-cover ' + cls + ' ' + (css ? 'img' : 'gen'), style: Object.assign({ '--bc': paraBc(key, inf) }, css || {}) }, paraIconEl(key, inf, 'board-icon'), extra || null); }
+function tabIcEl(s) { return typeof s === 'string' && s.startsWith('<svg') ? h('span', { class: 'tab-svg', html: s }) : s; }
+function coverInputs(set, has, clear) { /* shared Upload / link / generated controls */
+  const up = hbBtn('Upload image', () => { closeTransient(); pickFiles('image/*', async files => { const f = files[0]; if (!f) return; const blob = await resizeImage(f, 1600); set({ blobId: await Blobs.put(blob), y: 50 }); }); }, 'hb-solid');
+  const url = h('input', { class: 'tm-input', placeholder: 'Or paste an image link and press Enter', 'aria-label': 'Image link' });
+  url.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && url.value.trim()) { e.preventDefault(); closeTransient(); set({ src: normUrl(url.value.trim()), y: 50 }); } });
+  return [h('div', { class: 'pn-cvrow' }, up, url, has ? hbBtn('Use generated cover', () => { closeTransient(); clear(); }) : null)];
+}
+function paraCoverPop(anchor, key) {
+  const [k, id] = key.split(':'), tgt = k === 'b' ? ST.boards[id] : ST.pages[id], prop = k === 'b' ? 'cover' : 'banner'; if (!tgt) return;
+  const set = v => { checkpoint(); tgt[prop] = v; tgt.updatedAt = now(); save(); if (k === 'p') syncPageCard(id); else { const bc = boardCardFor(id); if (bc && bc.boardId === S.boardId) rerenderCard(bc.id); } scheduleSidebar(); hbRender(); };
+  const pp = h('div', { class: 'pop coverpop pd-coverpop' }, h('div', { class: 'dd-h' }, 'Cover'), ...coverInputs(set, !!tgt[prop], () => set(null)));
+  closeTransient(); document.body.append(pp); const r = anchor.getBoundingClientRect(); placeEl(pp, r.right - 300, r.bottom + 6);
+  setTimeout(() => pp.querySelector('input')?.focus(), 0);
+}
+function paraBoardTree() {
+  const kids = {};
+  for (const b of liveBoards()) { if (b.id === ST.rootId) continue; const bc = boardCardFor(b.id); if (!bc) continue; (kids[bc.boardId] = kids[bc.boardId] || []).push(b); }
+  const out = [{ id: ST.rootId, depth: 0, title: ST.boards[ST.rootId].title || 'Home' }];
+  const walk = (pid, d) => { if (d > 8) return; for (const b of (kids[pid] || []).sort((a, c) => (a.title || '').localeCompare(c.title || ''))) { out.push({ id: b.id, depth: d, title: b.title || 'Untitled' }); walk(b.id, d + 1); } };
+  walk(ST.rootId, 1); return out;
+}
+function paraHomeBoard(kind) { const id = (ST.settings.paraHome || {})[kind]; return id && ST.boards[id] && boardIsLive(id) ? id : null; }
+function pnDialog(kind) {
+  closeTransient();
+  const isP = kind === 'projects', one = HB_ONE[kind], home = paraHomeBoard(kind), last = (ST.settings.paraDest || {})[kind];
+  const st = { status: 'active', deadline: '', area: '', cover: null, color: BOARD_COLORS[Object.keys(ST.boards).length % BOARD_COLORS.length] };
+  const name = h('input', { class: 'src-title pn-name', placeholder: isP ? 'Project name' : 'Area name', 'aria-label': 'Name' });
+  const tree = paraBoardTree();
+  const dest = h('select', { class: 'tm-input', 'aria-label': 'Destination board' },
+    home ? null : h('option', { value: '__auto' }, `${NV_NAME[kind]} (new board on ${ST.boards[ST.rootId].title || 'Home'})`),
+    ...tree.map(t => h('option', { value: t.id }, '   '.repeat(t.depth) + (t.depth ? '└ ' : '') + t.title + (t.id === home ? ' · default' : ''))));
+  dest.value = last && ST.boards[last] && boardIsLive(last) ? last : home || '__auto';
+  const field = (label, el) => h('label', { class: 'src-f' }, h('span', null, label), el);
+  const preview = h('div', { class: 'board-cover pn-cover gen', style: { '--bc': '#5f8ff0' } }, h('span', { class: 'board-icon' }, h('span', { class: 'para-svg', html: ICON.board })));
+  const coverBox = h('div', { class: 'pn-cv' });
+  const paintCover = () => {
+    preview.className = 'board-cover pn-cover ' + (st.cover ? 'img' : 'gen'); preview.removeAttribute('style'); preview.style.setProperty('--bc', st.color);
+    if (st.cover) Object.assign(preview.style, bannerCss(st.cover));
+    const sw = st.cover ? null : h('div', { class: 'pn-sw', role: 'group', 'aria-label': 'Cover color' }, ...BOARD_COLORS.map(c => h('button', { type: 'button', class: c === st.color ? 'on' : '', style: { background: c }, 'aria-label': 'Color ' + c, 'aria-pressed': String(c === st.color), onclick: () => { st.color = c; paintCover(); } })));
+    coverBox.replaceChildren(...[preview, sw].filter(Boolean), ...coverInputs(v => { st.cover = v; paintCover(); }, !!st.cover, () => { st.cover = null; paintCover(); }));
+  };
+  const fields = [field('Name', name), field('Destination', dest)];
+  if (isP) {
+    const seg = h('div', { class: 'hb-tabs pd-status' }); const paintSeg = () => seg.replaceChildren(...Object.entries(PJ_STATUS).map(([k, l]) => h('button', { type: 'button', class: st.status === k ? 'on' : '', 'aria-pressed': String(st.status === k), onclick: () => { st.status = k; paintSeg(); } }, l))); paintSeg();
+    const dl = h('input', { type: 'date', class: 'tm-input', 'aria-label': 'Deadline' }); dl.addEventListener('change', () => { st.deadline = dl.value; });
+    const areas = nvItems('areas'), asel = h('select', { class: 'tm-input', 'aria-label': 'Parent area' }, h('option', { value: '' }, 'No area'), ...areas.map(a => h('option', { value: a }, refInfo(a).title))); asel.addEventListener('change', () => { st.area = asel.value; });
+    fields.push(field('Status', seg), h('div', { class: 'src-2' }, field('Deadline', dl), field('Parent area', asel)));
+  }
+  fields.push(field('Cover', coverBox)); paintCover();
+  let bg; const close = () => { bg.remove(); document.removeEventListener('keydown', onKey, true); };
+  const create = () => {
+    const n = name.value.trim(); if (!n) { name.focus(); return toast('Give it a name first'); }
+    checkpoint();
+    let pid = dest.value;
+    if (pid === '__auto') { const c = createBoardIn(ST.rootId, NV_NAME[kind]); ST.settings.paraHome = ST.settings.paraHome || {}; ST.settings.paraHome[kind] = c.id; pid = c.id; }
+    if (!ST.boards[pid]) pid = ST.rootId;
+    const b = createBoardIn(pid, n); b.color = st.color; if (st.cover) b.cover = st.cover;
+    (ST.settings.paraDest = ST.settings.paraDest || {})[kind] = pid;
+    const key = 'b:' + b.id;
+    if (isP) { const m = paraSet(key); m.status = st.status; if (st.deadline) m.deadline = st.deadline; if (st.area) m.area = st.area; if (st.status === 'active') m.start = todayStr(); }
+    nvMap(kind)[key] = kind; save(); close(); renderBoard(); renderSidebar(); scheduleSidebar();
+    toast(`${one[0].toUpperCase() + one.slice(1)} created in ${boardName(pid)}`);
+    hbRender(); pdOpen(key, kind);
+  };
+  const onKey = e => { if ($$('.modal-bg').at(-1) !== bg || e.target.closest('.menu,.pop')) return; if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); } if (e.key === 'Enter' && (e.target === name || e.metaKey || e.ctrlKey)) { e.preventDefault(); create(); } };
+  bg = h('div', { class: 'modal-bg src-bg' }, h('div', { class: 'src-modal pn-modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'New ' + one },
+    h('div', { class: 'src-head' }, h('div', null, h('b', null, 'New ' + one), h('span', { class: 'hb-muted' }, `Creates a board and files it under ${NV_NAME[kind]}.`)), h('span', { class: 'hb-gap' }), h('button', { class: 'hb-more', title: 'Close', 'aria-label': 'Close', onclick: () => close() }, '×')),
+    h('div', { class: 'pn-body' }, ...fields),
+    h('div', { class: 'src-foot' }, h('span', { class: 'hb-muted' }, 'You can change all of this later'), h('span', { class: 'hb-gap' }), hbBtn('Cancel', () => close()), hbBtn('Create ' + one, create, 'hb-solid'))));
+  bg.addEventListener('pointerdown', e => { if (e.target === bg) close(); });
+  document.addEventListener('keydown', onKey, true); document.body.append(bg); setTimeout(() => name.focus(), 0);
+}
 
 /* one-time: move the old Home "Inbox" checklist and Unsorted tray items into the Inbox board */
 function oneInbox() {
