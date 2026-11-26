@@ -12199,7 +12199,7 @@ const HB_KINDS = ['capture', ...NV_PARA];
 const HB_ONE = { projects: 'project', areas: 'area', resources: 'resource' };
 const HB_SUB = {
   capture: 'Type, paste, or drop anything. Sort it later.',
-  projects: 'Work with an end date. Progress comes from the checklists inside each one.',
+  projects: 'Work with an end date. Progress counts finished goals and tasks.',
   areas: 'Ongoing parts of your life and work.',
   resources: 'Reference material you want to find again.',
   archives: 'Tucked away, not deleted. Restore anything you need.'
@@ -12435,15 +12435,16 @@ function hbCard(key, kind) {
   const more = h('button', { class: 'hb-more', title: 'Options', 'aria-label': 'Options for ' + inf.title, onclick: e => { e.stopPropagation(); hbMenu(more, key, kind); } }, '⋯');
   const chip = (n, one) => h('span', { class: 'hb-chip' }, `${n} ${one}${n === 1 ? '' : 's'}`);
   const chips = h('div', { class: 'hb-chips' }, ...(inf.kind === 'd' ? [chip(s.rows, 'row')] : [chip(s.tasks, 'task'), chip(s.notes, 'note'), chip(s.res, 'resource')]));
-  const progress = kind === 'projects' ? h('div', { class: 'hb-prog' }, h('div', null, h('span', null, HB_STATUS[s.status]), h('span', null, s.pct + '%')), h('div', { class: 'hb-bar', role: 'progressbar', 'aria-valuenow': String(s.pct), 'aria-valuemin': '0', 'aria-valuemax': '100' }, h('i', { style: { width: s.pct + '%', background: col } }))) : null;
+  const progress = kind === 'projects' ? pjProgEl(key, col) : null;
   const card = h('article', { class: 'hb-card', 'data-key': key, tabindex: '0' },
     kind === 'areas' ? h('div', { class: 'hb-cover', style: { background: `linear-gradient(135deg, ${col}, color-mix(in srgb, ${col} 25%, var(--card)))` } }) : null,
     h('div', { class: 'hb-cardtop' }, h('span', { class: 'hb-ico', style: { background: col } }, inf.icon || inf.title.charAt(0).toUpperCase()),
-      h('div', { class: 'hb-name' }, h('b', null, inf.title), h('span', null, HB_KIND[inf.kind] + (kind === 'archives' && from ? ` · from ${NV_NAME[from]}` : ''))), more),
+      h('div', { class: 'hb-name' }, h('b', null, inf.title), h('span', null, HB_KIND[inf.kind] + (kind === 'archives' && from ? ` · from ${NV_NAME[from]}` : '') + (kind === 'projects' && pjArea(key) ? ' · ' + refInfo(pjArea(key)).title : '') + (kind === 'areas' && areaProjects(key).length ? ` · ${areaProjects(key).length} project${areaProjects(key).length === 1 ? '' : 's'}` : ''))), more),
     chips, progress,
     h('div', { class: 'hb-foot' }, h('span', null, s.at ? 'Updated ' + timeAgo(s.at) : ''), kind === 'archives' ? hbBtn('Restore', e => { e.stopPropagation(); hbRestore(key); }) : h('span', null, '↗')));
-  card.addEventListener('click', e => { if (e.target.closest('button')) return; openRef(key, e); scheduleSidebar(); });
-  card.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target === card) { openRef(key); scheduleSidebar(); } });
+  const dash = kind === 'projects' || kind === 'areas';
+  card.addEventListener('click', e => { if (e.target.closest('button')) return; if (dash && !(e.metaKey || e.ctrlKey)) return void pdOpen(key, kind); openRef(key, e); scheduleSidebar(); });
+  card.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target === card) { if (dash) return void pdOpen(key, kind); openRef(key); scheduleSidebar(); } });
   return card;
 }
 function hbGrid(kind) {
@@ -12464,7 +12465,7 @@ function hbGrid(kind) {
   let keys = nvItems(kind);
   const total = keys.length;
   if (q) keys = keys.filter(k => refInfo(k).title.toLowerCase().includes(q));
-  if (kind === 'projects' && hbUI.status !== 'all') keys = keys.filter(k => hbStats(k).status === hbUI.status);
+  if (kind === 'projects' && hbUI.status !== 'all') keys = keys.filter(k => pjStatus(k) === hbUI.status);
   if (kind === 'archives' && tab !== 'all') keys = keys.filter(k => (ST.settings.paraFrom || {})[k] === tab);
   keys.sort(v.sort === 'name' ? (a, b) => refInfo(a).title.localeCompare(refInfo(b).title) : (a, b) => hbStats(b).at - hbStats(a).at);
   box.className = 'hb-results hb-grid' + (v.layout === 'list' ? ' list' : '');
@@ -12493,7 +12494,7 @@ function hbPara(ov, kind) {
   }
   if (kind === 'archives') parts.push(hbTabs([['all', 'All', items.length], ...['areas', 'projects', 'resources'].map(k => [k, NV_NAME[k], items.filter(x => from[x] === k).length])], hbUI.tab.archives || 'all', t => { hbUI.tab.archives = t; hbRender(); }));
   parts.push(h('div', { class: 'hb-tools' }, hbSearch(kind, 'Search ' + kind, () => hbGrid(kind)), h('span', { class: 'hb-gap' }),
-    kind === 'projects' ? sel('Status', [['all', 'All statuses'], ...Object.entries(HB_STATUS)], hbUI.status, x => { hbUI.status = x; hbGrid(kind); }) : null,
+    kind === 'projects' ? sel('Status', [['all', 'All statuses'], ...Object.entries(PJ_STATUS)], PJ_STATUS[hbUI.status] ? hbUI.status : (hbUI.status = 'all'), x => { hbUI.status = x; hbGrid(kind); }) : null,
     sel('Sort', [['recent', 'Recent'], ['name', 'Name']], v.sort, x => set('sort', x)),
     h('div', { class: 'hb-tabs' }, ...[['grid', 'Grid'], ['list', 'List']].map(([a, b]) => h('button', { class: v.layout === a ? 'on' : '', 'aria-pressed': String(v.layout === a), onclick: () => set('layout', a) }, b)))),
     h('div', { class: 'hb-results' }));
@@ -12631,18 +12632,20 @@ function habStreaks(hb) {
   return { cur: run, best, total: keys.length };
 }
 function habToggle(hb, d) { if (d > todayStr()) return; checkpoint(); if (hb.done[d]) delete hb.done[d]; else hb.done[d] = 1; save(); hbRender(); }
-function habDialog(hb) {
+function habDialog(hb, areaKey) {
   const name = h('input', { type: 'text', class: 'hb-search', placeholder: 'Habit name', 'aria-label': 'Habit name', value: hb ? hb.name : '' });
   const days = new Set(hb ? hb.days : [0, 1, 2, 3, 4, 5, 6]);
   const row = h('div', { class: 'hb-row' }, ...DOW.map((l, i) => { const b = h('button', { class: 'hb-btn' + (days.has(i) ? ' hb-solid' : ''), 'aria-pressed': String(days.has(i)), onclick: () => { days.has(i) ? days.delete(i) : days.add(i); b.classList.toggle('hb-solid', days.has(i)); b.setAttribute('aria-pressed', String(days.has(i))); } }, l); return b; }));
+  const areas = nvItems('areas'), area = h('select', { class: 'hb-sel', 'aria-label': 'Area' }, h('option', { value: '' }, 'No area'), ...areas.map(k => h('option', { value: k }, refInfo(k).title)));
+  area.value = hb ? (areas.includes(hb.area) ? hb.area : '') : areas.includes(areaKey) ? areaKey : '';
   let bg; const close = () => bg.remove();
   const ok = () => {
     const n = name.value.trim(); if (!n) return name.focus(); if (!days.size) return toast('Pick at least one day');
-    checkpoint(); if (hb) { hb.name = n; hb.days = [...days].sort(); } else habits().push({ id: uid(), name: n, days: [...days].sort(), done: {}, paused: false, createdAt: now() });
+    checkpoint(); if (hb) { hb.name = n; hb.days = [...days].sort(); hb.area = area.value || undefined; } else habits().push({ id: uid(), name: n, days: [...days].sort(), done: {}, paused: false, createdAt: now(), area: area.value || undefined });
     save(); close(); hbRender();
   };
   name.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') ok(); if (e.key === 'Escape') close(); });
-  bg = h('div', { class: 'modal-bg' }, h('div', { class: 'modal hab-modal' }, h('h3', null, hb ? 'Edit habit' : 'New habit'), name, row, h('div', { class: 'hb-row' }, hbBtn('Cancel', close), hbBtn('Save', ok, 'hb-solid'))));
+  bg = h('div', { class: 'modal-bg' }, h('div', { class: 'modal hab-modal' }, h('h3', null, hb ? 'Edit habit' : 'New habit'), name, row, h('label', { class: 'src-f' }, h('span', null, 'Area'), area), h('div', { class: 'hb-row' }, hbBtn('Cancel', close), hbBtn('Save', ok, 'hb-solid'))));
   bg.addEventListener('pointerdown', e => { if (e.target === bg) close(); });
   document.body.append(bg); setTimeout(() => name.focus(), 0);
 }
@@ -12663,7 +12666,7 @@ function habRow(hb, range) {
   const cells = x3.view === 'all' ? h('div', { class: 'hab-all' }, ...[[st.total, 'check-ins'], [st.cur, 'current streak'], [st.best, 'best streak']].map(([n, l]) => h('div', null, h('b', null, String(n)), h('span', null, l))))
     : x3.view === 'week' ? h('div', { class: 'hab-week' }, ...range.days.map(d => h('div', null, h('span', null, DOW[parseYmd(d).getDay()]), habCell(hb, d, false))))
       : h('div', { class: x3.view === 'year' ? 'hab-year' : 'hab-month' }, ...[...Array(parseYmd(range.days[0]).getDay())].map(() => h('i')), ...range.days.map(d => habCell(hb, d, x3.view === 'month')));
-  return h('div', { class: 'hab-row ' + x3.view + (hb.paused ? ' paused' : ''), 'data-hab': hb.id }, h('div', { class: 'hab-name' }, h('div', null, h('b', null, hb.name), h('span', null, hb.paused ? 'Paused' : `${st.cur} streak`)), more), cells);
+  return h('div', { class: 'hab-row ' + x3.view + (hb.paused ? ' paused' : ''), 'data-hab': hb.id }, h('div', { class: 'hab-name' }, h('div', null, h('b', null, hb.name), h('span', null, (hb.paused ? 'Paused' : `${st.cur} streak`) + (hb.area && refExists(hb.area) ? ' · ' + refInfo(hb.area).title : ''))), more), cells);
 }
 function habList() {
   const box = $('.hab-list'); if (!box) return;
@@ -13531,6 +13534,149 @@ function packetFrom(p) {
   if (p.src && String(p.src).startsWith('src:')) { const s = srcById(p.src.slice(4)); return s ? srcTitle(s) : 'Source removed'; }
   const c = ST.cards[p.src]; return c && liveCard(c) ? hbTitle(c) : 'Source removed';
 }
+
+/* ========== Project & Area dashboards: fields, goals, habits ========== */
+const PJ_STATUS = { new: 'Not started', active: 'Active', hold: 'On hold', done: 'Done' };
+const paraAll = () => ST.para || (ST.para = {});
+const paraGet = key => paraAll()[key] || {};
+const paraSet = key => paraAll()[key] || (paraAll()[key] = {});
+const pjStatus = key => PJ_STATUS[paraGet(key).status] ? paraGet(key).status : 'active';
+const paraGoals = key => paraGet(key).goals || [];
+const pjArea = key => { const a = paraGet(key).area; return a && refExists(a) && nvItems('areas').includes(a) ? a : ''; };
+function paraProg(key) {
+  const s = hbStats(key), g = paraGoals(key), done = s.done + g.filter(x => x.done).length, total = s.tasks + g.length;
+  return { done, total, pct: total ? Math.round(done / total * 100) : 0 };
+}
+function pjDue(key) {
+  const d = paraGet(key).deadline; if (!d) return null;
+  const n = Math.round((parseYmd(d) - parseYmd(todayStr())) / 864e5), done = pjStatus(key) === 'done';
+  return { d, n, late: n < 0 && !done, text: done ? 'Due ' + dueLabel(d, todayStr()) : n === 0 ? 'Due today' : n === 1 ? 'Due tomorrow' : n > 1 ? `${n} days left` : `${-n} day${n === -1 ? '' : 's'} overdue` };
+}
+function pjProgEl(key, col) {
+  const p = paraProg(key), due = pjDue(key);
+  return h('div', { class: 'hb-prog' }, h('div', null, h('span', null, PJ_STATUS[pjStatus(key)] + (due ? ' · ' : ''), due ? h('em', { class: 'pd-due' + (due.late ? ' late' : '') }, due.text) : null), h('span', null, p.pct + '%')),
+    h('div', { class: 'hb-bar', role: 'progressbar', 'aria-valuenow': String(p.pct), 'aria-valuemin': '0', 'aria-valuemax': '100' }, h('i', { style: { width: p.pct + '%', background: col } })));
+}
+const areaProjects = key => nvItems('projects').filter(p => pjArea(p) === key);
+const areaHabits = key => habits().filter(hb => hb.area === key);
+function pdTasks(key) {
+  const [k, id] = key.split(':');
+  return taskEntries().filter(e => k === 'b' ? e.boardId === id : k === 'p' ? e.pid === id : !!(e.db && e.db.id === id));
+}
+const pdRing = (pct, col, title, sub) => h('div', { class: 'pd-ring' }, h('div', { class: 'pd-rc', style: { background: `conic-gradient(${col} ${pct * 3.6}deg, var(--hover) 0)` } }, h('b', null, pct + '%')), h('div', null, h('b', null, title), h('span', null, sub)));
+const pdSec = (title, n, ...kids) => h('section', { class: 'pd-sec' }, h('h3', null, title, n == null ? null : h('span', null, String(n))), ...kids);
+
+let pdCur = null;
+function pdClose() { if (!pdCur) return; const c = pdCur; pdCur = null; c.bg.remove(); document.removeEventListener('keydown', c.onKey, true); if (hbOpen()) hbRender(); }
+function pdOpen(key, kind, back) {
+  closeTransient(); if (!refExists(key)) return;
+  if (pdCur) { pdCur.bg.remove(); document.removeEventListener('keydown', pdCur.onKey, true); pdCur = null; }
+  const isP = kind === 'projects', inf = refInfo(key), col = hbColor(key, inf);
+  let marked = false;
+  const edit = fn => { if (!marked) { checkpoint(); marked = true; } fn(paraSet(key)); save(); };
+  const act = fn => { checkpoint(); fn(paraSet(key)); save(); hbRender(); };
+  const date = (v, label, fn) => { const i = h('input', { type: 'date', class: 'tm-input', 'aria-label': label }); i.value = v || ''; i.addEventListener('change', () => act(m => fn(m, i.value))); return i; };
+  const field = (label, el) => h('label', { class: 'src-f' }, h('span', null, label), el);
+  const main = h('div', { class: 'pd-main' }), side = h('aside', { class: 'src-log pd-side' });
+  const openLabel = { b: 'Open board', p: 'Open page', d: 'Open database' }[key[0]];
+  const head = h('div', { class: 'src-head' },
+    back ? h('button', { class: 'hb-btn pd-back', onclick: () => pdOpen(back.key, back.kind) }, '‹ ' + refInfo(back.key).title) : null,
+    h('span', { class: 'src-ic', style: { background: col } }, inf.icon || inf.title.charAt(0).toUpperCase()),
+    h('div', null, h('b', null, inf.title), h('span', { class: 'hb-muted' }, `${HB_ONE[kind] === 'project' ? 'Project' : 'Area'} · ${HB_KIND[key[0]]}`)),
+    h('span', { class: 'hb-gap' }), hbBtn(openLabel, e => { pdClose(); openRef(key, e); scheduleSidebar(); }, 'hb-solid'),
+    h('button', { class: 'hb-more', title: 'Close', 'aria-label': 'Close', onclick: pdClose }, '×'));
+  const bg = h('div', { class: 'modal-bg src-bg' }, h('div', { class: 'src-modal pd-modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': inf.title }, head, h('div', { class: 'src-body' }, main, side)));
+  const onKey = e => { if (e.key !== 'Escape' || $$('.modal-bg').at(-1) !== bg || e.target.closest('.menu,.pop')) return; e.preventDefault(); e.stopPropagation(); pdClose(); };
+  bg.addEventListener('pointerdown', e => { if (e.target === bg) pdClose(); });
+
+  const goalsSec = () => {
+    const g = paraGoals(key), t = todayStr();
+    const rows = g.map(x => {
+      const ti = h('input', { class: 'pd-gt', value: x.title, 'aria-label': 'Goal' });
+      ti.addEventListener('input', () => edit(m => { const y = (m.goals || []).find(z => z.id === x.id); if (y) y.title = ti.value; }));
+      ti.addEventListener('keydown', e => { if (e.key === 'Enter') ti.blur(); });
+      const late = x.date && !x.done && x.date < t;
+      return h('div', { class: 'pd-goal' + (x.done ? ' done' : ''), 'data-goal': x.id },
+        h('button', { class: 'pd-chk' + (x.done ? ' on' : ''), 'aria-label': (x.done ? 'Mark not done: ' : 'Mark done: ') + x.title, 'aria-pressed': String(!!x.done), onclick: () => act(m => { const y = m.goals.find(z => z.id === x.id); y.done = !y.done; y.doneAt = y.done ? now() : undefined; }) }, x.done ? '✓' : ''),
+        ti, h('label', { class: 'pd-gd' + (late ? ' late' : '') }, date(x.date, 'Target date for ' + x.title, (m, v) => { m.goals.find(z => z.id === x.id).date = v; })),
+        h('button', { class: 'src-x', 'aria-label': 'Delete goal ' + x.title, onclick: () => act(m => { m.goals = m.goals.filter(z => z.id !== x.id); }) }, '×'));
+    });
+    const ni = h('input', { class: 'tm-input', placeholder: 'Add a goal and press Enter', 'aria-label': 'New goal' }), nd = h('input', { type: 'date', class: 'tm-input', 'aria-label': 'New goal target date' });
+    const add = () => { const v = ni.value.trim(); if (!v) return ni.focus(); pdCur.focusAdd = true; act(m => { (m.goals = m.goals || []).push({ id: uid(), title: v, date: nd.value || '', done: false, createdAt: now() }); }); };
+    ni.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); add(); } });
+    const n = g.filter(x => x.done).length;
+    return pdSec('Goals', g.length ? `${n}/${g.length}` : null, ...rows, h('div', { class: 'pd-gadd' }, ni, nd, hbBtn('Add', add)));
+  };
+  const tasksSec = () => {
+    const all = pdTasks(key), open = all.filter(e => e.col !== 'done').sort((a, b) => (a.due || '9') < (b.due || '9') ? -1 : (a.due || '9') > (b.due || '9') ? 1 : 0), t = todayStr();
+    const rows = open.slice(0, 12).map(e => h('div', { class: 'pd-task' },
+      h('button', { class: 'pd-chk', 'aria-label': 'Complete: ' + e.text, onclick: () => { entryMove(e.key, 'done'); hbRender(); } }, ''),
+      h('button', { class: 'pd-tt', onclick: () => { pdClose(); entryOpen(e); } }, e.text),
+      e.due ? h('span', { class: 'hb-chip' + (entryLate(e) ? ' pd-late' : '') }, dueLabel(e.due, t)) : null,
+      e.col === 'doing' ? h('span', { class: 'hb-chip' }, 'In progress') : null));
+    const more = open.length > 12 || key[0] === 'b' ? hbBtn(open.length > 12 ? `All ${open.length} in Tasks` : 'Open in Tasks', () => { pdClose(); if (key[0] === 'b') kb.board = key.slice(2); openTasksView(); }) : null;
+    return pdSec('Open tasks', open.length, ...(rows.length ? rows : [h('p', { class: 'hb-muted pd-none' }, all.length ? 'Every task here is done.' : 'No tasks yet. Checklists on this ' + HB_KIND[key[0]].toLowerCase() + ' show up here.')]),
+      all.length - open.length ? h('p', { class: 'hb-muted pd-none' }, `${all.length - open.length} done`) : null, more);
+  };
+  const projSec = () => {
+    const list = areaProjects(key);
+    return pdSec('Projects', list.length, ...(list.length ? list.map(p => { const pi = refInfo(p), pc = hbColor(p, pi), pr = paraProg(p);
+      return h('button', { class: 'pd-proj', onclick: () => pdOpen(p, 'projects', { key, kind }) }, h('span', { class: 'hb-ico pd-mini', style: { background: pc } }, pi.icon || pi.title.charAt(0).toUpperCase()),
+        h('div', null, h('b', null, pi.title), h('span', null, PJ_STATUS[pjStatus(p)] + (pjDue(p) ? ' · ' + pjDue(p).text : ''))),
+        h('div', { class: 'hb-bar pd-pbar' }, h('i', { style: { width: pr.pct + '%', background: pc } })), h('em', null, pr.pct + '%')); })
+      : [h('p', { class: 'hb-muted pd-none' }, 'Open a project and set its Parent area to this area.')]));
+  };
+  const weekDays = () => { const b = parseYmd(todayStr()); b.setDate(b.getDate() - b.getDay()); const f = ymd(b); return [...Array(7)].map((_, i) => addDays(f, i)); };
+  const habSec = () => {
+    const list = areaHabits(key), days = weekDays();
+    const rows = list.map(hb => { const st = habStreaks(hb);
+      return h('div', { class: 'pd-hab' + (hb.paused ? ' paused' : ''), 'data-hab': hb.id }, h('div', { class: 'pd-hn' }, h('b', null, hb.name), h('span', null, hb.paused ? 'Paused' : `${st.cur} streak`)),
+        h('div', { class: 'hab-week' }, ...days.map(d => h('div', null, h('span', null, DOW[parseYmd(d).getDay()]), habCell(hb, d, false))))); });
+    return pdSec('Habits', list.length, ...(rows.length ? rows : [h('p', { class: 'hb-muted pd-none' }, 'No habits linked to this area yet.')]), h('div', { class: 'hb-row' }, hbBtn('+ Add habit', () => habDialog(null, key)),
+      habits().some(hb => hb.area !== key) ? (() => { const b = hbBtn('Link existing', e => { e.stopPropagation(); showMenuAt(b, habits().filter(hb => hb.area !== key).map(hb => ({ label: hb.name + (hb.area && refExists(hb.area) ? ' · ' + refInfo(hb.area).title : ''), fn: () => { checkpoint(); hb.area = key; save(); hbRender(); } }))); }); return b; })() : null));
+  };
+  const srcSec = () => {
+    const list = sources().filter(s => (s.projects || []).includes(key) || (s.areas || []).includes(key));
+    return list.length ? pdSec('Linked sources', list.length, ...list.slice(0, 8).map(s => { const [tl, sc] = SRC_TYPES[s.type] || SRC_TYPES.article;
+      return h('button', { class: 'pd-src', onclick: () => srcOpen(s.id) }, h('i', { class: 'kb-dot', style: { background: sc } }), h('b', null, srcTitle(s)), h('span', null, tl + ' · ' + SRC_STATUS[s.status]), s.rating ? srcStars(s.rating) : null); })) : null;
+  };
+  const recentSec = () => {
+    if (key[0] !== 'b') return null;
+    const id = key.slice(2), list = hbCards(id).filter(c => c.type !== 'todo').sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)).slice(0, 6);
+    return list.length ? pdSec('Recent items', null, h('div', { class: 'pd-recent' }, ...list.map(c => h('button', { class: 'pd-rc-item', onclick: () => { pdClose(); closeDashes(); openBoard(id); requestAnimationFrame(() => centerOn(c.id)); scheduleSidebar(); } }, h('span', null, c.type), h('b', null, hbTitle(c)), h('em', null, timeAgo(c.updatedAt || c.createdAt || 0)))))) : null;
+  };
+  const sideP = () => {
+    const m = paraGet(key), p = paraProg(key), due = pjDue(key), st = pjStatus(key);
+    const desc = h('textarea', { class: 'tm-input pd-desc', rows: '3', placeholder: 'What does done look like?', 'aria-label': 'Description or outcome' }); desc.value = m.desc || '';
+    desc.addEventListener('input', () => edit(x => { x.desc = desc.value; }));
+    const areas = nvItems('areas'), asel = h('select', { class: 'tm-input', 'aria-label': 'Parent area' }, h('option', { value: '' }, 'No area'), ...areas.map(a => h('option', { value: a }, refInfo(a).title))); asel.value = pjArea(key);
+    asel.addEventListener('change', () => act(x => { x.area = asel.value || undefined; }));
+    return [pdRing(p.pct, col, `${p.done} of ${p.total} done`, 'Goals and tasks together'),
+      field('Status', h('div', { class: 'hb-tabs pd-status' }, ...Object.entries(PJ_STATUS).map(([k, l]) => h('button', { class: st === k ? 'on' : '', 'aria-pressed': String(st === k), onclick: () => act(x => { x.status = k; if (k === 'active' && !x.start) x.start = todayStr(); }) }, l)))),
+      h('div', { class: 'src-2' }, field('Start', date(m.start, 'Start date', (x, v) => { x.start = v; })), field('Deadline', date(m.deadline, 'Deadline', (x, v) => { x.deadline = v; }))),
+      due ? h('span', { class: 'pd-due' + (due.late ? ' late' : '') }, due.text) : null,
+      field('Description / outcome', desc), field('Parent area', asel),
+      pjArea(key) ? hbBtn('Open ' + refInfo(pjArea(key)).title, () => pdOpen(pjArea(key), 'areas', { key, kind })) : null];
+  };
+  const sideA = () => {
+    const p = paraProg(key), t = todayStr(), due = areaHabits(key).filter(hb => !hb.paused && hb.days.includes(parseYmd(t).getDay())), dn = due.filter(hb => hb.done[t]).length;
+    const pj = areaProjects(key), act2 = pj.filter(x => pjStatus(x) === 'active').length;
+    return [pdRing(p.pct, col, `${p.done} of ${p.total} done`, 'Goals and tasks together'),
+      pdRing(due.length ? Math.round(dn / due.length * 100) : 0, '#16a34a', `${dn} of ${due.length} habits`, due.length ? 'Checked in today' : 'None due today'),
+      h('div', { class: 'pd-stats' }, ...[[act2, 'active projects'], [pdTasks(key).filter(e => e.col !== 'done').length, 'open tasks'], [paraGoals(key).filter(g => !g.done).length, 'open goals']].map(([n, l]) => h('div', null, h('b', null, String(n)), h('span', null, l))))];
+  };
+  const paint = () => {
+    if (!refExists(key)) return pdClose();
+    marked = false; const y = main.scrollTop;
+    main.replaceChildren(...[goalsSec(), isP ? null : projSec(), tasksSec(), isP ? null : habSec(), srcSec(), recentSec()].filter(Boolean));
+    side.replaceChildren(...(isP ? sideP() : sideA()).filter(Boolean), h('span', { class: 'hb-muted pd-auto' }, 'Changes save automatically'));
+    main.scrollTop = y;
+    if (pdCur && pdCur.focusAdd) { pdCur.focusAdd = false; main.querySelector('.pd-gadd input')?.focus(); }
+  };
+  pdCur = { key, kind, bg, onKey, paint };
+  paint(); document.addEventListener('keydown', onKey, true); document.body.append(bg);
+}
+{ const _hr = hbRender; hbRender = function () { _hr.apply(this, arguments); if (pdCur && pdCur.bg.isConnected) pdCur.paint(); }; }
 
 /* one-time: move the old Home "Inbox" checklist and Unsorted tray items into the Inbox board */
 function oneInbox() {
