@@ -12418,6 +12418,7 @@ function hbMenu(btn, key, kind) {
   ].filter(Boolean));
 }
 function hbNew(btn, kind) {
+  if (kind === 'resources') return void srcOpen(null, { status: 'distilled' });
   askText(btn, `New ${HB_ONE[kind]} name`, '', name => {
     if (!name.trim()) return;
     checkpoint(); const b = createBoardIn(ST.rootId, name.trim()); save(); renderBoard(); hbMove('b:' + b.id, kind);
@@ -12448,6 +12449,12 @@ function hbCard(key, kind) {
 function hbGrid(kind) {
   const box = $('.hb-results'); if (!box) return;
   const v = hbView(), q = (hbUI.q[kind] || '').trim().toLowerCase(), tab = hbUI.tab[kind] || 'all';
+  if (kind === 'resources' && tab === 'sources') {
+    const list = sources().filter(x => x.status === 'distilled' && (!q || [x.title, x.author, x.site, x.takeaway, x.tags.join(' '), strip(x.html)].join(' ').toLowerCase().includes(q))).sort((a, b) => (b.distilledAt || b.updatedAt) - (a.distilledAt || a.updatedAt));
+    box.className = 'hb-results hb-grid' + (v.layout === 'list' ? ' list' : '');
+    box.replaceChildren(...(list.length ? list.map(srcCard) : [hbEmpty('No sources yet', 'Sources you mark Distilled in Distill land here.', hbBtn('+ New resource', () => srcOpen(null, { status: 'distilled' }), 'hb-solid'))]));
+    return;
+  }
   if (kind === 'resources' && tab !== 'all') {
     const cards = nvItems(kind).filter(k => k[0] === 'b').flatMap(k => hbCards(k.slice(2))).filter(c => hbType(c) === tab && (!q || cardText(c).toLowerCase().includes(q)));
     box.className = 'hb-results hb-grid' + (v.layout === 'list' ? ' list' : '');
@@ -12462,6 +12469,7 @@ function hbGrid(kind) {
   keys.sort(v.sort === 'name' ? (a, b) => refInfo(a).title.localeCompare(refInfo(b).title) : (a, b) => hbStats(b).at - hbStats(a).at);
   box.className = 'hb-results hb-grid' + (v.layout === 'list' ? ' list' : '');
   const kids = keys.map(k => hbCard(k, kind));
+  if (kind === 'resources') kids.push(...sources().filter(x => x.status === 'distilled' && (!q || [x.title, x.author, x.site, x.takeaway, x.tags.join(' ')].join(' ').toLowerCase().includes(q))).sort((a, b) => (b.distilledAt || b.updatedAt) - (a.distilledAt || a.updatedAt)).map(srcCard));
   if (!kids.length) {
     box.className = 'hb-results';
     kids.push(total ? hbEmpty('No matches', 'Try another search or filter.') : kind === 'archives' ? hbEmpty('Nothing archived', 'Move projects, areas, or resources here from their ⋯ menu.') : hbEmpty(`No ${kind} yet`, `Create one, or file a board, page, or database you already have.`, h('div', { class: 'hb-row' }, hbBtn(`+ New ${HB_ONE[kind]}`, e => { e.stopPropagation(); hbNew(e.currentTarget, kind); }, 'hb-solid'), hbBtn('File existing', e => { e.stopPropagation(); hbExisting(e.currentTarget, kind); }))));
@@ -12473,13 +12481,15 @@ function hbPara(ov, kind) {
   const set = (k, val) => { v[k] = val; save(); hbRender(); };
   const sel = (label, opts, cur, fn) => { const s = h('select', { class: 'hb-sel', 'aria-label': label }, ...opts.map(([a, b]) => h('option', { value: a }, b))); s.value = cur; s.onchange = () => fn(s.value); return s; };
   const actions = HB_ONE[kind] ? [hbBtn('File existing', e => { e.stopPropagation(); hbExisting(e.currentTarget, kind); }), hbBtn(`+ New ${HB_ONE[kind]}`, e => { e.stopPropagation(); hbNew(e.currentTarget, kind); }, 'hb-solid')] : [];
-  const parts = [h('header', { class: 'hb-head' }, h('div', null, h('h2', null, NV_NAME[kind], h('span', { class: 'hb-count' }, String(items.length))), h('p', null, HB_SUB[kind])), h('div', { class: 'hb-row' }, ...actions))];
+  const parts = [h('header', { class: 'hb-head' }, h('div', null, h('h2', null, NV_NAME[kind], h('span', { class: 'hb-count' }, String(items.length + (kind === 'resources' ? sources().filter(x => x.status === 'distilled').length : 0)))), h('p', null, HB_SUB[kind])), h('div', { class: 'hb-row' }, ...actions))];
   if (kind === 'resources') {
     const cards = items.filter(k => k[0] === 'b').flatMap(k => hbCards(k.slice(2)));
     const n = t => cards.filter(c => hbType(c) === t).length, tab = hbUI.tab.resources || 'all';
     const pick = t => { hbUI.tab.resources = t; hbRender(); };
-    parts.push(h('div', { class: 'hb-library' }, ...HB_TYPES.map(([t, l], i) => h('button', { class: 'hb-tile', onclick: () => pick(t) }, h('i', { style: { background: HB_COL[[5, 4, 2, 1][i]] } }), h('b', null, l), h('span', null, `${n(t)} item${n(t) === 1 ? '' : 's'}`)))),
-      hbTabs([['all', 'All', items.length], ...HB_TYPES.map(([t, l]) => [t, l, n(t)])], tab, pick));
+    const ns = sources().filter(x => x.status === 'distilled').length;
+    parts.push(h('div', { class: 'hb-library' }, h('button', { class: 'hb-tile', onclick: () => pick('sources') }, h('i', { style: { background: HB_COL[0] } }), h('b', null, 'Sources'), h('span', null, `${ns} item${ns === 1 ? '' : 's'}`)),
+      ...HB_TYPES.map(([t, l], i) => h('button', { class: 'hb-tile', onclick: () => pick(t) }, h('i', { style: { background: HB_COL[[5, 4, 2, 1][i]] } }), h('b', null, l), h('span', null, `${n(t)} item${n(t) === 1 ? '' : 's'}`)))),
+      hbTabs([['all', 'All', items.length + ns], ['sources', 'Sources', ns], ...HB_TYPES.map(([t, l]) => [t, l, n(t)])], tab, pick));
   }
   if (kind === 'archives') parts.push(hbTabs([['all', 'All', items.length], ...['areas', 'projects', 'resources'].map(k => [k, NV_NAME[k], items.filter(x => from[x] === k).length])], hbUI.tab.archives || 'all', t => { hbUI.tab.archives = t; hbRender(); }));
   parts.push(h('div', { class: 'hb-tools' }, hbSearch(kind, 'Search ' + kind, () => hbGrid(kind)), h('span', { class: 'hb-gap' }),
@@ -12503,6 +12513,7 @@ function hbPara(ov, kind) {
 window.addEventListener('paste', e => {
   const kind = hbOpen(); if (!kind || isTypingTarget(e.target) || $('.pv-wrap,.modal-bg,.dbfull')) return;
   e.preventDefault(); e.stopImmediatePropagation();
+  if (kind === 'distill') { const t = (e.clipboardData?.getData('text/plain') || '').trim(); if (isUrl(t)) srcPark(normUrl(t)); else if (t) toast('Paste a link to park it here'); return; }
   if (kind !== 'capture') return;
   const files = [...(e.clipboardData?.files || [])]; if (files.length) return void hbFiles(files);
   const t = (e.clipboardData?.getData('text/plain') || '').trim(); if (!t) return;
@@ -12539,10 +12550,10 @@ function dsSide() {
   const box = $('.ds-side'); if (!box) return;
   box.replaceChildren(
     h('section', { class: 'ds-panel' }, h('b', null, 'Packets'), h('span', { class: 'hb-muted' }, `${packets().length} saved for Express`),
-      h('span', { class: 'hb-muted' }, 'Select text in a note, then choose Save as packet.'), hbBtn('Open Express', () => openHub('express'))),
+      h('span', { class: 'hb-muted' }, 'Select text in a source’s notes, then choose Save as packet.'), hbBtn('Open Express', () => openHub('express'))),
     h('section', { class: 'ds-panel' }, h('b', null, 'The four layers'), ...LAYERS.map(([n, l]) => h('div', { class: 'ds-layer' }, dsBars(n), h('span', null, l)))));
 }
-function dsRender(ov) {
+function dsNotesMain() {
   const all = dsNotes(); let c = x3.note && ST.cards[x3.note];
   if (c && !liveCard(c)) c = null;
   let main;
@@ -12568,8 +12579,7 @@ function dsRender(ov) {
         tool('Bold', () => fmt('bold', null, false)), tool('Highlight', () => fmt('hiliteColor', 'rgba(255, 212, 0, 0.38)', true)), tool('Clear highlight', () => fmt('hiliteColor', 'transparent', true)), tool('Save as packet', () => dsSave(picked(), c.id))),
       h('h3', { class: 'ds-title' }, hbTitle(c)), sum, text);
   }
-  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' }, hbHead('Distill', `${all.length} note${all.length === 1 ? '' : 's'} with text. Add one layer each time you open one.`), h('div', { class: 'ds-wrap' }, main, h('aside', { class: 'ds-side' }))));
-  dsSide();
+  return main;
 }
 
 /* ---- Express ---- */
@@ -12597,7 +12607,7 @@ function exRender(ov) {
     const on = x3.picked.has(p.id), src = ST.cards[p.src];
     return h('article', { class: 'hb-card ex-card' + (on ? ' on' : ''), role: 'checkbox', 'aria-checked': String(on), tabindex: '0', onclick: e => { if (e.target.closest('button')) return; on ? x3.picked.delete(p.id) : x3.picked.add(p.id); hbRender(); }, onkeydown: e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); e.currentTarget.click(); } } },
       h('p', { class: 'ex-text' }, p.text.slice(0, 280)),
-      h('div', { class: 'hb-foot' }, h('span', null, src && liveCard(src) ? hbTitle(src) : 'Source removed'), hbBtn('Delete', () => { checkpoint(); ST.packets = packets().filter(x => x.id !== p.id); x3.picked.delete(p.id); save(); hbRender(); })));
+      h('div', { class: 'hb-foot' }, h('span', null, packetFrom(p)), hbBtn('Delete', () => { checkpoint(); ST.packets = packets().filter(x => x.id !== p.id); x3.picked.delete(p.id); save(); hbRender(); })));
   })) : hbEmpty('Nothing ready to make yet', 'Save a few packets in Distill and they show up here.', hbBtn('Open Distill', () => openHub('distill'), 'hb-solid'));
   ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' }, hbHead('Express', 'Start from a project, not a blank page.', makeBtn), strip4, body));
 }
@@ -13322,6 +13332,204 @@ function plRender() {
   ov.replaceChildren(h('div', { class: 'tv-top' }, dashHead('Focus & Time', 'Plan your day in blocks.'), ttTabs()), body);
   const sc = ov.querySelector('.pl-scroll');
   if (sy != null) sc.scrollTop = sy; else { const n = new Date(), m = day === t ? n.getHours() * 60 + n.getMinutes() - 60 : 8 * 60; sc.scrollTop = Math.max(0, (m - PLAN.from) * PLAN.ppm); }
+}
+
+
+/* ========== Distill: parked sources (articles, videos, podcasts, books, files, notes) ========== */
+const SRC_TYPES = { article: ['Article', '#4f7cf0'], video: ['Video', '#e5484d'], podcast: ['Podcast', '#8b5cf6'], book: ['Book', '#e08a1e'], file: ['File', '#139fa3'], note: ['Note', '#22a06b'] };
+const SRC_STATUS = { queued: 'Queued', progress: 'In progress', distilled: 'Distilled' };
+const SRC_TABS = [['all', 'All', null], ['article', 'Articles', ['article']], ['video', 'Videos', ['video']], ['audio', 'Podcasts & books', ['podcast', 'book']], ['files', 'Files & notes', ['file', 'note']]];
+const SRC_WHO = { article: 'Author', video: 'Channel', podcast: 'Show / host', book: 'Author', file: 'Author', note: 'From' };
+const srcUI = { tab: 'all', status: 'open', q: '' };
+const sources = () => ST.sources || (ST.sources = []);
+const srcById = id => sources().find(s => s.id === id) || null;
+function srcDetect(url) {
+  const u = (url || '').toLowerCase();
+  if (ytId(url) || /vimeo\.com|loom\.com|tiktok\.com|instagram\.com\/reel/.test(u)) return 'video';
+  if (/open\.spotify\.com\/(episode|show)|podcasts\.apple\.com|overcast\.fm|pca\.st|pocketcasts/.test(u)) return 'podcast';
+  if (/goodreads\.com\/book|books\.google|openlibrary\.org|amazon\.[a-z.]+\/.*\/dp\//.test(u)) return 'book';
+  return 'article';
+}
+function srcNew(o) { return Object.assign({ id: uid(), type: 'article', title: '', url: '', image: '', site: '', desc: '', author: '', episode: '', published: '', consumed: '', status: 'queued', rating: 0, takeaway: '', tags: [], projects: [], areas: [], html: '', summary: '', blobId: null, fileName: '', mime: '', size: 0, createdAt: now(), updatedAt: now() }, o || {}); }
+const srcLayer = s => dsLayer({ data: { html: s.html || '', summary: s.summary || '' } });
+const srcThumb = s => s.type === 'video' && ytId(s.url) ? `https://i.ytimg.com/vi/${ytId(s.url)}/hqdefault.jpg` : s.image || (s.blobId && /^image\//.test(s.mime) ? Blobs.url(s.blobId) : '');
+function srcTitle(s) { return s.title || (s.url ? hostOf(s.url) : s.fileName) || 'Untitled source'; }
+async function srcFetch(s, done) {
+  const url = s.url; if (!url) return;
+  const fill = (k, v) => { if (v && !s[k]) s[k] = v; };
+  try {
+    if (ytId(url)) {
+      fill('site', 'YouTube');
+      const j = await (await fetch('https://noembed.com/embed?url=' + encodeURIComponent(url))).json();
+      if (j.title && (!s.title || s.title === hostOf(url))) s.title = j.title; fill('author', j.author_name);
+    } else {
+      const j = await (await fetch('https://api.microlink.io/?url=' + encodeURIComponent(url))).json();
+      if (j.status === 'success') { const d = j.data;
+        if (d.title && (!s.title || s.title === hostOf(url))) s.title = d.title;
+        fill('desc', d.description); fill('image', d.image && d.image.url); fill('site', d.publisher || hostOf(url)); fill('author', d.author);
+        if (d.date && !s.published) s.published = String(d.date).slice(0, 10); }
+    }
+  } catch (e) { fill('site', hostOf(url)); }
+  if (srcById(s.id) || done) { s.updatedAt = now(); if (srcById(s.id)) save(); }
+  if (done) done(); else if (hbOpen() === 'distill' || hbOpen() === 'resources') hbRender();
+}
+function srcPark(url) {
+  checkpoint(); const s = srcNew({ type: srcDetect(url), url, title: hostOf(url), site: hostOf(url) });
+  sources().unshift(s); save(); hbRender(); toast('Parked in Distill'); srcFetch(s);
+  return s;
+}
+const srcStars = (n, size) => h('span', { class: 'src-stars' + (size ? ' ' + size : ''), 'aria-label': n ? n + ' of 5 stars' : 'Not rated' }, ...[1, 2, 3, 4, 5].map(i => h('i', { class: i <= n ? 'on' : '' }, '★')));
+function srcCard(s) {
+  const [tl, col] = SRC_TYPES[s.type] || SRC_TYPES.article, th = srcThumb(s);
+  return h('article', { class: 'hb-card src-card', tabindex: '0', 'data-src': s.id, onclick: () => srcOpen(s.id), onkeydown: e => { if (e.key === 'Enter') srcOpen(s.id); } },
+    h('div', { class: 'src-thumb', style: { background: th ? `center/cover no-repeat url("${th}")` : `linear-gradient(135deg, ${col}, color-mix(in srgb, ${col} 30%, var(--card)))` } },
+      th ? null : h('b', null, tl), s.type === 'video' && th ? h('i', { class: 'src-play' }, '▶') : null),
+    h('div', { class: 'hb-chips' }, h('span', { class: 'hb-chip' }, h('i', { class: 'kb-dot', style: { background: col } }), ' ' + tl), h('span', { class: 'hb-chip src-st ' + s.status }, SRC_STATUS[s.status])),
+    h('b', { class: 'src-ct' }, srcTitle(s)),
+    h('span', { class: 'hb-muted' }, [s.author, s.site].filter(Boolean).join(' · ') || ' '),
+    s.takeaway ? h('p', { class: 'src-take' }, s.takeaway) : null,
+    h('div', { class: 'hb-foot' }, s.rating ? srcStars(s.rating) : h('span', null, ''), dsBars(srcLayer(s))));
+}
+function dsSourcesMain() {
+  const q = srcUI.q.trim().toLowerCase(), tab = SRC_TABS.find(t => t[0] === srcUI.tab) || SRC_TABS[0];
+  const inDistill = sources().filter(s => s.status !== 'distilled');
+  const list = inDistill.filter(s => (!tab[2] || tab[2].includes(s.type)) && (srcUI.status === 'open' || s.status === srcUI.status) && (!q || [s.title, s.author, s.site, s.takeaway, s.tags.join(' '), strip(s.html)].join(' ').toLowerCase().includes(q)))
+    .sort((a, b) => (a.status === 'progress' ? 0 : 1) - (b.status === 'progress' ? 0 : 1) || b.updatedAt - a.updatedAt);
+  const link = h('input', { class: 'hb-search src-paste', type: 'url', placeholder: 'Paste a link to an article, video or podcast and press Enter', 'aria-label': 'Park a link' });
+  link.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter' && link.value.trim()) { const v = link.value.trim(); if (!isUrl(v) && !/^\S+\.\S+$/.test(v)) return toast('That doesn’t look like a link'); link.value = ''; srcPark(normUrl(v)); } });
+  const search = h('input', { class: 'hb-search', type: 'search', placeholder: 'Search sources', 'aria-label': 'Search sources', value: srcUI.q });
+  search.addEventListener('input', () => { srcUI.q = search.value; const r = $('.src-grid'); if (r) { const y = $('.hb-scroll')?.scrollTop; hbRender(); const n = $('.ds-main .hb-search[type=search]'); n?.focus(); n?.setSelectionRange(n.value.length, n.value.length); if ($('.hb-scroll')) $('.hb-scroll').scrollTop = y; } });
+  return h('div', { class: 'ds-main' }, link,
+    h('div', { class: 'hb-tools' }, search, h('span', { class: 'hb-gap' }),
+      h('div', { class: 'hb-tabs' }, ...[['open', 'All open'], ['queued', 'Queued'], ['progress', 'In progress']].map(([v, l]) => h('button', { class: srcUI.status === v ? 'on' : '', 'aria-pressed': String(srcUI.status === v), onclick: () => { srcUI.status = v; hbRender(); } }, l)))),
+    list.length ? h('div', { class: 'hb-grid src-grid' }, ...list.map(srcCard))
+      : hbEmpty(inDistill.length ? 'No matches' : 'Nothing parked yet', inDistill.length ? 'Try another tab, status or search.' : 'Paste a link above, or use + Park a source for a podcast, book, file or note.', inDistill.length ? null : hbBtn('+ Park a source', () => srcOpen(null), 'hb-solid')));
+}
+
+/* ---- the source window ---- */
+function srcOpen(id, preset) {
+  closeTransient();
+  const existing = id ? srcById(id) : null; if (id && !existing) return;
+  const s = existing || srcNew(preset || {}), isNew = !existing;
+  let marked = false; const touch = () => { if (!isNew) { if (!marked) { checkpoint(); marked = true; } s.updatedAt = now(); save(); } };
+  let bg, added = false; const close = () => { bg.remove(); document.removeEventListener('keydown', onKey, true); if ((added || !isNew) && hbOpen()) hbRender(); };
+  const commit = () => {
+    if (isNew) {
+      if (!s.title && !s.url && !s.fileName && !strip(s.html || '').trim()) return void toast('Add a title, link, file or note first');
+      checkpoint(); if (!s.title) s.title = srcTitle(s); if (s.status === 'distilled' && !s.distilledAt) s.distilledAt = now();
+      sources().unshift(s); added = true; save(); toast(s.status === 'distilled' ? 'Added to Resources' : 'Parked in Distill');
+    }
+    close();
+  };
+  const onKey = e => { if (e.key === 'Escape' && !e.target.closest('.menu,.pop')) { e.preventDefault(); e.stopPropagation(); close(); } if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); commit(); } };
+  const [tl, col] = SRC_TYPES[s.type] || SRC_TYPES.article;
+  const field = (label, el) => h('label', { class: 'src-f' }, h('span', null, label), el);
+  const inp = (k, ph, type) => { const x = h('input', { class: 'tm-input', type: type || 'text', placeholder: ph || '', value: s[k] || '' }); x.addEventListener('input', () => { s[k] = x.value; touch(); }); return x; };
+
+  /* left: title, source, notes */
+  const title = h('input', { class: 'src-title', placeholder: 'Untitled source', 'aria-label': 'Title', value: s.title || '' });
+  title.addEventListener('input', () => { s.title = title.value; touch(); });
+  const media = h('div', { class: 'src-media' });
+  const paintMedia = () => {
+    media.replaceChildren();
+    const yt = s.url && ytId(s.url);
+    if (yt) media.append(h('div', { class: 'video-wrap src-vid' }, h('iframe', { src: ytEmbed(yt), allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen', allowfullscreen: '', referrerpolicy: 'strict-origin-when-cross-origin', title: srcTitle(s) })));
+    else if (s.url) media.append(h('a', { class: 'src-link', href: s.url, target: '_blank', rel: 'noopener' },
+      s.image ? h('img', { src: s.image, alt: '', referrerpolicy: 'no-referrer' }) : null,
+      h('div', null, h('b', null, srcTitle(s)), h('span', null, s.desc ? s.desc.slice(0, 180) : s.site || hostOf(s.url)), h('em', null, hostOf(s.url) + ' ↗'))));
+    if (s.blobId) {
+      const isImg = /^image\//.test(s.mime);
+      media.append(isImg ? h('img', { class: 'src-img', src: Blobs.url(s.blobId), alt: s.fileName || '' }) : null,
+        h('div', { class: 'src-file' }, h('b', null, s.fileName || 'File'), h('span', { class: 'hb-muted' }, fmtSize(s.size || 0)),
+          h('a', { class: 'hb-btn', href: Blobs.url(s.blobId), target: '_blank', rel: 'noopener', download: s.fileName || 'file' }, 'Open'),
+          hbBtn('Remove', () => { s.blobId = null; s.fileName = ''; s.mime = ''; s.size = 0; touch(); paintMedia(); })));
+    }
+    const url = h('input', { class: 'tm-input src-url', type: 'url', placeholder: s.url ? 'Replace link…' : 'Paste a link and press Enter', 'aria-label': 'Link', value: '' });
+    url.addEventListener('keydown', e => { e.stopPropagation(); if (e.key !== 'Enter' || !url.value.trim()) return; e.preventDefault();
+      s.url = normUrl(url.value.trim()); s.image = ''; s.desc = ''; if (isNew || s.type === 'article') { s.type = srcDetect(s.url); typeSel.value = s.type; paintLog(); }
+      touch(); paintMedia(); srcFetch(s, () => { if (!bg.isConnected) return; if (!title.value && s.title) title.value = s.title; paintMedia(); paintLog(); }); });
+    const file = h('input', { type: 'file', hidden: '' });
+    file.onchange = async () => { const f = file.files[0]; if (!f) return; s.blobId = await Blobs.put(f); s.fileName = f.name; s.mime = f.type; s.size = f.size; if (!s.title) { s.title = f.name.replace(/\.[^.]+$/, ''); title.value = s.title; } if (isNew && !s.url) { s.type = 'file'; typeSel.value = 'file'; paintLog(); } touch(); paintMedia(); };
+    const drop = h('div', { class: 'src-drop' }, url, hbBtn(s.blobId ? 'Replace file' : '+ Attach a file', () => file.click()), file);
+    drop.addEventListener('dragover', e => { if ([...e.dataTransfer.types].includes('Files')) { e.preventDefault(); drop.classList.add('over'); } });
+    drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+    drop.addEventListener('drop', e => { drop.classList.remove('over'); if (!e.dataTransfer.files.length) return; e.preventDefault(); const dt = new DataTransfer(); dt.items.add(e.dataTransfer.files[0]); file.files = dt.files; file.onchange(); });
+    media.append(drop);
+  };
+  /* notes with the four layers */
+  const bars = h('span', null, dsBars(srcLayer(s)));
+  const notes = h('div', { class: 'hb-text rt src-notes', role: 'textbox', 'aria-multiline': 'true', 'aria-label': 'Notes', 'data-ph': 'Your notes. Bold the key lines, then highlight the best of the bold.', html: s.html || '' }); notes.contentEditable = 'true';
+  const relayer = () => bars.replaceChildren(dsBars(srcLayer(s)));
+  notes.addEventListener('input', () => { s.html = notes.innerHTML; touch(); relayer(); });
+  notes.addEventListener('paste', e => { e.preventDefault(); e.stopPropagation(); document.execCommand('insertText', false, e.clipboardData.getData('text/plain')); });
+  const picked = () => { const g = getSelection(); return g.rangeCount && notes.contains(g.anchorNode) ? g.toString() : ''; };
+  const fmt = (cmd, val, css) => { if (!picked()) return toast('Select some text first'); document.execCommand('styleWithCSS', false, css); document.execCommand(cmd, false, val); document.execCommand('styleWithCSS', false, false); s.html = notes.innerHTML; touch(); relayer(); };
+  const tool = (label, fn) => { const b = hbBtn(label, fn); b.addEventListener('pointerdown', e => e.preventDefault()); return b; };
+  const sum = h('textarea', { class: 'ds-sum', rows: '2', placeholder: 'Layer 4: summary in your own words (optional)', 'aria-label': 'Summary' }); sum.value = s.summary || '';
+  sum.addEventListener('input', () => { s.summary = sum.value; touch(); relayer(); });
+  const left = h('div', { class: 'src-left' }, title, media,
+    h('div', { class: 'src-nh' }, h('b', null, 'Notes'), bars, h('span', { class: 'hb-gap' }),
+      tool('Bold', () => fmt('bold', null, false)), tool('Highlight', () => fmt('hiliteColor', 'rgba(255, 212, 0, 0.38)', true)), tool('Clear', () => fmt('hiliteColor', 'transparent', true)),
+      tool('Save as packet', () => { if (isNew) return toast('Park the source first, then save packets'); dsSave(picked(), 'src:' + s.id); })),
+    sum, notes);
+
+  /* right: the log */
+  const typeSel = h('select', { class: 'tm-input', 'aria-label': 'Type' }, ...Object.entries(SRC_TYPES).map(([k, [l]]) => h('option', { value: k }, l)));
+  typeSel.value = s.type; typeSel.onchange = () => { s.type = typeSel.value; touch(); paintLog(); paintMedia(); };
+  const log = h('div', { class: 'src-log' });
+  const chipPick = (k, kind) => {
+    const box = h('div', { class: 'src-chips' });
+    const paint = () => { box.replaceChildren(...s[k].filter(key => refExists(key)).map(key => h('span', { class: 'hb-chip' }, refInfo(key).title, h('button', { class: 'src-x', 'aria-label': 'Remove ' + refInfo(key).title, onclick: () => { s[k] = s[k].filter(x => x !== key); touch(); paint(); } }, '×'))),
+      (() => { const b = h('button', { class: 'hb-btn src-add', onclick: e => { e.stopPropagation(); const opts = nvItems(kind).filter(x => !s[k].includes(x)); if (!opts.length) return toast(`No ${kind} to link yet`); showMenuAt(b, opts.map(x => ({ label: refInfo(x).title, fn: () => { s[k].push(x); touch(); paint(); } }))); } }, '+ Link'); return b; })()); };
+    paint(); return box;
+  };
+  const tagBox = () => {
+    const box = h('div', { class: 'src-chips' }), add = h('input', { class: 'tm-input src-tagin', placeholder: 'Add a tag…', 'aria-label': 'Add a tag' });
+    const paint = () => box.replaceChildren(...s.tags.map(t => h('span', { class: 'hb-chip' }, '#' + t, h('button', { class: 'src-x', 'aria-label': 'Remove tag ' + t, onclick: () => { s.tags = s.tags.filter(x => x !== t); touch(); paint(); } }, '×'))), add);
+    add.addEventListener('keydown', e => { e.stopPropagation(); if ((e.key === 'Enter' || e.key === ',') && add.value.trim()) { e.preventDefault(); const v = add.value.trim().replace(/^#/, ''); if (!s.tags.includes(v)) s.tags.push(v); add.value = ''; touch(); paint(); add.focus(); } });
+    paint(); return box;
+  };
+  const paintLog = () => {
+    const status = h('div', { class: 'hb-tabs src-status' }, ...Object.entries(SRC_STATUS).map(([k, l]) => h('button', { class: s.status === k ? 'on' : '', 'aria-pressed': String(s.status === k), onclick: () => {
+      s.status = k; if (k === 'distilled') { s.distilledAt = now(); if (!s.consumed) s.consumed = todayStr(); } if (k === 'progress' && !s.consumed) s.consumed = todayStr(); touch(); paintLog(); paintFoot(); } }, l)));
+    const stars = h('div', { class: 'src-rate', role: 'group', 'aria-label': 'Rating' }, ...[1, 2, 3, 4, 5].map(i => h('button', { class: i <= s.rating ? 'on' : '', 'aria-label': `${i} star${i > 1 ? 's' : ''}`, onclick: () => { s.rating = s.rating === i ? 0 : i; touch(); paintLog(); } }, '★')));
+    const take = h('textarea', { class: 'tm-input', rows: '2', placeholder: 'The one thing to remember', 'aria-label': 'Key takeaway' }); take.value = s.takeaway || ''; take.addEventListener('input', () => { s.takeaway = take.value; touch(); });
+    log.replaceChildren(...[h('b', { class: 'src-lh' }, 'Log'),
+      field('Type', typeSel), field('Status', status),
+      field(SRC_WHO[s.type] || 'Author', inp('author', SRC_WHO[s.type] || 'Author')),
+      ['podcast', 'book'].includes(s.type) ? field(s.type === 'book' ? 'Chapter / pages' : 'Episode', inp('episode', s.type === 'book' ? 'e.g. Ch. 3' : 'e.g. #142')) : null,
+      h('div', { class: 'src-2' }, field('Published', inp('published', '', 'date')), field(s.type === 'video' || s.type === 'podcast' ? 'Watched / heard' : 'Read on', inp('consumed', '', 'date'))),
+      field('Rating', stars), field('Key takeaway', take),
+      field('Tags', tagBox()), field('Projects', chipPick('projects', 'projects')), field('Areas', chipPick('areas', 'areas'))].filter(Boolean));
+  };
+  const foot = h('div', { class: 'src-foot' });
+  const paintFoot = () => foot.replaceChildren(
+    h('span', { class: 'hb-muted' }, isNew ? (navigator.platform.includes('Mac') ? '⌘' : 'Ctrl') + ' Enter to save · Everything is optional' : 'Changes save automatically'), h('span', { class: 'hb-gap' }),
+    isNew ? hbBtn('Cancel', close) : hbBtn('Delete', () => { checkpoint(); ST.sources = sources().filter(x => x.id !== s.id); save(); close(); toast('Source deleted. Undo with ' + (navigator.platform.includes('Mac') ? '⌘Z' : 'Ctrl+Z')); }),
+    isNew ? hbBtn(s.status === 'distilled' ? 'Add resource' : 'Park source', commit, 'hb-solid')
+      : s.status === 'distilled' ? hbBtn('Done', close, 'hb-solid') : hbBtn('Mark distilled', () => { s.status = 'distilled'; s.distilledAt = now(); if (!s.consumed) s.consumed = todayStr(); touch(); close(); toast('Moved to Resources · Sources'); }, 'hb-solid'));
+  paintMedia(); paintLog(); paintFoot();
+  const head = h('div', { class: 'src-head' }, h('span', { class: 'src-ic', style: { background: col } }, tl[0]),
+    h('div', null, h('b', null, isNew ? (s.status === 'distilled' ? 'New resource' : 'Park a source') : 'Source'), h('span', { class: 'hb-muted' }, isNew ? 'Articles, videos, podcasts, books, files and notes in one place.' : `Added ${timeAgo(s.createdAt)}`)),
+    h('span', { class: 'hb-gap' }), h('button', { class: 'hb-more', title: 'Close', 'aria-label': 'Close', onclick: close }, '×'));
+  bg = h('div', { class: 'modal-bg src-bg' }, h('div', { class: 'src-modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': isNew ? 'Park a source' : srcTitle(s) }, head, h('div', { class: 'src-body' }, left, log), foot));
+  bg.addEventListener('pointerdown', e => { if (e.target === bg) close(); });
+  document.addEventListener('keydown', onKey, true);
+  document.body.append(bg); setTimeout(() => (isNew ? (s.url ? notes : title) : notes).focus(), 0);
+  return s;
+}
+
+function dsRender(ov) {
+  const open = sources().filter(s => s.status !== 'distilled'), tab = srcUI.tab;
+  const tabs = hbTabs([...SRC_TABS.map(([k, l, t]) => [k, l, open.filter(s => !t || t.includes(s.type)).length]), ['notes', 'Board notes', dsNotes().length]], tab, v => { srcUI.tab = v; x3.note = null; hbRender(); });
+  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll' },
+    hbHead('Distill', `${open.length} source${open.length === 1 ? '' : 's'} waiting. Park articles, videos, podcasts and notes, then break them down in layers.`, hbBtn('+ Park a source', () => srcOpen(null), 'hb-solid')),
+    tabs, h('div', { class: 'ds-wrap' }, tab === 'notes' ? dsNotesMain() : dsSourcesMain(), h('aside', { class: 'ds-side' }))));
+  dsSide();
+}
+function packetFrom(p) {
+  if (p.src && String(p.src).startsWith('src:')) { const s = srcById(p.src.slice(4)); return s ? srcTitle(s) : 'Source removed'; }
+  const c = ST.cards[p.src]; return c && liveCard(c) ? hbTitle(c) : 'Source removed';
 }
 
 /* one-time: move the old Home "Inbox" checklist and Unsorted tray items into the Inbox board */
