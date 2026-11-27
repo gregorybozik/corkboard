@@ -4049,3 +4049,55 @@ body.sel-one .card.selected>.hp-col .hp-color{display:block}
 .pn-sw button{width:22px;height:22px;border-radius:50%;padding:0;border:2px solid transparent;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
 .pn-sw button.on{border-color:var(--text)}
 @media (max-width:760px){.pn-modal .src-foot .hb-muted{display:none}}
+/* ---- Today ---- */
+.td-page{gap:18px}
+.td-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;align-items:start}
+.td-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.td-card>header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.td-card>header b{font-size:14px}
+.td-ic{display:grid;place-items:center;color:var(--muted)}
+.td-ic svg{width:16px;height:16px}
+.td-card>header .hb-btn{padding:5px 10px;font-size:12px}
+.td-none{margin:2px 0;font-size:13px}
+.td-caprow{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.td-cin{flex:1;min-width:220px;font-size:15px;padding:10px 12px}
+.td-wait{display:flex;align-items:baseline;gap:6px;color:var(--muted);font-size:13px}
+.td-wait b{font-size:22px;color:var(--text)}
+.td-wait.on b{color:#e08a1e}
+.td-blk{display:grid;grid-template-columns:110px 1fr auto;gap:10px;align-items:center;padding:7px 8px;border-radius:8px;text-align:left;color:var(--text);border-left:3px solid color-mix(in srgb,#4f7cf0 60%,transparent)}
+.td-blk:hover{background:var(--hover)}
+.td-blk span{font-size:12px;color:var(--muted);white-space:nowrap}
+.td-blk b{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.td-blk.done{opacity:.5}.td-blk.done b{text-decoration:line-through}
+.td-blk.now{background:color-mix(in srgb,#4f7cf0 12%,transparent);border-left-color:#4f7cf0}
+.td-blk em{font-style:normal;font-size:11px;font-weight:700;color:#4f7cf0}
+.td-hab-row{display:flex;gap:10px;align-items:center;padding:4px 0}
+.td-hab-row b{flex:1;font-size:13px}
+.td-hab-row .hab-c{width:28px;height:28px}
+.td-hab-row .hb-muted{font-size:11px}
+.td-next{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.td-next b{font-size:16px}
+.td-next .hb-muted{font-size:12px}
+.td-jsnip{margin:0;font-size:13px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.td-jn .hb-btn,.td-cap .hb-btn{align-self:flex-start}
+.td-guide{border:1px solid color-mix(in srgb,#4f7cf0 45%,var(--line));background:color-mix(in srgb,#4f7cf0 7%,var(--card));border-radius:14px;padding:14px 16px}
+.td-guide>header{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.td-guide>header b{font-size:15px}
+.td-guide ol{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.td-guide li{display:flex;flex-direction:column;gap:6px;align-items:flex-start;padding:10px;border-radius:10px;background:var(--card);border:1px solid var(--line)}
+.td-guide li p{margin:0;font-size:12px;color:var(--muted);flex:1}
+.td-guide li .hb-btn{padding:5px 10px;font-size:12px}
+.td-gn{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#4f7cf0;color:#fff;font-size:12px;font-weight:800}
+/* ---- Plan page ---- */
+.pl-page{flex:1;min-height:0;display:flex;flex-direction:column;gap:16px;padding:24px 24px 16px}
+.hub-plan .tv-body.pl-body{flex:1;min-height:0;overflow:hidden;display:flex;gap:16px;padding:0;align-items:stretch}
+@container dash (max-width:760px){.hub-plan .tv-body.pl-body{flex-direction:column;overflow:auto}}
+@media (max-width:760px){
+  .pl-page{padding:16px 12px}
+  .hub-plan .tv-body.pl-body{flex-direction:column;overflow:auto}
+  .td-grid{grid-template-columns:1fr}
+  .td-guide ol{grid-template-columns:1fr}
+  .td-blk{grid-template-columns:90px 1fr auto}
+}
+@media (max-width:700px){#topbar.navbar #unsortedBadge::after{content:'capture'}}
+@media (max-width:760px){.td-blk{grid-template-columns:1fr auto;row-gap:2px}.td-blk span{grid-column:1}.td-blk b{grid-column:1}.td-blk em{grid-column:2;grid-row:1 / span 2}}

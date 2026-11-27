@@ -1777,7 +1777,7 @@ function openTrash() {
   render();
 }
 function updateUnsorted() {
-{ const n = ST ? nvInboxCount() : 0; const b = $('#unsortedBadge'); if (b) { b.innerHTML = ''; b.append(h('b', null, String(n)), ' Inbox'); } }
+{ const n = ST ? nvInboxCount() : 0; const b = $('#unsortedBadge'); if (b) { b.innerHTML = ''; b.append(h('b', null, String(n)), ' Capture'); } }
 hook18: { const host = $('#unsortedBadge'); if (!host || !host.parentElement) break hook18;
     let b = $('#markBadge');
     if (!b) { b = h('button', { id: 'markBadge', title: 'Dim everything except bookmarked columns', onclick: () => { document.body.classList.toggle('mark-only'); updateUnsorted(); } }); host.after(b); }
@@ -12249,7 +12249,7 @@ function openHub(kind) {
 function hbRender() {
   const kind = hbOpen(); if (!kind) return;
   const ov = $('.dashview.hubview'), y = ov.querySelector('.hb-scroll')?.scrollTop || 0;
-  ({ capture: hbCapture, distill: dsRender, express: exRender, habits: habRender, journal: jnRender, review: rvRender }[kind] || (o => hbPara(o, kind)))(ov);
+  ({ capture: hbCapture, distill: dsRender, express: exRender, habits: habRender, journal: jnRender, review: rvRender, today: tdRender, plan: plHubRender }[kind] || (o => hbPara(o, kind)))(ov);
   const sc = ov.querySelector('.hb-scroll'); if (sc) sc.scrollTop = y;
 }
 function hbSearch(kind, label, onInput) {
@@ -12355,6 +12355,7 @@ function hbEditor() {
     { label: 'Delete', fn: () => { trashCards([c.id]); save(); done(); scheduleSidebar(); } }]); } }, '⋯');
   return h('div', { class: 'hb-edhead' }, hbBtn('‹ List', () => { hbUI.detail = false; hbRender(); }, 'hb-backlist'), h('span', null, c ? 'Capture' : 'New capture'), h('span', { class: 'hb-gap' }),
     c && ['note', 'doc', 'link'].includes(c.type) ? hbBtn('Make task', () => { const t = captureToTask(c); hbUI.sel = 't:' + t.id; hbRender(); toast('Now a task'); }, 'hb-solid') : null,
+    c && c.type === 'link' && c.data.url ? hbBtn('Send to Distill', () => { captureToDistill(c); done(); }) : null,
     move || null, more || null);
   };
   let head = mkHead();
@@ -12516,7 +12517,7 @@ window.addEventListener('paste', e => {
   const kind = hbOpen(); if (!kind || isTypingTarget(e.target) || $('.pv-wrap,.modal-bg,.dbfull')) return;
   e.preventDefault(); e.stopImmediatePropagation();
   if (kind === 'distill') { const t = (e.clipboardData?.getData('text/plain') || '').trim(); if (isUrl(t)) srcPark(normUrl(t)); else if (t) toast('Paste a link to park it here'); return; }
-  if (kind !== 'capture') return;
+  if (kind !== 'capture') { const t = (e.clipboardData?.getData('text/plain') || '').trim(); if (!t) return; capAddText(t); toast(isUrl(t) ? 'Link saved to Capture' : 'Saved to Capture'); if (kind === 'today') hbRender(); return; }
   const files = [...(e.clipboardData?.files || [])]; if (files.length) return void hbFiles(files);
   const t = (e.clipboardData?.getData('text/plain') || '').trim(); if (!t) return;
   checkpoint(); const url = isUrl(t) && normUrl(t), c = url ? hbAdd('link', { url, title: hostOf(url) }) : hbAdd('note', { html: esc(t).replace(/\n/g, '<br>') });
@@ -12863,13 +12864,12 @@ function fxRender() {
   const el = _tt.apply(this, arguments), tl = el.querySelector('.ft-tl');
   const on = fxTimerTab(); if (on) tl.querySelectorAll('.ft-tab').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-selected', 'false'); });
   const pl = S.fvTab === 'plan'; if (pl) tl.querySelectorAll('.ft-tab').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-selected', 'false'); });
-  tl.prepend(h('button', { class: 'ft-tab' + (on ? ' on' : ''), role: 'tab', 'aria-selected': String(on), onclick: () => { S.fvTab = 'timer'; renderFocusView(); } }, 'Timer'),
-    h('button', { class: 'ft-tab' + (pl ? ' on' : ''), role: 'tab', 'aria-selected': String(pl), onclick: () => { S.fvTab = 'plan'; renderFocusView(); } }, 'Plan'));
+  tl.prepend(h('button', { class: 'ft-tab' + (on ? ' on' : ''), role: 'tab', 'aria-selected': String(on), onclick: () => { S.fvTab = 'timer'; renderFocusView(); } }, 'Timer'));
   return el;
 }; }
 { const _rf = renderFocusView; renderFocusView = function () {
   if (!$('.focusview')) return; if (!S.fvTab) S.fvTab = 'timer';
-  if (S.fvTab === 'plan') { const a = document.activeElement; if (a && a.matches('.focusview .pl-q') && $('.pl-side')) return; return plRender(); }
+  if (S.fvTab === 'plan') S.fvTab = 'timer';
   if (S.fvTab !== 'timer') return _rf.apply(this, arguments);
   /* don't wipe a half-typed task */
   const typing = document.activeElement; if (typing && typing.matches('.focusview .kb-add') && typing.value) return;
@@ -13143,6 +13143,7 @@ function rvRender(ov) {
     ...more(inbox, 8, x => x.c
       ? row(hbTitle(x.c), hbType(x.c) === 'other' ? x.c.type : hbType(x.c),
         ['note', 'doc', 'link'].includes(x.c.type) ? hbBtn('Make task', () => { captureToTask(x.c); hbRender(); }) : null,
+        x.c.type === 'link' && x.c.data.url ? hbBtn('Send to Distill', () => { captureToDistill(x.c); hbRender(); }) : null,
         (() => { const b = hbBtn('Move to…', e => { e.stopPropagation(); sortMenu(b, bid => { moveCardTo(x.c, bid); hbRender(); }); }); return b; })(),
         hbBtn('Delete', () => { trashCards([x.c.id]); save(); hbRender(); scheduleSidebar(); }))
       : row(x.task.text || 'Untitled task', 'Task in inbox',
@@ -13256,7 +13257,7 @@ function plTaskMenu(btn, it, day) {
     it.block ? { label: 'Remove block', fn: () => { const f = findTask(it.id); if (!f) return; checkpoint(); delete f.item.block; save(); refreshTaskViews([f.card.id]); plRender(); } } : null].filter(Boolean));
 }
 function plRender() {
-  const ov = $('.focusview'); if (!ov) return;
+  const ov = hbOpen() === 'plan' ? $('.dashview.hubview') : null; if (!ov) return;
   const day = plUI.day || (plUI.day = todayStr()), t = todayStr(), H = (PLAN.to - PLAN.from) * PLAN.ppm;
   const old = ov.querySelector('.pl-scroll'), sy = old ? old.scrollTop : null;
   const nav = h('div', { class: 'hab-nav' }, hbBtn('‹', () => { plUI.day = addDays(day, -1); plRender(); }), h('b', null, parseYmd(day).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })), hbBtn('›', () => { plUI.day = addDays(day, 1); plRender(); }), hbBtn('Today', () => { plUI.day = t; plRender(); }));
@@ -13334,7 +13335,7 @@ function plRender() {
   const planned = blocks.reduce((n, b) => n + b.it.block.mins, 0), tracked = ttAll(a0, a0 + 864e5).reduce((n, e) => n + eMins(e), 0);
   const body = h('div', { class: 'tv-body pl-body' },
     h('section', { class: 'fx-timer pl-day' }, h('div', { class: 'pl-head' }, nav, h('span', { class: 'hb-muted' }, `${fmtMins(planned)} planned · ${fmtMins(tracked)} tracked`)), h('div', { class: 'pl-scroll' }, grid)), side);
-  ov.replaceChildren(h('div', { class: 'tv-top' }, dashHead('Focus & Time', 'Plan your day in blocks.'), ttTabs()), body);
+  ov.replaceChildren(h('div', { class: 'pl-page' }, hbHead('Plan', 'Plan your day in blocks. Drag tasks onto the day, then start focus from a block.'), body));
   const sc = ov.querySelector('.pl-scroll');
   if (sy != null) sc.scrollTop = sy; else { const n = new Date(), m = day === t ? n.getHours() * 60 + n.getMinutes() - 60 : 8 * 60; sc.scrollTop = Math.max(0, (m - PLAN.from) * PLAN.ppm); }
 }
@@ -13759,6 +13760,140 @@ function pnDialog(kind) {
   document.addEventListener('keydown', onKey, true); document.body.append(bg); setTimeout(() => name.focus(), 0);
 }
 
+/* ========== Today page, Plan page, sidebar order, one inbox, first-run guide ========== */
+HB_KINDS.push('today', 'plan');
+NV_NAME.today = 'Today'; NV_NAME.plan = 'Plan';
+NV_SVG.today = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+NV_SVG.plan = '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M7 13h4M7 17h7"/>';
+
+/* ---- one inbox: links go to Capture; Capture links can move to Distill ---- */
+function capAddText(v) {
+  checkpoint(); const url = isUrl(v) && normUrl(v), c = url ? hbAdd('link', { url, title: hostOf(url) }) : hbAdd('note', { html: esc(v).replace(/\n/g, '<br>') });
+  if (url) fetchPreview(c.id); return c;
+}
+function captureToDistill(c) {
+  const d = c.data || {}; if (!d.url) return;
+  checkpoint();
+  const s = srcNew({ type: srcDetect(d.url), url: d.url, title: d.title && d.title !== hostOf(d.url) ? d.title : '', image: d.image || '', desc: d.desc || '', site: hostOf(d.url) });
+  sources().unshift(s); trashCards([c.id], true); save(); scheduleSidebar(); toast('Sent to Distill'); srcFetch(s);
+  return s;
+}
+
+/* ---- first-run guide ---- */
+const GUIDE = [
+  ['capture', 'Capture', 'Type, paste, or drop anything. Sort it later.', 'Open Capture'],
+  ['capture', 'Sort', 'Turn each capture into a task, or file it under a project or area.', 'Sort Capture'],
+  ['plan', 'Plan', 'Drag today’s tasks into time blocks.', 'Open Plan'],
+  ['tasks', 'Do', 'Work the Tasks board. Start a focus session on the next task.', 'Open Tasks'],
+  ['review', 'Review', 'Once a week, clear Capture and check every project.', 'Open Review']];
+function tdGo(k) { if (k === 'tasks') { closePageView(); openTasksView(); } else if (k === 'focus') { closePageView(); closeDashes(); openFocusView(); } else openHub(k); scheduleSidebar(); }
+function tdGuide() {
+  const st = ST.settings; if (st.guideDone && !S.tdGuide) return null;
+  if (!st.guideShown) { st.guideShown = true; save(); }
+  const close = () => { st.guideDone = true; S.tdGuide = false; save(); hbRender(); };
+  return h('section', { class: 'td-guide', 'aria-label': 'How Corkboard works' },
+    h('header', null, h('b', null, 'How Corkboard works'), h('span', { class: 'hb-muted' }, 'Five steps, every day. Review once a week.'), h('span', { class: 'hb-gap' }), hbBtn('Got it', close, 'hb-solid')),
+    h('ol', null, ...GUIDE.map(([k, t, d, l], i) => h('li', null, h('span', { class: 'td-gn' }, String(i + 1)), h('b', null, t), h('p', null, d), hbBtn(l, () => tdGo(k))))));
+}
+
+/* ---- Today ---- */
+function tdCard(cls, k, title, n, action, ...body) {
+  return h('section', { class: 'td-card ' + cls }, h('header', null, h('span', { class: 'td-ic', html: k.startsWith('<') ? k : nvIcon(k) }), h('b', null, title), n == null ? null : h('span', { class: 'hb-count' }, String(n)), h('span', { class: 'hb-gap' }), action), ...body.filter(Boolean));
+}
+const tdNone = t => h('p', { class: 'hb-muted td-none' }, t);
+function tdNext() {
+  const t = todayStr(), nowMs = Date.now();
+  const b = plBlocks(t).filter(x => !x.it.done && plStartMs(x.it.block) + x.it.block.mins * 6e4 > nowMs).sort((x, y) => plMin(x.it.block.start) - plMin(y.it.block.start))[0];
+  if (b) return { it: b.it, why: 'Blocked ' + plRange(b.it.block) };
+  const x = top3()[0] || todayItems()[0]; return x ? { it: x.it, why: x.why || 'Today' } : null;
+}
+function tdRender(ov) {
+  const t = todayStr(), dt = parseYmd(t);
+  /* capture */
+  const cin = h('input', { class: 'tm-input td-cin', placeholder: 'Capture anything. Type or paste a link, then press Enter', 'aria-label': 'Quick capture' });
+  cin.addEventListener('keydown', e => { if (e.key === 'Enter' && cin.value.trim()) { e.preventDefault(); capAddText(cin.value.trim()); toast('Saved to Capture'); hbRender(); $('.td-cin')?.focus(); } });
+  const nIn = nvInboxCount();
+  const cap = tdCard('td-cap', 'capture', 'Capture', null, null, h('div', { class: 'td-caprow' }, cin, h('div', { class: 'td-wait' + (nIn ? ' on' : '') }, h('b', null, String(nIn)), h('span', null, nIn === 1 ? 'item waiting' : 'items waiting')), hbBtn(nIn ? 'Sort now' : 'Open Capture', () => openHub('capture'), nIn ? 'hb-solid' : '')));
+  /* plan */
+  const blocks = plBlocks(t).sort((x, y) => plMin(x.it.block.start) - plMin(y.it.block.start)), nowM = new Date().getHours() * 60 + new Date().getMinutes();
+  const plan = tdCard('td-plan', 'plan', 'Today’s plan', blocks.length, hbBtn('Open Plan', () => openHub('plan')),
+    ...(blocks.length ? blocks.map(x => { const s = plMin(x.it.block.start), cur = !x.it.done && s <= nowM && nowM < s + x.it.block.mins;
+      return h('button', { class: 'td-blk' + (x.it.done ? ' done' : '') + (cur ? ' now' : ''), onclick: () => openTask(x.it.id) }, h('span', null, plRange(x.it.block)), h('b', null, x.it.text || 'Untitled task'), cur ? h('em', null, 'Now') : null); })
+      : [tdNone('Nothing blocked yet. Open Plan and drag tasks onto the day.')]));
+  /* due */
+  const due = taskEntries().filter(e => e.col !== 'done' && e.due && e.due <= t).sort((a, b) => a.due < b.due ? -1 : a.due > b.due ? 1 : 0);
+  const dueC = tdCard('td-due', ICON.todo, 'Due today & overdue', due.length, hbBtn('Open Tasks', () => tdGo('tasks')),
+    ...(due.length ? due.slice(0, 10).map(e => h('div', { class: 'pd-task' },
+      h('button', { class: 'pd-chk', 'aria-label': 'Complete: ' + e.text, onclick: () => { entryMove(e.key, 'done'); hbRender(); } }, ''),
+      h('button', { class: 'pd-tt', onclick: () => entryOpen(e) }, e.text),
+      h('span', { class: 'hb-chip' + (entryLate(e) ? ' pd-late' : '') }, e.due < t ? 'Overdue · ' + dueLabel(e.due, t) : e.time ? clockHM(e.time) : 'Today'))) : [tdNone('Nothing due today.')]),
+    due.length > 10 ? h('p', { class: 'hb-muted td-none' }, `+ ${due.length - 10} more in Tasks`) : null);
+  /* habits */
+  const hs = habits().filter(hb => !hb.paused && hb.days.includes(dt.getDay())), hd = hs.filter(hb => hb.done[t]).length;
+  const hab = tdCard('td-hab', 'habits', 'Habits', hs.length ? `${hd}/${hs.length}` : null, hbBtn('Open Habits', () => openHub('habits')),
+    ...(hs.length ? hs.map(hb => h('div', { class: 'td-hab-row' }, habCell(hb, t, false), h('b', null, hb.name), h('span', { class: 'hb-muted' }, habStreaks(hb).cur + ' streak'))) : [tdNone(habits().length ? 'No habits due today.' : 'No habits yet.')]));
+  /* focus */
+  const run = FT().active, nx = tdNext();
+  const foc = tdCard('td-foc', ICON.focus, 'Focus', null, hbBtn('Open Focus', () => tdGo('focus')),
+    run ? h('div', { class: 'td-next' }, h('b', null, 'A focus session is running'), hbBtn('Go to timer', () => tdGo('focus'), 'hb-solid'))
+      : nx ? h('div', { class: 'td-next' }, h('span', { class: 'hb-muted' }, 'Next up · ' + nx.why), h('b', null, nx.it.text || 'Untitled task'), hbBtn('▶ Start focus', () => { const tid = nx.it.id; closePageView(); closeDashes(); S.fvTab = 'timer'; openFocusView(); plStartFocus(tid); scheduleSidebar(); }, 'hb-solid'))
+      : tdNone('No task lined up. Add one to Top 3 or Today, or block time in Plan.'));
+  /* projects */
+  const pj = nvItems('projects').filter(k => pjStatus(k) === 'active').sort((a, b) => (paraGet(a).deadline || '9999') < (paraGet(b).deadline || '9999') ? -1 : (paraGet(a).deadline || '9999') > (paraGet(b).deadline || '9999') ? 1 : 0);
+  const prj = tdCard('td-prj', 'projects', 'Active projects', pj.length, hbBtn('Open Projects', () => openHub('projects')),
+    ...(pj.length ? pj.slice(0, 5).map(k => { const inf = refInfo(k), pr = paraProg(k), du = pjDue(k);
+      return h('button', { class: 'pd-proj', onclick: () => pdOpen(k, 'projects') }, paraIconEl(k, inf, 'pd-mini'), h('div', null, h('b', null, inf.title), h('span', { class: du && du.late ? 'pd-late' : '' }, du ? du.text : 'No deadline')),
+        h('div', { class: 'hb-bar pd-pbar' }, h('i', { style: { width: pr.pct + '%', background: hbColor(k, inf) } })), h('em', null, pr.pct + '%')); }) : [tdNone('No active projects.')]));
+  /* journal */
+  const je = jnEntry(t), snip = je ? jnSnippet(je) : '';
+  const jn = tdCard('td-jn', 'journal', 'Journal', null, null, h('p', { class: 'td-jsnip' + (snip ? '' : ' hb-muted') }, je ? (snip || 'Entry started, still empty.') : 'No entry for today yet.'),
+    hbBtn(je ? 'Open today’s entry' : 'Start today’s entry', () => { jnOpen(t); if (S.pvReturn) S.pvReturn.k = 'today'; }, 'hb-solid'));
+  ov.replaceChildren(h('div', { class: 'hb-page hb-scroll td-page' },
+    hbHead('Today', dt.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' }), (ST.settings.guideDone && !S.tdGuide) ? hbBtn('How Corkboard works', () => { S.tdGuide = true; hbRender(); }) : null),
+    tdGuide(), cap, h('div', { class: 'td-grid' }, plan, dueC, foc, hab, prj, jn)));
+}
+function plHubRender(ov) { const a = document.activeElement; if (a && a.matches('.pl-q') && $('.pl-side')) return; plRender(); }
+
+/* ---- launch on Today ---- */
+function tdLaunch() {
+  const st = ST.settings; if (st.guideShown) st.guideDone = true;
+  const tabs = tabList(); let i = tabs.findIndex(x => x.o === 'd:hb:today');
+  if (i < 0) tabs.unshift({ b: ST.rootId, o: 'd:hb:today' }); else if (i > 0) tabs.unshift(tabs.splice(i, 1)[0]);
+  tabNormalize(); i = tabs.findIndex(x => x.o === 'd:hb:today');
+  st.tabCur = i; tabApply(tabs[i]); save();
+}
+
+/* ---- sidebar order: Today, Home | Flow | Tools ---- */
+function sbNav(k) {
+  const a = hbOpen() === k;
+  return h('button', { class: 'sb-item nv-row' + (a ? ' on' : ''), title: NV_NAME[k], 'data-nv': k, 'aria-current': a ? 'page' : null, onclick: () => { openHub(k); if (isMobileSb()) toggleSidebar(false); } },
+    h('span', { class: 'sb-ic', html: nvIcon(k) }), h('span', { class: 'sb-lab' }, NV_NAME[k]));
+}
+function sbReorder() {
+  const dyn = $('#sbDyn'); if (!dyn) return;
+  const secs = [...dyn.querySelectorAll(':scope > .sb-sec')], byH = t => secs.find(x => x.querySelector(':scope > .sb-h')?.textContent === t);
+  const flow = byH('Flow'), org = byH('Organize'), tools = byH('Tools'), prim = dyn.querySelector('.sb-primary');
+  if (!flow || !tools || !prim) return;
+  if (!prim.querySelector('[data-nv=today]')) prim.prepend(sbNav('today'));
+  const pair = k => { const b0 = dyn.querySelector(`.sb-item[data-nv="${k}"]`); if (!b0) return []; const row = b0.parentElement.classList.contains('hb-sbrow') ? b0.parentElement : b0, nx = row.nextElementSibling; return nx && nx.classList.contains('nv-kids') ? [row, nx] : [row]; };
+  flow.append(...['capture', ...NV_PARA, 'distill', 'express', 'review'].flatMap(pair));
+  if (org && !org.querySelector('.sb-item,.hb-sbrow')) org.remove();
+  if (!tools.querySelector('[data-nv=plan]')) tools.querySelector(':scope > .sb-h').after(sbNav('plan'));
+  const lab = l => [...tools.querySelectorAll(':scope > .sb-item')].find(b => (b.querySelector('.sb-lab')?.textContent || b.textContent).trim() === l);
+  tools.append(...[tools.querySelector('[data-nv=plan]'), lab('Tasks'), lab('Focus'), tools.querySelector('[data-nv=habits]'), tools.querySelector('[data-nv=journal]'), lab('Notes')].filter(Boolean));
+}
+{ const _ng = nvGroup; nvGroup = function () { const r = _ng.apply(this, arguments); try { sbReorder(); } catch (e) { console.warn(e); } return r; }; }
+{ const _tb = nvTopBar; nvTopBar = function () {
+  const r = _tb.apply(this, arguments); const bar = $('#sbTop'); if (!bar) return r;
+  const find = l => [...bar.querySelectorAll('.nvt')].find(x => x.textContent.replace(/\s*\d+$/, '').replace(' ▾', '').trim() === l);
+  const mk = k => h('button', { class: 'nvt' + (hbOpen() === k ? ' on' : ''), onclick: () => { openHub(k); scheduleSidebar(); } }, NV_NAME[k]);
+  if (!find('Today')) find('Home')?.before(mk('today'));
+  if (!find('Plan')) find('Tasks')?.before(mk('plan'));
+  const org = find('Organize'), dist = find('Distill'), ex = find('Express'), rv = find('Review'), cap = find('Capture') || [...bar.querySelectorAll('.nvt')].find(x => x.textContent.startsWith('Capture'));
+  if (cap && org) cap.after(org); if (org && dist) org.after(dist); if (dist && ex) dist.after(ex); if (ex && rv) ex.after(rv);
+  const jn = find('Journal'), nt = find('Notes'); if (jn && nt) jn.after(nt);
+  return r; }; }
+
 /* one-time: move the old Home "Inbox" checklist and Unsorted tray items into the Inbox board */
 function oneInbox() {
   if (ST.settings.oneInbox) return; ST.settings.oneInbox = 1;
@@ -13776,7 +13911,7 @@ function oneInbox() {
   save(); renderBoard(); scheduleSidebar();
   toast('Your old inbox items are now in Capture', 5000);
 }
-{ const _rtv = refreshTaskViews; refreshTaskViews = function () { const r = _rtv.apply(this, arguments); if (hbOpen() === 'capture') hbRender(); return r; }; }
+{ const _rtv = refreshTaskViews; refreshTaskViews = function () { const r = _rtv.apply(this, arguments); if (['capture', 'today', 'plan'].includes(hbOpen())) hbRender(); return r; }; }
 /* repair: tasks moved with the task-details Board/List picker in the one-inbox release landed in a hidden checklist */
 function repairHiddenLists(quiet) {
   let n = 0;
@@ -13788,4 +13923,4 @@ function repairHiddenLists(quiet) {
   if (quiet) { repairHiddenLists.found = n; return; }
   if (n) { save(); renderBoard(); scheduleSidebar(); toast(`Recovered ${n} task${n === 1 ? '' : 's'} that had been hidden`, 6000); }
 }
-init().then(() => { const n = repairHiddenLists.found || 0; if (n) { save(); toast(`Recovered ${n} task${n === 1 ? '' : 's'} that had been hidden`, 6000); } oneInbox(); checkReminders(); });
+init().then(() => { const n = repairHiddenLists.found || 0; if (n) { save(); toast(`Recovered ${n} task${n === 1 ? '' : 's'} that had been hidden`, 6000); } oneInbox(); checkReminders(); tdLaunch(); });
