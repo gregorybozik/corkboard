@@ -1106,7 +1106,7 @@ function gcBlobs() {
   const used = new Set(); for (const c of Object.values(ST.cards)) for (const b of cardBlobIds(c)) used.add(b);
   for (const p of Object.values(ST.pages || {})) for (const b of blobIdsOfPage(p)) used.add(b);
   for (const bd of Object.values(ST.boards || {})) if (bd.cover && bd.cover.blobId) used.add(bd.cover.blobId);
-  for (const s of [...S.hist, ...S.fut]) for (const m of s.matchAll(/"(?:blobId|thumbId)":"(b[\w]+)"/g)) used.add(m[1]);
+  for (const s of [...S.hist, ...S.fut, JSON.stringify({ st: ST.settings, src: ST.sources || [], para: ST.para || {} })]) for (const m of s.matchAll(/"(?:blobId|thumbId)":"(b[\w]+)"/g)) used.add(m[1]);
   for (const id of Object.keys(Blobs.mem)) if (!used.has(id)) Blobs.remove(id);
 }
 function descendantBoards(bid) { const out = new Set([bid]); let grew = true; while (grew) { grew = false; for (const b of Object.values(ST.boards)) if (!out.has(b.id) && out.has(b.parentId)) { out.add(b.id); grew = true; } } return out; }
@@ -1143,29 +1143,33 @@ function pasteCards(data, pt, opts) {
   if (!data || !data.cards || !data.cards.length) return;
   const cloneIt = !!(opts && opts.clone);
   checkpoint();
-  const idm = {}, bm = {}, gm = {};
-  for (const b of data.boards) bm[b.id] = uid();
-  for (const c of [...data.cards, ...data.extra]) idm[c.id] = uid();
+  const idm = {}, bm = {}, gm = {}, reuse = new Set(), keepB = new Set();
+  if (!cloneIt) for (const c of data.cards) { const o = ST.cards[c.id]; if (o && (o.trashed || (o.columnId && reuse.has(o.columnId)))) { reuse.add(c.id); if (c.type === 'board' && ST.boards[c.data.boardId]) for (const d of descendantBoards(c.data.boardId)) keepB.add(d); } }
+  for (const b of data.boards) bm[b.id] = keepB.has(b.id) ? b.id : uid();
+  for (const c of [...data.cards, ...data.extra]) idm[c.id] = reuse.has(c.id) ? c.id : uid();
   const inSel = new Set(data.cards.map(c => c.id));
   const tops = data.cards.filter(c => !c.columnId || !idm[c.columnId]);
   const minX = Math.min(...tops.map(c => c.x)), minY = Math.min(...tops.map(c => c.y));
   const dx = pt ? pt.x - minX : 24, dy = pt ? pt.y - minY : 24;
   let z = maxZ(S.boardId); const newSel = new Set();
-  for (const b of data.boards) { const n = JSON.parse(JSON.stringify(b)); n.id = bm[b.id]; n.parentId = bm[b.parentId] || S.boardId; n.createdAt = n.updatedAt = now(); ST.boards[n.id] = n; }
+  for (const b of data.boards) { if (keepB.has(b.id)) { if (!keepB.has(b.parentId) && ST.boards[b.id]) { ST.boards[b.id].parentId = S.boardId; ST.boards[b.id].updatedAt = now(); } continue; } const n = JSON.parse(JSON.stringify(b)); n.id = bm[b.id]; n.parentId = bm[b.parentId] || S.boardId; n.createdAt = n.updatedAt = now(); ST.boards[n.id] = n; }
   for (const c of [...data.cards, ...data.extra]) {
-    const n = JSON.parse(JSON.stringify(c)); n.id = idm[c.id]; const sel = inSel.has(c.id); if (n.gid) n.gid = gm[n.gid] || (gm[n.gid] = uid());
+    if (!inSel.has(c.id) && keepB.has(c.boardId)) continue;
+    const n = JSON.parse(JSON.stringify(c)); n.id = idm[c.id]; const sel = inSel.has(c.id), kept = reuse.has(c.id); if (n.gid) n.gid = gm[n.gid] || (gm[n.gid] = uid());
     n.boardId = sel ? S.boardId : (bm[c.boardId] || S.boardId);
     n.columnId = n.columnId ? (idm[n.columnId] || null) : null;
     if (sel && !n.columnId) { n.x = Math.round(c.x + dx); n.y = Math.round(c.y + dy); n.z = ++z; newSel.add(n.id); }
-    if (sel) { n.trashed = false; n.unsorted = false; }
+    if (sel) { n.trashed = false; n.unsorted = false; delete n.trashedAt; }
     if (n.type === 'column') n.data.childIds = n.data.childIds.map(i => idm[i]).filter(Boolean);
     if (n.type === 'board') n.data.boardId = bm[c.data.boardId] || n.data.boardId;
-    if (n.type === 'database') { if (ST.dbs[n.data.dbId] && dbIsLive(n.data.dbId)) n.data.linked = true; else { n.data = defaultData('database'); n.data.dbId = newDb({ t: 'card', id: n.id }).id; } }
-    if (n.type === 'page' && !cloneIt && ST.pages[c.data.pageId] && pageIsLive(c.data.pageId)) { n.data.linked = true; n.data.pageId = c.data.pageId; }
+    if (!kept && n.type === 'database') { if (ST.dbs[n.data.dbId] && dbIsLive(n.data.dbId)) n.data.linked = true; else { n.data = defaultData('database'); n.data.dbId = newDb({ t: 'card', id: n.id }).id; } }
+    if (kept) { /* moved, not copied: same page */ }
+    else if (n.type === 'page' && !cloneIt && ST.pages[c.data.pageId] && pageIsLive(c.data.pageId)) { n.data.linked = true; n.data.pageId = c.data.pageId; }
     else if (n.type === 'page') { n.data.linked = false; const src = data.pages && data.pages[c.data.pageId] ? collectPageTree(c.data.pageId, data.pages) : null; n.data.pageId = src ? clonePageTree(src, c.data.pageId, { t: 'card', id: n.id }) : newPage({}, { t: 'card', id: n.id }).id; }
-    n.createdAt = n.updatedAt = now(); if (n.type === 'todo') reseedTodo(n); ST.cards[n.id] = n;
+    if (!kept) n.createdAt = now(); n.updatedAt = now(); if (n.type === 'todo' && !kept) reseedTodo(n); ST.cards[n.id] = n;
   }
   for (const l of data.lines) {
+    if (keepB.has(l.boardId)) continue;
     const n = JSON.parse(JSON.stringify(l)); n.id = uid(); n.boardId = bm[l.boardId] || S.boardId;
     for (const k of ['from', 'to']) { if (n[k].cardId) n[k].cardId = idm[n[k].cardId]; else if (n.boardId === S.boardId) { n[k].x += dx; n[k].y += dy; } }
     ST.lines[n.id] = n;
@@ -13912,7 +13916,7 @@ function tdCatSelect(val, fn) {
 function tdSetCat(key, name) { const f = findTask(key); if (!f) return; checkpoint(); f.item.cat = name || undefined; f.card.updatedAt = now(); save(); hbRender(); }
 
 /* ---- cover ---- */
-function tdCoverCss() { const cv = ST.settings.tdCover; if (!cv || !(cv.blobId || cv.src)) return null; const css = bannerCss(cv); css.backgroundPosition = `center ${cv.y ?? 50}%`; return css; }
+function tdCoverCss() { const cv = ST.settings.tdCover; if (!cv || !(cv.blobId || cv.src) || (cv.blobId && !Blobs.get(cv.blobId))) return null; const css = bannerCss(cv); css.backgroundPosition = `center ${cv.y ?? 50}%`; return css; }
 function tdCoverPop(anchor) {
   const st = ST.settings, cur = st.tdCover || null;
   const set = v => { checkpoint(); st.tdCover = v ? Object.assign({ y: 50, dim: 35 }, v) : null; save(); hbRender(); };
@@ -14131,6 +14135,36 @@ addEventListener('resize', () => { if (document.body.classList.contains('nobar')
 
 nbApply();
 
+/* ========== Keep PARA filing when a project/area is cut and pasted to another board ========== */
+function paraRemapKey(oldK, newK) {
+  if (oldK === newK) return;
+  for (const m of [ST.settings.para || {}, ST.settings.stage || {}]) if (oldK in m) { m[newK] = m[oldK]; delete m[oldK]; }
+  const pf = ST.settings.paraFrom; if (pf && oldK in pf) { pf[newK] = pf[oldK]; delete pf[oldK]; }
+  const pa = ST.para; if (pa && pa[oldK]) { pa[newK] = pa[oldK]; delete pa[oldK]; }
+  for (const k in (ST.para || {})) if (ST.para[k].area === oldK) ST.para[k].area = newK;
+  for (const s of ST.sources || []) for (const f of ['projects', 'areas']) if (Array.isArray(s[f])) s[f] = s[f].map(x => x === oldK ? newK : x);
+  for (const hb of ST.habits || []) if (hb.area === oldK) hb.area = newK;
+  if (ST.folderOf && oldK in ST.folderOf) { ST.folderOf[newK] = ST.folderOf[oldK]; delete ST.folderOf[oldK]; }
+}
+/* Repair items that were cut and pasted before this fix: the filed key points at a board/page whose card is in Trash,
+   and exactly one live board/page with the same title was created after it was cut. */
+function paraRelinkCut() {
+  let n = 0;
+  const filed = new Set([...Object.keys(ST.settings.para || {}), ...Object.keys(ST.settings.stage || {})]);
+  for (const key of [...filed]) {
+    if (nvLive(key)) continue;
+    const [k, id] = key.split(':'); let title, cut;
+    if (k === 'b') { const b = ST.boards[id], c = boardCardFor(id); if (!b || !c || !c.trashed) continue; title = b.title; cut = c.trashedAt || 0;
+      const cands = liveBoards().filter(x => x.id !== id && x.title === title && (x.createdAt || 0) >= cut - 2000 && !filed.has('b:' + x.id));
+      if (cands.length === 1) { paraRemapKey(key, 'b:' + cands[0].id); filed.add('b:' + cands[0].id); n++; } }
+    else if (k === 'p') { const p = ST.pages[id], c = Object.values(ST.cards).find(x => x.type === 'page' && x.data && x.data.pageId === id); if (!p || !c || !c.trashed) continue; title = p.title; cut = c.trashedAt || 0;
+      const cands = Object.values(ST.pages).filter(x => x.id !== id && x.title === title && (x.createdAt || 0) >= cut - 2000 && pageIsLive(x.id) && !filed.has('p:' + x.id));
+      if (cands.length === 1) { paraRemapKey(key, 'p:' + cands[0].id); filed.add('p:' + cands[0].id); n++; } }
+  }
+  if (n) { save(); scheduleSidebar(); }
+  return n;
+}
+
 /* one-time: move the old Home "Inbox" checklist and Unsorted tray items into the Inbox board */
 function oneInbox() {
   if (ST.settings.oneInbox) return; ST.settings.oneInbox = 1;
@@ -14160,4 +14194,4 @@ function repairHiddenLists(quiet) {
   if (quiet) { repairHiddenLists.found = n; return; }
   if (n) { save(); renderBoard(); scheduleSidebar(); toast(`Recovered ${n} task${n === 1 ? '' : 's'} that had been hidden`, 6000); }
 }
-init().then(() => { const n = repairHiddenLists.found || 0; if (n) { save(); toast(`Recovered ${n} task${n === 1 ? '' : 's'} that had been hidden`, 6000); } oneInbox(); checkReminders(); tdLaunch(); nbApply(); });
+init().then(() => { const n = repairHiddenLists.found || 0; if (n) { save(); toast(`Recovered ${n} task${n === 1 ? '' : 's'} that had been hidden`, 6000); } oneInbox(); checkReminders(); paraRelinkCut(); tdLaunch(); nbApply(); });
