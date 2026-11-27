@@ -14105,6 +14105,32 @@ function tdSettingsSection(row) {
   return [row('Timer lengths (minutes)', lens, 'Used by the Today focus panel and the Focus page'), h('div', { class: 'set-row nohover td2-catwrap' }, h('div', { class: 'set-l' }, h('div', null, 'Task categories'), h('div', { class: 'set-sub' }, 'Used to tag and filter tasks on Today')), box)];
 }
 
+/* ========== Phones + iPad portrait: no top bars, floating buttons ========== */
+const NOBAR_MQ = matchMedia('(max-width:760px), (max-width:1024px) and (orientation:portrait)');
+function nbIcon(d) { return `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`; }
+function nbApply() {
+  const on = NOBAR_MQ.matches; document.body.classList.toggle('nobar', on);
+  let f = $('#nbFloat');
+  if (on && !f) {
+    const more = h('button', { class: 'nb-b', 'aria-label': 'More', title: 'More', html: nbIcon('<circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>') });
+    more.onclick = e => { e.stopPropagation(); showMenuAt(more, [
+      { label: 'Open tabs…', fn: () => setTimeout(() => tabAll(more), 0) },
+      { label: 'Undo', fn: () => undo() }, { label: 'Redo', fn: () => redo() }, '-',
+      { label: 'Capture' + (nvInboxCount() ? ` (${nvInboxCount()})` : ''), fn: () => openHub('capture') },
+      { label: 'Settings', fn: () => openSettings() }]); };
+    f = h('div', { id: 'nbFloat' },
+      h('button', { class: 'nb-b', 'aria-label': 'Open sidebar', title: 'Menu', html: nbIcon('<path d="M4 7h16M4 12h16M4 17h16"/>'), onclick: () => toggleSidebar(isMobileSb() ? true : undefined) }),
+      h('span', { class: 'nb-gap' }),
+      h('button', { class: 'nb-b', 'aria-label': 'Search', title: 'Search', html: nbIcon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>'), onclick: () => $('#btnSearch')?.click() }), more);
+    document.body.append(f);
+  } else if (!on && f) f.remove();
+  document.documentElement.style.setProperty('--navtop', on ? '0px' : Math.round(($('#topbar')?.getBoundingClientRect().bottom) || 77) + 'px');
+}
+NOBAR_MQ.addEventListener('change', () => { nbApply(); if (typeof hbOpen === 'function' && hbOpen()) hbRender(); });
+addEventListener('resize', () => { if (document.body.classList.contains('nobar')) document.documentElement.style.setProperty('--navtop', '0px'); });
+
+nbApply();
+
 /* one-time: move the old Home "Inbox" checklist and Unsorted tray items into the Inbox board */
 function oneInbox() {
   if (ST.settings.oneInbox) return; ST.settings.oneInbox = 1;
@@ -14134,4 +14160,4 @@ function repairHiddenLists(quiet) {
   if (quiet) { repairHiddenLists.found = n; return; }
   if (n) { save(); renderBoard(); scheduleSidebar(); toast(`Recovered ${n} task${n === 1 ? '' : 's'} that had been hidden`, 6000); }
 }
-init().then(() => { const n = repairHiddenLists.found || 0; if (n) { save(); toast(`Recovered ${n} task${n === 1 ? '' : 's'} that had been hidden`, 6000); } oneInbox(); checkReminders(); tdLaunch(); });
+init().then(() => { const n = repairHiddenLists.found || 0; if (n) { save(); toast(`Recovered ${n} task${n === 1 ? '' : 's'} that had been hidden`, 6000); } oneInbox(); checkReminders(); tdLaunch(); nbApply(); });

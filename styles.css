@@ -4233,3 +4233,16 @@ body.sel-one .card.selected>.hp-col .hp-color{display:block}
   .td2-flow{padding:16px}
   .td2-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+/* ---- Phones + iPad portrait: no top bars, floating buttons ---- */
+body.nobar #tabbar,body.nobar #topbar,body.nobar #tabrow{display:none!important}
+body.nobar .tasksview,body.nobar .dashview,body.nobar .pv-wrap,body.nobar .dbfull{top:0!important}
+#nbFloat{position:fixed;top:calc(10px + env(safe-area-inset-top));left:calc(var(--sbw,0px) + 10px);right:10px;z-index:24500;display:flex;align-items:center;gap:8px;pointer-events:none}
+#nbFloat .nb-gap{flex:1}
+.nb-b{pointer-events:auto;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);background:rgba(20,21,24,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer}
+.nb-b:active{transform:scale(.96)}
+body.nobar .dashview:not(.hub-today),body.nobar .tasksview,body.nobar .pv-wrap{padding-top:58px;box-sizing:border-box}
+body.nobar.sb-mobile.sb-open #nbFloat{display:none}
+body.nobar .td2-cwrap{padding-top:68px}
+@media (max-width:760px){body.nobar .td2-cwrap{padding-top:112px}body.nobar .td2-ctop{top:66px}}
+body.nobar #main{padding-top:0}
+body.nobar #bhead{top:64px!important}
