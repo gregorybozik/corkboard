@@ -2594,7 +2594,7 @@ hook24: { const f = findTask(tid), due = f && document.querySelector('.modal-bg 
   const dates = h('div', { class: 'tm-dates' }, h('label', { class: 'tm-df' }, h('span', { class: 'tm-cap' }, 'Start'), start), h('label', { class: 'tm-df' }, h('span', { class: 'tm-cap' }, 'Due'), due));
   dueLabel.textContent = 'Dates'; dueLabel.after(dates); dates.after(h('div', { class: 'tm-label' })); /* empty label cell keeps shortcuts aligned */
   const planRow = h('div', { class: 'tm-row tm-plan' }); dueRow.after(h('div', { class: 'tm-label' }, 'Plan'), planRow);
-  planRow.after(h('div', { class: 'tm-label' }, 'When'), whenRow(tid, change, due));
+  { const wr = whenRow(tid, change, due); planRow.after(h('div', { class: 'tm-label' }, 'When'), wr); wr.after(h('div', { class: 'tm-label' }, 'Category'), h('div', { class: 'tm-row' }, tdCatSelect(f.item.cat, v => change(x => { x.cat = v || undefined; })))); }
   const paint = () => {
     const cur = findTask(tid).item; planRow.innerHTML = '';
     const who = h('button', { class: 'btn', onclick: e => peoplePop(e.currentTarget, cur.assignee || [], v => { change(x => { x.assignee = v; }); paint(); }) }, (cur.assignee || []).length ? (cur.assignee).map(personById).filter(Boolean).map(p => p.name).join(', ') : 'Assign people');
@@ -6017,6 +6017,7 @@ function openSettings() {
       tgl('Show Favorites', null, st.showFavs !== false, v => { st.showFavs = v; save(); renderSidebar(); }),
       tgl('Show Recent', null, st.showRecent !== false, v => { st.showRecent = v; save(); renderSidebar(); }),
     ],
+    Today: () => tdSettingsSection(row),
     AI: () => aiSettingsSection().slice(1),
     Data: () => [
       row('Trash', h('button', { class: 'btn', onclick: () => { bg.remove(); closePageView(); closeDashes(); openTrash(); } }, 'Open Trash'), 'Restore or permanently delete removed boards, pages and cards'),
@@ -12249,7 +12250,7 @@ function openHub(kind) {
 function hbRender() {
   const kind = hbOpen(); if (!kind) return;
   const ov = $('.dashview.hubview'), y = ov.querySelector('.hb-scroll')?.scrollTop || 0;
-  ({ capture: hbCapture, distill: dsRender, express: exRender, habits: habRender, journal: jnRender, review: rvRender, today: tdRender, plan: plHubRender }[kind] || (o => hbPara(o, kind)))(ov);
+  ({ capture: hbCapture, distill: dsRender, express: exRender, habits: habRender, journal: jnRender, review: rvRender, today: tdHome, plan: plHubRender }[kind] || (o => hbPara(o, kind)))(ov);
   const sc = ov.querySelector('.hb-scroll'); if (sc) sc.scrollTop = y;
 }
 function hbSearch(kind, label, onInput) {
@@ -13856,7 +13857,7 @@ function plHubRender(ov) { const a = document.activeElement; if (a && a.matches(
 
 /* ---- launch on Today ---- */
 function tdLaunch() {
-  const st = ST.settings; if (st.guideShown) st.guideDone = true;
+  fxApplyLens(); const st = ST.settings; if (st.guideShown) st.guideDone = true;
   const tabs = tabList(); let i = tabs.findIndex(x => x.o === 'd:hb:today');
   if (i < 0) tabs.unshift({ b: ST.rootId, o: 'd:hb:today' }); else if (i > 0) tabs.unshift(tabs.splice(i, 1)[0]);
   tabNormalize(); i = tabs.findIndex(x => x.o === 'd:hb:today');
@@ -13893,6 +13894,216 @@ function sbReorder() {
   if (cap && org) cap.after(org); if (org && dist) org.after(dist); if (dist && ex) dist.after(ex); if (ex && rv) ex.after(rv);
   const jn = find('Journal'), nt = find('Notes'); if (jn && nt) jn.after(nt);
   return r; }; }
+
+/* ========== Today v2: cover + focus panel, widgets, planner, workflow dial, habits/journal, recent projects ========== */
+const TD_CATS0 = [['Arthrex', '#4F7CF0'], ['Side work', '#8B5CF6'], ['Home', '#22A06B']];
+const TD_URG = { overdue: ['Overdue', 0], today: ['Today', 1], week: ['This week', 2], someday: ['Someday', 3] };
+const tdUI = { cat: 'all', urg: 'all', sort: 'urgency', all: false };
+function tdCats() { const st = ST.settings; if (!Array.isArray(st.taskCats)) st.taskCats = TD_CATS0.map(([name, color]) => ({ name, color })); return st.taskCats; }
+function tdCatColor(n) { const c = tdCats().find(x => x.name === n); return c ? c.color : null; }
+function tdUrg(e, t) { if (!e.due) return 'someday'; if (e.due < t) return 'overdue'; if (e.due === t) return 'today'; return e.due <= addDays(t, 7) ? 'week' : 'someday'; }
+function tdSchedulable(e) { return e.kind === 'list' || (e.kind === 'page' && !e.loose); }
+function tdItem(e) { if (!tdSchedulable(e)) return null; const f = findTask(e.key); return f ? f.item : null; }
+function fxApplyLens() { const L = ST.settings.fxLens || {}; for (const m of FX_MODES) if (L[m[0]] > 0) m[2] = L[m[0]]; }
+function tdCatSelect(val, fn) {
+  const s = h('select', { class: 'tm-input', 'aria-label': 'Category' }, h('option', { value: '' }, 'No category'), ...tdCats().map(c => h('option', { value: c.name }, c.name)));
+  s.value = tdCats().some(c => c.name === val) ? val : ''; s.addEventListener('change', () => fn(s.value)); return s;
+}
+function tdSetCat(key, name) { const f = findTask(key); if (!f) return; checkpoint(); f.item.cat = name || undefined; f.card.updatedAt = now(); save(); hbRender(); }
+
+/* ---- cover ---- */
+function tdCoverCss() { const cv = ST.settings.tdCover; if (!cv || !(cv.blobId || cv.src)) return null; const css = bannerCss(cv); css.backgroundPosition = `center ${cv.y ?? 50}%`; return css; }
+function tdCoverPop(anchor) {
+  const st = ST.settings, cur = st.tdCover || null;
+  const set = v => { checkpoint(); st.tdCover = v ? Object.assign({ y: 50, dim: 35 }, v) : null; save(); hbRender(); };
+  const slider = (label, key, min, max) => { const i = h('input', { type: 'range', min: String(min), max: String(max), value: String((st.tdCover || {})[key] ?? (key === 'y' ? 50 : 35)), 'aria-label': label });
+    let marked = false; i.addEventListener('input', () => { if (!st.tdCover) return; if (!marked) { checkpoint(); marked = true; } st.tdCover[key] = +i.value; save(); const c = $('.td2-cover'); if (c) { if (key === 'y') c.style.backgroundPosition = `center ${i.value}%`; else c.style.setProperty('--dim', String(i.value / 100)); } });
+    return h('label', { class: 'td2-sl' }, h('span', null, label), i); };
+  const pp = h('div', { class: 'pop coverpop pd-coverpop' }, h('div', { class: 'dd-h' }, 'Today cover'), ...coverInputs(set, !!cur, () => set(null)),
+    cur ? slider('Position', 'y', 0, 100) : null, cur ? slider('Darken', 'dim', 0, 80) : null);
+  closeTransient(); document.body.append(pp); const r = anchor.getBoundingClientRect(); placeEl(pp, r.right - 300, r.bottom + 6);
+}
+
+/* ---- focus panel on the cover ---- */
+function tdFocusPanel() {
+  const a = FT().active; if (a && a.kind) fx.mode = a.kind;
+  const mode = fx.mode, mm = FX_MODES.find(m => m[0] === mode), mins = mm[2];
+  const rem = a ? tRemain(a) : mins * 60000, frac = a ? rem / a.planned : 1, C = 2 * Math.PI * 52;
+  const col = mode === 'focus' ? 'var(--td-acc)' : mode === 'short' ? '#4ADE80' : '#60A5FA';
+  const nx = mode === 'focus' ? (a && a.taskId ? { it: { text: timerTaskText(a.taskId) || 'Focus session' }, why: 'Now' } : tdNext()) : null;
+  const ring = `<svg viewBox="0 0 120 120" width="112" height="112" aria-hidden="true"><circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="9"/><circle class="td2-arc" cx="60" cy="60" r="52" fill="none" stroke="${col}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${(C * (1 - frac)).toFixed(2)}" transform="rotate(-90 60 60)"/></svg>`;
+  const go = () => { if (FT().active) return; if (mode === 'focus' && nx && nx.it.id) fx.task = nx.it.id; fxStart(); hbRender(); };
+  const ctl = !a ? [h('button', { class: 'td2-go', onclick: go }, '▶ Start ' + (mode === 'focus' ? 'focus' : 'break'))]
+    : [h('button', { class: 'td2-go', onclick: () => { a.paused ? resumeTimer() : pauseTimer(); hbRender(); } }, a.paused ? '▶ Resume' : '❚❚ Pause'),
+      h('button', { class: 'td2-stop', 'aria-label': 'Stop timer', onclick: () => { if (a.kind && a.kind !== 'focus') { cancelChime(); clearTimeout(TM.finishT); FT().active = null; save(); renderMini(); } else stopTimer(); hbRender(); } }, '■')];
+  return h('section', { class: 'td2-focus', 'aria-label': 'Focus timer' },
+    h('div', { class: 'td2-modes', role: 'group', 'aria-label': 'Timer mode' }, ...FX_MODES.map(([k, l, m]) => h('button', { class: k === mode ? 'on' : '', 'aria-pressed': String(k === mode), disabled: a ? '' : null, title: m + ' min', onclick: () => { fx.mode = k; hbRender(); } }, l))),
+    h('div', { class: 'td2-fbody' }, h('div', { class: 'td2-ring' }, h('span', { html: ring }), h('b', { class: 'td2-time' }, fmtClock(rem))),
+      h('div', { class: 'td2-fnext' }, h('span', null, a ? (a.paused ? 'Paused' : mode === 'focus' ? 'Focusing on' : 'On a break') : mode === 'focus' ? (nx ? 'Next up · ' + nx.why : 'Next up') : mm[1] + ' · ' + mins + ' min'),
+        h('b', null, mode === 'focus' ? (nx ? nx.it.text || 'Untitled task' : 'Pick a task in Focus') : mode === 'short' ? 'Stand up, stretch, refill.' : 'Step away from the screen for a bit.'))),
+    h('div', { class: 'td2-fctl' }, ...ctl));
+}
+setInterval(() => { if (!ST || hbOpen() !== 'today') return; const a = FT().active, t = $('.td2-time'); if (!a || !t) return; const rem = tRemain(a); t.textContent = fmtClock(rem); const C = 2 * Math.PI * 52; $('.td2-arc')?.setAttribute('stroke-dashoffset', (C * (1 - rem / a.planned)).toFixed(2)); }, 500);
+{ const _rt = refreshTimer; refreshTimer = function () { const r = _rt.apply(this, arguments); if (hbOpen() === 'today') hbRender(); return r; }; }
+
+/* ---- widgets ---- */
+function tdSpark(vals, col) {
+  const w = 104, hh = 46, mx = Math.max(1, ...vals), pts = vals.map((v, i) => [Math.round(i * w / (vals.length - 1)), Math.round(hh - 4 - (v / mx) * (hh - 10))]);
+  const line = pts.map((p, i) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
+  return `<svg width="${w}" height="${hh}" viewBox="0 0 ${w} ${hh}" aria-hidden="true"><path d="${line} L${w} ${hh} L0 ${hh}Z" fill="${col}" opacity=".22"/><path d="${line}" fill="none" stroke="${col}" stroke-width="2"/></svg>`;
+}
+function tdWidgets(t) {
+  const days = [...Array(7)].map((_, i) => addDays(t, i - 6)), today = plBlocks(t), mins = today.reduce((s, b) => s + b.it.block.mins, 0);
+  const open = taskEntries().filter(e => e.col !== 'done'), od = open.filter(e => e.due && e.due < t);
+  const late = e => Math.round((parseYmd(t) - parseYmd(e.due)) / 864e5), bk = [0, 0, 0, 0]; od.forEach(e => { const d = late(e); bk[d <= 2 ? 0 : d <= 7 ? 1 : d <= 14 ? 2 : 3]++; });
+  const bmx = Math.max(1, ...bk), oldest = od.map(e => e.due).sort()[0];
+  const pj = nvItems('projects').filter(k => pjStatus(k) === 'active'), avg = pj.length ? Math.round(pj.reduce((s, k) => s + paraProg(k).pct, 0) / pj.length) : 0;
+  const dow = d => parseYmd(d).getDay(), hs = habits().filter(hb => !hb.paused), due = d => hs.filter(hb => hb.days.includes(dow(d)));
+  const hd = due(t), hdn = hd.filter(hb => hb.done[t]).length, best = Math.max(0, ...hs.map(hb => habStreaks(hb).cur));
+  const tile = (n, nCls, label, sub, viz, go) => h('button', { class: 'td2-w', onclick: go }, h('div', null, h('b', { class: 'td2-wn' + (nCls ? ' ' + nCls : '') }, n), h('span', { class: 'td2-wl' }, label), h('span', { class: 'td2-ws' }, sub)), viz);
+  return h('section', { class: 'td2-widgets', 'aria-label': 'Summary' },
+    tile(String(today.length), '', 'Scheduled', today.length ? `${fmtMins(mins)} planned today` : 'No blocks on today’s plan', h('span', { class: 'td2-viz', html: tdSpark(days.map(d => plBlocks(d).length), 'var(--td-acc)') }), () => $('.td2-planner')?.scrollIntoView({ behavior: 'smooth', block: 'start' })),
+    tile(String(od.length), od.length ? 'bad' : '', 'Overdue', od.length ? 'Oldest: ' + dueLabel(oldest, t) : 'Nothing overdue', h('span', { class: 'td2-bars', 'aria-hidden': 'true' }, ...bk.map((v, i) => h('i', { title: ['1–2 days', '3–7 days', '8–14 days', '15+ days'][i] + ': ' + v, style: { height: Math.max(4, Math.round(v / bmx * 46)) + 'px', opacity: String(.35 + i * .2) } }))), () => { tdUI.urg = 'overdue'; hbRender(); $('.td2-planner')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }),
+    tile(String(pj.length), '', pj.length === 1 ? 'Active project' : 'Active projects', pj.length ? avg + '% average progress' : 'None active', h('span', { class: 'td2-ringw', style: { background: `conic-gradient(var(--td-acc) ${avg * 3.6}deg, var(--line) 0)` } }, h('b', null, avg + '%')), () => openHub('projects')),
+    tile(`${hdn}/${hd.length}`, '', 'Habits', hs.length ? (best ? `Best streak: ${best}` : 'No streaks yet') : 'No habits yet', h('span', { class: 'td2-hgrid', 'aria-hidden': 'true' }, ...days.map(d => { const dd = due(d), r = dd.length ? dd.filter(hb => hb.done[d]).length / dd.length : 0; return h('i', { class: d === t ? 'now' : '', style: { opacity: String(dd.length ? .25 + r * .75 : .12) } }); })), () => openHub('habits')));
+}
+
+/* ---- planner: vertical calendar + draggable task list ---- */
+function tdPlanner(t) {
+  const H0 = 7, H1 = 18, RH = 52, nowD = new Date(), nowM = nowD.getHours() * 60 + nowD.getMinutes();
+  const blocks = plBlocks(t);
+  const cal = h('div', { class: 'td2-cal', 'aria-label': 'Today calendar' });
+  for (let hr = H0; hr <= H1; hr++) {
+    const here = blocks.filter(b => Math.floor(plMin(b.it.block.start) / 60) === hr).sort((a, b) => plMin(a.it.block.start) - plMin(b.it.block.start));
+    const row = h('div', { class: 'td2-hr', 'data-h': String(hr) }, h('span', { class: 'td2-hl' }, (hr % 12 || 12) + (hr < 12 ? ' AM' : ' PM')),
+      h('div', { class: 'td2-slot' }, ...here.map(b => { const col = tdCatColor(b.it.cat) || 'var(--td-acc)'; const btn = h('button', { class: 'td2-blk' + (b.it.done ? ' done' : ''), style: { borderLeftColor: col }, 'aria-label': `${b.it.text}, ${plRange(b.it.block)}`, onclick: e => plBlockMenu(e.currentTarget, b.it) }, h('b', null, b.it.text || 'Untitled task'), h('span', null, plRange(b.it.block))); return btn; })));
+    if (t === todayStr() && nowM >= hr * 60 && nowM < (hr + 1) * 60) row.append(h('i', { class: 'td2-now', style: { top: Math.round((nowM - hr * 60) / 60 * RH) + 'px' } }));
+    row.addEventListener('dragover', e => { if (!S.tdDrag) return; e.preventDefault(); row.classList.add('over'); });
+    row.addEventListener('dragleave', () => row.classList.remove('over'));
+    row.addEventListener('drop', e => { row.classList.remove('over'); const id = S.tdDrag; S.tdDrag = null; if (!id) return; e.preventDefault(); const f = findTask(id); if (!f) return; plSet(id, t, hr * 60, f.item.block ? f.item.block.mins : 60); toast('Scheduled ' + (hr % 12 || 12) + ':00 ' + (hr < 12 ? 'AM' : 'PM')); hbRender(); });
+    cal.append(row);
+  }
+  const placed = blocks.length, pm = blocks.reduce((s, b) => s + b.it.block.mins, 0);
+  const calCard = h('section', { class: 'td2-card td2-calc' }, h('header', null, h('h2', null, 'Today'), h('span', { class: 'td2-sub' }, placed ? `${placed} block${placed === 1 ? '' : 's'} · ${fmtMins(pm)}` : 'Drag tasks onto the day'), h('span', { class: 'hb-gap' }), hbBtn('Open Plan', () => openHub('plan'))), cal);
+
+  /* task list */
+  const all = taskEntries().filter(e => e.col !== 'done');
+  let list = all.filter(e => { const it = tdItem(e), cat = it && it.cat; return (tdUI.cat === 'all' || (tdUI.cat === '' ? !cat : cat === tdUI.cat)) && (tdUI.urg === 'all' || tdUrg(e, t) === tdUI.urg); });
+  const ur = e => TD_URG[tdUrg(e, t)][1];
+  const catCmp = (a, b) => { const x = (tdItem(a) || {}).cat || '', y = (tdItem(b) || {}).cat || ''; return x && !y ? -1 : !x && y ? 1 : x.localeCompare(y); };
+  const byDue = (a, b) => (a.due || '9') < (b.due || '9') ? -1 : (a.due || '9') > (b.due || '9') ? 1 : 0;
+  list.sort((a, b) => tdUI.sort === 'title' ? a.text.localeCompare(b.text) : tdUI.sort === 'category' ? (catCmp(a, b) || ur(a) - ur(b) || byDue(a, b)) : (ur(a) - ur(b) || byDue(a, b)));
+  const shown = tdUI.all ? list : list.slice(0, 10);
+  const chip = (on, label, fn, color) => h('button', { class: 'td2-chip' + (on ? ' on' : ''), 'aria-pressed': String(on), onclick: fn }, color ? h('i', { style: { background: color } }) : null, label);
+  const sort = h('select', { class: 'td2-sort', 'aria-label': 'Sort tasks' }, ...[['urgency', 'Urgency'], ['category', 'Category'], ['title', 'A–Z']].map(([v, l]) => h('option', { value: v }, l))); sort.value = tdUI.sort;
+  sort.addEventListener('change', () => { tdUI.sort = sort.value; hbRender(); });
+  const rows = shown.map(e => {
+    const it = tdItem(e), cat = it && it.cat, col = tdCatColor(cat), u = tdUrg(e, t), blk = it && it.block && it.block.date === t ? it.block : null, drag = tdSchedulable(e) && !!it;
+    const catBtn = h('button', { class: 'td2-cat', disabled: drag ? null : '', title: drag ? 'Set category' : 'Category not available for this item', onclick: ev => { ev.stopPropagation(); showMenuAt(ev.currentTarget, [{ label: 'No category', fn: () => tdSetCat(e.key, '') }, ...tdCats().map(c => ({ label: (c.name === cat ? '✓ ' : '') + c.name, fn: () => tdSetCat(e.key, c.name) })), '-', { label: 'Edit categories…', fn: () => { ST.settings.setTab = 'Today'; openSettings(); } }]); } }, h('i', { style: { background: col || 'transparent', borderColor: col || 'var(--muted)' } }), cat || 'No category');
+    const el = h('div', { class: 'td2-task' + (blk ? ' placed' : ''), draggable: drag ? 'true' : null },
+      h('span', { class: 'td2-grip', 'aria-hidden': 'true' }, drag ? '⋮⋮' : ''),
+      h('button', { class: 'pd-chk', 'aria-label': 'Complete: ' + e.text, onclick: () => { entryMove(e.key, 'done'); hbRender(); } }, ''),
+      h('div', { class: 'td2-tmain' }, h('button', { class: 'td2-tt', onclick: () => entryOpen(e) }, e.text),
+        h('div', { class: 'td2-tmeta' }, catBtn, h('span', { class: 'td2-u u-' + u }, TD_URG[u][0]), h('span', { class: 'td2-when' }, blk ? 'Scheduled ' + plRange(blk) : e.due ? 'Due ' + dueLabel(e.due, t) : ''))),
+      drag && !blk ? hbBtn('Next free slot', () => { const m = plFree(t, 60, 1)[0] ?? plFree(t, 30, 1)[0]; if (m == null) return toast('No free time left today'); plSet(e.key, t, m, plFree(t, 60, 1)[0] != null ? 60 : 30); hbRender(); }) : null);
+    if (drag) { el.addEventListener('dragstart', ev => { S.tdDrag = e.key; try { ev.dataTransfer.setData('text/plain', e.key); ev.dataTransfer.effectAllowed = 'move'; } catch (_) { } el.classList.add('dragging'); }); el.addEventListener('dragend', () => { S.tdDrag = null; el.classList.remove('dragging'); $$('.td2-hr.over').forEach(x => x.classList.remove('over')); }); }
+    return el;
+  });
+  const taskCard = h('section', { class: 'td2-card td2-tasks' },
+    h('header', null, h('h2', null, 'Tasks'), h('span', { class: 'hb-count' }, String(list.length)), h('span', { class: 'hb-gap' }), h('label', { class: 'td2-sortl' }, 'Sort', sort), hbBtn('Open Tasks', () => tdGo('tasks'))),
+    h('div', { class: 'td2-chips', role: 'group', 'aria-label': 'Category' }, chip(tdUI.cat === 'all', 'All', () => { tdUI.cat = 'all'; hbRender(); }), ...tdCats().map(c => chip(tdUI.cat === c.name, c.name, () => { tdUI.cat = c.name; hbRender(); }, c.color)), chip(tdUI.cat === '', 'No category', () => { tdUI.cat = ''; hbRender(); })),
+    h('div', { class: 'td2-chips', role: 'group', 'aria-label': 'Urgency' }, chip(tdUI.urg === 'all', 'Any urgency', () => { tdUI.urg = 'all'; hbRender(); }), ...Object.entries(TD_URG).map(([k, [l]]) => chip(tdUI.urg === k, l, () => { tdUI.urg = k; hbRender(); }))),
+    ...(rows.length ? rows : [h('p', { class: 'hb-muted td-none' }, all.length ? 'No tasks match these filters.' : 'No open tasks.')]),
+    list.length > 10 ? hbBtn(tdUI.all ? 'Show fewer' : `Show all ${list.length}`, () => { tdUI.all = !tdUI.all; hbRender(); }) : null,
+    h('p', { class: 'td2-hint' }, 'Drag a task onto an hour to block time.'));
+  return h('div', { class: 'td2-planner' }, calCard, taskCard);
+}
+
+/* ---- workflow dial ---- */
+function tdFlow(t) {
+  const open = taskEntries().filter(e => e.col !== 'done'), cap = nvInboxCount();
+  const unsorted = open.filter(e => { const it = tdItem(e); return !e.due && !(it && it.cat) && !(it && it.block); }).length;
+  const dueNow = open.filter(e => e.due && e.due <= t), toPlace = dueNow.filter(e => { const it = tdItem(e); return tdSchedulable(e) && it && !(it.block && it.block.date === t); }).length, placed = plBlocks(t).length;
+  const doneToday = taskEntries().filter(e => e.col === 'done' && e.it && e.it.doneAt && ymd(new Date(e.it.doneAt)) === t).length;
+  const lr = ST.settings.lastReview, reviewed = lr && Date.now() - lr < 7 * 864e5;
+  const S5 = [
+    ['Capture', cap ? 0 : 1, cap ? `${cap} waiting` : 'Inbox clear', () => openHub('capture'), cap ? `Sort ${cap} capture${cap === 1 ? '' : 's'}` : ''],
+    ['Sort', open.length ? 1 - unsorted / open.length : 1, unsorted ? `${unsorted} without a date or category` : 'Everything filed', () => { tdUI.cat = ''; tdUI.urg = 'someday'; hbRender(); $('.td2-planner')?.scrollIntoView({ behavior: 'smooth' }); }, unsorted ? `File ${unsorted} task${unsorted === 1 ? '' : 's'}` : ''],
+    ['Plan', toPlace + placed ? placed / (toPlace + placed) : 1, toPlace ? `${toPlace} due task${toPlace === 1 ? '' : 's'} to place` : placed ? `${placed} block${placed === 1 ? '' : 's'} today` : 'Nothing due to place', () => $('.td2-planner')?.scrollIntoView({ behavior: 'smooth' }), toPlace ? `Block time for ${toPlace} task${toPlace === 1 ? '' : 's'}` : ''],
+    ['Do', dueNow.length + doneToday ? doneToday / (dueNow.length + doneToday) : 1, dueNow.length ? `${dueNow.length} due or overdue · ${doneToday} done today` : `${doneToday} done today`, () => { const n = tdNext(); closePageView(); closeDashes(); S.fvTab = 'timer'; openFocusView(); if (n && n.it.id) plStartFocus(n.it.id); }, dueNow.length ? 'Start focus on the next task' : ''],
+    ['Review', reviewed ? 1 : 0, reviewed ? 'Done this week' : lr ? 'Last done ' + rvSince() : 'Not done yet', () => openHub('review'), reviewed ? '' : 'Do the weekly review']];
+  const nextI = S5.findIndex(s => s[1] < 1), clear = S5.filter(s => s[1] >= 1).length;
+  const C = 2 * Math.PI * 92, seg = C / 5, gap = 7;
+  let svg = `<svg viewBox="0 0 220 220" width="210" height="210" role="img" aria-label="Workflow: ${clear} of 5 steps clear">`;
+  S5.forEach(([, p], i) => { const len = seg - gap; svg += `<circle cx="110" cy="110" r="92" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="18" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-i * seg}" transform="rotate(-90 110 110)"/>`;
+    if (p > 0) svg += `<circle cx="110" cy="110" r="92" fill="none" stroke="${p >= 1 ? 'var(--td-acc)' : 'var(--td-acc2)'}" stroke-width="18" stroke-dasharray="${len * Math.min(1, p)} ${C}" stroke-dashoffset="${-i * seg}" transform="rotate(-90 110 110)"/>`; });
+  svg += '</svg>';
+  const nx = nextI >= 0 ? S5[nextI] : null;
+  return h('section', { class: 'td2-card td2-flow', 'aria-label': 'Workflow' },
+    h('div', { class: 'td2-dial' }, h('span', { html: svg }), h('div', { class: 'td2-dc' }, h('span', null, nx ? 'Next step' : 'All clear'), h('b', null, nx ? nx[0] : '✓'), h('span', null, `${clear} of 5 clear`))),
+    h('div', { class: 'td2-flr' }, h('header', null, h('h2', null, 'Workflow'), h('span', { class: 'hb-gap' }), nx && nx[4] ? h('button', { class: 'td2-go sm', onclick: nx[3] }, nx[4] + ' →') : null),
+      h('div', { class: 'td2-steps' }, ...S5.map(([l, p, note, go], i) => h('button', { class: 'td2-step' + (i === nextI ? ' next' : '') + (p >= 1 ? ' clear' : ''), onclick: go }, h('span', null, h('i'), `${i + 1} · ${l}`), h('em', null, note))))));
+}
+
+/* ---- habits + journal ---- */
+function tdHabJn(t) {
+  const hs = habits().filter(hb => !hb.paused), b = parseYmd(t); b.setDate(b.getDate() - b.getDay()); const wk = [...Array(7)].map((_, i) => addDays(ymd(b), i));
+  const hab = h('section', { class: 'td2-card td2-hab' }, h('header', null, h('h2', null, 'Habits'), h('span', { class: 'td2-sub' }, `${hs.filter(hb => hb.days.includes(parseYmd(t).getDay()) && hb.done[t]).length}/${hs.filter(hb => hb.days.includes(parseYmd(t).getDay())).length} today`), h('span', { class: 'hb-gap' }), hbBtn('Open Habits', () => openHub('habits'))),
+    hs.length ? h('div', { class: 'td2-hg' }, h('span'), ...wk.map(d => h('span', { class: 'td2-hd' + (d === t ? ' now' : '') }, DOW[parseYmd(d).getDay()].slice(0, 1))),
+      ...hs.flatMap(hb => [h('span', { class: 'td2-hn' }, hb.name), ...wk.map(d => habCell(hb, d, false))])) : h('p', { class: 'hb-muted td-none' }, 'No habits yet. Add one in Habits.'));
+  const je = jnEntry(t), ta = h('textarea', { class: 'td2-jin', rows: '3', placeholder: 'What’s on your mind this morning?', 'aria-label': 'Journal line' });
+  const add = () => { const v = ta.value.trim(); if (!v) return ta.focus(); checkpoint(); const fresh = !jnEntry(t); const p = jnEnsure(t); const i = p.blocks.findIndex(x => x.type === 'h2' && strip(x.html) === 'Notes');
+    const blk = i >= 0 ? p.blocks[i + 1] : null; if (blk && blk.type === 'text' && !strip(blk.html || '').trim()) blk.html = esc(v); else p.blocks.splice(i >= 0 ? i + 1 : p.blocks.length, 0, nb('text', esc(v)));
+    p.updatedAt = now(); save(); if (fresh) renderBoard(); toast('Added to today’s journal'); hbRender(); };
+  ta.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); add(); } });
+  const snip = je ? jnSnippet(je) : '';
+  const jn = h('section', { class: 'td2-card td2-jn' }, h('header', null, h('h2', null, 'Journal'), h('span', { class: 'td2-sub' }, je ? (snip ? 'Today: ' + snip.slice(0, 60) + (snip.length > 60 ? '…' : '') : 'Entry started') : 'No entry for today yet')),
+    ta, h('div', { class: 'hb-row' }, hbBtn('Add to journal', add, 'hb-solid'), hbBtn(je ? 'Open full entry' : 'Start today’s entry', () => { jnOpen(t); if (S.pvReturn) S.pvReturn.k = 'today'; }), h('span', { class: 'td2-hint' }, 'Cmd/Ctrl+Enter adds the line')));
+  return h('div', { class: 'td2-two' }, hab, jn);
+}
+
+/* ---- recent projects ---- */
+function tdRecent() {
+  const upd = k => { const [kk, id] = k.split(':'); return kk === 'b' ? Math.max(ST.boards[id]?.updatedAt || 0, ...Object.values(ST.cards).filter(c => c.boardId === id).map(c => c.updatedAt || 0)) : kk === 'p' ? ST.pages[id]?.updatedAt || 0 : ST.dbs[id]?.updatedAt || 0; };
+  const pj = nvItems('projects').filter(k => pjStatus(k) === 'active').map(k => [k, upd(k)]).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  return h('section', { class: 'td2-recent', 'aria-label': 'Recent projects' }, h('header', null, h('h2', null, 'Recent projects'), h('span', { class: 'hb-gap' }), hbBtn('Open Projects', () => openHub('projects'))),
+    pj.length ? h('div', { class: 'td2-pgrid' }, ...pj.map(([k, at]) => { const inf = refInfo(k), css = paraCoverCss(k), pr = paraProg(k), du = pjDue(k);
+      const card = h('button', { class: 'td2-pc board-cover ' + (css ? 'img' : 'gen'), style: Object.assign({ '--bc': paraBc(k, inf) }, css || {}), onclick: () => pdOpen(k, 'projects') },
+        h('div', { class: 'td2-pci' }, h('span', null, at ? 'Edited ' + timeAgo(at) : 'Active project'), h('b', null, inf.title), h('span', { class: du && du.late ? 'pd-late' : '' }, du ? du.text : 'No deadline'),
+          h('div', { class: 'td2-pbar' }, h('div', { class: 'hb-bar' }, h('i', { style: { width: Math.max(pr.pct, 2) + '%' } })), h('em', null, pr.pct + '%'))));
+      return card; })) : h('p', { class: 'hb-muted td-none' }, 'No active projects yet.'));
+}
+
+/* ---- page ---- */
+function tdHome(ov) {
+  const t = todayStr(), dt = parseYmd(t), css = tdCoverCss(), cv = ST.settings.tdCover;
+  const cin = h('input', { class: 'td2-cin', placeholder: 'Type or paste a link, press Enter', 'aria-label': 'Quick capture' });
+  cin.addEventListener('keydown', e => { if (e.key === 'Enter' && cin.value.trim()) { e.preventDefault(); capAddText(cin.value.trim()); toast('Saved to Capture'); hbRender(); $('.td2-cin')?.focus(); } });
+  const nIn = nvInboxCount();
+  const cover = h('header', { class: 'td2-cover' + (css ? ' img' : ''), style: Object.assign({ '--dim': String(((cv && cv.dim) ?? 35) / 100) }, css || {}) },
+    h('div', { class: 'td2-cwrap' },
+      h('div', { class: 'td2-cl' }, h('div', null, h('div', { class: 'td2-date' }, dt.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })), h('h1', null, 'Today')),
+        h('label', { class: 'td2-cap' }, h('span', null, 'Capture'), cin, h('button', { class: 'td2-wait', onclick: () => openHub('capture') }, nIn ? `${nIn} waiting` : 'Inbox clear'))),
+      h('div', { class: 'td2-cr' }, h('div', { class: 'td2-ctop' }, (ST.settings.guideDone && !S.tdGuide) ? h('button', { class: 'td2-glass', onclick: () => { S.tdGuide = true; hbRender(); } }, 'How Corkboard works') : null,
+        h('button', { class: 'td2-glass', onclick: e => { e.stopPropagation(); tdCoverPop(e.currentTarget); } }, 'Change cover')), tdFocusPanel())));
+  ov.replaceChildren(h('div', { class: 'hb-scroll td2' }, cover,
+    h('main', { class: 'td2-main' }, tdGuide(), tdWidgets(t), tdPlanner(t), tdFlow(t), tdHabJn(t), tdRecent())));
+}
+
+/* ---- settings: Today tab ---- */
+function tdSettingsSection(row) {
+  const st = ST.settings, L = st.fxLens || (st.fxLens = {});
+  const lens = h('div', { class: 'td2-lens' }, ...FX_MODES.map(([k, l, m]) => { const i = h('input', { type: 'number', min: '1', max: '180', class: 'set-in', value: String(L[k] || m), 'aria-label': l + ' minutes' });
+    i.addEventListener('change', () => { const v = Math.max(1, Math.min(180, parseInt(i.value, 10) || m)); i.value = String(v); L[k] = v; fxApplyLens(); save(); }); return h('label', null, h('span', null, l), i); }));
+  const box = h('div', { class: 'td2-catset' });
+  const paint = () => box.replaceChildren(...tdCats().map((c, i) => { const n = h('input', { class: 'set-in', value: c.name, 'aria-label': 'Category name' }), col = h('input', { type: 'color', value: c.color, 'aria-label': 'Category color' });
+      n.addEventListener('change', () => { const v = n.value.trim(); if (!v) { n.value = c.name; return; } const old = c.name; checkpoint(); c.name = v; for (const e of taskEntries()) { const it = tdItem(e); if (it && it.cat === old) it.cat = v; } save(); });
+      col.addEventListener('change', () => { c.color = col.value; save(); });
+      return h('div', { class: 'td2-catrow' }, col, n, h('button', { class: 'btn', 'aria-label': 'Delete ' + c.name, onclick: () => { checkpoint(); tdCats().splice(i, 1); save(); paint(); } }, 'Delete')); }),
+    h('button', { class: 'btn', onclick: () => { tdCats().push({ name: 'New category', color: '#94A3B8' }); save(); paint(); } }, '+ Add category'));
+  paint();
+  return [row('Timer lengths (minutes)', lens, 'Used by the Today focus panel and the Focus page'), h('div', { class: 'set-row nohover td2-catwrap' }, h('div', { class: 'set-l' }, h('div', null, 'Task categories'), h('div', { class: 'set-sub' }, 'Used to tag and filter tasks on Today')), box)];
+}
 
 /* one-time: move the old Home "Inbox" checklist and Unsorted tray items into the Inbox board */
 function oneInbox() {
